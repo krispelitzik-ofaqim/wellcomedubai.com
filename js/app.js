@@ -132,6 +132,7 @@ function renderHome() {
   // Load live widgets
   loadWeatherWidget();
   loadCurrencyWidget();
+  renderFlightBoard('flightBoardWidget');
 
   // Flights widget
   const flightsEl = document.getElementById('flightsWidget');
