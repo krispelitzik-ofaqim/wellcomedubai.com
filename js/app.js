@@ -138,18 +138,41 @@ function renderHome() {
 function cardHTML(item, category) {
   const rating = item.googleRating || item.rating;
   const reviews = item.totalReviews;
+  const isRestaurant = (category === 'restaurants' || category === 'shopping');
+
+  if (isRestaurant) {
+    // Square card - image top, white block bottom
+    return `
+      <div style="min-width:180px;width:180px;scroll-snap-align:start;background:#fff;border-radius:6px;overflow:hidden;cursor:pointer;border:1px solid #E5E7EB;box-shadow:0 2px 8px rgba(0,0,0,0.06);" onclick="openDetail('${category}', ${item.id})">
+        <div style="width:180px;height:180px;overflow:hidden;">
+          <img src="${item.image}" alt="${item.name}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'">
+        </div>
+        <div style="padding:10px;">
+          <div style="font-weight:600;color:#2C5F6E;font-size:0.85rem;margin-bottom:2px;">${item.name}</div>
+          <div style="font-size:0.7rem;color:#6B7F8D;margin-bottom:4px;"><i class="fas fa-map-marker-alt" style="color:#F4A261;"></i> ${item.address || ''}</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <span style="color:#E9C46A;font-size:0.8rem;font-weight:600;"><i class="fas fa-star"></i> ${rating || '-'}</span>
+            <span style="color:#E76F51;font-size:0.75rem;font-weight:500;">${item.price || ''}</span>
+          </div>
+          ${item.isOpen === true ? '<div style="color:#2A9D8F;font-size:0.65rem;font-weight:600;margin-top:3px;">● פתוח</div>' : ''}
+        </div>
+      </div>`;
+  }
+
+  // Default horizontal card for hotels, attractions etc
   return `
     <div class="listing-card" onclick="openDetail('${category}', ${item.id})">
       <img class="card-img" src="${item.image}" alt="${item.name}" onerror="this.style.display='none'">
       <div class="card-body">
-        <div class="card-title">${item.name}</div>
-        <div class="card-location"><i class="fas fa-map-marker-alt"></i> ${item.address || ''}</div>
+        <div class="card-title" style="color:#2C5F6E;">${item.name}</div>
+        <div class="card-location" style="color:#6B7F8D;"><i class="fas fa-map-marker-alt" style="color:#F4A261;"></i> ${item.address || ''}</div>
+        ${item.stars ? `<div style="color:#E9C46A;font-size:0.75rem;margin-bottom:4px;">${'★'.repeat(item.stars)}</div>` : ''}
         <div class="card-footer">
-          <span class="card-rating">
-            <i class="fas fa-star" style="color:#E9C46A;"></i> ${rating || '-'}
+          <span class="card-rating" style="color:#E9C46A;">
+            <i class="fas fa-star"></i> ${rating || '-'}
             ${reviews ? `<span style="color:#6B7F8D;font-size:0.7rem;">(${reviews})</span>` : ''}
           </span>
-          <span class="card-price">${item.priceRange || item.price || ''}</span>
+          <span class="card-price" style="color:#E76F51;">${item.priceRange || item.price || ''}</span>
         </div>
         ${item.isOpen === true ? '<div style="color:#2A9D8F;font-size:0.7rem;font-weight:600;margin-top:4px;">● פתוח עכשיו</div>' : ''}
       </div>
