@@ -141,21 +141,25 @@ function renderHome() {
     const weekLater = new Date(tomorrow);
     weekLater.setDate(weekLater.getDate() + 7);
     flightsEl.innerHTML = `
-      <div style="background:#fff;border-radius:8px;padding:16px;border:1px solid #E5E7EB;">
-        <div style="font-weight:700;color:#2C5F6E;font-size:0.9rem;margin-bottom:10px;">
-          <i class="fas fa-plane" style="color:#E76F51;"></i> טיסות תל אביב ↔ דובאי
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
+      <div style="background:linear-gradient(135deg,#2C5F6E,#2A9D8F);border-radius:8px;padding:20px;color:#fff;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <i class="fas fa-plane-departure" style="font-size:1.3rem;color:#E9C46A;"></i>
           <div>
-            <label style="font-size:0.75rem;color:#6B7F8D;">הלוך</label>
-            <input type="date" id="flightDepart" value="${tomorrow.toISOString().split('T')[0]}" style="width:100%;padding:8px;border-radius:6px;border:1px solid #E5E7EB;font-family:Heebo;font-size:0.85rem;">
-          </div>
-          <div>
-            <label style="font-size:0.75rem;color:#6B7F8D;">חזור</label>
-            <input type="date" id="flightReturn" value="${weekLater.toISOString().split('T')[0]}" style="width:100%;padding:8px;border-radius:6px;border:1px solid #E5E7EB;font-family:Heebo;font-size:0.85rem;">
+            <div style="font-weight:700;font-size:1rem;">טיסות תל אביב ✈ דובאי</div>
+            <div style="font-size:0.75rem;opacity:0.8;">מצא את הטיסה הזולה ביותר</div>
           </div>
         </div>
-        <button onclick="doFlightSearch()" style="width:100%;padding:10px;border-radius:8px;background:#E76F51;color:#fff;border:none;font-family:Heebo;font-weight:600;cursor:pointer;">
+        <div style="display:flex;gap:10px;margin-bottom:12px;align-items:flex-end;">
+          <div style="flex:1;">
+            <label style="font-size:0.7rem;opacity:0.8;display:block;margin-bottom:3px;">הלוך</label>
+            <input type="date" id="flightDepart" value="${tomorrow.toISOString().split('T')[0]}" style="width:100%;padding:10px;border-radius:6px;border:none;font-family:Heebo;font-size:0.85rem;color:#2C5F6E;">
+          </div>
+          <div style="flex:1;">
+            <label style="font-size:0.7rem;opacity:0.8;display:block;margin-bottom:3px;">חזור</label>
+            <input type="date" id="flightReturn" value="${weekLater.toISOString().split('T')[0]}" style="width:100%;padding:10px;border-radius:6px;border:none;font-family:Heebo;font-size:0.85rem;color:#2C5F6E;">
+          </div>
+        </div>
+        <button onclick="doFlightSearch()" style="width:100%;padding:12px;border-radius:8px;background:#E9C46A;color:#2C5F6E;border:none;font-family:Heebo;font-weight:700;cursor:pointer;font-size:0.95rem;">
           <i class="fas fa-search"></i> חפש טיסות
         </button>
         <div id="flightResults" style="margin-top:12px;"></div>
