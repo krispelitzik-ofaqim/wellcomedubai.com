@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WellCome Dubai - לוח ניהול</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<div class="admin-layout">
+  <!-- Sidebar -->
+  <aside class="admin-sidebar">
+    <div class="logo">WellCome<span style="color:var(--white);font-weight:400;">Dubai</span> <small style="color:var(--gray);font-size:0.65rem;">ADMIN</small></div>
+    <button class="admin-nav-item active" data-section="dashboard" onclick="showSection('dashboard')">
+      <i class="fas fa-chart-bar"></i> דשבורד
+    </button>
+    <button class="admin-nav-item" data-section="hotels" onclick="showSection('hotels')">
+      <i class="fas fa-hotel"></i> מלונות
+    </button>
+    <button class="admin-nav-item" data-section="restaurants" onclick="showSection('restaurants')">
+      <i class="fas fa-utensils"></i> מסעדות
+    </button>
+    <button class="admin-nav-item" data-section="attractions" onclick="showSection('attractions')">
+      <i class="fas fa-landmark"></i> אטרקציות
+    </button>
+    <button class="admin-nav-item" data-section="shopping" onclick="showSection('shopping')">
+      <i class="fas fa-shopping-bag"></i> קניות
+    </button>
+    <button class="admin-nav-item" data-section="nightlife" onclick="showSection('nightlife')">
+      <i class="fas fa-glass-cheers"></i> בילויים
+    </button>
+    <button class="admin-nav-item" data-section="transport" onclick="showSection('transport')">
+      <i class="fas fa-subway"></i> תחבורה
+    </button>
+    <button class="admin-nav-item" data-section="casino" onclick="showSection('casino')">
+      <i class="fas fa-dice"></i> קזינו
+    </button>
+    <div style="border-top:1px solid rgba(212,168,67,0.1);margin:12px 0;"></div>
+    <button class="admin-nav-item" data-section="theme" onclick="showSection('theme')">
+      <i class="fas fa-palette"></i> עיצוב ופלטה
+    </button>
+    <a href="../index.html" class="admin-nav-item" style="text-decoration:none;">
+      <i class="fas fa-external-link-alt"></i> צפה באפליקציה
+    </a>
+  </aside>
+
+  <!-- Mobile Header -->
+  <div id="mobileAdminHeader" style="display:none;position:sticky;top:0;z-index:150;background:var(--navy);padding:12px 16px;border-bottom:1px solid rgba(212,168,67,0.15);">
+    <div style="display:flex;align-items:center;justify-content:space-between;">
+      <span style="color:var(--gold);font-weight:700;font-size:1.1rem;">WellCome<span style="color:var(--white);font-weight:400;">Dubai</span> <small style="color:var(--gray);font-size:0.6rem;">ADMIN</small></span>
+      <button id="mobileMenuBtn" onclick="toggleMobileMenu()" style="background:none;border:none;color:var(--gold);font-size:1.4rem;cursor:pointer;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:10px;transition:background 0.3s;">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Slide Menu -->
+  <div id="mobileMenuOverlay" onclick="toggleMobileMenu()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:200;backdrop-filter:blur(3px);"></div>
+  <div id="mobileMenuDrawer" style="position:fixed;top:0;right:-280px;width:270px;height:100vh;background:var(--navy);z-index:250;transition:right 0.3s ease;overflow-y:auto;box-shadow:-4px 0 20px rgba(0,0,0,0.4);padding-top:16px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:0 16px 16px;border-bottom:1px solid rgba(212,168,67,0.1);">
+      <span style="color:var(--gold);font-weight:700;font-size:1.1rem;">תפריט ניהול</span>
+      <button onclick="toggleMobileMenu()" style="background:none;border:none;color:var(--gray);font-size:1.2rem;cursor:pointer;"><i class="fas fa-times"></i></button>
+    </div>
+    <div style="padding:8px 0;">
+      <button class="admin-nav-item mobile-nav active" data-section="dashboard" onclick="showSection('dashboard');toggleMobileMenu();" style="display:flex;width:100%;padding:14px 20px;font-size:0.95rem;">
+        <i class="fas fa-chart-bar"></i> דשבורד
+      </button>
+      <button class="admin-nav-item mobile-nav" data-section="hotels" onclick="showSection('hotels');toggleMobileMenu();" style="display:flex;width:100%;padding:14px 20px;font-size:0.95rem;">
+        <i class="fas fa-hotel"></i> מלונות
+      </button>
+      <button class="admin-nav-item mobile-nav" data-section="restaurants" onclick="showSection('restaurants');toggleMobileMenu();" style="display:flex;width:100%;padding:14px 20px;font-size:0.95rem;">
+        <i class="fas fa-utensils"></i> מסעדות
+      </button>
+      <button class="admin-nav-item mobile-nav" data-section="attractions" onclick="showSection('attractions');toggleMobileMenu();" style="display:flex;width:100%;padding:14px 20px;font-size:0.95rem;">
+        <i class="fas fa-landmark"></i> אטרקציות
+      </button>
+      <button class="admin-nav-item mobile-nav" data-section="shopping" onclick="showSection('shopping');toggleMobileMenu();" style="display:flex;width:100%;padding:14px 20px;font-size:0.95rem;">
+        <i class="fas fa-shopping-bag"></i> קניות
+      </button>
+      <button class="admin-nav-item mobile-nav" data-section="nightlife" onclick="showSection('nightlife');toggleMobileMenu();" style="display:flex;width:100%;padding:14px 20px;font-size:0.95rem;">
+        <i class="fas fa-glass-cheers"></i> בילויים
+      </button>
+      <button class="admin-nav-item mobile-nav" data-section="transport" onclick="showSection('transport');toggleMobileMenu();" style="display:flex;width:100%;padding:14px 20px;font-size:0.95rem;">
+        <i class="fas fa-subway"></i> תחבורה
+      </button>
+      <button class="admin-nav-item mobile-nav" data-section="casino" onclick="showSection('casino');toggleMobileMenu();" style="display:flex;width:100%;padding:14px 20px;font-size:0.95rem;">
+        <i class="fas fa-dice"></i> קזינו
+      </button>
+      <div style="border-top:1px solid rgba(212,168,67,0.1);margin:8px 0;"></div>
+      <button class="admin-nav-item mobile-nav" data-section="theme" onclick="showSection('theme');toggleMobileMenu();" style="display:flex;width:100%;padding:14px 20px;font-size:0.95rem;">
+        <i class="fas fa-palette"></i> עיצוב ופלטה
+      </button>
+      <a href="../index.html" class="admin-nav-item" style="display:flex;width:100%;padding:14px 20px;font-size:0.95rem;text-decoration:none;">
+        <i class="fas fa-external-link-alt"></i> צפה באפליקציה
+      </a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="admin-main" id="adminContent">
+    <!-- Dashboard -->
+    <div id="section-dashboard">
+      <div class="admin-header">
+        <h2>דשבורד</h2>
+      </div>
+      <div class="stats-grid" id="statsGrid"></div>
+      <h3 style="margin:20px 0 12px;color:var(--white);">פריטים אחרונים</h3>
+      <div id="recentItems"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Form Modal -->
+<div class="admin-modal" id="formModal">
+  <div class="admin-form-card" id="formContent"></div>
+</div>
+
+<!-- Delete Confirm Modal -->
+<div class="admin-modal" id="deleteModal">
+  <div class="admin-form-card" style="max-width:380px;text-align:center;">
+    <h3><i class="fas fa-exclamation-triangle" style="color:var(--danger);"></i> מחיקת פריט</h3>
+    <p style="color:var(--gray);margin:12px 0;">האם אתה בטוח שברצונך למחוק פריט זה? לא ניתן לבטל פעולה זו.</p>
+    <div class="form-actions">
+      <button class="form-btn cancel" onclick="closeDeleteModal()">ביטול</button>
+      <button class="form-btn" style="background:var(--danger);color:white;" id="confirmDeleteBtn">מחק</button>
+    </div>
+  </div>
+</div>
+
+<script src="../js/data.js"></script>
+<script>
+  let currentSection = 'dashboard';
+
+  // Mobile responsive
+  let mobileMenuOpen = false;
+  function checkMobile() {
+    const header = document.getElementById('mobileAdminHeader');
+    if (window.innerWidth <= 600) {
+      header.style.display = 'block';
+    } else {
+      header.style.display = 'none';
+      if (mobileMenuOpen) toggleMobileMenu();
+    }
+  }
+  window.addEventListener('resize', checkMobile);
+  checkMobile();
+
+  function toggleMobileMenu() {
+    mobileMenuOpen = !mobileMenuOpen;
+    const overlay = document.getElementById('mobileMenuOverlay');
+    const drawer = document.getElementById('mobileMenuDrawer');
+    if (mobileMenuOpen) {
+      overlay.style.display = 'block';
+      drawer.style.right = '0';
+      document.body.style.overflow = 'hidden';
+    } else {
+      overlay.style.display = 'none';
+      drawer.style.right = '-280px';
+      document.body.style.overflow = '';
+    }
+  }
+
+  // Init
+  showSection('dashboard');
+
+  function showSection(section) {
+    currentSection = section;
+    document.querySelectorAll('.admin-nav-item').forEach(n => n.classList.remove('active'));
+    document.querySelectorAll(`.admin-nav-item[data-section="${section}"]`).forEach(btn => btn.classList.add('active'));
+
+    if (section === 'dashboard') {
+      renderDashboard();
+    } else if (section === 'theme') {
+      renderThemeSection();
+    } else {
+      renderCategorySection(section);
+    }
+  }
+
+  // ===== DASHBOARD =====
+  function renderDashboard() {
+    const stats = getStats();
+    const content = document.getElementById('adminContent');
+
+    const iconMap = { hotels:'fa-hotel', restaurants:'fa-utensils', attractions:'fa-landmark', shopping:'fa-shopping-bag', nightlife:'fa-glass-cheers', transport:'fa-subway', casino:'fa-dice' };
+    const nameMap = { hotels:'מלונות', restaurants:'מסעדות', attractions:'אטרקציות', shopping:'קניות', nightlife:'בילויים', transport:'תחבורה', casino:'קזינו' };
+
+    content.innerHTML = `
+      <div class="admin-header"><h2>דשבורד</h2></div>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-database"></i></div>
+          <div class="stat-number">${stats.total}</div>
+          <div class="stat-label">סה"כ פריטים</div>
+        </div>
+        ${Object.entries(stats).filter(([k]) => k !== 'total').map(([key, val]) => `
+          <div class="stat-card" style="cursor:pointer;" onclick="showSection('${key}')">
+            <div class="stat-icon"><i class="fas ${iconMap[key]}"></i></div>
+            <div class="stat-number">${val}</div>
+            <div class="stat-label">${nameMap[key]}</div>
+          </div>
+        `).join('')}
+      </div>
+      <h3 style="margin:24px 0 14px;color:var(--white);">כל הפריטים המומלצים</h3>
+      <table class="admin-table">
+        <thead><tr><th>תמונה</th><th>שם</th><th>קטגוריה</th><th>דירוג</th><th>מחיר</th></tr></thead>
+        <tbody>
+          ${getFeatured().map(item => `
+            <tr>
+              <td><img class="thumb" src="${item.image}" onerror="this.src='https://via.placeholder.com/50/132240/D4A843?text=img'"></td>
+              <td style="color:var(--white);font-weight:500;">${item.name}</td>
+              <td><span class="card-tag">${nameMap[item.category] || item.category}</span></td>
+              <td style="color:var(--gold);">${item.rating ? '⭐ ' + item.rating : '-'}</td>
+              <td>${item.price || '-'}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    `;
+  }
+
+  // ===== CATEGORY SECTION =====
+  const categoryNames = { hotels:'מלונות', restaurants:'מסעדות', attractions:'אטרקציות', shopping:'קניות', nightlife:'בילויים', transport:'תחבורה', casino:'קזינו' };
+
+  function renderCategorySection(category) {
+    const items = getAllItems(category);
+    const content = document.getElementById('adminContent');
+
+    content.innerHTML = `
+      <div class="admin-header">
+        <h2>${categoryNames[category]} (${items.length})</h2>
+        <button class="admin-add-btn" onclick="openForm('${category}')"><i class="fas fa-plus"></i> הוסף חדש</button>
+      </div>
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>תמונה</th>
+            <th>שם</th>
+            <th>תיאור</th>
+            <th>דירוג</th>
+            <th>מחיר</th>
+            <th>מומלץ</th>
+            <th>פעולות</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${items.map(item => `
+            <tr>
+              <td><img class="thumb" src="${item.image}" onerror="this.src='https://via.placeholder.com/50/132240/D4A843?text=img'"></td>
+              <td style="color:var(--white);font-weight:500;">${item.name}</td>
+              <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${item.description?.substring(0, 50)}...</td>
+              <td style="color:var(--gold);">${item.rating || '-'}</td>
+              <td>${item.price || '-'}</td>
+              <td>${item.featured ? '<i class="fas fa-star" style="color:var(--gold);"></i>' : '<i class="far fa-star" style="color:var(--gray);"></i>'}</td>
+              <td>
+                <div class="actions">
+                  <button class="action-btn edit" onclick="openForm('${category}', ${item.id})" title="ערוך"><i class="fas fa-edit"></i></button>
+                  <button class="action-btn delete" onclick="confirmDelete('${category}', ${item.id})" title="מחק"><i class="fas fa-trash"></i></button>
+                </div>
+              </td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+      ${items.length === 0 ? '<div style="text-align:center;padding:40px;color:var(--gray);"><i class="fas fa-inbox" style="font-size:2rem;margin-bottom:8px;display:block;"></i>אין פריטים בקטגוריה זו</div>' : ''}
+    `;
+  }
+
+  // ===== FORM =====
+  function openForm(category, editId) {
+    const modal = document.getElementById('formModal');
+    const formContent = document.getElementById('formContent');
+    const isEdit = !!editId;
+    const item = isEdit ? getItem(category, editId) : {};
+
+    formContent.innerHTML = `
+      <h3>${isEdit ? 'עריכת' : 'הוספת'} פריט - ${categoryNames[category]}</h3>
+      <form id="itemForm" onsubmit="saveForm(event, '${category}', ${editId || 'null'})">
+        <div class="form-group">
+          <label>שם (עברית)</label>
+          <input type="text" name="name" value="${item.name || ''}" required>
+        </div>
+        <div class="form-group">
+          <label>שם (אנגלית)</label>
+          <input type="text" name="nameEn" value="${item.nameEn || ''}">
+        </div>
+        <div class="form-group">
+          <label>תיאור</label>
+          <textarea name="description" required>${item.description || ''}</textarea>
+        </div>
+        <div class="form-group">
+          <label>כתובת URL לתמונה</label>
+          <input type="url" name="image" value="${item.image || ''}" placeholder="https://...">
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div class="form-group">
+            <label>דירוג (0-5)</label>
+            <input type="number" name="rating" min="0" max="5" step="0.1" value="${item.rating || ''}">
+          </div>
+          <div class="form-group">
+            <label>רמת מחיר</label>
+            <select name="price">
+              <option value="">בחר...</option>
+              <option value="$" ${item.price==='$'?'selected':''}>$ - תקציבי</option>
+              <option value="$$" ${item.price==='$$'?'selected':''}>$$ - בינוני</option>
+              <option value="$$$" ${item.price==='$$$'?'selected':''}>$$$ - יקר</option>
+              <option value="$$$$" ${item.price==='$$$$'?'selected':''}>$$$$ - יוקרה</option>
+              <option value="$$$$$" ${item.price==='$$$$$'?'selected':''}>$$$$$ - אולטרה יוקרה</option>
+              <option value="חינם" ${item.price==='חינם'?'selected':''}>חינם</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>טווח מחירים</label>
+          <input type="text" name="priceRange" value="${item.priceRange || ''}" placeholder="לדוגמה: 500-1000 AED">
+        </div>
+        <div class="form-group">
+          <label>כתובת</label>
+          <input type="text" name="address" value="${item.address || ''}">
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div class="form-group">
+            <label>קו רוחב (Lat)</label>
+            <input type="number" name="lat" step="any" value="${item.lat || ''}" placeholder="25.2048">
+          </div>
+          <div class="form-group">
+            <label>קו אורך (Lng)</label>
+            <input type="number" name="lng" step="any" value="${item.lng || ''}" placeholder="55.2708">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>טלפון</label>
+          <input type="text" name="phone" value="${item.phone || ''}" dir="ltr">
+        </div>
+        <div class="form-group">
+          <label>תגיות (מופרדות בפסיקים)</label>
+          <input type="text" name="tags" value="${(item.tags || []).join(', ')}" placeholder="יוקרה, חוף, משפחות">
+        </div>
+        <div class="form-group">
+          <label>תת-קטגוריה</label>
+          <input type="text" name="subcategory" value="${item.subcategory || ''}" placeholder="luxury, budget, asian...">
+        </div>
+        <div class="form-group" style="display:flex;align-items:center;gap:8px;">
+          <input type="checkbox" name="featured" id="featuredCheck" ${item.featured ? 'checked' : ''} style="width:auto;">
+          <label for="featuredCheck" style="margin:0;">פריט מומלץ</label>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="form-btn cancel" onclick="closeForm()">ביטול</button>
+          <button type="submit" class="form-btn save">${isEdit ? 'שמור שינויים' : 'הוסף פריט'}</button>
+        </div>
+      </form>
+    `;
+    modal.classList.add('active');
+  }
+
+  function saveForm(e, category, editId) {
+    e.preventDefault();
+    const form = document.getElementById('itemForm');
+    const data = {
+      name: form.name.value,
+      nameEn: form.nameEn.value,
+      description: form.description.value,
+      image: form.image.value,
+      rating: form.rating.value ? parseFloat(form.rating.value) : 0,
+      price: form.price.value,
+      priceRange: form.priceRange.value,
+      address: form.address.value,
+      lat: form.lat.value ? parseFloat(form.lat.value) : null,
+      lng: form.lng.value ? parseFloat(form.lng.value) : null,
+      phone: form.phone.value,
+      tags: form.tags.value.split(',').map(t => t.trim()).filter(Boolean),
+      subcategory: form.subcategory.value,
+      featured: form.featured.checked,
+      category: category
+    };
+
+    if (editId) {
+      updateItem(category, editId, data);
+    } else {
+      addItem(category, data);
+    }
+
+    closeForm();
+    showSection(category);
+  }
+
+  function closeForm() {
+    document.getElementById('formModal').classList.remove('active');
+  }
+
+  // ===== DELETE =====
+  let deleteTarget = null;
+  function confirmDelete(category, id) {
+    deleteTarget = { category, id };
+    document.getElementById('deleteModal').classList.add('active');
+    document.getElementById('confirmDeleteBtn').onclick = () => {
+      deleteItem(deleteTarget.category, deleteTarget.id);
+      closeDeleteModal();
+      showSection(deleteTarget.category);
+    };
+  }
+  function closeDeleteModal() {
+    document.getElementById('deleteModal').classList.remove('active');
+    deleteTarget = null;
+  }
+
+  // ===== THEME / PALETTE =====
+  const PALETTE = {
+    name: 'Desert Sunset',
+    icon: '🌅',
+    desc: 'כחול עמוק + קורל + חרדל - חם ומזמין',
+    colors: {
+      '--gold':'#E76F51','--gold-light':'#F4A261',
+      '--dark-blue':'#FDF6EC','--navy':'#FFFFFF','--navy-light':'#F5EFE6',
+      '--white':'#2C5F6E','--gray':'#6B7F8D','--text':'#2C5F6E',
+      '--card-bg':'#FFFFFF','--success':'#2A9D8F','--danger':'#E76F51'
+    },
+    accent: '#E9C46A',
+    swatches: [
+      { hex:'#2C5F6E', name:'כחול עמוק', role:'טקסט, כותרות' },
+      { hex:'#2A9D8F', name:'טורקיז-מנטה', role:'הצלחה, תגיות' },
+      { hex:'#E9C46A', name:'חרדל חם', role:'דגש, אייקונים' },
+      { hex:'#F4A261', name:'כתום בהיר', role:'כפתורים משניים' },
+      { hex:'#E76F51', name:'קורל', role:'כפתור ראשי, CTA' },
+      { hex:'#FDF6EC', name:'שמנת', role:'רקע ראשי' },
+    ]
+  };
+
+  function renderThemeSection() {
+    const content = document.getElementById('adminContent');
+
+    content.innerHTML = `
+      <div class="admin-header"><h2><i class="fas fa-palette" style="margin-left:8px;"></i> עיצוב ופלטת צבעים</h2></div>
+      <div style="background:#FDF6EC;border-radius:16px;padding:28px;border:2px solid #E9C46A;margin-bottom:24px;">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+          <span style="font-size:2.5rem;">🌅</span>
+          <div>
+            <div style="font-size:1.4rem;font-weight:700;color:#2C5F6E;">Desert Sunset</div>
+            <div style="font-size:0.9rem;color:#6B7F8D;">כחול עמוק + קורל + חרדל - חם ומזמין</div>
+          </div>
+          <div style="margin-right:auto;background:#2A9D8F;color:#fff;font-size:0.75rem;padding:4px 12px;border-radius:20px;font-weight:600;">פעיל</div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:20px;">
+          ${PALETTE.swatches.map(s => `
+            <div style="background:#fff;border-radius:12px;padding:12px;border:1px solid #F5EFE6;text-align:center;">
+              <div style="width:100%;height:50px;border-radius:8px;background:${s.hex};margin-bottom:8px;border:1px solid rgba(0,0,0,0.08);"></div>
+              <div style="font-weight:600;color:#2C5F6E;font-size:0.85rem;">${s.name}</div>
+              <div style="font-family:monospace;color:#6B7F8D;font-size:0.8rem;margin:2px 0;direction:ltr;">${s.hex}</div>
+              <div style="font-size:0.75rem;color:#2A9D8F;">${s.role}</div>
+            </div>
+          `).join('')}
+        </div>
+
+        <div style="background:#fff;border-radius:12px;padding:16px;border:1px solid #F5EFE6;">
+          <div style="font-size:0.85rem;color:#6B7F8D;margin-bottom:10px;">תצוגה מקדימה:</div>
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px;">
+            <div style="background:#E76F51;color:#fff;padding:8px 16px;border-radius:8px;font-size:0.85rem;font-weight:600;">כפתור ראשי</div>
+            <div style="background:#E9C46A;color:#2C5F6E;padding:8px 16px;border-radius:8px;font-size:0.85rem;font-weight:600;">דגש</div>
+            <div style="background:#2A9D8F;color:#fff;padding:8px 16px;border-radius:8px;font-size:0.85rem;font-weight:600;">תגית</div>
+            <div style="background:#F4A261;color:#fff;padding:8px 16px;border-radius:8px;font-size:0.85rem;font-weight:600;">משני</div>
+          </div>
+          <div style="color:#2C5F6E;font-weight:600;font-size:1rem;">כותרת לדוגמה</div>
+          <div style="color:#6B7F8D;font-size:0.85rem;">טקסט תיאור רגיל שנראה ככה בפלטה Desert Sunset.</div>
+        </div>
+      </div>
+
+      <button onclick="applyTheme()" style="padding:12px 28px;border-radius:12px;background:#E76F51;color:#fff;border:none;font-family:Heebo;font-weight:600;font-size:1rem;cursor:pointer;">
+        <i class="fas fa-check"></i> החל פלטה על האפליקציה
+      </button>
+    `;
+  }
+
+  function applyTheme() {
+    const palette = PALETTE;
+
+    // Save choice
+    localStorage.setItem('dubai_theme', 'sunset');
+    localStorage.setItem('dubai_theme_colors', JSON.stringify(palette.colors));
+    localStorage.setItem('dubai_theme_accent', palette.accent);
+
+    // Apply to main app CSS file
+    const cssText = Object.entries(palette.colors).map(([k,v]) => `${k}:${v}`).join(';');
+    localStorage.setItem('dubai_theme_css', cssText);
+
+    // Refresh theme section to show active
+    renderThemeSection();
+
+    // Show confirmation
+    const msg = document.createElement('div');
+    msg.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#059669;color:#fff;padding:12px 24px;border-radius:12px;font-weight:600;z-index:9999;font-family:Heebo;box-shadow:0 4px 12px rgba(0,0,0,0.2);';
+    msg.textContent = `✓ פלטת "${palette.name}" הוחלה! רענן את האפליקציה לראות.`;
+    document.body.appendChild(msg);
+    setTimeout(() => msg.remove(), 3000);
+  }
+</script>
+
+</body>
+</html>

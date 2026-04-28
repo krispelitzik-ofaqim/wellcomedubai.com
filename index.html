@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>WellCome Dubai - המדריך לתייר הישראלי בדובאי</title>
+  <meta name="description" content="המדריך המלא לתיירים ישראליים בדובאי - מלונות, מסעדות, אטרקציות, קניות, בילויים ועוד">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="css/style.css?v=6">
+  <script>
+    // Apply saved theme immediately before render
+    const savedCSS = localStorage.getItem('dubai_theme_css');
+    if (savedCSS) document.documentElement.style.cssText = savedCSS;
+  </script>
+</head>
+<body>
+
+<!-- Splash Screen -->
+<div class="splash-screen">
+  <div class="splash-logo">WellCome<span>Dubai</span></div>
+  <div class="splash-sub">המדריך שלך לדובאי</div>
+  <div class="splash-spinner"></div>
+</div>
+
+<!-- App -->
+<div class="app">
+  <!-- Top Header -->
+  <header class="top-header">
+    <div class="logo">WellCome<span>Dubai</span> <i class="fas fa-star" style="font-size:0.6rem;color:var(--gold);"></i></div>
+    <div class="header-actions">
+      <button class="header-btn" onclick="showMobilePopup()" title="פתח בנייד"><i class="fas fa-mobile-alt"></i></button>
+      <button class="header-btn" onclick="navigateTo('info')" title="מידע שימושי"><i class="fas fa-info-circle"></i></button>
+      <a href="admin/index.html" class="header-btn" title="לוח ניהול"><i class="fas fa-cog"></i></a>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- HOME PAGE -->
+    <div id="page-home" class="page active">
+      <!-- Hero -->
+      <div class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+          <h1 class="hero-title">ברוכים הבאים ל<span>דובאי</span></h1>
+          <p class="hero-subtitle">המדריך המלא לתייר הישראלי</p>
+        </div>
+      </div>
+
+      <!-- Search -->
+      <div class="search-container">
+        <div class="search-box">
+          <i class="fas fa-search"></i>
+          <input type="text" id="searchInput" placeholder="חפש מלונות, מסעדות, אטרקציות...">
+        </div>
+        <div id="searchResults" style="display:none;margin-top:8px;"></div>
+      </div>
+
+      <!-- Weather + Currency -->
+      <div id="weatherWidget" style="margin:0 20px 8px;"></div>
+      <div id="currencyWidget" style="margin:0 20px 12px;"></div>
+
+      <!-- Categories -->
+      <div class="section-title">קטגוריות</div>
+      <div class="categories-grid">
+        <a class="category-card" onclick="navigateTo('hotels')">
+          <div class="category-icon"><i class="fas fa-hotel"></i></div>
+          <span>מלונות</span>
+        </a>
+        <a class="category-card" onclick="navigateTo('restaurants')">
+          <div class="category-icon"><i class="fas fa-utensils"></i></div>
+          <span>מסעדות</span>
+        </a>
+        <a class="category-card" onclick="navigateTo('attractions')">
+          <div class="category-icon"><i class="fas fa-landmark"></i></div>
+          <span>אטרקציות</span>
+        </a>
+        <a class="category-card" onclick="navigateTo('shopping')">
+          <div class="category-icon"><i class="fas fa-shopping-bag"></i></div>
+          <span>קניות</span>
+        </a>
+        <a class="category-card" onclick="navigateTo('nightlife')">
+          <div class="category-icon"><i class="fas fa-glass-cheers"></i></div>
+          <span>בילויים</span>
+        </a>
+        <a class="category-card" onclick="navigateTo('transport')">
+          <div class="category-icon"><i class="fas fa-subway"></i></div>
+          <span>תחבורה</span>
+        </a>
+        <a class="category-card" onclick="navigateTo('casino')">
+          <div class="category-icon"><i class="fas fa-dice"></i></div>
+          <span>קזינו</span>
+        </a>
+        <a class="category-card" onclick="navigateTo('map')">
+          <div class="category-icon"><i class="fas fa-map-marked-alt"></i></div>
+          <span>מפה</span>
+        </a>
+      </div>
+
+      <!-- Top Hotels -->
+      <h2 style="padding:20px 20px 10px;font-size:1.3rem;color:#2C5F6E;display:flex;align-items:center;justify-content:space-between;">
+        <span><i class="fas fa-hotel" style="color:#E9C46A;margin-left:8px;"></i>מלונות מובילים</span>
+        <a href="#" onclick="navigateTo('hotels');return false;" style="color:#E76F51;font-size:0.85rem;font-weight:500;text-decoration:none;">הכל &larr;</a>
+      </h2>
+      <div class="cards-scroll" id="topHotels"></div>
+
+      <h2 style="padding:20px 20px 10px;font-size:1.3rem;color:#2C5F6E;display:flex;align-items:center;justify-content:space-between;">
+        <span><i class="fas fa-landmark" style="color:#2A9D8F;margin-left:8px;"></i>אטרקציות חובה</span>
+        <a href="#" onclick="navigateTo('attractions');return false;" style="color:#E76F51;font-size:0.85rem;font-weight:500;text-decoration:none;">הכל &larr;</a>
+      </h2>
+      <div class="cards-scroll" id="topAttractions"></div>
+
+      <h2 style="padding:20px 20px 10px;font-size:1.3rem;color:#2C5F6E;display:flex;align-items:center;justify-content:space-between;">
+        <span><i class="fas fa-utensils" style="color:#F4A261;margin-left:8px;"></i>מסעדות וקניות</span>
+        <a href="#" onclick="navigateTo('restaurants');return false;" style="color:#E76F51;font-size:0.85rem;font-weight:500;text-decoration:none;">הכל &larr;</a>
+      </h2>
+      <div class="cards-scroll" id="topRestShopping"></div>
+
+      <!-- Flights Widget -->
+      <div id="flightsWidget" style="margin:0 20px 12px;"></div>
+
+      <!-- Quick Info Banner -->
+      <div style="margin:20px;padding:20px;background:linear-gradient(135deg,rgba(212,168,67,0.15),rgba(212,168,67,0.05));border-radius:16px;border:1px solid rgba(212,168,67,0.2);">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
+          <i class="fas fa-info-circle" style="color:var(--gold);font-size:1.3rem;"></i>
+          <span style="font-weight:600;color:var(--white);">ידעת?</span>
+        </div>
+        <p style="font-size:0.85rem;line-height:1.6;color:var(--gray);">ישראלים מקבלים ויזה אוטומטית בנחיתה בדובאי. הטיסה מתל אביב לוקחת כ-3 שעות בלבד!</p>
+        <button onclick="navigateTo('info')" style="margin-top:10px;padding:8px 16px;border-radius:8px;background:var(--gold);color:var(--dark-blue);border:none;font-family:Heebo;font-weight:600;cursor:pointer;">מידע מלא &larr;</button>
+      </div>
+    </div>
+
+    <!-- LIST PAGE (dynamic) -->
+    <div id="page-list" class="page"></div>
+
+    <!-- MAP PAGE -->
+    <div id="page-map" class="page"></div>
+
+    <!-- INFO PAGE -->
+    <div id="page-info" class="page"></div>
+  </main>
+
+  <!-- Detail Modal -->
+  <div id="detailModal" class="modal-overlay"></div>
+
+  <!-- Bottom Navigation -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" data-page="home">
+      <i class="fas fa-home"></i>
+      <span>בית</span>
+    </button>
+    <button class="nav-item" data-page="attractions">
+      <i class="fas fa-star"></i>
+      <span>אטרקציות</span>
+    </button>
+    <button class="nav-item" data-page="map">
+      <i class="fas fa-map"></i>
+      <span>מפה</span>
+    </button>
+    <button class="nav-item" data-page="restaurants">
+      <i class="fas fa-utensils"></i>
+      <span>מסעדות</span>
+    </button>
+    <button class="nav-item" data-page="info">
+      <i class="fas fa-info-circle"></i>
+      <span>מידע</span>
+    </button>
+  </nav>
+</div>
+
+<!-- Mobile Mode Indicator -->
+<div id="mobileModeBanner" style="display:none;position:fixed;top:0;left:0;right:0;z-index:9000;background:linear-gradient(135deg,#E76F51,#F4A261);color:#fff;text-align:center;padding:8px;font-size:0.85rem;font-weight:600;">
+  <i class="fas fa-mobile-alt"></i> תצוגת נייד (390px) &nbsp;
+  <button onclick="toggleMobileMode()" style="background:#fff;color:#E76F51;border:none;padding:4px 14px;border-radius:20px;font-family:Heebo;font-weight:600;font-size:0.8rem;cursor:pointer;margin-right:8px;">
+    <i class="fas fa-desktop"></i> חזרה למחשב
+  </button>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDIqkbn9__0EdYjyCRQv4w-Gi3tHWwSwro&libraries=places&language=he" async defer onerror="window._googleMapsBlocked=true;"></script>
+<script src="js/data.js?v=9"></script>
+<script src="js/places.js?v=9"></script>
+<script src="js/booking.js?v=9"></script>
+<script src="js/services.js?v=9"></script>
+<script src="js/app.js?v=9"></script>
+<script>
+  // ===== Mobile Mode Toggle =====
+  let isMobileMode = false;
+
+  function showMobilePopup() {
+    toggleMobileMode();
+  }
+
+  function toggleMobileMode() {
+    isMobileMode = !isMobileMode;
+    const app = document.querySelector('.app');
+    const banner = document.getElementById('mobileModeBanner');
+    const body = document.body;
+
+    if (isMobileMode) {
+      body.style.background = '#1a1a2e';
+      body.style.display = 'flex';
+      body.style.justifyContent = 'center';
+      body.style.alignItems = 'flex-start';
+      body.style.minHeight = '100vh';
+
+      app.style.maxWidth = '390px';
+      app.style.width = '390px';
+      app.style.minHeight = '100vh';
+      app.style.boxShadow = '0 0 40px rgba(0,0,0,0.3)';
+      app.style.borderLeft = '1px solid #e0e0e0';
+      app.style.borderRight = '1px solid #e0e0e0';
+      app.style.position = 'relative';
+
+      banner.style.display = 'block';
+      app.style.marginTop = '38px';
+    } else {
+      body.style.background = '';
+      body.style.display = '';
+      body.style.justifyContent = '';
+      body.style.alignItems = '';
+
+      app.style.maxWidth = '';
+      app.style.width = '';
+      app.style.boxShadow = '';
+      app.style.borderLeft = '';
+      app.style.borderRight = '';
+      app.style.position = '';
+      app.style.marginTop = '';
+
+      banner.style.display = 'none';
+    }
+  }
+</script>
+</body>
+</html>
