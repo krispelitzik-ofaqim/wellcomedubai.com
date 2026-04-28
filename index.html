@@ -122,11 +122,17 @@
       </h2>
       <div class="cards-scroll" id="topRestShopping"></div>
 
-      <!-- Live Flight Board -->
-      <div id="flightBoardWidget" style="margin:0 20px 12px;"></div>
-
-      <!-- Flights Search -->
-      <div id="flightsWidget" style="margin:0 20px 12px;"></div>
+      <!-- Flight teaser -->
+      <div onclick="navigateTo('flights')" style="margin:0 20px 12px;background:linear-gradient(135deg,#2C5F6E,#2A9D8F);border-radius:8px;padding:14px 16px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <i class="fas fa-plane-departure" style="color:#E9C46A;font-size:1.2rem;"></i>
+          <div>
+            <div style="color:#fff;font-weight:700;font-size:0.9rem;">טיסות + לוח המראות/נחיתות</div>
+            <div style="color:rgba(255,255,255,0.7);font-size:0.75rem;">TLV ↔ DXB | מחירים בזמן אמת</div>
+          </div>
+        </div>
+        <i class="fas fa-chevron-left" style="color:#E9C46A;"></i>
+      </div>
 
       <!-- Quick Info Banner -->
       <div style="margin:20px;padding:20px;background:linear-gradient(135deg,rgba(212,168,67,0.15),rgba(212,168,67,0.05));border-radius:16px;border:1px solid rgba(212,168,67,0.2);">
@@ -145,6 +151,9 @@
     <!-- MAP PAGE -->
     <div id="page-map" class="page"></div>
 
+    <!-- FLIGHTS PAGE -->
+    <div id="page-flights" class="page"></div>
+
     <!-- INFO PAGE -->
     <div id="page-info" class="page"></div>
   </main>
@@ -162,13 +171,13 @@
       <i class="fas fa-star"></i>
       <span>אטרקציות</span>
     </button>
+    <button class="nav-item" data-page="flights">
+      <i class="fas fa-plane"></i>
+      <span>טיסות</span>
+    </button>
     <button class="nav-item" data-page="map">
       <i class="fas fa-map"></i>
       <span>מפה</span>
-    </button>
-    <button class="nav-item" data-page="restaurants">
-      <i class="fas fa-utensils"></i>
-      <span>מסעדות</span>
     </button>
     <button class="nav-item" data-page="info">
       <i class="fas fa-info-circle"></i>

@@ -17,6 +17,9 @@ const DEFAULT_DATA = {
     { id:104, name:"Ravi Restaurant", nameEn:"Ravi Restaurant", category:"restaurants", subcategory:"budget", description:"מסעדה פקיסטנית אגדית שפועלת מ-1978. אוכל מדהים במחירי רצפה - סוד מקומי.", image:"https://images.pexels.com/photos/31023337/pexels-photo-31023337.jpeg", rating:4.3, price:"$", priceRange:"30-70 ₪ לזוג", address:"Satwa", lat:25.2256, lng:55.2688, phone:"+971-4-331-5353", tags:["פקיסטני","תקציבי","מקומי"], featured:false },
     { id:105, name:"Pierchic", nameEn:"Pierchic", category:"restaurants", subcategory:"seafood", description:"מסעדת פירות ים על רציף מעל הים. נוף מהמם לשקיעה ומנות דגים מעולות.", image:"https://images.pexels.com/photos/31023334/pexels-photo-31023334.jpeg", rating:4.6, price:"$$$$", priceRange:"500-900 ₪ לזוג", address:"Al Qasr Hotel, Jumeirah", lat:25.1345, lng:55.1842, phone:"+971-4-432-3232", tags:["פירות ים","רומנטי","שקיעה"], featured:true },
     { id:106, name:"Operation Falafel", nameEn:"Operation Falafel", category:"restaurants", subcategory:"local", description:"רשת מסעדות לבנונית-ערבית מעולה עם פלאפל, חומוס ושווארמה ברמה גבוהה.", image:"https://images.pexels.com/photos/31023335/pexels-photo-31023335.jpeg", rating:4.2, price:"$", priceRange:"40-100 ₪ לזוג", address:"סניפים בכל דובאי", lat:25.2048, lng:55.2708, phone:"+971-4-222-2111", tags:["לבנוני","פלאפל","תקציבי"], featured:false },
+    { id:107, name:"Oshi", nameEn:"Oshi", category:"restaurants", subcategory:"israeli", description:"מסעדה ישראלית בדובאי עם תפריט ים תיכוני - חומוס, שקשוקה, סלטים ישראליים ובשרים על האש.", image:"https://images.pexels.com/photos/31023337/pexels-photo-31023337.jpeg", rating:4.4, price:"$$", priceRange:"150-350 ₪ לזוג", address:"JBR, The Walk", lat:25.0780, lng:55.1340, phone:"+971-4-555-1234", tags:["ישראלי","כשר","ים תיכוני"], featured:true },
+    { id:108, name:"Shabestan", nameEn:"Shabestan", category:"restaurants", subcategory:"israeli", description:"מסעדה פרסית-ישראלית עם מנות מזה\"ת אותנטיות. אווירה ביתית וטעמים מוכרים מהארץ.", image:"https://images.pexels.com/photos/33953639/pexels-photo-33953639.jpeg", rating:4.3, price:"$$", priceRange:"120-300 ₪ לזוג", address:"Downtown Dubai", lat:25.2000, lng:55.2740, phone:"+971-4-555-5678", tags:["ישראלי","פרסי","מזה\"ת"], featured:false },
+    { id:109, name:"The Kosher Grill", nameEn:"The Kosher Grill", category:"restaurants", subcategory:"israeli", description:"מסעדה כשרה בדובאי עם בשרים, המבורגרים ומנות ישראליות אהובות. כשרות מהדרין.", image:"https://images.pexels.com/photos/31023334/pexels-photo-31023334.jpeg", rating:4.5, price:"$$$", priceRange:"200-500 ₪ לזוג", address:"DIFC", lat:25.2135, lng:55.2825, phone:"+971-4-555-9012", tags:["ישראלי","כשר","בשרים"], featured:true },
   ],
   attractions: [
     { id:201, name:"ברג' חליפה", nameEn:"Burj Khalifa", category:"attractions", subcategory:"landmark", description:"הבניין הגבוה בעולם (828 מטר). עלו לתצפית בקומה 148 לנוף פנורמי עוצר נשימה של דובאי כולה.", image:"https://images.pexels.com/photos/29470840/pexels-photo-29470840.jpeg", rating:4.9, price:"$$", priceRange:"₪149-399 / $40-109", address:"Downtown Dubai", lat:25.1972, lng:55.2744, phone:"+971-4-888-8888", tags:["תצפית","סמל","חובה"], featured:true },
@@ -77,7 +80,7 @@ const PRACTICAL_INFO = {
   ]
 };
 
-const DB_VERSION = 4;
+const DB_VERSION = 5;
 function getDB() {
   const ver = localStorage.getItem(DB_KEY + '_ver');
   if (ver && Number(ver) >= DB_VERSION) {

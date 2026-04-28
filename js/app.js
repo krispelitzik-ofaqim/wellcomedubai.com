@@ -61,13 +61,14 @@ function navigateTo(page, subcategory) {
   switch(page) {
     case 'home': renderHome(); break;
     case 'hotels': renderListPage('hotels', 'מלונות', ['הכל','7 כוכבים','5 כוכבים','3-4 כוכבים','תקציבי'], subcategory); break;
-    case 'restaurants': renderListPage('restaurants', 'מסעדות', ['הכל','אסייתי','מקומי','פירות ים','תקציבי'], subcategory); break;
+    case 'restaurants': renderListPage('restaurants', 'מסעדות', ['הכל','ישראלי','אסייתי','מקומי','פירות ים','תקציבי'], subcategory); break;
     case 'attractions': renderListPage('attractions', 'אטרקציות', ['הכל','ציון דרך','מוזיאון','הרפתקה','קניות'], subcategory); break;
     case 'shopping': renderListPage('shopping', 'קניות', ['הכל','קניון','שוק'], subcategory); break;
     case 'nightlife': renderListPage('nightlife', 'בילויים', ['הכל','מועדון','לאונג\'','בידור','מופע'], subcategory); break;
     case 'transport': renderListPage('transport', 'תחבורה', ['הכל','מטרו','מונית','סירה','אפליקציה'], subcategory); break;
     case 'casino': renderListPage('casino', 'קזינו ומשחקים', ['הכל','קזינו','מרוצים'], subcategory); break;
     case 'map': renderMapPage(); break;
+    case 'flights': renderFlightsPage(); break;
     case 'info': renderInfoPage(); break;
   }
 }
@@ -132,41 +133,6 @@ function renderHome() {
   // Load live widgets
   loadWeatherWidget();
   loadCurrencyWidget();
-  renderFlightBoard('flightBoardWidget');
-
-  // Flights widget
-  const flightsEl = document.getElementById('flightsWidget');
-  if (flightsEl) {
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 7);
-    const weekLater = new Date(tomorrow);
-    weekLater.setDate(weekLater.getDate() + 7);
-    flightsEl.innerHTML = `
-      <div style="background:linear-gradient(135deg,#2C5F6E,#2A9D8F);border-radius:8px;padding:20px;color:#fff;">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
-          <i class="fas fa-plane-departure" style="font-size:1.3rem;color:#E9C46A;"></i>
-          <div>
-            <div style="font-weight:700;font-size:1rem;">טיסות תל אביב ✈ דובאי</div>
-            <div style="font-size:0.75rem;opacity:0.8;">מצא את הטיסה הזולה ביותר</div>
-          </div>
-        </div>
-        <div style="display:flex;gap:10px;margin-bottom:12px;align-items:flex-end;">
-          <div style="flex:1;">
-            <label style="font-size:0.7rem;opacity:0.8;display:block;margin-bottom:3px;">הלוך</label>
-            <input type="date" id="flightDepart" value="${tomorrow.toISOString().split('T')[0]}" style="width:100%;padding:10px;border-radius:6px;border:none;font-family:Heebo;font-size:0.85rem;color:#2C5F6E;">
-          </div>
-          <div style="flex:1;">
-            <label style="font-size:0.7rem;opacity:0.8;display:block;margin-bottom:3px;">חזור</label>
-            <input type="date" id="flightReturn" value="${weekLater.toISOString().split('T')[0]}" style="width:100%;padding:10px;border-radius:6px;border:none;font-family:Heebo;font-size:0.85rem;color:#2C5F6E;">
-          </div>
-        </div>
-        <button onclick="doFlightSearch()" style="width:100%;padding:12px;border-radius:8px;background:#E9C46A;color:#2C5F6E;border:none;font-family:Heebo;font-weight:700;cursor:pointer;font-size:0.95rem;">
-          <i class="fas fa-search"></i> חפש טיסות
-        </button>
-        <div id="flightResults" style="margin-top:12px;"></div>
-      </div>
-    `;
-  }
 }
 
 function cardHTML(item, category) {
@@ -293,7 +259,7 @@ function buildLeafletMap(el, zoom, items) {
 
 // ===== LIST PAGE =====
 const SUBCAT_MAP = {
-  '7 כוכבים':'7star','5 כוכבים':'5star','3-4 כוכבים':'3-4star','יוקרה':'luxury','עסקים':'business','תקציבי':'budget',
+  '7 כוכבים':'7star','5 כוכבים':'5star','3-4 כוכבים':'3-4star','יוקרה':'luxury','עסקים':'business','תקציבי':'budget','ישראלי':'israeli',
   'אסייתי':'asian','מקומי':'local','פירות ים':'seafood',
   'ציון דרך':'landmark','מוזיאון':'museum','הרפתקה':'adventure',
   'קניון':'mall','שוק':'souk',
@@ -345,6 +311,99 @@ function renderListPage(category, title, filters, activeFilter) {
     clearMap();
     buildMap('listMap', 11, filtered.map(i => ({ ...i, category })));
   }, 200);
+}
+
+// ===== FLIGHTS PAGE =====
+function renderFlightsPage() {
+  const page = document.getElementById('page-flights');
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 7);
+  const weekLater = new Date(tomorrow);
+  weekLater.setDate(weekLater.getDate() + 7);
+
+  page.innerHTML = `
+    <div class="page-header">
+      <button class="back-btn" onclick="navigateTo('home')"><i class="fas fa-arrow-right"></i></button>
+      <h2><i class="fas fa-plane" style="color:#E9C46A;margin-left:6px;"></i> טיסות ישראל ↔ דובאי</h2>
+    </div>
+    <div style="padding:16px 20px;">
+      <!-- Live Flight Board -->
+      <div id="flightsPageBoard" style="margin-bottom:16px;"></div>
+
+      <!-- Search Flights -->
+      <div style="background:linear-gradient(135deg,#2C5F6E,#2A9D8F);border-radius:8px;padding:20px;color:#fff;margin-bottom:16px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <i class="fas fa-search" style="font-size:1.1rem;color:#E9C46A;"></i>
+          <div>
+            <div style="font-weight:700;font-size:1rem;">חפש טיסות TLV ✈ DXB</div>
+            <div style="font-size:0.75rem;opacity:0.8;">השווה מחירים ומצא את הטיסה הזולה</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;margin-bottom:12px;align-items:flex-end;">
+          <div style="flex:1;">
+            <label style="font-size:0.7rem;opacity:0.8;display:block;margin-bottom:3px;">הלוך</label>
+            <input type="date" id="flightPageDepart" value="${tomorrow.toISOString().split('T')[0]}" style="width:100%;padding:10px;border-radius:6px;border:none;font-family:Heebo;font-size:0.85rem;color:#2C5F6E;">
+          </div>
+          <div style="flex:1;">
+            <label style="font-size:0.7rem;opacity:0.8;display:block;margin-bottom:3px;">חזור</label>
+            <input type="date" id="flightPageReturn" value="${weekLater.toISOString().split('T')[0]}" style="width:100%;padding:10px;border-radius:6px;border:none;font-family:Heebo;font-size:0.85rem;color:#2C5F6E;">
+          </div>
+        </div>
+        <button onclick="doFlightPageSearch()" style="width:100%;padding:12px;border-radius:8px;background:#E9C46A;color:#2C5F6E;border:none;font-family:Heebo;font-weight:700;cursor:pointer;font-size:0.95rem;">
+          <i class="fas fa-search"></i> חפש טיסות
+        </button>
+        <div id="flightPageResults" style="margin-top:12px;"></div>
+      </div>
+
+      <!-- Quick links -->
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <a href="https://www.skyscanner.co.il/transport/flights/tlv/dxb/" target="_blank" style="flex:1;text-align:center;padding:12px;border-radius:8px;background:#fff;border:1px solid #E5E7EB;text-decoration:none;color:#2C5F6E;font-weight:600;font-size:0.8rem;">
+          <i class="fas fa-search" style="color:#E76F51;display:block;font-size:1.2rem;margin-bottom:4px;"></i>Skyscanner
+        </a>
+        <a href="https://www.google.com/travel/flights?q=TLV%20to%20DXB" target="_blank" style="flex:1;text-align:center;padding:12px;border-radius:8px;background:#fff;border:1px solid #E5E7EB;text-decoration:none;color:#2C5F6E;font-weight:600;font-size:0.8rem;">
+          <i class="fab fa-google" style="color:#2A9D8F;display:block;font-size:1.2rem;margin-bottom:4px;"></i>Google Flights
+        </a>
+        <a href="https://www.elal.com" target="_blank" style="flex:1;text-align:center;padding:12px;border-radius:8px;background:#fff;border:1px solid #E5E7EB;text-decoration:none;color:#2C5F6E;font-weight:600;font-size:0.8rem;">
+          <i class="fas fa-plane" style="color:#E9C46A;display:block;font-size:1.2rem;margin-bottom:4px;"></i>אל על
+        </a>
+        <a href="https://www.flydubai.com" target="_blank" style="flex:1;text-align:center;padding:12px;border-radius:8px;background:#fff;border:1px solid #E5E7EB;text-decoration:none;color:#2C5F6E;font-weight:600;font-size:0.8rem;">
+          <i class="fas fa-plane-departure" style="color:#F4A261;display:block;font-size:1.2rem;margin-bottom:4px;"></i>FlyDubai
+        </a>
+      </div>
+    </div>
+  `;
+
+  renderFlightBoard('flightsPageBoard');
+}
+
+async function doFlightPageSearch() {
+  const depart = document.getElementById('flightPageDepart')?.value;
+  const ret = document.getElementById('flightPageReturn')?.value;
+  const results = document.getElementById('flightPageResults');
+  if (!results) return;
+
+  results.innerHTML = '<div style="text-align:center;padding:20px;"><i class="fas fa-spinner fa-spin" style="color:#E9C46A;"></i> מחפש טיסות TLV → DXB...</div>';
+
+  const flights = await searchFlights(depart, ret);
+  if (!flights || flights.length === 0) {
+    results.innerHTML = '<div style="text-align:center;padding:16px;font-size:0.85rem;opacity:0.8;">לא נמצאו טיסות. נסה תאריכים אחרים.</div>';
+    return;
+  }
+
+  results.innerHTML = flights.map(f => {
+    const outbound = f.legs[0];
+    const inbound = f.legs[1];
+    return `
+      <div style="background:rgba(255,255,255,0.1);border-radius:6px;padding:12px;margin-bottom:8px;${f.deepLink ? 'cursor:pointer;' : ''}" ${f.deepLink ? `onclick="window.open('${f.deepLink}','_blank')"` : ''}>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          <span style="font-size:1.1rem;font-weight:700;color:#E9C46A;">${f.price || f.priceRaw + ' ₪'}</span>
+          ${outbound?.stops === 0 ? '<span style="background:#2A9D8F;color:#fff;font-size:0.65rem;padding:2px 8px;border-radius:10px;">ישיר</span>' : ''}
+        </div>
+        ${outbound ? `<div style="font-size:0.8rem;margin-bottom:3px;"><span style="font-weight:600;">${outbound.origin} → ${outbound.destination}</span> | ${outbound.carrier} | ${Math.floor(outbound.duration/60)}ש ${outbound.duration%60}ד</div>` : ''}
+        ${inbound ? `<div style="font-size:0.8rem;"><span style="font-weight:600;">${inbound.origin} → ${inbound.destination}</span> | ${inbound.carrier} | ${Math.floor(inbound.duration/60)}ש ${inbound.duration%60}ד</div>` : ''}
+      </div>
+    `;
+  }).join('');
 }
 
 // ===== MAP PAGE =====
