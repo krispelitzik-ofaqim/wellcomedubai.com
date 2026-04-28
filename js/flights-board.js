@@ -149,8 +149,8 @@ async function loadFlightBoard(direction) {
       <span></span>
     </div>
     ${flights.map(f => `
-      <div style="display:grid;grid-template-columns:70px 1fr 60px 50px 55px 65px;gap:4px;padding:8px 6px;font-size:0.8rem;align-items:center;border-bottom:1px solid #faf5ed;${f.isTLV ? 'background:#FFF8E7;' : ''}">
-        <span style="font-weight:600;color:#2C5F6E;font-size:0.75rem;">${f.flight}</span>
+      <div style="display:grid;grid-template-columns:70px 1fr 60px 50px 55px 65px;gap:4px;padding:8px 6px;font-size:0.8rem;align-items:center;border-bottom:1px solid #faf5ed;cursor:pointer;${f.isTLV ? 'background:#FFF8E7;' : ''}" onclick="openFlightDetail('${f.flight}','${f.airline}','${isDepart ? f.destination : f.origin}','${isDepart ? f.destinationCode : f.originCode}','${formatTime(f.scheduled)}','${formatTime(f.actual)}','${f.terminal}','${f.status}','${isDepart ? 'departure' : 'arrival'}','${f.isTLV}')">
+        <span style="font-weight:600;color:#E76F51;font-size:0.75rem;text-decoration:underline;">${f.flight}</span>
         <span style="display:flex;align-items:center;gap:4px;">
           ${f.isTLV ? '<span style="font-size:0.65rem;">🇮🇱</span>' : ''}
           <span style="color:#2C5F6E;font-size:0.78rem;">${isDepart ? f.destination : f.origin}</span>
@@ -166,4 +166,85 @@ async function loadFlightBoard(direction) {
       עודכן: ${new Date().toLocaleTimeString('he-IL')} | נמל התעופה הבינלאומי דובאי (DXB)
     </div>
   `;
+}
+
+// Flight detail popup
+function openFlightDetail(flight, airline, city, cityCode, scheduled, actual, terminal, status, direction, isTLV) {
+  const isDepart = direction === 'departure';
+  const flightClean = flight.replace(/\s/g, '');
+
+  const modal = document.getElementById('detailModal');
+  if (!modal) return;
+
+  modal.innerHTML = `
+    <div class="modal-sheet" style="max-width:440px;">
+      <!-- Header -->
+      <div style="background:linear-gradient(135deg,#2C5F6E,#2A9D8F);padding:20px;color:#fff;">
+        <button onclick="document.getElementById('detailModal').classList.remove('active')" style="position:absolute;top:12px;left:12px;background:rgba(255,255,255,0.2);border:none;color:#fff;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1rem;">✕</button>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+          <i class="fas fa-${isDepart ? 'plane-departure' : 'plane-arrival'}" style="font-size:1.8rem;color:#E9C46A;"></i>
+          <div>
+            <div style="font-size:1.4rem;font-weight:800;">${flight}</div>
+            <div style="opacity:0.8;font-size:0.85rem;">${airline}</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:20px;align-items:center;justify-content:center;margin-top:8px;">
+          <div style="text-align:center;">
+            <div style="font-size:1.5rem;font-weight:700;">${isDepart ? 'DXB' : (cityCode || '?')}</div>
+            <div style="font-size:0.7rem;opacity:0.7;">${isDepart ? 'דובאי' : city}</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;">
+            <i class="fas fa-long-arrow-alt-left" style="font-size:1.2rem;color:#E9C46A;"></i>
+            <div style="font-size:0.65rem;opacity:0.6;">${isDepart ? 'המראה' : 'נחיתה'}</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="font-size:1.5rem;font-weight:700;">${isDepart ? (cityCode || '?') : 'DXB'}</div>
+            <div style="font-size:0.7rem;opacity:0.7;">${isDepart ? city : 'דובאי'}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Details -->
+      <div style="padding:20px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+          <div style="background:#FDF6EC;border-radius:8px;padding:12px;text-align:center;">
+            <div style="font-size:0.7rem;color:#6B7F8D;">שעה מתוכננת</div>
+            <div style="font-size:1.3rem;font-weight:700;color:#2C5F6E;direction:ltr;">${scheduled || '-'}</div>
+          </div>
+          <div style="background:#FDF6EC;border-radius:8px;padding:12px;text-align:center;">
+            <div style="font-size:0.7rem;color:#6B7F8D;">שעה בפועל</div>
+            <div style="font-size:1.3rem;font-weight:700;color:${actual && actual !== scheduled ? '#E76F51' : '#2A9D8F'};direction:ltr;">${actual || scheduled || '-'}</div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+          <div style="background:#FDF6EC;border-radius:8px;padding:12px;text-align:center;">
+            <div style="font-size:0.7rem;color:#6B7F8D;">טרמינל</div>
+            <div style="font-size:1.1rem;font-weight:700;color:#2C5F6E;">${terminal || '-'}</div>
+          </div>
+          <div style="background:#FDF6EC;border-radius:8px;padding:12px;text-align:center;">
+            <div style="font-size:0.7rem;color:#6B7F8D;">סטטוס</div>
+            <div style="font-size:0.9rem;font-weight:700;color:${statusColor(status)};">${statusHebrew(status)}</div>
+          </div>
+        </div>
+
+        ${isTLV === 'true' ? '<div style="background:#FFF8E7;border-radius:8px;padding:10px;text-align:center;margin-bottom:16px;font-size:0.85rem;color:#2C5F6E;"><span style="font-size:1rem;">🇮🇱</span> טיסה ישירה לישראל / מישראל</div>' : ''}
+
+        <!-- Action buttons -->
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <a href="https://www.flightradar24.com/data/flights/${flightClean.toLowerCase()}" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border-radius:8px;background:#E76F51;color:#fff;text-decoration:none;font-weight:600;">
+            <i class="fas fa-satellite-dish"></i> מעקב חי - Flightradar24
+          </a>
+          <a href="https://www.flightaware.com/live/flight/${flightClean}" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border-radius:8px;background:#2C5F6E;color:#fff;text-decoration:none;font-weight:600;">
+            <i class="fas fa-radar"></i> מעקב - FlightAware
+          </a>
+          <a href="https://www.google.com/search?q=${flightClean}+flight+status" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border-radius:8px;background:#E9C46A;color:#2C5F6E;text-decoration:none;font-weight:600;">
+            <i class="fab fa-google"></i> חפש בגוגל
+          </a>
+        </div>
+      </div>
+    </div>
+  `;
+  modal.classList.add('active');
+  modal.onclick = (e) => { if (e.target === modal) modal.classList.remove('active'); };
 }
