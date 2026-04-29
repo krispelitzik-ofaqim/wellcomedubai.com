@@ -440,14 +440,14 @@ body {
   display:inline-block;
   opacity:0;
   color:#fff;
-  animation: heroLetterIn 0.3s ease forwards, heroToOrange 0.8s ease 5s forwards, heroFadeOut 1.5s ease 15s forwards;
+  animation: heroLetterIn 0.3s ease forwards, heroToOrange 0.8s ease 5s forwards;
 }
 .hero-letter.hero-dubai {
-  animation: heroLetterIn 0.3s ease forwards, heroDubaiOrange 0.8s ease 5s forwards, heroFadeOut 1.5s ease 15s forwards;
+  animation: heroLetterIn 0.3s ease forwards, heroDubaiOrange 0.8s ease 5s forwards;
 }
 .hero-sub-anim {
   opacity:0;
-  animation: heroSubIn 0.8s ease 5s forwards, heroFadeOut 1.5s ease 15s forwards;
+  animation: heroSubIn 0.8s ease 5s forwards;
 }
 @keyframes heroLetterIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
 @keyframes heroToOrange { to { color:#E76F51; } }
