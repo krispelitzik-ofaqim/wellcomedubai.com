@@ -203,17 +203,21 @@ function buildMap(elementId, zoom, items) {
   const el = document.getElementById(elementId);
   if (!el) return;
 
+  // Always show static map first as placeholder
+  buildStaticMap(el, items);
+
+  // Then try to load interactive map on top
   try {
     if (hasGoogle()) {
+      el.innerHTML = '';
       buildGoogleMap(el, zoom, items);
     } else if (typeof L !== 'undefined') {
+      el.innerHTML = '';
       buildLeafletMap(el, zoom, items);
-    } else {
-      buildStaticMap(el, items);
     }
   } catch(e) {
     console.error('Map error:', e);
-    buildStaticMap(el, items);
+    // Static map already showing as fallback
   }
 }
 
