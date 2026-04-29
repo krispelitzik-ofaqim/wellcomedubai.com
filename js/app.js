@@ -69,6 +69,7 @@ function navigateTo(page, subcategory) {
     case 'casino': renderListPage('casino', 'קזינו ומשחקים', ['הכל','קזינו','מרוצים'], subcategory); break;
     case 'map': renderMapPage(); break;
     case 'flights': renderFlightsPage(); break;
+    case 'livecams': renderLiveCamsPage(); break;
     case 'info': renderInfoPage(); break;
   }
 }
@@ -430,6 +431,76 @@ async function doFlightPageSearch() {
   }).join('');
 }
 
+// ===== LIVE CAMS PAGE =====
+function renderLiveCamsPage() {
+  const page = document.getElementById('page-livecams');
+  const cams = [
+    { name:'ברג\' חליפה ומזרקת דובאי', icon:'fas fa-building', color:'#E76F51', url:'https://www.webcamtaxi.com/en/united-arab-emirates/dubai/burj-khalifa-lake-dubai.html', embed:'https://www.youtube.com/embed/live_stream?channel=UCKjg-gKRv1aVL9pEoWxWxAQ' },
+    { name:'דובאי מרינה', icon:'fas fa-ship', color:'#2A9D8F', url:'https://www.skylinewebcams.com/en/webcam/united-arab-emirates/dubai/dubai/dubai-marina.html', embed:'' },
+    { name:'קו הרקיע - שנגרי-לה', icon:'fas fa-city', color:'#E9C46A', url:'https://www.webcamgalore.com/webcam/United-Arab-Emirates/Dubai/29600.html', embed:'' },
+    { name:'חוף ג\'ומיירה', icon:'fas fa-umbrella-beach', color:'#F4A261', url:'https://www.skylinewebcams.com/en/webcam/united-arab-emirates/dubai/dubai.html', embed:'' },
+    { name:'פאלם ג\'ומיירה', icon:'fas fa-tree', color:'#2C5F6E', url:'https://en.youwebcams.org/location/dubai/', embed:'' },
+    { name:'Downtown דובאי', icon:'fas fa-landmark', color:'#E76F51', url:'https://www.webcamtaxi.com/en/united-arab-emirates/dubai.html', embed:'' },
+  ];
+
+  page.innerHTML = `
+    <div class="page-header">
+      <button class="back-btn" onclick="navigateTo('home')"><i class="fas fa-arrow-right"></i></button>
+      <h2><i class="fas fa-video" style="color:#E76F51;margin-left:6px;"></i> דובאי עכשיו - מצלמות חיות</h2>
+    </div>
+    <div style="padding:16px 20px;">
+      <!-- Weather widget here too -->
+      <div id="liveCamWeather" style="margin-bottom:16px;"></div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        ${cams.map(cam => `
+          <a href="${cam.url}" target="_blank" style="text-decoration:none;">
+            <div style="background:#fff;border-radius:6px;overflow:hidden;border:1px solid #E5E7EB;transition:all 0.3s;cursor:pointer;" onmouseover="this.style.borderColor='${cam.color}'" onmouseout="this.style.borderColor='#E5E7EB'">
+              <div style="background:${cam.color};padding:24px;text-align:center;">
+                <i class="${cam.icon}" style="font-size:2rem;color:#fff;"></i>
+                <div style="position:relative;margin-top:8px;">
+                  <span style="background:rgba(255,0,0,0.9);color:#fff;font-size:0.6rem;padding:2px 8px;border-radius:10px;font-weight:700;animation:pulse 1.5s infinite;">● LIVE</span>
+                </div>
+              </div>
+              <div style="padding:12px;text-align:center;">
+                <div style="font-weight:600;color:#2C5F6E;font-size:0.85rem;">${cam.name}</div>
+                <div style="font-size:0.7rem;color:#6B7F8D;margin-top:2px;">לחץ לצפייה בשידור חי</div>
+              </div>
+            </div>
+          </a>
+        `).join('')}
+      </div>
+
+      <div style="margin-top:16px;background:#FDF6EC;border-radius:6px;padding:12px;border-right:3px solid #E9C46A;">
+        <div style="font-size:0.8rem;color:#2C5F6E;">
+          <i class="fas fa-info-circle" style="color:#E9C46A;"></i>
+          <b>טיפ:</b> המצלמות משדרות 24/7. בדוק את הפרש השעות - דובאי UTC+4 (שעה לפני ישראל בחורף, אותו זמן בקיץ).
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Load weather in cam page too
+  setTimeout(async () => {
+    const el = document.getElementById('liveCamWeather');
+    if (el) {
+      const w = await getDubaiWeather();
+      if (w) {
+        el.innerHTML = `
+          <div style="background:linear-gradient(135deg,#2C5F6E,#2A9D8F);border-radius:8px;padding:14px;color:#fff;display:flex;align-items:center;justify-content:space-between;">
+            <div>
+              <div style="font-size:0.75rem;opacity:0.8;">דובאי עכשיו</div>
+              <div style="font-size:1.8rem;font-weight:700;">${w.temp}°C</div>
+              <div style="font-size:0.8rem;">${w.condition}</div>
+            </div>
+            <img src="https:${w.icon}" style="width:50px;height:50px;">
+          </div>
+        `;
+      }
+    }
+  }, 100);
+}
+
 // ===== MAP PAGE =====
 function renderMapPage() {
   const page = document.getElementById('page-map');
@@ -626,6 +697,7 @@ function openDetail(category, id) {
         <div class="modal-actions" style="flex-wrap:wrap;">
           ${item.lat ? `<button class="modal-btn primary" onclick="openNavigation(${item.lat},${item.lng})"><i class="fas fa-directions"></i> נווט</button>` : ''}
           ${item.googleUrl ? `<a href="${item.googleUrl}" target="_blank" class="modal-btn secondary"><i class="fab fa-google"></i> Google Maps</a>` : ''}
+          ${item.webcam ? `<a href="${item.webcam}" target="_blank" class="modal-btn secondary" style="background:#2A9D8F;color:#fff;border:none;"><i class="fas fa-video"></i> מצלמה חיה</a>` : ''}
           ${item.website ? `<a href="${item.website}" target="_blank" class="modal-btn secondary"><i class="fas fa-globe"></i> אתר</a>` : ''}
           ${item.phone ? `<a href="tel:${item.phone}" class="modal-btn secondary"><i class="fas fa-phone"></i> התקשר</a>` : ''}
           <button class="modal-btn secondary" onclick="shareItem('${item.name}','${item.address}')"><i class="fas fa-share-alt"></i> שתף</button>
