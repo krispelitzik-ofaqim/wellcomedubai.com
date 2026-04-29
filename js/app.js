@@ -546,46 +546,36 @@ function renderWeatherPage() {
 function renderLiveCamsPage() {
   const page = document.getElementById('page-livecams');
   const cams = [
-    { name:'ברג\' חליפה ומזרקת דובאי', icon:'fas fa-building', color:'#E76F51', url:'https://www.webcamtaxi.com/en/united-arab-emirates/dubai/burj-khalifa-lake-dubai.html', embed:'https://www.youtube.com/embed/live_stream?channel=UCKjg-gKRv1aVL9pEoWxWxAQ' },
-    { name:'דובאי מרינה', icon:'fas fa-ship', color:'#2A9D8F', url:'https://www.skylinewebcams.com/en/webcam/united-arab-emirates/dubai/dubai/dubai-marina.html', embed:'' },
-    { name:'קו הרקיע - שנגרי-לה', icon:'fas fa-city', color:'#E9C46A', url:'https://www.webcamgalore.com/webcam/United-Arab-Emirates/Dubai/29600.html', embed:'' },
-    { name:'חוף ג\'ומיירה', icon:'fas fa-umbrella-beach', color:'#F4A261', url:'https://www.skylinewebcams.com/en/webcam/united-arab-emirates/dubai/dubai.html', embed:'' },
-    { name:'פאלם ג\'ומיירה', icon:'fas fa-tree', color:'#2C5F6E', url:'https://en.youwebcams.org/location/dubai/', embed:'' },
-    { name:'Downtown דובאי', icon:'fas fa-landmark', color:'#E76F51', url:'https://www.webcamtaxi.com/en/united-arab-emirates/dubai.html', embed:'' },
+    { name:'ברג\' חליפה - שידור חי', embed:'https://www.youtube.com/embed/xKYvWgyxXXg?autoplay=1&mute=1', color:'#E76F51' },
+    { name:'דובאי Downtown', embed:'https://www.youtube.com/embed/EEhaQLAw-M8?autoplay=0&mute=1', color:'#2A9D8F' },
+    { name:'דובאי מרינה', embed:'https://www.skylinewebcams.com/embed/webcam/united-arab-emirates/dubai/dubai/dubai-marina.html', color:'#E9C46A' },
+    { name:'דובאי - קו הרקיע', embed:'https://www.skylinewebcams.com/embed/webcam/united-arab-emirates/dubai/dubai/dubai.html', color:'#F4A261' },
   ];
 
   page.innerHTML = `
     <div class="page-header">
       <button class="back-btn" onclick="navigateTo('home')"><i class="fas fa-arrow-right"></i></button>
-      <h2><i class="fas fa-video" style="color:#E76F51;margin-left:6px;"></i> דובאי עכשיו - מצלמות חיות</h2>
+      <h2><i class="fas fa-video" style="color:#E76F51;margin-left:6px;"></i> דובאי עכשיו - שידור חי</h2>
     </div>
-    <div style="padding:16px 20px;">
-      <!-- Weather widget here too -->
-      <div id="liveCamWeather" style="margin-bottom:16px;"></div>
+    <div style="padding:12px 16px;">
+      <div id="liveCamWeather" style="margin-bottom:12px;"></div>
 
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-        ${cams.map(cam => `
-          <a href="${cam.url}" target="_blank" style="text-decoration:none;">
-            <div style="background:#fff;border-radius:6px;overflow:hidden;border:1px solid #E5E7EB;transition:all 0.3s;cursor:pointer;" onmouseover="this.style.borderColor='${cam.color}'" onmouseout="this.style.borderColor='#E5E7EB'">
-              <div style="background:${cam.color};padding:24px;text-align:center;">
-                <i class="${cam.icon}" style="font-size:2rem;color:#fff;"></i>
-                <div style="position:relative;margin-top:8px;">
-                  <span style="background:rgba(255,0,0,0.9);color:#fff;font-size:0.6rem;padding:2px 8px;border-radius:10px;font-weight:700;animation:pulse 1.5s infinite;">● LIVE</span>
-                </div>
-              </div>
-              <div style="padding:12px;text-align:center;">
-                <div style="font-weight:600;color:#2C5F6E;font-size:0.85rem;">${cam.name}</div>
-                <div style="font-size:0.7rem;color:#6B7F8D;margin-top:2px;">לחץ לצפייה בשידור חי</div>
-              </div>
-            </div>
-          </a>
-        `).join('')}
-      </div>
+      ${cams.map((cam, i) => `
+        <div style="margin-bottom:14px;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+            <span style="background:rgba(255,0,0,0.85);color:#fff;font-size:0.55rem;padding:2px 8px;border-radius:10px;font-weight:700;">● LIVE</span>
+            <span style="font-weight:700;color:${cam.color};font-size:0.9rem;">${cam.name}</span>
+          </div>
+          <div style="position:relative;width:100%;padding-bottom:56.25%;background:#000;border-radius:6px;overflow:hidden;">
+            <iframe src="${cam.embed}" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allowfullscreen loading="${i === 0 ? 'eager' : 'lazy'}"></iframe>
+          </div>
+        </div>
+      `).join('')}
 
-      <div style="margin-top:16px;background:#FDF6EC;border-radius:6px;padding:12px;border-right:3px solid #E9C46A;">
-        <div style="font-size:0.8rem;color:#2C5F6E;">
+      <div style="margin-top:8px;background:#FDF6EC;border-radius:6px;padding:10px;border-right:3px solid #E9C46A;">
+        <div style="font-size:0.75rem;color:#2C5F6E;">
           <i class="fas fa-info-circle" style="color:#E9C46A;"></i>
-          <b>טיפ:</b> המצלמות משדרות 24/7. בדוק את הפרש השעות - דובאי UTC+4 (שעה לפני ישראל בחורף, אותו זמן בקיץ).
+          דובאי UTC+4 | שעה לפני ישראל בחורף, אותו זמן בקיץ
         </div>
       </div>
     </div>
