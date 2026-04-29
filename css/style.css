@@ -80,7 +80,7 @@ body {
   position:absolute; inset:0;
   background-size:cover;
   background-position:center;
-  transition: opacity 1.5s ease;
+  transition: opacity 3s ease;
 }
 .hero-overlay {
   position:absolute; inset:0;
