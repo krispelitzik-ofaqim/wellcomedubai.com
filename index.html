@@ -64,11 +64,14 @@
       <!-- Hero with category tags -->
       <div class="hero" style="height:100vh;max-height:700px;">
         <div class="hero-bg"></div>
-        <div class="hero-overlay" style="background:linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.7) 100%);"></div>
-        <div class="hero-content" style="padding:30px 20px 24px;justify-content:flex-end;">
-          <h1 class="hero-title" style="font-size:2.2rem;">ברוכים הבאים ל<span>דובאי</span></h1>
-          <p class="hero-subtitle" style="margin-bottom:16px;">המדריך המלא לתייר הישראלי</p>
-          <!-- Category words at bottom -->
+        <div class="hero-overlay" style="background:linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, transparent 25%, transparent 60%, rgba(0,0,0,0.7) 100%);"></div>
+        <div class="hero-content" style="padding:20px;justify-content:space-between;">
+          <!-- Top 20%: Title -->
+          <div style="padding-top:10px;">
+            <h1 id="heroTitle" class="hero-title" style="font-size:2.2rem;min-height:2.5rem;"></h1>
+            <p id="heroSubtitle" class="hero-subtitle" style="opacity:0;transition:opacity 0.5s;">המדריך המלא לתייר הישראלי</p>
+          </div>
+          <!-- Bottom: Category words -->
           <div style="display:flex;flex-wrap:wrap;gap:6px 14px;line-height:1.8;">
             <a onclick="navigateTo('hotels')" style="color:#E76F51;font-size:1.1rem;font-weight:700;cursor:pointer;text-decoration:none;text-shadow:0 1px 3px rgba(0,0,0,0.5);">מלונות</a>
             <a onclick="navigateTo('restaurants')" style="color:#E9C46A;font-size:0.95rem;font-weight:700;cursor:pointer;text-decoration:none;text-shadow:0 1px 3px rgba(0,0,0,0.5);">מסעדות</a>
@@ -231,6 +234,40 @@
   function showMobilePopup() {
     toggleMobileMode();
   }
+
+  // Hero title animation
+  function animateHeroTitle() {
+    const words = ['ברוכים', 'הבאים', 'ל<span>דובאי</span>'];
+    const title = document.getElementById('heroTitle');
+    const subtitle = document.getElementById('heroSubtitle');
+    if (!title) return;
+
+    let i = 0;
+    title.innerHTML = '';
+
+    function showNext() {
+      if (i < words.length) {
+        title.innerHTML += (i > 0 ? ' ' : '') + `<span style="opacity:0;display:inline-block;animation:wordFadeIn 0.6s ease forwards;">${words[i]}</span>`;
+        i++;
+        setTimeout(showNext, 500);
+      } else {
+        // Show subtitle after all words
+        setTimeout(() => { if (subtitle) subtitle.style.opacity = '1'; }, 400);
+        // Fade out after 10 seconds
+        setTimeout(() => {
+          if (title) title.style.transition = 'opacity 1s';
+          if (title) title.style.opacity = '0';
+          if (subtitle) subtitle.style.transition = 'opacity 1s';
+          if (subtitle) subtitle.style.opacity = '0';
+        }, 10000);
+      }
+    }
+
+    // Start after splash screen
+    setTimeout(showNext, 1800);
+  }
+
+  animateHeroTitle();
 
   function toggleSearch() {
     const bar = document.getElementById('searchBar');
