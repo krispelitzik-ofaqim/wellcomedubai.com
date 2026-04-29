@@ -188,8 +188,12 @@ const MARKER_COLORS = {
 };
 
 function clearMap() {
-  if (map) {
-    if (map.remove) map.remove(); // Leaflet
+  try {
+    if (map) {
+      if (map.remove) map.remove(); // Leaflet
+      map = null;
+    }
+  } catch(e) {
     map = null;
   }
   markers = [];
@@ -336,8 +340,17 @@ function renderListPage(category, title, filters, activeFilter) {
 
   setTimeout(() => {
     clearMap();
-    buildMap('listMap', 11, filtered.map(i => ({ ...i, category })));
-  }, 200);
+    const mapEl = document.getElementById('listMap');
+    if (mapEl && mapEl.offsetHeight > 0) {
+      buildMap('listMap', 11, filtered.map(i => ({ ...i, category })));
+    } else {
+      // Retry after more time
+      setTimeout(() => {
+        clearMap();
+        buildMap('listMap', 11, filtered.map(i => ({ ...i, category })));
+      }, 500);
+    }
+  }, 300);
 }
 
 // ===== FLIGHTS PAGE =====
