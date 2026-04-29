@@ -152,20 +152,20 @@ async function loadFlightBoard(direction) {
 
   content.innerHTML = `
     <!-- Table header -->
-    <div style="display:grid;grid-template-columns:55px 1fr 45px 40px;gap:3px;padding:6px 4px;font-size:0.6rem;color:#6B7F8D;font-weight:600;border-bottom:1px solid #F5EFE6;">
+    <div style="display:grid;grid-template-columns:55px 1fr 1fr 50px;gap:3px;padding:6px 4px;font-size:0.6rem;color:#6B7F8D;font-weight:600;border-bottom:1px solid #F5EFE6;">
       <span>טיסה</span>
+      <span>חברה</span>
       <span>${isDepart ? 'יעד' : 'מוצא'}</span>
-      <span>שעה</span>
       <span>סטטוס</span>
     </div>
     ${flights.map(f => `
-      <div style="display:grid;grid-template-columns:55px 1fr 45px 40px;gap:3px;padding:5px 4px;font-size:0.7rem;align-items:center;border-bottom:1px solid #faf5ed;cursor:pointer;${f.isTLV ? 'background:#FFF8E7;' : ''}" onclick="openFlightDetail('${f.flight}','${f.airline}','${isDepart ? f.destination : f.origin}','${isDepart ? f.destinationCode : f.originCode}','${formatTime(f.scheduled)}','${formatTime(f.actual)}','${f.terminal}','${f.status}','${isDepart ? 'departure' : 'arrival'}','${f.isTLV}')">
+      <div style="display:grid;grid-template-columns:55px 1fr 1fr 50px;gap:3px;padding:5px 4px;font-size:0.7rem;align-items:center;border-bottom:1px solid #faf5ed;cursor:pointer;${f.isTLV ? 'background:#FFF8E7;' : ''}" onclick="openFlightDetail('${f.flight}','${f.airline}','${isDepart ? f.destination : f.origin}','${isDepart ? f.destinationCode : f.originCode}','${formatTime(f.scheduled)}','${formatTime(f.actual)}','${f.terminal}','${f.status}','${isDepart ? 'departure' : 'arrival'}','${f.isTLV}')">
         <span style="font-weight:600;color:#E76F51;font-size:0.65rem;">${f.flight}</span>
+        <span style="color:#2C5F6E;font-size:0.63rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${f.airline}</span>
         <span style="display:flex;align-items:center;gap:3px;overflow:hidden;">
           ${f.isTLV ? '<span style="font-size:0.6rem;">🇮🇱</span>' : ''}
-          <span style="color:#2C5F6E;font-size:0.68rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${isDepart ? f.destinationCode || f.destination : f.originCode || f.origin}</span>
+          <span style="color:#6B7F8D;font-size:0.63rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${isDepart ? f.destinationCode || f.destination : f.originCode || f.origin}</span>
         </span>
-        <span style="font-weight:600;color:#2C5F6E;font-size:0.68rem;direction:ltr;text-align:center;">${formatTime(f.scheduled)}</span>
         <span style="background:${statusBg(f.status)};color:${statusColor(f.status)};font-size:0.55rem;font-weight:700;padding:2px 5px;border-radius:4px;text-align:center;">${statusHebrew(f.status)}</span>
       </div>
     `).join('')}
