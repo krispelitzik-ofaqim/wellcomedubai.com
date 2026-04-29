@@ -209,12 +209,22 @@ function buildMap(elementId, zoom, items) {
     } else if (typeof L !== 'undefined') {
       buildLeafletMap(el, zoom, items);
     } else {
-      el.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--gray);font-size:0.9rem;text-align:center;padding:20px;"><div><i class="fas fa-map-marked-alt" style="font-size:2rem;color:var(--gold);display:block;margin-bottom:8px;"></i>המפה לא זמינה ברשת הנוכחית.<br>נסה מרשת אחרת או לחץ על "נווט בגוגל" בכרטיס פריט.</div></div>';
+      buildStaticMap(el, items);
     }
   } catch(e) {
     console.error('Map error:', e);
-    el.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--gray);text-align:center;padding:20px;"><div><i class="fas fa-exclamation-triangle" style="font-size:2rem;color:var(--gold);display:block;margin-bottom:8px;"></i>שגיאה בטעינת המפה.<br>נסה לרענן את הדף.</div></div>';
+    buildStaticMap(el, items);
   }
+}
+
+function buildStaticMap(el, items) {
+  // Static Google Map image as fallback
+  var markers = (items || []).filter(i => i.lat && i.lng).slice(0, 15).map(i => {
+    var color = '0xE76F51';
+    return `markers=color:${color}|${i.lat},${i.lng}`;
+  }).join('&');
+  var src = `https://maps.googleapis.com/maps/api/staticmap?center=25.2048,55.2708&zoom=11&size=600x300&maptype=roadmap&${markers}&key=AIzaSyDIqkbn9__0EdYjyCRQv4w-Gi3tHWwSwro`;
+  el.innerHTML = `<img src="${src}" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='<div style=\\'display:flex;align-items:center;justify-content:center;height:100%;color:#6B7F8D;text-align:center;\\'>מפה לא זמינה ברשת זו</div>'">`;
 }
 
 // --- Google Maps ---
