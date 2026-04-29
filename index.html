@@ -235,36 +235,42 @@
     toggleMobileMode();
   }
 
-  // Hero title animation
+  // Hero title animation - letter by letter
   function animateHeroTitle() {
-    const words = ['ברוכים', 'הבאים', 'ל<span>דובאי</span>'];
+    const text = 'ברוכים הבאים לדובאי';
+    const dubaiStart = text.indexOf('דובאי');
     const title = document.getElementById('heroTitle');
     const subtitle = document.getElementById('heroSubtitle');
     if (!title) return;
 
-    let i = 0;
     title.innerHTML = '';
+    let i = 0;
 
-    function showNext() {
-      if (i < words.length) {
-        title.innerHTML += (i > 0 ? ' ' : '') + `<span style="opacity:0;display:inline-block;animation:wordFadeIn 0.6s ease forwards;">${words[i]}</span>`;
+    function showNextLetter() {
+      if (i < text.length) {
+        const ch = text[i];
+        const isDubai = (i >= dubaiStart);
+        if (ch === ' ') {
+          title.innerHTML += ' ';
+        } else {
+          const color = isDubai ? 'color:#E76F51' : 'color:#fff';
+          title.innerHTML += `<span style="${color};opacity:0;display:inline;animation:letterFadeIn 0.3s ease ${i * 80}ms forwards;">${ch}</span>`;
+        }
         i++;
-        setTimeout(showNext, 500);
+        setTimeout(showNextLetter, 80);
       } else {
-        // Show subtitle after all words
-        setTimeout(() => { if (subtitle) subtitle.style.opacity = '1'; }, 400);
+        // Show subtitle
+        setTimeout(() => { if (subtitle) subtitle.style.opacity = '1'; }, 500);
         // Fade out after 10 seconds
         setTimeout(() => {
-          if (title) title.style.transition = 'opacity 1s';
-          if (title) title.style.opacity = '0';
-          if (subtitle) subtitle.style.transition = 'opacity 1s';
-          if (subtitle) subtitle.style.opacity = '0';
+          if (title) { title.style.transition = 'opacity 1.5s'; title.style.opacity = '0'; }
+          if (subtitle) { subtitle.style.transition = 'opacity 1.5s'; subtitle.style.opacity = '0'; }
         }, 10000);
       }
     }
 
-    // Start after splash screen
-    setTimeout(showNext, 1800);
+    // Start after splash screen disappears
+    setTimeout(showNextLetter, 2000);
   }
 
   animateHeroTitle();
