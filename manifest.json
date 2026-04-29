@@ -4,16 +4,16 @@
   "description": "המדריך המלא לתיירים ישראליים בדובאי",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#0A1628",
-  "theme_color": "#D4A843",
+  "background_color": "#2C5F6E",
+  "theme_color": "#E76F51",
   "orientation": "portrait",
   "dir": "rtl",
   "lang": "he",
   "icons": [
     {
-      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' rx='40' fill='%230A1628'/><text x='96' y='120' text-anchor='middle' font-size='90' fill='%23D4A843'>🌴</text></svg>",
+      "src": "images/icon.jpeg",
       "sizes": "192x192",
-      "type": "image/svg+xml"
+      "type": "image/jpeg"
     }
   ]
 }
