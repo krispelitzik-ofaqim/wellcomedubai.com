@@ -310,18 +310,19 @@ function renderListPage(category, title, filters, activeFilter) {
     </div>
     ${category === 'hotels' ? '<div id="bookingWidget" style="padding:0 20px;"></div>' : ''}
     <div class="map-container"><div id="listMap" style="width:100%;height:100%;"></div></div>
-    <div class="listings-grid">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 16px 20px;">
       ${filtered.map(item => `
-        <div class="list-card" onclick="openDetail('${category}', ${item.id})">
-          <img class="card-thumb" src="${item.image}" alt="${item.name}" onerror="this.style.display='none'">
-          <div class="card-info">
-            <div class="card-title">${item.name}</div>
-            <div class="card-desc">${item.description?.substring(0, 80)}...</div>
-            <div class="card-meta">
-              ${item.rating ? `<span class="card-rating"><i class="fas fa-star"></i> ${item.rating}</span>` : ''}
-              <span class="card-price">${item.priceRange || item.price || ''}</span>
-              ${item.tags?.[0] ? `<span class="card-tag">${item.tags[0]}</span>` : ''}
+        <div style="background:#fff;border-radius:6px;overflow:hidden;border:1px solid #E5E7EB;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,0.05);" onclick="openDetail('${category}', ${item.id})">
+          <img src="${item.image}" alt="${item.name}" style="width:100%;height:130px;object-fit:cover;" onerror="this.style.display='none'">
+          <div style="padding:10px;">
+            <div style="font-weight:600;color:#2C5F6E;font-size:0.85rem;margin-bottom:3px;">${item.name}</div>
+            ${item.stars ? `<div style="color:#E9C46A;font-size:0.7rem;margin-bottom:3px;">${'★'.repeat(Math.min(item.stars,5))}${item.stars > 5 ? '+' : ''}</div>` : ''}
+            <div style="font-size:0.7rem;color:#6B7F8D;margin-bottom:4px;"><i class="fas fa-map-marker-alt" style="color:#F4A261;font-size:0.6rem;"></i> ${item.address || ''}</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              ${item.rating ? `<span style="color:#E9C46A;font-size:0.75rem;font-weight:600;"><i class="fas fa-star"></i> ${item.googleRating || item.rating}</span>` : ''}
+              <span style="color:#E76F51;font-size:0.7rem;font-weight:600;">${item.price || ''}</span>
             </div>
+            ${item.isOpen === true ? '<div style="color:#2A9D8F;font-size:0.6rem;font-weight:600;margin-top:3px;">● פתוח</div>' : ''}
           </div>
         </div>
       `).join('')}
