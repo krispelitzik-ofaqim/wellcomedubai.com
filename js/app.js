@@ -66,7 +66,7 @@ function navigateTo(page, subcategory) {
     case 'shopping': renderListPage('shopping', 'קניות', ['הכל','קניון','שוק'], subcategory); break;
     case 'nightlife': renderListPage('nightlife', 'בילויים', ['הכל','מועדון','לאונג\'','בידור','מופע'], subcategory); break;
     case 'transport': renderListPage('transport', 'תחבורה', ['הכל','מטרו','מונית','סירה','אפליקציה'], subcategory); break;
-    case 'casino': renderListPage('casino', 'קזינו ומשחקים', ['הכל','קזינו','מרוצים'], subcategory); break;
+    case 'casino': renderListPage('casino', 'בידור ומשחקים', ['הכל','קזינו','מרוצים','ספורט'], subcategory); break;
     case 'map': renderMapPage(); break;
     case 'flights': renderFlightsPage(); break;
     case 'livecams': renderLiveCamsPage(); break;
@@ -309,7 +309,7 @@ const SUBCAT_MAP = {
   'קניון':'mall','שוק':'souk',
   'מועדון':'club','לאונג\'':'lounge','בידור':'entertainment','מופע':'show',
   'מטרו':'metro','מונית':'taxi','סירה':'boat','אפליקציה':'app',
-  'קזינו':'casino','מרוצים':'racing','קניות':'shopping'
+  'קזינו':'casino','מרוצים':'racing','ספורט':'sport','קניות':'shopping'
 };
 
 function renderListPage(category, title, filters, activeFilter) {

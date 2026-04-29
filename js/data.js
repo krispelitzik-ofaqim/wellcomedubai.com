@@ -235,8 +235,14 @@ const DEFAULT_DATA = {
     { id:504, name:"Careem / Uber", nameEn:"Careem Uber", category:"transport", subcategory:"app", description:"שירותי הסעות באפליקציה. Careem הוא המקומי הפופולרי.", image:"https://images.pexels.com/photos/29352929/pexels-photo-29352929.jpeg", rating:4.3, price:"$$", priceRange:"₪15-100 / $4-27 לנסיעה", address:"בכל מקום", lat:25.2048, lng:55.2708, tags:["אפליקציה","נוח","מהיר"], featured:false },
   ],
   casino: [
-    { id:601, name:"Wynn Resort Dubai", nameEn:"Wynn Resort Dubai", category:"casino", subcategory:"casino", description:"נפתח בקרוב! ריזורט קזינו ראשון בדובאי.", image:"https://images.pexels.com/photos/31824217/pexels-photo-31824217.jpeg", rating:0, price:"$$$$", priceRange:"טרם פורסם", address:"Ras Al Khaimah", lat:25.1500, lng:55.2000, tags:["קזינו","חדש","יוקרה"], featured:true },
-    { id:602, name:"Hippodrome - Meydan", nameEn:"Meydan Racecourse", category:"casino", subcategory:"racing", description:"מתחם מרוצי הסוסים היוקרתי. אירועי הימורים ו-VIP.", image:"https://images.pexels.com/photos/32696882/pexels-photo-32696882.jpeg", rating:4.4, price:"$$$", priceRange:"₪100-500 / $27-136", address:"Meydan", lat:25.1665, lng:55.3052, tags:["מרוצים","הימורים","VIP"], featured:true },
+    { id:601, name:"Wynn Resort (בקרוב)", nameEn:"Wynn Resort Dubai", category:"casino", subcategory:"casino", description:"ריזורט קזינו ראשון באמירויות! צפוי להיפתח ב-2027.", image:"https://images.pexels.com/photos/31824217/pexels-photo-31824217.jpeg", rating:0, price:"$$$$", priceRange:"טרם פורסם", address:"Ras Al Khaimah", lat:25.1500, lng:55.2000, tags:["קזינו","חדש","יוקרה"], featured:true },
+    { id:602, name:"מרוצי סוסים - Meydan", nameEn:"Meydan Racecourse", category:"casino", subcategory:"racing", description:"מתחם מרוצי הסוסים היוקרתי של דובאי. Dubai World Cup - הפרס הגדול בעולם.", image:"https://images.pexels.com/photos/32696882/pexels-photo-32696882.jpeg", rating:4.4, price:"$$$", priceRange:"₪100-500", address:"Meydan", lat:25.1665, lng:55.3052, tags:["מרוצים","סוסים","VIP"], featured:true },
+    { id:603, name:"מרוצי גמלים", nameEn:"Al Marmoom Camel Racing", category:"casino", subcategory:"racing", description:"מרוצי גמלים מסורתיים עם רובוטים רוכבים. חוויה אמיראתית ייחודית וחינמית!", image:"images/hotels/hotel_22.jpeg", rating:4.6, price:"חינם", priceRange:"חינם", address:"Al Marmoom", lat:25.0200, lng:55.3500, tags:["מרוצים","גמלים","מסורתי"], featured:true },
+    { id:604, name:"F1 - Abu Dhabi GP", nameEn:"Abu Dhabi Grand Prix", category:"casino", subcategory:"sport", description:"גרנד פרי פורמולה 1 במסלול יאס מרינה. האירוע הספורטיבי הגדול ביותר במזה\"ת.", image:"images/nightlife/night_1.jpeg", rating:4.8, price:"$$$$", priceRange:"₪1,000-10,000", address:"Yas Marina Circuit, Abu Dhabi", lat:24.4672, lng:54.6031, tags:["ספורט","F1","אירוע"], featured:true },
+    { id:605, name:"Dubai World Cup", nameEn:"Dubai World Cup", category:"casino", subcategory:"racing", description:"גביע העולם למרוצי סוסים - הפרס הגדול בעולם ($12 מיליון). מרץ בכל שנה.", image:"images/nightlife/night_2.jpeg", rating:4.7, price:"$$$", priceRange:"₪200-2,000", address:"Meydan Racecourse", lat:25.1665, lng:55.3052, tags:["מרוצים","סוסים","גביע"], featured:false },
+    { id:606, name:"פולו דובאי", nameEn:"Dubai Polo Club", category:"casino", subcategory:"sport", description:"מועדון הפולו של דובאי. משחקים, אירועי VIP וברנץ' ביום שישי.", image:"images/hotels/hotel_5.jpeg", rating:4.3, price:"$$", priceRange:"₪100-500", address:"Arabian Ranches", lat:25.0600, lng:55.2800, tags:["ספורט","פולו","VIP"], featured:false },
+    { id:607, name:"גולף - Emirates GC", nameEn:"Emirates Golf Club", category:"casino", subcategory:"sport", description:"מועדון הגולף המפורסם של דובאי עם מסלול 18 גומות ומועדון VIP.", image:"images/hotels/hotel_6.jpeg", rating:4.5, price:"$$$", priceRange:"₪500-1,500", address:"Emirates Hills", lat:25.0950, lng:55.1600, tags:["ספורט","גולף","מועדון"], featured:false },
+    { id:608, name:"קרטינג - Dubai Autodrome", nameEn:"Dubai Autodrome", category:"casino", subcategory:"sport", description:"מסלול מרוצים ומתחם קרטינג מקצועי. חוויית אדרנלין לכל הגילאים.", image:"images/nightlife/night_3.jpeg", rating:4.4, price:"$$", priceRange:"₪150-400", address:"Motor City", lat:25.0500, lng:55.2200, tags:["ספורט","קרטינג","אדרנלין"], featured:false },
   ]
 };
 
@@ -266,7 +272,7 @@ const PRACTICAL_INFO = {
   ]
 };
 
-const DB_VERSION = 101;
+const DB_VERSION = 102;
 function getDB() {
   const ver = localStorage.getItem(DB_KEY + '_ver');
   if (ver && Number(ver) >= DB_VERSION) {
