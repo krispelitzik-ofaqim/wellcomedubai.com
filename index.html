@@ -250,18 +250,16 @@
 
     function nextLetter() {
       if (i >= text.length) {
-        // All letters done - show subtitle
-        setTimeout(function() { if (subtitle) subtitle.style.opacity = '1'; }, 500);
-        // Turn orange after 3 seconds
+        // Turn orange after 2 seconds + show subtitle
         setTimeout(function() {
           letters.forEach(function(s) { s.style.color = '#E76F51'; });
-          if (subtitle) subtitle.style.color = '#F4A261';
-        }, 3000);
-        // Fade out after 10 seconds in orange
+          if (subtitle) { subtitle.style.opacity = '1'; subtitle.style.color = '#fff'; }
+        }, 2000);
+        // Fade out both after 10 seconds in orange
         setTimeout(function() {
           if (title) { title.style.transition = 'opacity 1.5s'; title.style.opacity = '0'; }
           if (subtitle) { subtitle.style.transition = 'opacity 1.5s'; subtitle.style.opacity = '0'; }
-        }, 13000);
+        }, 12000);
         return;
       }
 
