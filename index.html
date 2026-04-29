@@ -128,6 +128,38 @@
       </h2>
       <div class="cards-scroll" id="topRestShopping"></div>
 
+      <!-- Quick Action Buttons -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:16px 20px;">
+        <div onclick="navigateTo('info')" style="background:#E76F51;border-radius:6px;padding:18px 14px;cursor:pointer;display:flex;align-items:center;gap:10px;">
+          <i class="fas fa-first-aid" style="color:#fff;font-size:1.4rem;"></i>
+          <div>
+            <div style="color:#fff;font-weight:700;font-size:0.9rem;">מידע חיוני</div>
+            <div style="color:rgba(255,255,255,0.7);font-size:0.7rem;">חירום, ויזה, טיפים</div>
+          </div>
+        </div>
+        <div onclick="scrollToWidget('weatherWidget')" style="background:#2A9D8F;border-radius:6px;padding:18px 14px;cursor:pointer;display:flex;align-items:center;gap:10px;">
+          <i class="fas fa-cloud-sun" style="color:#fff;font-size:1.4rem;"></i>
+          <div>
+            <div style="color:#fff;font-weight:700;font-size:0.9rem;">מזג האוויר</div>
+            <div style="color:rgba(255,255,255,0.7);font-size:0.7rem;">תחזית בזמן אמת</div>
+          </div>
+        </div>
+        <div onclick="scrollToWidget('currencyWidget')" style="background:#E9C46A;border-radius:6px;padding:18px 14px;cursor:pointer;display:flex;align-items:center;gap:10px;">
+          <i class="fas fa-calculator" style="color:#2C5F6E;font-size:1.4rem;"></i>
+          <div>
+            <div style="color:#2C5F6E;font-weight:700;font-size:0.9rem;">המרת מטבע</div>
+            <div style="color:rgba(44,95,110,0.7);font-size:0.7rem;">שקל ↔ דירהם</div>
+          </div>
+        </div>
+        <div onclick="showLegalInfo()" style="background:#2C5F6E;border-radius:6px;padding:18px 14px;cursor:pointer;display:flex;align-items:center;gap:10px;">
+          <i class="fas fa-balance-scale" style="color:#E9C46A;font-size:1.4rem;"></i>
+          <div>
+            <div style="color:#fff;font-weight:700;font-size:0.9rem;">מידע משפטי</div>
+            <div style="color:rgba(255,255,255,0.7);font-size:0.7rem;">חוקים ונהלים</div>
+          </div>
+        </div>
+      </div>
+
       <!-- Flight teaser -->
       <div onclick="navigateTo('flights')" style="margin:0 20px 12px;background:linear-gradient(135deg,#2C5F6E,#2A9D8F);border-radius:8px;padding:14px 16px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;">
         <div style="display:flex;align-items:center;gap:10px;">
@@ -214,6 +246,58 @@
 
   function showMobilePopup() {
     toggleMobileMode();
+  }
+
+  function scrollToWidget(id) {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior:'smooth', block:'center' });
+  }
+
+  function showLegalInfo() {
+    const modal = document.getElementById('detailModal');
+    modal.innerHTML = `
+      <div class="modal-sheet" style="max-width:480px;">
+        <div style="background:linear-gradient(135deg,#2C5F6E,#1a4a5a);padding:20px;color:#fff;">
+          <button onclick="document.getElementById('detailModal').classList.remove('active')" style="position:absolute;top:12px;left:12px;background:rgba(255,255,255,0.2);border:none;color:#fff;width:32px;height:32px;border-radius:50%;cursor:pointer;">✕</button>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <i class="fas fa-balance-scale" style="font-size:1.5rem;color:#E9C46A;"></i>
+            <div style="font-size:1.2rem;font-weight:700;">מידע משפטי - דובאי</div>
+          </div>
+        </div>
+        <div style="padding:20px;font-size:0.85rem;line-height:1.8;color:#2C5F6E;">
+          <div style="font-weight:700;color:#E76F51;margin-bottom:6px;"><i class="fas fa-exclamation-triangle"></i> חוקים חשובים לתיירים</div>
+          <ul style="padding-right:16px;margin-bottom:16px;">
+            <li><b>אלכוהול</b> - מותר רק בברים ומסעדות מורשות. שתייה ברחוב או שכרות בציבור = עבירה פלילית.</li>
+            <li><b>סמים</b> - סובלנות אפס. אפילו כמויות זעירות = עונש מאסר חמור.</li>
+            <li><b>לבוש</b> - לבוש צנוע במקומות ציבוריים (כתפיים וברכיים מכוסות). בחוף ובבריכה - חופשי.</li>
+            <li><b>צילום</b> - אסור לצלם אנשים ללא רשות, במיוחד נשים מקומיות. אסור לצלם ליד מתקנים צבאיים/ממשלתיים.</li>
+            <li><b>PDA</b> - חיבוקים ונשיקות בציבור יכולים להוביל לקנס או מעצר.</li>
+            <li><b>רמדאן</b> - אכילה, שתייה ועישון בציבור בשעות הצום אסורים בחוק.</li>
+            <li><b>גסות</b> - קללות, מחוות גסות או העלבת אדם = עבירה פלילית.</li>
+            <li><b>רשתות חברתיות</b> - פרסום תמונות/סרטונים של אנשים ללא רשות = עבירה.</li>
+          </ul>
+          <div style="font-weight:700;color:#2A9D8F;margin-bottom:6px;"><i class="fas fa-passport"></i> ויזה ושהייה</div>
+          <ul style="padding-right:16px;margin-bottom:16px;">
+            <li>ישראלים מקבלים <b>ויזה אוטומטית ל-30 יום</b> בנחיתה.</li>
+            <li>נדרש דרכון בתוקף ל-<b>6 חודשים לפחות</b>.</li>
+            <li>ניתן להאריך שהייה ב-30 יום נוספים תמורת תשלום.</li>
+          </ul>
+          <div style="font-weight:700;color:#E9C46A;margin-bottom:6px;"><i class="fas fa-phone-alt"></i> מספרי חירום</div>
+          <ul style="padding-right:16px;margin-bottom:16px;">
+            <li>משטרה: <b>999</b></li>
+            <li>אמבולנס: <b>998</b></li>
+            <li>כיבוי אש: <b>997</b></li>
+            <li>משטרת תיירות: <b>+971-800-2438</b></li>
+            <li>שגרירות ישראל: <b>+971-2-497-9200</b></li>
+          </ul>
+          <div style="background:#FDF6EC;padding:12px;border-radius:6px;font-size:0.8rem;color:#6B7F8D;">
+            <i class="fas fa-info-circle" style="color:#E76F51;"></i> מידע זה הוא כללי בלבד ואינו מהווה ייעוץ משפטי. מומלץ לבדוק עדכונים באתר משרד החוץ הישראלי לפני הנסיעה.
+          </div>
+        </div>
+      </div>
+    `;
+    modal.classList.add('active');
+    modal.onclick = (e) => { if (e.target === modal) modal.classList.remove('active'); };
   }
 
   function toggleMobileMode() {
