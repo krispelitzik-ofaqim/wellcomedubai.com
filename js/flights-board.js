@@ -101,11 +101,11 @@ function renderFlightBoard(containerId) {
           <div style="display:flex;align-items:center;gap:8px;">
             <i class="fas fa-plane" style="color:#E9C46A;font-size:1rem;"></i>
             <span style="color:#fff;font-weight:700;font-size:0.9rem;">נמל התעופה דובאי (DXB)</span>
-            <span style="background:rgba(255,0,0,0.85);color:#fff;font-size:0.5rem;padding:2px 6px;border-radius:8px;font-weight:700;animation:pulse 1.5s infinite;margin-right:6px;">● LIVE</span>
           </div>
           <span style="color:rgba(255,255,255,0.7);font-size:0.7rem;">${new Date().toLocaleDateString('he-IL',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}</span>
         </div>
-        <div style="display:flex;gap:4px;" id="boardTabs">
+        <div style="display:flex;gap:4px;align-items:center;" id="boardTabs">
+          <span style="background:rgba(255,0,0,0.85);color:#fff;font-size:0.5rem;padding:2px 6px;border-radius:8px;font-weight:700;animation:pulse 1.5s infinite;">● LIVE</span>
           <button onclick="loadFlightBoard('Departure')" id="tabDep" style="padding:6px 14px;border-radius:6px;border:none;font-family:Heebo;font-size:0.8rem;font-weight:600;cursor:pointer;background:#E9C46A;color:#2C5F6E;">
             <i class="fas fa-plane-departure"></i> המראות
           </button>
@@ -156,20 +156,15 @@ async function loadFlightBoard(direction) {
 
   content.innerHTML = `
     <!-- Table header -->
-    <div style="display:grid;grid-template-columns:55px 1fr 1fr 50px;gap:3px;padding:6px 4px;font-size:0.6rem;color:#6B7F8D;font-weight:600;border-bottom:1px solid #F5EFE6;">
+    <div style="display:grid;grid-template-columns:55px 1fr 50px;gap:3px;padding:6px 4px;font-size:0.6rem;color:#6B7F8D;font-weight:600;border-bottom:1px solid #F5EFE6;">
       <span>טיסה</span>
       <span>חברה</span>
-      <span>${isDepart ? 'יעד' : 'מוצא'}</span>
       <span>סטטוס</span>
     </div>
     ${flights.map(f => `
-      <div style="display:grid;grid-template-columns:55px 1fr 1fr 50px;gap:3px;padding:5px 4px;font-size:0.7rem;align-items:center;border-bottom:1px solid #faf5ed;cursor:pointer;${f.isTLV ? 'background:#FFF8E7;' : ''}" onclick="openFlightDetail('${f.flight}','${f.airline}','${isDepart ? f.destination : f.origin}','${isDepart ? f.destinationCode : f.originCode}','${formatTime(f.scheduled)}','${formatTime(f.actual)}','${f.terminal}','${f.status}','${isDepart ? 'departure' : 'arrival'}','${f.isTLV}')">
+      <div style="display:grid;grid-template-columns:55px 1fr 50px;gap:3px;padding:5px 4px;font-size:0.7rem;align-items:center;border-bottom:1px solid #faf5ed;cursor:pointer;${f.isTLV ? 'background:#FFF8E7;' : ''}" onclick="openFlightDetail('${f.flight}','${f.airline}','${isDepart ? f.destination : f.origin}','${isDepart ? f.destinationCode : f.originCode}','${formatTime(f.scheduled)}','${formatTime(f.actual)}','${f.terminal}','${f.status}','${isDepart ? 'departure' : 'arrival'}','${f.isTLV}')">
         <span style="font-weight:600;color:#E76F51;font-size:0.65rem;">${f.flight}</span>
-        <span style="color:#2C5F6E;font-size:0.63rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${f.airline}</span>
-        <span style="display:flex;align-items:center;gap:3px;overflow:hidden;">
-          ${f.isTLV ? '<span style="font-size:0.6rem;">🇮🇱</span>' : ''}
-          <span style="color:#6B7F8D;font-size:0.63rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${isDepart ? f.destinationCode || f.destination : f.originCode || f.origin}</span>
-        </span>
+        <span style="color:#2C5F6E;font-size:0.68rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${f.airline}</span>
         <span style="background:${statusBg(f.status)};color:${statusColor(f.status)};font-size:0.55rem;font-weight:700;padding:2px 5px;border-radius:4px;text-align:center;">${statusHebrew(f.status)}</span>
       </div>
     `).join('')}
