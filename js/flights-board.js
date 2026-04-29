@@ -96,10 +96,13 @@ function renderFlightBoard(containerId) {
   container.innerHTML = `
     <div style="background:#fff;border-radius:8px;overflow:hidden;border:1px solid #E5E7EB;">
       <!-- Header -->
-      <div style="background:linear-gradient(135deg,#2C5F6E,#1a4a5a);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;">
-        <div style="display:flex;align-items:center;gap:8px;">
-          <i class="fas fa-plane" style="color:#E9C46A;font-size:1.1rem;"></i>
-          <span style="color:#fff;font-weight:700;font-size:0.95rem;">נמל התעופה דובאי (DXB) - טיסות חי</span>
+      <div style="background:linear-gradient(135deg,#2C5F6E,#1a4a5a);padding:12px 16px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <i class="fas fa-plane" style="color:#E9C46A;font-size:1rem;"></i>
+            <span style="color:#fff;font-weight:700;font-size:0.9rem;">נמל התעופה דובאי (DXB)</span>
+          </div>
+          <span style="color:rgba(255,255,255,0.7);font-size:0.7rem;">${new Date().toLocaleDateString('he-IL',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}</span>
         </div>
         <div style="display:flex;gap:4px;" id="boardTabs">
           <button onclick="loadFlightBoard('Departure')" id="tabDep" style="padding:6px 14px;border-radius:6px;border:none;font-family:Heebo;font-size:0.8rem;font-weight:600;cursor:pointer;background:#E9C46A;color:#2C5F6E;">
