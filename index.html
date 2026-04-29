@@ -238,38 +238,47 @@
   // Hero title animation - letter by letter
   function animateHeroTitle() {
     const text = 'ברוכים הבאים לדובאי';
-    const dubaiStart = text.indexOf('דובאי');
     const title = document.getElementById('heroTitle');
     const subtitle = document.getElementById('heroSubtitle');
     if (!title) return;
 
     title.innerHTML = '';
     let i = 0;
+    const letters = [];
 
     function showNextLetter() {
       if (i < text.length) {
         const ch = text[i];
-        const isDubai = (i >= dubaiStart);
         if (ch === ' ') {
           title.innerHTML += ' ';
         } else {
-          const color = isDubai ? 'color:#E76F51' : 'color:#fff';
-          title.innerHTML += `<span style="${color};opacity:0;display:inline;animation:letterFadeIn 0.3s ease ${i * 80}ms forwards;">${ch}</span>`;
+          const span = document.createElement('span');
+          span.textContent = ch;
+          span.style.cssText = 'color:#fff;opacity:0;display:inline;transition:color 1s;';
+          span.style.animation = `letterFadeIn 0.3s ease forwards`;
+          title.appendChild(span);
+          letters.push(span);
         }
         i++;
         setTimeout(showNextLetter, 80);
       } else {
         // Show subtitle
         setTimeout(() => { if (subtitle) subtitle.style.opacity = '1'; }, 500);
-        // Fade out after 10 seconds
+
+        // After 3 seconds - turn all letters to orange
+        setTimeout(() => {
+          letters.forEach(s => { s.style.color = '#E76F51'; });
+          if (subtitle) subtitle.style.color = '#F4A261';
+        }, 3000);
+
+        // After 10 seconds in orange - fade out
         setTimeout(() => {
           if (title) { title.style.transition = 'opacity 1.5s'; title.style.opacity = '0'; }
           if (subtitle) { subtitle.style.transition = 'opacity 1.5s'; subtitle.style.opacity = '0'; }
-        }, 10000);
+        }, 13000);
       }
     }
 
-    // Start after splash screen disappears
     setTimeout(showNextLetter, 2000);
   }
 
