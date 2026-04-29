@@ -169,7 +169,7 @@ const PRACTICAL_INFO = {
   ]
 };
 
-const DB_VERSION = 10;
+const DB_VERSION = 99;
 function getDB() {
   const ver = localStorage.getItem(DB_KEY + '_ver');
   if (ver && Number(ver) >= DB_VERSION) {
