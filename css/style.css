@@ -78,7 +78,9 @@ body {
 }
 .hero-bg {
   position:absolute; inset:0;
-  background: url('https://images.pexels.com/photos/31692141/pexels-photo-31692141.jpeg') center/cover;
+  background-size:cover;
+  background-position:center;
+  transition: opacity 1.5s ease;
 }
 .hero-overlay {
   position:absolute; inset:0;
