@@ -338,7 +338,7 @@ function renderListPage(category, title, filters, activeFilter) {
             <div style="font-size:0.7rem;color:#6B7F8D;margin-bottom:4px;"><i class="fas fa-map-marker-alt" style="color:#F4A261;font-size:0.6rem;"></i> ${item.address || ''}</div>
             <div style="display:flex;align-items:center;justify-content:space-between;">
               ${item.rating ? `<span style="color:#E9C46A;font-size:0.75rem;font-weight:600;"><i class="fas fa-star"></i> ${item.googleRating || item.rating}</span>` : ''}
-              <span style="color:#E76F51;font-size:0.7rem;font-weight:600;">${item.price || ''}</span>
+              <span style="color:#E76F51;font-size:0.65rem;font-weight:600;">${item.priceRange || item.price || ''}</span>
             </div>
             ${item.isOpen === true ? '<div style="color:#2A9D8F;font-size:0.6rem;font-weight:600;margin-top:3px;">● פתוח</div>' : ''}
             <div style="display:flex;gap:6px;margin-top:6px;">
