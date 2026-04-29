@@ -39,25 +39,37 @@
       WellCome<span>Dubai</span>
     </div>
     <div class="header-actions">
+      <button class="header-btn" onclick="toggleSearch()" title="חיפוש"><i class="fas fa-search"></i></button>
       <button class="header-btn" onclick="showMobilePopup()" title="פתח בנייד"><i class="fas fa-mobile-alt"></i></button>
       <button class="header-btn" onclick="navigateTo('info')" title="מידע שימושי"><i class="fas fa-info-circle"></i></button>
       <a href="admin/index.html" class="header-btn" title="לוח ניהול"><i class="fas fa-cog"></i></a>
     </div>
   </header>
 
+  <!-- Expandable Search Bar -->
+  <div id="searchBar" style="display:none;background:#fff;padding:10px 20px;border-bottom:1px solid #E5E7EB;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <div class="search-box" style="flex:1;margin:0;background:#FDF6EC;border:1px solid #E5E7EB;border-radius:8px;padding:10px 14px;">
+        <i class="fas fa-search" style="color:#6B7F8D;"></i>
+        <input type="text" id="searchInput" placeholder="חפש מלונות, מסעדות, אטרקציות..." style="flex:1;background:none;border:none;outline:none;color:#2C5F6E;font-family:Heebo;font-size:0.9rem;direction:rtl;">
+      </div>
+      <button onclick="toggleSearch()" style="background:none;border:none;color:#6B7F8D;font-size:1.1rem;cursor:pointer;padding:8px;"><i class="fas fa-times"></i></button>
+    </div>
+  </div>
+
   <!-- Main Content -->
   <main class="main-content">
     <!-- HOME PAGE -->
     <div id="page-home" class="page active">
       <!-- Hero with category tags -->
-      <div class="hero" style="height:auto;min-height:340px;">
+      <div class="hero" style="height:100vh;max-height:700px;">
         <div class="hero-bg"></div>
-        <div class="hero-overlay" style="background:linear-gradient(to bottom, transparent 20%, rgba(0,0,0,0.65) 100%);"></div>
-        <div class="hero-content" style="padding:30px 20px 20px;">
-          <h1 class="hero-title">ברוכים הבאים ל<span>דובאי</span></h1>
-          <p class="hero-subtitle">המדריך המלא לתייר הישראלי</p>
-          <!-- Category words -->
-          <div style="display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:16px;line-height:1.8;">
+        <div class="hero-overlay" style="background:linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.7) 100%);"></div>
+        <div class="hero-content" style="padding:30px 20px 24px;justify-content:flex-end;">
+          <h1 class="hero-title" style="font-size:2.2rem;">ברוכים הבאים ל<span>דובאי</span></h1>
+          <p class="hero-subtitle" style="margin-bottom:16px;">המדריך המלא לתייר הישראלי</p>
+          <!-- Category words at bottom -->
+          <div style="display:flex;flex-wrap:wrap;gap:6px 14px;line-height:1.8;">
             <a onclick="navigateTo('hotels')" style="color:#E76F51;font-size:1.1rem;font-weight:700;cursor:pointer;text-decoration:none;text-shadow:0 1px 3px rgba(0,0,0,0.5);">מלונות</a>
             <a onclick="navigateTo('restaurants')" style="color:#E9C46A;font-size:0.95rem;font-weight:700;cursor:pointer;text-decoration:none;text-shadow:0 1px 3px rgba(0,0,0,0.5);">מסעדות</a>
             <a onclick="navigateTo('attractions')" style="color:#2A9D8F;font-size:1.15rem;font-weight:800;cursor:pointer;text-decoration:none;text-shadow:0 1px 3px rgba(0,0,0,0.5);">אטרקציות</a>
@@ -72,14 +84,8 @@
         </div>
       </div>
 
-      <!-- Search -->
-      <div class="search-container">
-        <div class="search-box">
-          <i class="fas fa-search"></i>
-          <input type="text" id="searchInput" placeholder="חפש מלונות, מסעדות, אטרקציות...">
-        </div>
-        <div id="searchResults" style="display:none;margin-top:8px;"></div>
-      </div>
+      <!-- Search Results (hidden until search opens) -->
+      <div id="searchResults" style="display:none;margin:0 20px 8px;"></div>
 
       <!-- Weather + Currency -->
       <div id="weatherWidget" style="margin:0 20px 8px;"></div>
@@ -224,6 +230,19 @@
 
   function showMobilePopup() {
     toggleMobileMode();
+  }
+
+  function toggleSearch() {
+    const bar = document.getElementById('searchBar');
+    if (bar.style.display === 'none') {
+      bar.style.display = 'block';
+      document.getElementById('searchInput').focus();
+    } else {
+      bar.style.display = 'none';
+      document.getElementById('searchInput').value = '';
+      document.getElementById('searchResults').style.display = 'none';
+      document.getElementById('searchResults').innerHTML = '';
+    }
   }
 
   function scrollToWidget(id) {
