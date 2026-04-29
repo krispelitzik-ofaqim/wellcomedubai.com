@@ -63,7 +63,7 @@ function navigateTo(page, subcategory) {
     case 'hotels': renderListPage('hotels', 'מלונות', ['הכל','7 כוכבים','5 כוכבים','3-4 כוכבים','תקציבי'], subcategory); break;
     case 'restaurants': renderListPage('restaurants', 'מסעדות', ['הכל','יוקרתי מאוד','יוקרתי','עממי','ישראלי','לבנוני','טורקי','אוכל רחוב'], subcategory); break;
     case 'attractions': renderListPage('attractions', 'אטרקציות', ['הכל','ציון דרך','מוזיאון','חוף','פארק מים','פארק שעשועים','סיור','גן חיות'], subcategory); break;
-    case 'shopping': renderListPage('shopping', 'קניות', ['הכל','קניון','שוק'], subcategory); break;
+    case 'shopping': renderListPage('shopping', 'קניונים ושווקים', ['הכל','קניון','שוק'], subcategory); break;
     case 'nightlife': renderListPage('nightlife', 'בילויים', ['הכל','מועדון','לאונג\'','בידור','מופע'], subcategory); break;
     case 'transport': renderListPage('transport', 'תחבורה', ['הכל','מטרו','מונית','סירה','אפליקציה'], subcategory); break;
     case 'casino': renderListPage('casino', 'בידור ומשחקים', ['הכל','קזינו','מרוצים','ספורט'], subcategory); break;
