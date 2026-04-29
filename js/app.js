@@ -416,16 +416,16 @@ function renderFlightsPage() {
 
       <!-- Quick links -->
       <div style="display:flex;gap:8px;flex-wrap:wrap;">
-        <a href="https://www.skyscanner.co.il/transport/flights/tlv/dxb/" target="_blank" style="flex:1;text-align:center;padding:12px;border-radius:8px;background:#fff;border:1px solid #E5E7EB;text-decoration:none;color:#2C5F6E;font-weight:600;font-size:0.8rem;">
+        <a onclick="openInFrame('https://www.skyscanner.co.il/transport/flights/tlv/dxb/','Skyscanner')" style="flex:1;text-align:center;padding:12px;border-radius:8px;background:#fff;border:1px solid #E5E7EB;text-decoration:none;color:#2C5F6E;font-weight:600;font-size:0.8rem;cursor:pointer;">
           <i class="fas fa-search" style="color:#E76F51;display:block;font-size:1.2rem;margin-bottom:4px;"></i>Skyscanner
         </a>
-        <a href="https://www.google.com/travel/flights?q=TLV%20to%20DXB" target="_blank" style="flex:1;text-align:center;padding:12px;border-radius:8px;background:#fff;border:1px solid #E5E7EB;text-decoration:none;color:#2C5F6E;font-weight:600;font-size:0.8rem;">
+        <a onclick="openInFrame('https://www.google.com/travel/flights?q=TLV%20to%20DXB','Google Flights')" style="flex:1;text-align:center;padding:12px;border-radius:8px;background:#fff;border:1px solid #E5E7EB;text-decoration:none;color:#2C5F6E;font-weight:600;font-size:0.8rem;cursor:pointer;">
           <i class="fab fa-google" style="color:#2A9D8F;display:block;font-size:1.2rem;margin-bottom:4px;"></i>Google Flights
         </a>
-        <a href="https://www.elal.com" target="_blank" style="flex:1;text-align:center;padding:12px;border-radius:8px;background:#fff;border:1px solid #E5E7EB;text-decoration:none;color:#2C5F6E;font-weight:600;font-size:0.8rem;">
+        <a onclick="openInFrame('https://www.elal.com','אל על')" style="flex:1;text-align:center;padding:12px;border-radius:8px;background:#fff;border:1px solid #E5E7EB;text-decoration:none;color:#2C5F6E;font-weight:600;font-size:0.8rem;cursor:pointer;">
           <i class="fas fa-plane" style="color:#E9C46A;display:block;font-size:1.2rem;margin-bottom:4px;"></i>אל על
         </a>
-        <a href="https://www.flydubai.com" target="_blank" style="flex:1;text-align:center;padding:12px;border-radius:8px;background:#fff;border:1px solid #E5E7EB;text-decoration:none;color:#2C5F6E;font-weight:600;font-size:0.8rem;">
+        <a onclick="openInFrame('https://www.flydubai.com','FlyDubai')" style="flex:1;text-align:center;padding:12px;border-radius:8px;background:#fff;border:1px solid #E5E7EB;text-decoration:none;color:#2C5F6E;font-weight:600;font-size:0.8rem;cursor:pointer;">
           <i class="fas fa-plane-departure" style="color:#F4A261;display:block;font-size:1.2rem;margin-bottom:4px;"></i>FlyDubai
         </a>
       </div>
