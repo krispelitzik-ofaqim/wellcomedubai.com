@@ -101,6 +101,7 @@ function renderFlightBoard(containerId) {
           <div style="display:flex;align-items:center;gap:8px;">
             <i class="fas fa-plane" style="color:#E9C46A;font-size:1rem;"></i>
             <span style="color:#fff;font-weight:700;font-size:0.9rem;">נמל התעופה דובאי (DXB)</span>
+            <span style="background:rgba(255,0,0,0.85);color:#fff;font-size:0.5rem;padding:2px 6px;border-radius:8px;font-weight:700;animation:pulse 1.5s infinite;margin-right:6px;">● LIVE</span>
           </div>
           <span style="color:rgba(255,255,255,0.7);font-size:0.7rem;">${new Date().toLocaleDateString('he-IL',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}</span>
         </div>
