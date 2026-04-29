@@ -50,13 +50,25 @@ function formatTime(isoStr) {
   return '';
 }
 
+function statusBg(status) {
+  if (!status) return '#F0F0F0';
+  const s = status.toLowerCase();
+  if (s.includes('landed') || s.includes('arrived')) return '#E6F7F5';
+  if (s.includes('departed') || s.includes('en route')) return '#E6F7F5';
+  if (s.includes('cancelled')) return '#FEE2E2';
+  if (s.includes('delayed')) return '#FFF3E0';
+  if (s.includes('scheduled') || s.includes('expected')) return '#EEF2F7';
+  if (s.includes('boarding') || s.includes('gate')) return '#E8F5E9';
+  return '#F0F0F0';
+}
+
 function statusColor(status) {
   if (!status) return '#6B7F8D';
   const s = status.toLowerCase();
-  if (s.includes('landed') || s.includes('arrived')) return '#2A9D8F';
-  if (s.includes('departed') || s.includes('en route')) return '#2A9D8F';
-  if (s.includes('cancelled')) return '#E76F51';
-  if (s.includes('delayed')) return '#F4A261';
+  if (s.includes('landed') || s.includes('arrived')) return '#0D9488';
+  if (s.includes('departed') || s.includes('en route')) return '#0D9488';
+  if (s.includes('cancelled')) return '#DC2626';
+  if (s.includes('delayed')) return '#D97706';
   if (s.includes('scheduled') || s.includes('expected')) return '#2C5F6E';
   return '#6B7F8D';
 }
@@ -154,7 +166,7 @@ async function loadFlightBoard(direction) {
           <span style="color:#2C5F6E;font-size:0.68rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${isDepart ? f.destinationCode || f.destination : f.originCode || f.origin}</span>
         </span>
         <span style="font-weight:600;color:#2C5F6E;font-size:0.68rem;direction:ltr;text-align:center;">${formatTime(f.scheduled)}</span>
-        <span style="color:${statusColor(f.status)};font-size:0.6rem;font-weight:600;">${statusHebrew(f.status)}</span>
+        <span style="background:${statusBg(f.status)};color:${statusColor(f.status)};font-size:0.55rem;font-weight:700;padding:2px 5px;border-radius:4px;text-align:center;">${statusHebrew(f.status)}</span>
       </div>
     `).join('')}
     <div style="text-align:center;padding:8px;font-size:0.7rem;color:#aaa;">
