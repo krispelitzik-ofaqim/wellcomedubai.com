@@ -141,11 +141,11 @@
             <div style="color:rgba(255,255,255,0.7);font-size:0.7rem;">חירום, ויזה, טיפים</div>
           </div>
         </div>
-        <div onclick="scrollToWidget('weatherWidget')" style="background:#2A9D8F;border-radius:6px;padding:18px 14px;cursor:pointer;display:flex;align-items:center;gap:10px;">
+        <div onclick="navigateTo('weather')" style="background:#2A9D8F;border-radius:6px;padding:18px 14px;cursor:pointer;display:flex;align-items:center;gap:10px;">
           <i class="fas fa-cloud-sun" style="color:#fff;font-size:1.4rem;"></i>
           <div>
             <div style="color:#fff;font-weight:700;font-size:0.9rem;">מזג האוויר</div>
-            <div style="color:rgba(255,255,255,0.7);font-size:0.7rem;">תחזית בזמן אמת</div>
+            <div style="color:rgba(255,255,255,0.7);font-size:0.7rem;">תחזית + מצלמות חיות</div>
           </div>
         </div>
         <div onclick="scrollToWidget('currencyWidget')" style="background:#E9C46A;border-radius:6px;padding:18px 14px;cursor:pointer;display:flex;align-items:center;gap:10px;">
@@ -194,6 +194,9 @@
 
     <!-- LIVE CAMS PAGE -->
     <div id="page-livecams" class="page"></div>
+
+    <!-- WEATHER PAGE -->
+    <div id="page-weather" class="page"></div>
 
     <!-- INFO PAGE -->
     <div id="page-info" class="page"></div>

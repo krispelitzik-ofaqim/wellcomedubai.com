@@ -70,6 +70,7 @@ function navigateTo(page, subcategory) {
     case 'map': renderMapPage(); break;
     case 'flights': renderFlightsPage(); break;
     case 'livecams': renderLiveCamsPage(); break;
+    case 'weather': renderWeatherPage(); break;
     case 'info': renderInfoPage(); break;
   }
 }
@@ -429,6 +430,88 @@ async function doFlightPageSearch() {
       </div>
     `;
   }).join('');
+}
+
+// ===== WEATHER PAGE =====
+function renderWeatherPage() {
+  const page = document.getElementById('page-weather');
+  const dayNames = ['ראשון','שני','שלישי','רביעי','חמישי','שישי','שבת'];
+
+  page.innerHTML = `
+    <div class="page-header">
+      <button class="back-btn" onclick="navigateTo('home')"><i class="fas fa-arrow-right"></i></button>
+      <h2><i class="fas fa-cloud-sun" style="color:#2A9D8F;margin-left:6px;"></i> מזג אוויר + מצלמות חיות</h2>
+    </div>
+    <div style="padding:16px 20px;">
+      <div id="weatherPageContent" style="text-align:center;padding:30px;color:#6B7F8D;"><i class="fas fa-spinner fa-spin" style="color:#2A9D8F;font-size:1.3rem;"></i><br>טוען תחזית...</div>
+    </div>
+  `;
+
+  setTimeout(async () => {
+    const el = document.getElementById('weatherPageContent');
+    if (!el) return;
+    const w = await getDubaiWeather();
+    if (!w) { el.innerHTML = '<div style="color:#6B7F8D;">לא ניתן לטעון מזג אוויר כרגע.</div>'; return; }
+
+    el.innerHTML = `
+      <!-- Current -->
+      <div style="background:linear-gradient(135deg,#2C5F6E,#2A9D8F);border-radius:8px;padding:24px;color:#fff;text-align:center;margin-bottom:16px;">
+        <div style="font-size:0.85rem;opacity:0.8;">דובאי עכשיו</div>
+        <img src="https:${w.icon}" style="width:80px;height:80px;">
+        <div style="font-size:3rem;font-weight:800;">${w.temp}°C</div>
+        <div style="font-size:1rem;margin-bottom:8px;">${w.condition}</div>
+        <div style="display:flex;gap:16px;justify-content:center;font-size:0.8rem;opacity:0.85;">
+          <span><i class="fas fa-thermometer-half"></i> מרגיש ${w.feelsLike}°</span>
+          <span><i class="fas fa-tint"></i> לחות ${w.humidity}%</span>
+          <span><i class="fas fa-wind"></i> ${w.wind} קמ"ש</span>
+          <span><i class="fas fa-sun"></i> UV ${w.uv}</span>
+        </div>
+      </div>
+
+      <!-- 7 day forecast -->
+      <div style="background:#fff;border-radius:8px;padding:16px;border:1px solid #E5E7EB;margin-bottom:16px;">
+        <div style="font-weight:700;color:#2C5F6E;margin-bottom:12px;"><i class="fas fa-calendar-week" style="color:#E9C46A;"></i> תחזית שבועית</div>
+        ${w.forecast.map(d => {
+          const dayNum = new Date(d.date).getDay();
+          const dateStr = new Date(d.date).toLocaleDateString('he-IL',{day:'numeric',month:'numeric'});
+          return `
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #F5EFE6;">
+              <div style="width:60px;font-weight:600;color:#2C5F6E;font-size:0.85rem;">${dayNames[dayNum]}</div>
+              <div style="color:#6B7F8D;font-size:0.75rem;">${dateStr}</div>
+              <img src="https:${d.icon}" style="width:32px;height:32px;">
+              <div style="color:#6B7F8D;font-size:0.8rem;width:80px;">${d.condition}</div>
+              <div style="font-weight:600;color:#E76F51;">${d.maxTemp}°</div>
+              <div style="color:#6B7F8D;">${d.minTemp}°</div>
+            </div>`;
+        }).join('')}
+      </div>
+
+      <!-- Live Cams -->
+      <div style="background:#fff;border-radius:8px;padding:16px;border:1px solid #E5E7EB;">
+        <div style="font-weight:700;color:#2C5F6E;margin-bottom:12px;">
+          <i class="fas fa-video" style="color:#E76F51;"></i> מצלמות חיות
+          <span style="background:rgba(255,0,0,0.8);color:#fff;font-size:0.55rem;padding:2px 6px;border-radius:8px;font-weight:700;margin-right:6px;">LIVE</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+          <a href="https://www.webcamtaxi.com/en/united-arab-emirates/dubai/burj-khalifa-lake-dubai.html" target="_blank" style="text-decoration:none;text-align:center;padding:12px 8px;background:#FDF6EC;border-radius:6px;">
+            <i class="fas fa-building" style="font-size:1.2rem;color:#E76F51;"></i>
+            <div style="font-size:0.7rem;color:#2C5F6E;font-weight:600;margin-top:4px;">ברג' חליפה</div>
+          </a>
+          <a href="https://www.skylinewebcams.com/en/webcam/united-arab-emirates/dubai/dubai/dubai-marina.html" target="_blank" style="text-decoration:none;text-align:center;padding:12px 8px;background:#FDF6EC;border-radius:6px;">
+            <i class="fas fa-ship" style="font-size:1.2rem;color:#2A9D8F;"></i>
+            <div style="font-size:0.7rem;color:#2C5F6E;font-weight:600;margin-top:4px;">מרינה</div>
+          </a>
+          <a href="https://www.skylinewebcams.com/en/webcam/united-arab-emirates/dubai/dubai.html" target="_blank" style="text-decoration:none;text-align:center;padding:12px 8px;background:#FDF6EC;border-radius:6px;">
+            <i class="fas fa-umbrella-beach" style="font-size:1.2rem;color:#F4A261;"></i>
+            <div style="font-size:0.7rem;color:#2C5F6E;font-weight:600;margin-top:4px;">חוף</div>
+          </a>
+        </div>
+        <button onclick="navigateTo('livecams')" style="width:100%;margin-top:10px;padding:10px;border-radius:6px;background:#2C5F6E;color:#fff;border:none;font-family:Heebo;font-weight:600;cursor:pointer;font-size:0.85rem;">
+          <i class="fas fa-video"></i> כל המצלמות →
+        </button>
+      </div>
+    `;
+  }, 100);
 }
 
 // ===== LIVE CAMS PAGE =====
