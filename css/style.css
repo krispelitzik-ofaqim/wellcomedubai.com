@@ -441,13 +441,16 @@ body {
   opacity:0;
   color:#fff;
   animation: heroLetterIn 0.3s ease forwards, heroToOrange 0.8s ease 5s forwards;
+  animation-fill-mode: forwards, forwards;
 }
 .hero-letter.hero-dubai {
   animation: heroLetterIn 0.3s ease forwards, heroDubaiOrange 0.8s ease 5s forwards;
+  animation-fill-mode: forwards, forwards;
 }
 .hero-sub-anim {
   opacity:0;
   animation: heroSubIn 0.8s ease 5s forwards;
+  animation-fill-mode: forwards;
 }
 @keyframes heroLetterIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
 @keyframes heroToOrange { to { color:#E76F51; } }
