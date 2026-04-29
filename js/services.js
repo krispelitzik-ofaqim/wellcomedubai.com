@@ -9,7 +9,7 @@ async function getDubaiWeather() {
   if (cached) return cached;
 
   try {
-    const resp = await fetch('https://weatherapi-com.p.rapidapi.com/forecast.json?q=Dubai&days=3&lang=he', {
+    const resp = await fetch('https://weatherapi-com.p.rapidapi.com/forecast.json?q=Dubai&days=7&lang=he', {
       headers: { 'x-rapidapi-key': RAPID_KEY, 'x-rapidapi-host': 'weatherapi-com.p.rapidapi.com' }
     });
     const data = await resp.json();
@@ -66,18 +66,23 @@ async function loadWeatherWidget() {
         <span><i class="fas fa-sun"></i> UV ${w.uv}</span>
       </div>
       ${w.forecast.length ? `
-        <div style="display:flex;gap:8px;border-top:1px solid rgba(255,255,255,0.2);padding-top:10px;">
+        <div style="display:flex;gap:6px;border-top:1px solid rgba(255,255,255,0.2);padding-top:10px;overflow-x:auto;">
           ${w.forecast.map(d => {
             const dayNum = new Date(d.date).getDay();
             return `
-              <div style="flex:1;text-align:center;">
-                <div style="font-size:0.7rem;opacity:0.8;">${dayNames[dayNum]}</div>
-                <img src="https:${d.icon}" style="width:30px;height:30px;">
-                <div style="font-size:0.75rem;font-weight:600;">${d.maxTemp}° / ${d.minTemp}°</div>
+              <div style="flex:0 0 auto;text-align:center;min-width:52px;">
+                <div style="font-size:0.65rem;opacity:0.8;">${dayNames[dayNum]}</div>
+                <img src="https:${d.icon}" style="width:28px;height:28px;">
+                <div style="font-size:0.7rem;font-weight:600;">${d.maxTemp}°/${d.minTemp}°</div>
               </div>`;
           }).join('')}
         </div>
       ` : ''}
+      <div onclick="navigateTo('livecams')" style="margin-top:10px;padding:8px;background:rgba(255,255,255,0.15);border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;font-size:0.8rem;">
+        <i class="fas fa-video" style="color:#E9C46A;"></i>
+        <span>מצלמות חיות בדובאי</span>
+        <span style="background:rgba(255,0,0,0.8);color:#fff;font-size:0.55rem;padding:1px 6px;border-radius:8px;font-weight:700;">LIVE</span>
+      </div>
     </div>
   `;
 }
