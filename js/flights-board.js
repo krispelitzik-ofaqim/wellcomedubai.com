@@ -140,26 +140,21 @@ async function loadFlightBoard(direction) {
 
   content.innerHTML = `
     <!-- Table header -->
-    <div style="display:grid;grid-template-columns:70px 1fr 60px 50px 55px 65px;gap:4px;padding:8px 6px;font-size:0.7rem;color:#6B7F8D;font-weight:600;border-bottom:1px solid #F5EFE6;">
+    <div style="display:grid;grid-template-columns:55px 1fr 45px 40px;gap:3px;padding:6px 4px;font-size:0.6rem;color:#6B7F8D;font-weight:600;border-bottom:1px solid #F5EFE6;">
       <span>טיסה</span>
       <span>${isDepart ? 'יעד' : 'מוצא'}</span>
       <span>שעה</span>
-      <span>טרמ׳</span>
       <span>סטטוס</span>
-      <span></span>
     </div>
     ${flights.map(f => `
-      <div style="display:grid;grid-template-columns:70px 1fr 60px 50px 55px 65px;gap:4px;padding:8px 6px;font-size:0.8rem;align-items:center;border-bottom:1px solid #faf5ed;cursor:pointer;${f.isTLV ? 'background:#FFF8E7;' : ''}" onclick="openFlightDetail('${f.flight}','${f.airline}','${isDepart ? f.destination : f.origin}','${isDepart ? f.destinationCode : f.originCode}','${formatTime(f.scheduled)}','${formatTime(f.actual)}','${f.terminal}','${f.status}','${isDepart ? 'departure' : 'arrival'}','${f.isTLV}')">
-        <span style="font-weight:600;color:#E76F51;font-size:0.75rem;text-decoration:underline;">${f.flight}</span>
-        <span style="display:flex;align-items:center;gap:4px;">
-          ${f.isTLV ? '<span style="font-size:0.65rem;">🇮🇱</span>' : ''}
-          <span style="color:#2C5F6E;font-size:0.78rem;">${isDepart ? f.destination : f.origin}</span>
-          <span style="color:#6B7F8D;font-size:0.65rem;">${isDepart ? f.destinationCode : f.originCode}</span>
+      <div style="display:grid;grid-template-columns:55px 1fr 45px 40px;gap:3px;padding:5px 4px;font-size:0.7rem;align-items:center;border-bottom:1px solid #faf5ed;cursor:pointer;${f.isTLV ? 'background:#FFF8E7;' : ''}" onclick="openFlightDetail('${f.flight}','${f.airline}','${isDepart ? f.destination : f.origin}','${isDepart ? f.destinationCode : f.originCode}','${formatTime(f.scheduled)}','${formatTime(f.actual)}','${f.terminal}','${f.status}','${isDepart ? 'departure' : 'arrival'}','${f.isTLV}')">
+        <span style="font-weight:600;color:#E76F51;font-size:0.65rem;">${f.flight}</span>
+        <span style="display:flex;align-items:center;gap:3px;overflow:hidden;">
+          ${f.isTLV ? '<span style="font-size:0.6rem;">🇮🇱</span>' : ''}
+          <span style="color:#2C5F6E;font-size:0.68rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${isDepart ? f.destinationCode || f.destination : f.originCode || f.origin}</span>
         </span>
-        <span style="font-weight:600;color:#2C5F6E;direction:ltr;text-align:center;">${formatTime(f.scheduled)}</span>
-        <span style="color:#6B7F8D;text-align:center;font-size:0.75rem;">${f.terminal || '-'}</span>
-        <span style="color:${statusColor(f.status)};font-size:0.7rem;font-weight:600;">${statusHebrew(f.status)}</span>
-        <span style="font-size:0.65rem;color:#6B7F8D;">${f.airline}</span>
+        <span style="font-weight:600;color:#2C5F6E;font-size:0.68rem;direction:ltr;text-align:center;">${formatTime(f.scheduled)}</span>
+        <span style="color:${statusColor(f.status)};font-size:0.6rem;font-weight:600;">${statusHebrew(f.status)}</span>
       </div>
     `).join('')}
     <div style="text-align:center;padding:8px;font-size:0.7rem;color:#aaa;">
