@@ -49,13 +49,26 @@
   <main class="main-content">
     <!-- HOME PAGE -->
     <div id="page-home" class="page active">
-      <!-- Hero -->
-      <div class="hero">
+      <!-- Hero with category tags -->
+      <div class="hero" style="height:auto;min-height:340px;">
         <div class="hero-bg"></div>
-        <div class="hero-overlay"></div>
-        <div class="hero-content">
+        <div class="hero-overlay" style="background:linear-gradient(to bottom, transparent 20%, rgba(0,0,0,0.65) 100%);"></div>
+        <div class="hero-content" style="padding:30px 20px 20px;">
           <h1 class="hero-title">ברוכים הבאים ל<span>דובאי</span></h1>
           <p class="hero-subtitle">המדריך המלא לתייר הישראלי</p>
+          <!-- Category tags -->
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;">
+            <a onclick="navigateTo('hotels')" style="padding:7px 16px;border-radius:20px;background:#E76F51;color:#fff;font-size:0.85rem;font-weight:600;cursor:pointer;text-decoration:none;">מלונות</a>
+            <a onclick="navigateTo('restaurants')" style="padding:7px 16px;border-radius:20px;background:#E9C46A;color:#2C5F6E;font-size:0.85rem;font-weight:600;cursor:pointer;text-decoration:none;">מסעדות</a>
+            <a onclick="navigateTo('attractions')" style="padding:7px 16px;border-radius:20px;background:#2A9D8F;color:#fff;font-size:0.85rem;font-weight:600;cursor:pointer;text-decoration:none;">אטרקציות</a>
+            <a onclick="navigateTo('shopping')" style="padding:7px 16px;border-radius:20px;background:#F4A261;color:#fff;font-size:0.85rem;font-weight:600;cursor:pointer;text-decoration:none;">קניות</a>
+            <a onclick="navigateTo('nightlife')" style="padding:7px 16px;border-radius:20px;background:#E76F51;color:#fff;font-size:0.8rem;font-weight:600;cursor:pointer;text-decoration:none;opacity:0.9;">בילויים</a>
+            <a onclick="navigateTo('transport')" style="padding:7px 16px;border-radius:20px;background:#2C5F6E;color:#E9C46A;font-size:0.8rem;font-weight:600;cursor:pointer;text-decoration:none;">תחבורה</a>
+            <a onclick="navigateTo('casino')" style="padding:7px 16px;border-radius:20px;background:#E9C46A;color:#2C5F6E;font-size:0.8rem;font-weight:600;cursor:pointer;text-decoration:none;opacity:0.9;">קזינו</a>
+            <a onclick="navigateTo('map')" style="padding:7px 16px;border-radius:20px;background:rgba(255,255,255,0.2);color:#fff;font-size:0.8rem;font-weight:600;cursor:pointer;text-decoration:none;backdrop-filter:blur(4px);">מפה</a>
+            <a onclick="navigateTo('livecams')" style="padding:7px 16px;border-radius:20px;background:rgba(255,255,255,0.15);color:#fff;font-size:0.8rem;font-weight:600;cursor:pointer;text-decoration:none;backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,0.3);">LIVE 🔴</a>
+            <a onclick="navigateTo('flights')" style="padding:7px 16px;border-radius:20px;background:#2A9D8F;color:#fff;font-size:0.8rem;font-weight:600;cursor:pointer;text-decoration:none;opacity:0.9;">✈ טיסות</a>
+          </div>
         </div>
       </div>
 
@@ -71,47 +84,6 @@
       <!-- Weather + Currency -->
       <div id="weatherWidget" style="margin:0 20px 8px;"></div>
       <div id="currencyWidget" style="margin:0 20px 12px;"></div>
-
-      <!-- Categories -->
-      <h2 style="padding:20px 20px 10px;font-size:1.5rem;font-weight:800;color:#2C5F6E;border-right:4px solid #E76F51;margin:0 20px;padding-right:12px;">קטגוריות</h2>
-      <div class="categories-grid">
-        <a class="category-card" onclick="navigateTo('hotels')">
-          <div class="category-icon"><i class="fas fa-hotel"></i></div>
-          <span>מלונות</span>
-        </a>
-        <a class="category-card" onclick="navigateTo('restaurants')">
-          <div class="category-icon"><i class="fas fa-utensils"></i></div>
-          <span>מסעדות</span>
-        </a>
-        <a class="category-card" onclick="navigateTo('attractions')">
-          <div class="category-icon"><i class="fas fa-landmark"></i></div>
-          <span>אטרקציות</span>
-        </a>
-        <a class="category-card" onclick="navigateTo('shopping')">
-          <div class="category-icon"><i class="fas fa-shopping-bag"></i></div>
-          <span>קניות</span>
-        </a>
-        <a class="category-card" onclick="navigateTo('nightlife')">
-          <div class="category-icon"><i class="fas fa-glass-cheers"></i></div>
-          <span>בילויים</span>
-        </a>
-        <a class="category-card" onclick="navigateTo('transport')">
-          <div class="category-icon"><i class="fas fa-subway"></i></div>
-          <span>תחבורה</span>
-        </a>
-        <a class="category-card" onclick="navigateTo('casino')">
-          <div class="category-icon"><i class="fas fa-dice"></i></div>
-          <span>קזינו</span>
-        </a>
-        <a class="category-card" onclick="navigateTo('map')">
-          <div class="category-icon"><i class="fas fa-map-marked-alt"></i></div>
-          <span>מפה</span>
-        </a>
-        <a class="category-card" onclick="navigateTo('livecams')" style="border-color:#2A9D8F;">
-          <div class="category-icon" style="background:linear-gradient(135deg,rgba(231,111,81,0.15),rgba(42,157,143,0.1));color:#E76F51;"><i class="fas fa-video"></i></div>
-          <span>LIVE</span>
-        </a>
-      </div>
 
       <!-- Top Hotels -->
       <h2 style="padding:20px 20px 10px;font-size:1.5rem;font-weight:800;color:#2C5F6E;display:flex;align-items:center;justify-content:space-between;border-right:4px solid #E9C46A;margin:0 20px;padding-right:12px;">
