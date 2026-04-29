@@ -341,6 +341,10 @@ function renderListPage(category, title, filters, activeFilter) {
               <span style="color:#E76F51;font-size:0.7rem;font-weight:600;">${item.price || ''}</span>
             </div>
             ${item.isOpen === true ? '<div style="color:#2A9D8F;font-size:0.6rem;font-weight:600;margin-top:3px;">● פתוח</div>' : ''}
+            <div style="display:flex;gap:6px;margin-top:6px;">
+              <button onclick="event.stopPropagation();shareItem('${item.name.replace(/'/g,"\\'")}','${(item.address||'').replace(/'/g,"\\'")}')" style="flex:1;padding:5px;border-radius:4px;border:none;background:#FDF6EC;color:#2C5F6E;font-size:0.65rem;font-family:Heebo;cursor:pointer;"><i class="fas fa-share-alt"></i> שתף</button>
+              <a href="https://wa.me/?text=${encodeURIComponent(item.name + ' - ' + (item.address||'') + ' | WellCome Dubai')}" target="_blank" onclick="event.stopPropagation()" style="flex:1;padding:5px;border-radius:4px;border:none;background:#25D366;color:#fff;font-size:0.65rem;text-align:center;text-decoration:none;font-family:Heebo;"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+            </div>
           </div>
         </div>
       `).join('')}
