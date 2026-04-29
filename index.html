@@ -68,8 +68,10 @@
         <div class="hero-content" style="padding:20px;justify-content:space-between;">
           <!-- Top 20%: Title -->
           <div style="padding-top:10px;">
-            <h1 id="heroTitle" class="hero-title" style="font-size:2.2rem;min-height:2.5rem;">ברוכים הבאים לדובאי</h1>
-            <p id="heroSubtitle" class="hero-subtitle" style="opacity:0;transition:opacity 0.5s;">המדריך המלא לתייר הישראלי</p>
+            <h1 class="hero-title" style="font-size:2.2rem;">
+              <span class="hero-letter" style="animation-delay:1.6s">ב</span><span class="hero-letter" style="animation-delay:1.7s">ר</span><span class="hero-letter" style="animation-delay:1.8s">ו</span><span class="hero-letter" style="animation-delay:1.9s">כ</span><span class="hero-letter" style="animation-delay:2.0s">י</span><span class="hero-letter" style="animation-delay:2.1s">ם</span><span style="display:inline"> </span><span class="hero-letter" style="animation-delay:2.3s">ה</span><span class="hero-letter" style="animation-delay:2.4s">ב</span><span class="hero-letter" style="animation-delay:2.5s">א</span><span class="hero-letter" style="animation-delay:2.6s">י</span><span class="hero-letter" style="animation-delay:2.7s">ם</span><span style="display:inline"> </span><span class="hero-letter" style="animation-delay:2.9s">ל</span><span class="hero-letter hero-dubai" style="animation-delay:3.0s">ד</span><span class="hero-letter hero-dubai" style="animation-delay:3.1s">ו</span><span class="hero-letter hero-dubai" style="animation-delay:3.2s">ב</span><span class="hero-letter hero-dubai" style="animation-delay:3.3s">א</span><span class="hero-letter hero-dubai" style="animation-delay:3.4s">י</span>
+            </h1>
+            <p class="hero-subtitle hero-sub-anim">המדריך המלא לתייר הישראלי</p>
           </div>
           <!-- Bottom: Category words -->
           <div style="display:flex;flex-wrap:wrap;gap:6px 14px;line-height:1.8;">
@@ -236,59 +238,7 @@
   }
 
   // Hero title animation - letter by letter
-  // Hero title animation
-  setTimeout(function() {
-    const text = 'ברוכים הבאים לדובאי';
-    const title = document.getElementById('heroTitle');
-    const subtitle = document.getElementById('heroSubtitle');
-    if (!title) return;
-
-    // Clear and start animation
-    title.textContent = '';
-    const letters = [];
-    let i = 0;
-
-    function nextLetter() {
-      if (i >= text.length) {
-        // Turn orange after 2 seconds + show subtitle
-        setTimeout(function() {
-          letters.forEach(function(s) { s.style.color = '#E76F51'; });
-          if (subtitle) { subtitle.style.opacity = '1'; subtitle.style.color = '#fff'; }
-        }, 2000);
-        // Fade out both after 10 seconds in orange
-        setTimeout(function() {
-          if (title) { title.style.transition = 'opacity 1.5s'; title.style.opacity = '0'; }
-          if (subtitle) { subtitle.style.transition = 'opacity 1.5s'; subtitle.style.opacity = '0'; }
-        }, 12000);
-        return;
-      }
-
-      var ch = text[i];
-      if (ch === ' ') {
-        var space = document.createTextNode(' ');
-        title.appendChild(space);
-      } else {
-        var span = document.createElement('span');
-        span.textContent = ch;
-        span.style.color = '#fff';
-        span.style.opacity = '0';
-        span.style.transition = 'color 1s';
-        span.style.display = 'inline-block';
-        title.appendChild(span);
-        letters.push(span);
-        // Fade in this letter
-        requestAnimationFrame(function() {
-          requestAnimationFrame(function() {
-            span.style.opacity = '1';
-          });
-        });
-      }
-      i++;
-      setTimeout(nextLetter, 100);
-    }
-
-    nextLetter();
-  }, 2000);
+  // Hero animation is now pure CSS - no JavaScript needed
 
   function toggleSearch() {
     const bar = document.getElementById('searchBar');
