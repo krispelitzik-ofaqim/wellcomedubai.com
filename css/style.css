@@ -252,7 +252,7 @@ body {
 .modal-overlay.active { display:flex; }
 .modal-sheet {
   background:#FFFFFF; width:100%; max-width:500px;
-  max-height:85vh; border-radius:8px 8px 0 0;
+  max-height:95vh; border-radius:8px 8px 0 0;
   overflow-y:auto; animation:slideUp 0.3s ease;
   box-shadow:0 -4px 30px rgba(0,0,0,0.15);
 }

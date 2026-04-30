@@ -137,17 +137,24 @@ function renderHome() {
   loadCurrencyWidget();
 }
 
+function isVerifiedImage(item, category) {
+  return item.image && new RegExp(`^images/${category}/${item.id}\\.jpg$`).test(item.image);
+}
+const VERIFIED_BADGE = '<i class="fas fa-check-circle" title="תמונה מאומתת מויקיפדיה" style="color:#1DA1F2;font-size:0.85em;margin-right:4px;vertical-align:middle;"></i>';
+
 function cardHTML(item, category) {
   const rating = item.googleRating || item.rating;
   const reviews = item.totalReviews;
   const isRestaurant = (category === 'restaurants' || category === 'shopping');
+  const verified = isVerifiedImage(item, category) ? VERIFIED_BADGE : '';
 
   if (isRestaurant) {
     // Square card - image top, white block bottom
     return `
       <div style="min-width:180px;width:180px;scroll-snap-align:start;background:#fff;border-radius:6px;overflow:hidden;cursor:pointer;border:1px solid #E5E7EB;box-shadow:0 2px 8px rgba(0,0,0,0.06);" onclick="openDetail('${category}', ${item.id})">
-        <div style="width:180px;height:180px;overflow:hidden;">
+        <div style="width:180px;height:180px;overflow:hidden;position:relative;">
           <img src="${item.image}" alt="${item.name}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'">
+          ${verified ? '<div style="position:absolute;top:6px;left:6px;background:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 3px rgba(0,0,0,0.3);"><i class="fas fa-check-circle" title="מאומת" style="color:#1DA1F2;font-size:1rem;"></i></div>' : ''}
         </div>
         <div style="padding:10px;">
           <div style="font-weight:600;color:#2C5F6E;font-size:0.85rem;margin-bottom:2px;">${item.name}</div>
@@ -163,8 +170,9 @@ function cardHTML(item, category) {
 
   // Default horizontal card for hotels, attractions etc
   return `
-    <div class="listing-card" onclick="openDetail('${category}', ${item.id})">
+    <div class="listing-card" onclick="openDetail('${category}', ${item.id})" style="position:relative;">
       <img class="card-img" src="${item.image}" alt="${item.name}" onerror="this.style.display='none'">
+      ${verified ? '<div style="position:absolute;top:8px;right:8px;background:#fff;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 3px rgba(0,0,0,0.3);z-index:2;"><i class="fas fa-check-circle" title="מאומת" style="color:#1DA1F2;font-size:1.1rem;"></i></div>' : ''}
       <div class="card-body">
         <div class="card-title" style="color:#2C5F6E;">${item.name}</div>
         <div class="card-location" style="color:#6B7F8D;"><i class="fas fa-map-marker-alt" style="color:#F4A261;"></i> ${item.address || ''}</div>
