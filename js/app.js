@@ -325,26 +325,14 @@ const SUBCAT_MAP = {
   'קזינו':'casino','מרוצים':'racing','ספורט':'sport','קניות':'shopping'
 };
 
-function renderListPage(category, title, filters, activeFilter) {
-  const page = document.getElementById('page-list');
-  const items = getAllItems(category);
-  const active = activeFilter || 'הכל';
-  const filtered = sortByRating(active === 'הכל' ? items : items.filter(i => i.subcategory === SUBCAT_MAP[active]));
-
-  page.innerHTML = `
-    <div class="page-header">
-      <button class="back-btn" onclick="navigateTo('home')"><i class="fas fa-arrow-right"></i></button>
-      <h2>${title}</h2>
-    </div>
-    <div class="filter-tabs">
-      ${filters.map(f => `<button class="filter-tab ${f === active ? 'active' : ''}" onclick="renderListPage('${category}','${title}',${JSON.stringify(filters)},'${f}')">${f}</button>`).join('')}
-    </div>
-    ${category === 'hotels' ? '<div id="bookingWidget" style="padding:0 20px;"></div>' : ''}
-    <div class="map-container"><div id="listMap" style="width:100%;height:100%;"></div></div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 16px 20px;">
-      ${filtered.map(item => `
-        <div style="background:#fff;border-radius:6px;overflow:hidden;border:1px solid #E5E7EB;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,0.05);" onclick="openDetail('${category}', ${item.id})">
-          <img src="${item.image}" alt="${item.name}" style="width:100%;height:130px;object-fit:cover;" onerror="this.style.display='none'">
+function cardGridHTML(item, category) {
+  const verified = isVerifiedImage(item, category);
+  return `
+        <div style="background:#fff;border-radius:6px;overflow:hidden;border:1px solid #E5E7EB;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,0.05);position:relative;" onclick="openDetail('${category}', ${item.id})">
+          <div style="position:relative;">
+            <img src="${item.image}" alt="${item.name}" style="width:100%;height:130px;object-fit:cover;" onerror="this.style.display='none'">
+            ${verified ? '<div style="position:absolute;top:6px;left:6px;background:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 3px rgba(0,0,0,0.3);"><i class="fas fa-check-circle" title="מאומת" style="color:#1DA1F2;font-size:1rem;"></i></div>' : ''}
+          </div>
           <div style="padding:10px;">
             <div style="font-weight:600;color:#2C5F6E;font-size:0.85rem;margin-bottom:3px;">${item.name}</div>
             ${item.stars ? `<div style="color:#E9C46A;font-size:0.7rem;margin-bottom:3px;">${'★'.repeat(Math.min(item.stars,5))}${item.stars > 5 ? '+' : ''}</div>` : ''}
@@ -360,9 +348,47 @@ function renderListPage(category, title, filters, activeFilter) {
               ${item.phone ? `<a href="tel:${item.phone}" onclick="event.stopPropagation()" style="flex:1;padding:5px;border-radius:4px;border:none;background:#E9C46A;color:#2C5F6E;font-size:0.65rem;text-align:center;text-decoration:none;font-family:Heebo;"><i class="fas fa-phone"></i> טלפון</a>` : ''}
             </div>
           </div>
+        </div>`;
+}
+
+function renderListPage(category, title, filters, activeFilter) {
+  const page = document.getElementById('page-list');
+  const items = getAllItems(category);
+  const active = activeFilter || 'הכל';
+  const filtered = sortByRating(active === 'הכל' ? items : items.filter(i => i.subcategory === SUBCAT_MAP[active]));
+
+  // Build content - grouped by subcategory when "All" is selected
+  let contentHTML;
+  if (active === 'הכל') {
+    const groups = filters.filter(f => f !== 'הכל');
+    contentHTML = groups.map(g => {
+      const groupItems = sortByRating(items.filter(i => i.subcategory === SUBCAT_MAP[g]));
+      if (!groupItems.length) return '';
+      return `
+        <div style="padding:14px 16px 6px;display:flex;align-items:center;gap:8px;">
+          <div style="flex:1;height:1px;background:#E5E7EB;"></div>
+          <h3 style="margin:0;color:#2C5F6E;font-size:0.95rem;font-weight:700;">${g} <span style="color:#6B7F8D;font-size:0.75rem;font-weight:500;">(${groupItems.length})</span></h3>
+          <div style="flex:1;height:1px;background:#E5E7EB;"></div>
         </div>
-      `).join('')}
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 16px 8px;">
+          ${groupItems.map(item => cardGridHTML(item, category)).join('')}
+        </div>`;
+    }).join('');
+  } else {
+    contentHTML = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 16px 20px;">${filtered.map(item => cardGridHTML(item, category)).join('')}</div>`;
+  }
+
+  page.innerHTML = `
+    <div class="page-header">
+      <button class="back-btn" onclick="navigateTo('home')"><i class="fas fa-arrow-right"></i></button>
+      <h2>${title}</h2>
     </div>
+    <div class="filter-tabs">
+      ${filters.map(f => `<button class="filter-tab ${f === active ? 'active' : ''}" onclick="renderListPage('${category}','${title}',${JSON.stringify(filters)},'${f}')">${f}</button>`).join('')}
+    </div>
+    ${category === 'hotels' ? '<div id="bookingWidget" style="padding:0 20px;"></div>' : ''}
+    <div class="map-container"><div id="listMap" style="width:100%;height:100%;"></div></div>
+    ${contentHTML}
   `;
 
   // Booking.com widget for hotels page
