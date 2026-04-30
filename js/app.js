@@ -227,7 +227,7 @@ function buildStaticMap(el, items) {
     var color = '0xE76F51';
     return `markers=color:${color}|${i.lat},${i.lng}`;
   }).join('&');
-  var src = `https://maps.googleapis.com/maps/api/staticmap?center=25.2048,55.2708&zoom=11&size=600x300&maptype=roadmap&${markers}&key=AIzaSyDVYlYuM6saMxbhi2aKNCtiv6J8mR8LLgw`;
+  var src = `https://maps.googleapis.com/maps/api/staticmap?center=25.2048,55.2708&zoom=11&size=600x300&maptype=roadmap&${markers}&key=AIzaSyDIqkbn9__0EdYjyCRQv4w-Gi3tHWwSwro`;
   el.innerHTML = `<img src="${src}" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='<div style=\\'display:flex;align-items:center;justify-content:center;height:100%;color:#6B7F8D;text-align:center;\\'>מפה לא זמינה ברשת זו</div>'">`;
 }
 
