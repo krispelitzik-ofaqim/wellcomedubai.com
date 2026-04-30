@@ -203,10 +203,16 @@ function buildMap(elementId, zoom, items) {
   const el = document.getElementById(elementId);
   if (!el) return;
 
-  // Always show static map first as placeholder
-  buildStaticMap(el, items);
+  // Build static map URL
+  var mapMarkers = (items || []).filter(function(i){return i.lat && i.lng}).slice(0,15).map(function(i){
+    return 'markers=color:0xE76F51%7C'+i.lat+','+i.lng;
+  }).join('&');
+  var staticUrl = 'https://maps.googleapis.com/maps/api/staticmap?center=25.2048,55.2708&zoom='+(zoom||11)+'&size=600x300&maptype=roadmap&'+mapMarkers+'&key=AIzaSyDIqkbn9__0EdYjyCRQv4w-Gi3tHWwSwro';
 
-  // Then try to load interactive map on top
+  // Show static map immediately
+  el.innerHTML = '<img src="'+staticUrl+'" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML=\'<div style=\\\'display:flex;align-items:center;justify-content:center;height:100%;color:#6B7F8D;text-align:center;\\\'>מפה לא זמינה</div>\'">';
+
+  // Then try interactive on top
   try {
     if (hasGoogle()) {
       el.innerHTML = '';
@@ -217,7 +223,6 @@ function buildMap(elementId, zoom, items) {
     }
   } catch(e) {
     console.error('Map error:', e);
-    // Static map already showing as fallback
   }
 }
 
