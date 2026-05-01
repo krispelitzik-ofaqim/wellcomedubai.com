@@ -1,0 +1,29 @@
+[
+  {
+    "id": 201,
+    "name": "Burj Khalifa",
+    "candidates": [
+      "201_a.jpg",
+      "201_b.jpg",
+      "201_c.jpg"
+    ]
+  },
+  {
+    "id": 202,
+    "name": "Dubai Mall",
+    "candidates": [
+      "202_a.jpg",
+      "202_b.jpg",
+      "202_c.jpg"
+    ]
+  },
+  {
+    "id": 203,
+    "name": "Palm Jumeirah",
+    "candidates": [
+      "203_a.jpg",
+      "203_b.jpg",
+      "203_c.jpg"
+    ]
+  }
+]
