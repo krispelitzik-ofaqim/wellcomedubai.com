@@ -2,7 +2,7 @@
 <html lang="he" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>WellCome Dubai - המדריך לתייר הישראלי בדובאי</title>
   <meta name="description" content="המדריך המלא לתיירים ישראליים בדובאי - מלונות, מסעדות, אטרקציות, קניות, בילויים ועוד">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -24,7 +24,7 @@
 
 <!-- Splash Screen -->
 <div class="splash-screen">
-  <img src="images/icon-new.jpg" style="width:80px;height:80px;border-radius:18px;margin-bottom:12px;mix-blend-mode:luminosity;opacity:0.9;">
+  <img src="images/icon-new.jpg" style="width:80px;height:80px;border-radius:18px;margin-bottom:12px;box-shadow:0 8px 20px rgba(0,0,0,0.45),0 2px 6px rgba(0,0,0,0.3);">
   <div class="splash-logo">WellCome<span>Dubai</span></div>
   <div class="splash-sub">המדריך שלך לדובאי</div>
   <div class="splash-spinner"></div>
@@ -35,13 +35,12 @@
   <!-- Top Header -->
   <header class="top-header">
     <div class="logo" style="display:flex;align-items:center;gap:8px;">
-      <img src="images/icon-new.jpg" style="width:32px;height:32px;border-radius:8px;">
+      <img src="images/icon-new.jpg" style="width:32px;height:32px;border-radius:8px;box-shadow:0 3px 8px rgba(0,0,0,0.35),0 1px 3px rgba(0,0,0,0.25);">
       WellCome<span>Dubai</span>
     </div>
     <div class="header-actions">
       <button class="header-btn" onclick="toggleSearch()" title="חיפוש"><i class="fas fa-search"></i></button>
       <button class="header-btn" onclick="showMobilePopup()" title="פתח בנייד"><i class="fas fa-mobile-alt"></i></button>
-      <button class="header-btn" onclick="navigateTo('info')" title="מידע שימושי"><i class="fas fa-info-circle"></i></button>
       <a href="admin/index.html" class="header-btn" title="לוח ניהול"><i class="fas fa-cog"></i></a>
     </div>
   </header>
@@ -86,14 +85,14 @@
               <a onclick="navigateTo('shopping')" style="color:#F4A261;font-size:0.9rem;font-weight:600;cursor:pointer;text-decoration:none;text-shadow:0 1px 3px rgba(0,0,0,0.5);">קניות</a>
               <a onclick="navigateTo('nightlife')" style="color:#fff;font-size:0.9rem;font-weight:600;cursor:pointer;text-decoration:none;text-shadow:0 1px 3px rgba(0,0,0,0.5);">בילויים</a>
               <a onclick="navigateTo('kids')" style="color:#E76F51;font-size:0.9rem;font-weight:700;cursor:pointer;text-decoration:none;text-shadow:0 1px 3px rgba(0,0,0,0.5);">ילדים</a>
-              <a onclick="navigateTo('transport')" style="color:#E9C46A;font-size:0.9rem;font-weight:600;cursor:pointer;text-decoration:none;text-shadow:0 1px 3px rgba(0,0,0,0.5);">תחבורה</a>
               <a onclick="navigateTo('casino')" style="color:#F4A261;font-size:0.9rem;font-weight:600;cursor:pointer;text-decoration:none;text-shadow:0 1px 3px rgba(0,0,0,0.5);">בידור ומשחקים</a>
             </div>
             <div style="display:flex;gap:16px;justify-content:center;">
-              <a onclick="navigateTo('itineraries')" style="color:#E9C46A;font-size:0.85rem;font-weight:700;cursor:pointer;text-decoration:none;text-shadow:0 1px 3px rgba(0,0,0,0.5);">מסלולי יום</a>
-              <a onclick="navigateTo('map')" style="color:#fff;font-size:0.8rem;font-weight:600;cursor:pointer;text-decoration:none;text-shadow:0 1px 3px rgba(0,0,0,0.5);opacity:0.85;">מפה</a>
-              <a onclick="navigateTo('livecams')" style="color:#E76F51;font-size:0.8rem;font-weight:700;cursor:pointer;text-decoration:none;text-shadow:0 1px 3px rgba(0,0,0,0.5);">LIVE</a>
-              <a onclick="navigateTo('flights')" style="color:#2A9D8F;font-size:0.8rem;font-weight:700;cursor:pointer;text-decoration:none;text-shadow:0 1px 3px rgba(0,0,0,0.5);">טיסות</a>
+              <a onclick="navigateTo('itineraries')" style="color:#2A9D8F;font-size:0.85rem;font-weight:700;cursor:pointer;text-decoration:none;text-shadow:0 1px 3px rgba(0,0,0,0.5);">מסלולים מוכנים</a>
+              <a onclick="navigateTo('transport')" style="color:#E9C46A;font-size:0.85rem;font-weight:700;cursor:pointer;text-decoration:none;text-shadow:0 1px 3px rgba(0,0,0,0.5);">תחבורה</a>
+            </div>
+            <div style="display:flex;justify-content:center;margin-top:10px;">
+              <a onclick="navigateTo('near')" style="color:#fff;font-size:0.95rem;font-weight:700;cursor:pointer;text-decoration:none;text-shadow:0 1px 4px rgba(0,0,0,0.7);"><i class="fas fa-location-arrow" style="font-size:0.85rem;margin-left:6px;"></i>הראה לי מה קרוב אליי עכשיו</a>
             </div>
           </div>
         </div>
@@ -151,11 +150,28 @@
         <i class="fas fa-chevron-left" style="color:#E9C46A;font-size:1rem;"></i>
       </div>
 
-      <!-- Rotating Discovery Banner -->
-      <div id="discoveryBanner" style="margin:10px 20px;border-radius:8px;overflow:hidden;cursor:pointer;min-height:140px;transition:opacity 0.4s;">
-        <div style="text-align:center;padding:50px 20px;color:#6B7F8D;font-size:0.85rem;">טוען המלצות...</div>
+      <!-- Weather + Currency banners (side by side) -->
+      <div style="display:flex;gap:10px;margin:0 20px 12px;">
+        <div onclick="navigateTo('weather')" style="flex:1;background:linear-gradient(135deg,#2A9D8F,#E9C46A);border-radius:8px;padding:14px;cursor:pointer;display:flex;align-items:center;gap:10px;">
+          <i class="fas fa-sun" style="color:#fff;font-size:1.4rem;"></i>
+          <div>
+            <div style="color:#fff;font-weight:800;font-size:0.92rem;">מזג אויר</div>
+            <div style="color:rgba(255,255,255,0.85);font-size:0.7rem;margin-top:1px;">תחזית בדובאי</div>
+          </div>
+        </div>
+        <div onclick="navigateTo('currency')" style="flex:1;background:linear-gradient(135deg,#E76F51,#F4A261);border-radius:8px;padding:14px;cursor:pointer;display:flex;align-items:center;gap:10px;">
+          <i class="fas fa-coins" style="color:#fff;font-size:1.4rem;"></i>
+          <div>
+            <div style="color:#fff;font-weight:800;font-size:0.92rem;">המרת מטבעות</div>
+            <div style="color:rgba(255,255,255,0.85);font-size:0.7rem;margin-top:1px;">₪ · AED · $</div>
+          </div>
+        </div>
       </div>
+
     </div>
+
+    <!-- NEAR ME PAGE -->
+    <div id="page-near" class="page"></div>
 
     <!-- LIST PAGE (dynamic) -->
     <div id="page-list" class="page"></div>
@@ -200,16 +216,12 @@
       <i class="fas fa-home"></i>
       <span>בית</span>
     </button>
-    <button class="nav-item" data-page="weather">
-      <i class="fas fa-cloud-sun"></i>
-      <span>מזג אוויר</span>
-    </button>
-    <button class="nav-item" data-page="currency">
-      <i class="fas fa-exchange-alt"></i>
-      <span>המרת מטבע</span>
+    <button class="nav-item" data-page="map" onclick="navigateTo('map')">
+      <i class="fas fa-map-location-dot"></i>
+      <span>מפה</span>
     </button>
     <button class="nav-item" data-page="legal">
-      <i class="fas fa-balance-scale"></i>
+      <i class="fas fa-info-circle"></i>
       <span>מידע משפטי</span>
     </button>
     <a href="https://wa.me/972501234567?text=שלום%20מהאפליקציית%20WellCome%20Dubai" target="_blank" class="nav-item" style="text-decoration:none;color:#25D366;">
@@ -234,7 +246,7 @@
 <script src="js/booking.js?v=11"></script>
 <script src="js/services.js?v=11"></script>
 <script src="js/flights-board.js?v=11"></script>
-<script src="js/app.js?v=105"></script>
+<script src="js/app.js?v=106"></script>
 <script>
   // ===== Open in iframe =====
   function openInFrame(url, title) {

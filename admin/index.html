@@ -46,6 +46,9 @@
   <!-- Sidebar -->
   <aside class="admin-sidebar">
     <div class="logo">WellCome<span style="color:var(--white);font-weight:400;">Dubai</span> <small style="color:var(--gray);font-size:0.65rem;">ADMIN</small></div>
+    <button class="admin-nav-item" data-section="preview" onclick="showSection('preview')" style="background:linear-gradient(135deg,#E76F51,#F4A261);color:#fff;font-weight:800;border:none;margin-bottom:6px;">
+      <i class="fas fa-mobile-screen"></i> iPhone / Android
+    </button>
     <button class="admin-nav-item active" data-section="dashboard" onclick="showSection('dashboard')">
       <i class="fas fa-chart-bar"></i> דשבורד
     </button>
@@ -67,8 +70,11 @@
     <button class="admin-nav-item" data-section="transport" onclick="showSection('transport')">
       <i class="fas fa-subway"></i> תחבורה
     </button>
+    <button class="admin-nav-item" data-section="kids" onclick="showSection('kids')">
+      <i class="fas fa-child"></i> ילדים ומשפחות
+    </button>
     <button class="admin-nav-item" data-section="casino" onclick="showSection('casino')">
-      <i class="fas fa-dice"></i> קזינו
+      <i class="fas fa-dice"></i> בידור ומשחקים
     </button>
     <div style="border-top:1px solid rgba(212,168,67,0.1);margin:12px 0;"></div>
     <button class="admin-nav-item" data-section="theme" onclick="showSection('theme')">
@@ -97,6 +103,9 @@
       <button onclick="toggleMobileMenu()" style="background:none;border:none;color:var(--gray);font-size:1.2rem;cursor:pointer;"><i class="fas fa-times"></i></button>
     </div>
     <div style="padding:8px 0;">
+      <button class="admin-nav-item mobile-nav" data-section="preview" onclick="showSection('preview');toggleMobileMenu();" style="display:flex;width:calc(100% - 24px);margin:0 12px 6px;padding:14px 20px;font-size:0.95rem;background:linear-gradient(135deg,#E76F51,#F4A261);color:#fff;font-weight:800;border:none;border-radius:8px;">
+        <i class="fas fa-mobile-screen"></i> iPhone / Android
+      </button>
       <button class="admin-nav-item mobile-nav active" data-section="dashboard" onclick="showSection('dashboard');toggleMobileMenu();" style="display:flex;width:100%;padding:14px 20px;font-size:0.95rem;">
         <i class="fas fa-chart-bar"></i> דשבורד
       </button>
@@ -118,8 +127,11 @@
       <button class="admin-nav-item mobile-nav" data-section="transport" onclick="showSection('transport');toggleMobileMenu();" style="display:flex;width:100%;padding:14px 20px;font-size:0.95rem;">
         <i class="fas fa-subway"></i> תחבורה
       </button>
+      <button class="admin-nav-item mobile-nav" data-section="kids" onclick="showSection('kids');toggleMobileMenu();" style="display:flex;width:100%;padding:14px 20px;font-size:0.95rem;">
+        <i class="fas fa-child"></i> ילדים ומשפחות
+      </button>
       <button class="admin-nav-item mobile-nav" data-section="casino" onclick="showSection('casino');toggleMobileMenu();" style="display:flex;width:100%;padding:14px 20px;font-size:0.95rem;">
-        <i class="fas fa-dice"></i> קזינו
+        <i class="fas fa-dice"></i> בידור ומשחקים
       </button>
       <div style="border-top:1px solid rgba(212,168,67,0.1);margin:8px 0;"></div>
       <button class="admin-nav-item mobile-nav" data-section="theme" onclick="showSection('theme');toggleMobileMenu();" style="display:flex;width:100%;padding:14px 20px;font-size:0.95rem;">
@@ -207,9 +219,58 @@
       renderDashboard();
     } else if (section === 'theme') {
       renderThemeSection();
+    } else if (section === 'preview') {
+      renderPreviewSection();
     } else {
       renderCategorySection(section);
     }
+  }
+
+  function renderPreviewSection(device) {
+    device = device || sessionStorage.getItem('preview_device') || 'iphone';
+    sessionStorage.setItem('preview_device', device);
+    const content = document.getElementById('adminContent');
+    const isIphone = device === 'iphone';
+    const W = isIphone ? 393 : 384;
+    const H = isIphone ? 852 : 832;
+    const radius = isIphone ? 55 : 40;
+    const frameColor = isIphone ? '#1d1d1f' : '#0a0a0a';
+
+    const islandIphone = `
+      <div style="position:absolute;top:11px;left:50%;transform:translateX(-50%);width:120px;height:35px;background:#000;border-radius:20px;z-index:5;"></div>`;
+    const cameraAndroid = `
+      <div style="position:absolute;top:14px;left:50%;transform:translateX(-50%);width:10px;height:10px;background:#000;border-radius:50%;z-index:5;"></div>`;
+
+    content.innerHTML = `
+      <div class="admin-header"><h2><i class="fas fa-mobile-screen"></i> תצוגה במכשירים</h2></div>
+      <div style="display:flex;gap:10px;margin-bottom:20px;">
+        <button onclick="renderPreviewSection('iphone')" style="padding:10px 18px;border:none;border-radius:8px;background:${isIphone ? '#E76F51' : '#fff'};color:${isIphone ? '#fff' : '#2C5F6E'};font-weight:700;cursor:pointer;font-family:Heebo;box-shadow:0 1px 3px rgba(0,0,0,0.1);">
+          <i class="fab fa-apple"></i> iPhone 16
+        </button>
+        <button onclick="renderPreviewSection('android')" style="padding:10px 18px;border:none;border-radius:8px;background:${!isIphone ? '#2A9D8F' : '#fff'};color:${!isIphone ? '#fff' : '#2C5F6E'};font-weight:700;cursor:pointer;font-family:Heebo;box-shadow:0 1px 3px rgba(0,0,0,0.1);">
+          <i class="fab fa-android"></i> Galaxy S25
+        </button>
+        <button onclick="document.getElementById('previewFrame').src=document.getElementById('previewFrame').src" style="padding:10px 16px;border:1px solid #E5E7EB;border-radius:8px;background:#fff;color:#6B7F8D;font-weight:600;cursor:pointer;font-family:Heebo;">
+          <i class="fas fa-rotate-right"></i> רענן
+        </button>
+        <div style="margin-right:auto;color:#6B7F8D;font-size:0.85rem;align-self:center;">${W}×${H} px</div>
+      </div>
+      <div style="display:flex;justify-content:center;padding:30px 10px;">
+        <div style="position:relative;width:${W + 24}px;height:${H + 24}px;background:${frameColor};border-radius:${radius}px;padding:12px;box-shadow:0 20px 50px rgba(0,0,0,0.35), inset 0 0 0 2px #2a2a2c;">
+          ${isIphone ? islandIphone : cameraAndroid}
+          <div style="position:absolute;top:50%;${isIphone ? 'right:-3px' : 'right:-2px'};transform:translateY(-50%);width:3px;height:60px;background:#3a3a3c;border-radius:2px;"></div>
+          <div style="position:absolute;top:${isIphone ? '180px' : '160px'};left:-3px;width:3px;height:40px;background:#3a3a3c;border-radius:2px;"></div>
+          <div style="position:absolute;top:${isIphone ? '240px' : '220px'};left:-3px;width:3px;height:60px;background:#3a3a3c;border-radius:2px;"></div>
+          <div style="width:${W}px;height:${H}px;border-radius:${radius - 12}px;overflow:hidden;background:#fff;position:relative;">
+            <div style="position:absolute;top:0;left:0;right:0;height:${isIphone ? 47 : 32}px;background:#000;z-index:6;display:flex;align-items:center;justify-content:space-between;padding:0 ${isIphone ? '24px' : '14px'};color:#fff;font-size:0.78rem;font-weight:600;font-family:-apple-system,sans-serif;">
+              <span>9:41</span>
+              <span style="display:flex;gap:5px;align-items:center;font-size:0.75rem;"><i class="fas fa-signal"></i> <i class="fas fa-wifi"></i> <i class="fas fa-battery-three-quarters"></i></span>
+            </div>
+            <iframe id="previewFrame" src="../index.html" style="width:${W}px;height:${H - (isIphone ? 47 : 32)}px;border:none;display:block;margin-top:${isIphone ? 47 : 32}px;"></iframe>
+          </div>
+        </div>
+      </div>
+    `;
   }
 
   // ===== DASHBOARD =====
@@ -217,8 +278,8 @@
     const stats = getStats();
     const content = document.getElementById('adminContent');
 
-    const iconMap = { hotels:'fa-hotel', restaurants:'fa-utensils', attractions:'fa-landmark', shopping:'fa-shopping-bag', nightlife:'fa-glass-cheers', transport:'fa-subway', casino:'fa-dice' };
-    const nameMap = { hotels:'מלונות', restaurants:'מסעדות', attractions:'אטרקציות', shopping:'קניות', nightlife:'בילויים', transport:'תחבורה', casino:'קזינו' };
+    const iconMap = { hotels:'fa-hotel', restaurants:'fa-utensils', attractions:'fa-landmark', shopping:'fa-shopping-bag', nightlife:'fa-glass-cheers', transport:'fa-subway', casino:'fa-dice', kids:'fa-child' };
+    const nameMap = { hotels:'מלונות', restaurants:'מסעדות', attractions:'אטרקציות', shopping:'קניות', nightlife:'בילויים', transport:'תחבורה', casino:'בידור ומשחקים', kids:'ילדים ומשפחות' };
 
     content.innerHTML = `
       <div class="admin-header"><h2>דשבורד</h2></div>
@@ -255,7 +316,7 @@
   }
 
   // ===== CATEGORY SECTION =====
-  const categoryNames = { hotels:'מלונות', restaurants:'מסעדות', attractions:'אטרקציות', shopping:'קניות', nightlife:'בילויים', transport:'תחבורה', casino:'קזינו' };
+  const categoryNames = { hotels:'מלונות', restaurants:'מסעדות', attractions:'אטרקציות', shopping:'קניות', nightlife:'בילויים', transport:'תחבורה', casino:'בידור ומשחקים', kids:'ילדים ומשפחות' };
 
   function renderCategorySection(category) {
     const items = getAllItems(category);

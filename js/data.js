@@ -219,7 +219,7 @@ const DEFAULT_DATA = {
     // === MUSEUMS (additional) ===
     { id:249, name:"Etihad Museum", nameEn:"Etihad Museum", category:"attractions", subcategory:"museum", description:"מוזיאון מודרני המתעד את ייסוד האמירויות (1971). מבנה אדריכלי בולט עם מסמכי ההיסטוריה.", image:"images/attractions/249.jpg", rating:4.5, price:"$", priceRange:"₪25-50", address:"Jumeirah Beach Road", lat:25.2400, lng:55.2700, tags:["מוזיאון","היסטוריה","איחוד"], featured:false },
     { id:250, name:"Coffee Museum", nameEn:"Coffee Museum", category:"attractions", subcategory:"museum", description:"מוזיאון קטן ומרתק ב-Al Bastakiya — היסטוריה של הקפה הערבי, ציוד מסורתי וטעימות.", image:"images/attractions/250.jpg", rating:4.5, price:"$", priceRange:"₪15-30", address:"Al Fahidi", lat:25.2630, lng:55.2990, tags:["מוזיאון","קפה","היסטורי"], featured:false },
-    { id:251, name:"Camel Museum", nameEn:"Camel Museum", category:"attractions", subcategory:"museum", description:"מוזיאון על הגמל בתרבות הבדואית — תפקידו, ההיסטוריה והקשר לאמירויות.", image:"images/attractions/camel-museum.png", rating:4.3, price:"חינם", priceRange:"חינם", address:"Al Shindagha", lat:25.2680, lng:55.3038, tags:["מוזיאון","גמלים","תרבות"], featured:false },
+    { id:251, name:"Camel Museum", nameEn:"Camel Museum", category:"attractions", subcategory:"museum", description:"מוזיאון על הגמל בתרבות הבדואית — תפקידו, ההיסטוריה והקשר לאמירויות.", image:"images/attractions/251.jpg", rating:4.3, price:"חינם", priceRange:"חינם", address:"Al Shindagha", lat:25.2680, lng:55.3038, tags:["מוזיאון","גמלים","תרבות"], featured:false },
     { id:252, name:"Money Museum", nameEn:"Money Museum", category:"attractions", subcategory:"museum", description:"היסטוריה של המטבעות — מהמסחר על דרך המשי ועד הדירהם המודרני.", image:"images/attractions/252.jpg", rating:4.2, price:"חינם", priceRange:"חינם", address:"Emirates NBD HQ, Baniyas Square", lat:25.2680, lng:55.3060, tags:["מוזיאון","מטבעות","היסטוריה"], featured:false },
     { id:253, name:"Crossroads of Civilizations", nameEn:"Crossroads of Civilizations Museum", category:"attractions", subcategory:"museum", description:"מוזיאון פרטי על נחל דובאי — תרבויות עתיקות, פפירוסים, חרבות וכלי נשק.", image:"images/attractions/253.jpg", rating:4.6, price:"$$", priceRange:"₪70-120", address:"Al Shindagha", lat:25.2680, lng:55.3050, tags:["מוזיאון","עתיקות","היסטוריה"], featured:false },
 
@@ -384,7 +384,7 @@ const PRACTICAL_INFO = {
   ]
 };
 
-const DB_VERSION = 164;
+const DB_VERSION = 165;
 function getDB() {
   const ver = localStorage.getItem(DB_KEY + '_ver');
   if (ver && Number(ver) >= DB_VERSION) {

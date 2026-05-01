@@ -78,10 +78,219 @@ function navigateTo(page, subcategory) {
     case 'mall': renderMallPage(subcategory); break;
     case 'areas': renderAreasPage(); break;
     case 'info': renderInfoPage(); break;
+    case 'near': renderNearMePage(); break;
   }
 }
 
+// ===== NEAR ME =====
+function nearMeToggleHTML() {
+  const id = 'nmt_' + Math.random().toString(36).slice(2,9);
+  return `
+    <div style="margin:10px 12px;display:flex;align-items:center;justify-content:space-between;background:#fff;border-radius:8px;padding:10px 14px;box-shadow:0 2px 6px rgba(0,0,0,0.1);">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <i class="fas fa-location-arrow" style="color:#E76F51;font-size:1rem;"></i>
+        <span style="color:#2C5F6E;font-weight:700;font-size:0.88rem;">הראה לי מה קרוב אליי עכשיו</span>
+      </div>
+      <label style="position:relative;display:inline-block;width:44px;height:24px;cursor:pointer;flex-shrink:0;">
+        <input type="checkbox" id="${id}" onchange="navigateTo('near')" style="opacity:0;width:0;height:0;">
+        <span style="position:absolute;inset:0;background:#E5E7EB;border-radius:24px;transition:0.25s;"></span>
+        <span style="position:absolute;top:3px;right:3px;width:18px;height:18px;background:#fff;border-radius:50%;transition:0.25s;box-shadow:0 1px 3px rgba(0,0,0,0.3);"></span>
+      </label>
+    </div>`;
+}
+
+function loadHomeNearRow() {
+  const el = document.getElementById('topNear');
+  if (!el) return;
+  if (!navigator.geolocation) { el.innerHTML = ''; return; }
+  if (window._homeNearCache) { renderHomeNearRow(window._homeNearCache.lat, window._homeNearCache.lng); return; }
+  navigator.geolocation.getCurrentPosition(
+    pos => {
+      window._homeNearCache = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+      renderHomeNearRow(pos.coords.latitude, pos.coords.longitude);
+    },
+    () => {
+      el.innerHTML = `<div onclick="navigateTo('near')" style="background:#fff;border-radius:8px;padding:14px;border:1px dashed #E76F51;color:#E76F51;font-weight:600;text-align:center;cursor:pointer;font-size:0.85rem;">הפעל מיקום לראות מה קרוב אליך →</div>`;
+    },
+    { timeout: 5000, maximumAge: 600000 }
+  );
+}
+
+function renderHomeNearRow(myLat, myLng) {
+  const el = document.getElementById('topNear');
+  if (!el) return;
+  const db = getDB();
+  const all = [];
+  NEAR_CATS.forEach(cat => {
+    (db[cat.key] || []).filter(it => it.lat && it.lng).forEach(it => {
+      all.push({ ...it, _cat: cat, _dist: haversineKm(myLat, myLng, it.lat, it.lng) });
+    });
+  });
+  all.sort((a, b) => a._dist - b._dist);
+  const top = all.slice(0, 6);
+  if (!top.length) { el.innerHTML = ''; return; }
+  el.style.padding = '0';
+  el.className = 'cards-scroll';
+  el.innerHTML = top.map(it => `
+    <div onclick="navigateTo('near')" style="min-width:160px;width:160px;scroll-snap-align:start;background:#fff;border-radius:8px;overflow:hidden;border-right:4px solid ${it._cat.color};cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,0.06);">
+      <div style="position:relative;height:100px;overflow:hidden;">
+        <img src="${it.image}" alt="${it.name}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'">
+        <div style="position:absolute;top:6px;left:6px;background:${it._cat.color};color:#fff;padding:2px 8px;border-radius:10px;font-size:0.65rem;font-weight:700;">${it._dist.toFixed(1)} ק"מ</div>
+      </div>
+      <div style="padding:8px 10px;">
+        <div style="font-weight:700;color:#2C5F6E;font-size:0.78rem;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${it.nameHe || it.name}</div>
+        <div style="color:${it._cat.color};font-size:0.65rem;margin-top:3px;font-weight:600;"><i class="fas ${it._cat.icon}"></i> ${it._cat.label}</div>
+      </div>
+    </div>`).join('');
+}
+
+function toggleNearMe(el) {
+  const slider = document.getElementById('nearMeSlider');
+  const knob = document.getElementById('nearMeKnob');
+  if (el.checked) {
+    slider.style.background = '#2A9D8F';
+    knob.style.right = '25px';
+    navigateTo('near');
+  } else {
+    slider.style.background = '#E5E7EB';
+    knob.style.right = '3px';
+  }
+}
+
+function haversineKm(lat1, lng1, lat2, lng2) {
+  const toRad = d => d * Math.PI / 180;
+  const R = 6371;
+  const dLat = toRad(lat2 - lat1);
+  const dLng = toRad(lng2 - lng1);
+  const a = Math.sin(dLat/2)**2 + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng/2)**2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+const NEAR_CATS = [
+  { key:'restaurants', label:'מסעדות', color:'#F4A261', icon:'fa-utensils' },
+  { key:'attractions', label:'אטרקציות', color:'#2A9D8F', icon:'fa-landmark' },
+  { key:'shopping', label:'קניות', color:'#F4A261', icon:'fa-shopping-bag' },
+  { key:'nightlife', label:'בילויים', color:'#B85C8E', icon:'fa-glass-cheers' },
+  { key:'kids', label:'ילדים', color:'#E76F51', icon:'fa-child' },
+  { key:'hotels', label:'מלונות', color:'#E9C46A', icon:'fa-hotel' }
+];
+
+function renderNearMePage() {
+  const page = document.getElementById('page-near');
+  page.innerHTML = `<div style="padding:20px;text-align:center;color:#6B7F8D;"><i class="fas fa-spinner fa-spin" style="font-size:1.5rem;color:#E76F51;"></i><div style="margin-top:12px;">מבקש את המיקום שלך...</div></div>`;
+  if (!navigator.geolocation) {
+    page.innerHTML = `<div style="padding:30px 20px;text-align:center;color:#6B7F8D;">הדפדפן לא תומך במיקום</div>`;
+    return;
+  }
+  navigator.geolocation.getCurrentPosition(pos => {
+    renderNearList(pos.coords.latitude, pos.coords.longitude);
+  }, err => {
+    page.innerHTML = `
+      <div style="padding:30px 20px;text-align:center;">
+        <i class="fas fa-location-slash" style="font-size:2rem;color:#E76F51;"></i>
+        <div style="color:#2C5F6E;font-weight:700;margin-top:14px;">לא הצלחנו לאתר את המיקום</div>
+        <div style="color:#6B7F8D;font-size:0.85rem;margin-top:6px;">אפשר הרשאת מיקום בדפדפן ונסה שוב</div>
+        <button onclick="renderNearMePage()" style="margin-top:16px;padding:10px 22px;background:#2A9D8F;color:#fff;border:none;border-radius:6px;font-family:Heebo;font-weight:600;cursor:pointer;">נסה שוב</button>
+      </div>`;
+  }, { enableHighAccuracy:true, timeout:10000 });
+}
+
+function renderNearList(myLat, myLng) {
+  const db = getDB();
+  const sections = NEAR_CATS.map(cat => {
+    const items = (db[cat.key] || [])
+      .filter(it => it.lat && it.lng)
+      .map(it => ({ ...it, _dist: haversineKm(myLat, myLng, it.lat, it.lng) }))
+      .sort((a, b) => a._dist - b._dist)
+      .slice(0, 5);
+    if (!items.length) return '';
+    const renderRow = it => `
+      <div onclick="openDetail('${cat.key}', ${it.id})" style="display:flex;gap:12px;background:#fff;border-radius:8px;overflow:hidden;border-right:4px solid ${cat.color};cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,0.05);align-items:stretch;">
+        <div style="width:90px;height:90px;flex-shrink:0;overflow:hidden;background:#E5E7EB;">
+          <img src="${it.image}" alt="${it.name}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'">
+        </div>
+        <div style="flex:1;padding:10px 12px 10px 0;display:flex;flex-direction:column;justify-content:center;min-width:0;">
+          <div style="font-weight:700;color:#2C5F6E;font-size:0.92rem;line-height:1.2;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${it.nameHe || it.name}</div>
+          <div style="color:#6B7F8D;font-size:0.72rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"><i class="fas fa-map-marker-alt" style="color:${cat.color};font-size:0.65rem;margin-left:4px;"></i>${it.address || ''}</div>
+          <div style="display:flex;gap:8px;margin-top:5px;align-items:center;">
+            <span style="background:${cat.color};color:#fff;padding:2px 8px;border-radius:10px;font-size:0.65rem;font-weight:700;">${it._dist.toFixed(1)} ק"מ</span>
+            ${it.rating ? `<span style="color:#E9C46A;font-size:0.7rem;font-weight:600;"><i class="fas fa-star"></i> ${it.rating}</span>` : ''}
+          </div>
+        </div>
+      </div>`;
+    const visible = items.slice(0, 2).map(renderRow).join('');
+    const hidden = items.slice(2).map(renderRow).join('');
+    const sectionId = `near_${cat.key}_more`;
+    const moreBtn = hidden ? `
+      <div style="padding:0 20px;">
+        <button onclick="document.getElementById('${sectionId}').style.display='flex';this.style.display='none';" style="width:100%;background:transparent;border:1px dashed ${cat.color};color:${cat.color};padding:8px;border-radius:6px;font-family:Heebo;font-weight:600;cursor:pointer;font-size:0.8rem;">עוד ${items.length - 2}...</button>
+      </div>
+      <div id="${sectionId}" style="display:none;flex-direction:column;gap:8px;padding:8px 20px 0;">${hidden}</div>` : '';
+    return `
+      <div style="margin-bottom:18px;">
+        <h3 style="padding:0 20px 8px;font-size:1rem;font-weight:800;color:${cat.color};display:flex;align-items:center;gap:8px;margin:0;">
+          <i class="fas ${cat.icon}"></i>${cat.label}
+        </h3>
+        <div style="display:flex;flex-direction:column;gap:8px;padding:0 20px 8px;">${visible}</div>
+        ${moreBtn}
+      </div>`;
+  }).join('');
+
+  const page = document.getElementById('page-near');
+  page.innerHTML = `
+    <div style="padding:14px 20px;background:linear-gradient(135deg,#2C5F6E,#2A9D8F);color:#fff;display:flex;align-items:center;gap:10px;">
+      <i class="fas fa-location-arrow" style="font-size:1.1rem;color:#E9C46A;"></i>
+      <div style="flex:1;">
+        <div style="font-weight:800;font-size:1rem;">קרוב אליך עכשיו</div>
+        <div style="font-size:0.72rem;opacity:0.85;">2 הקרובים מכל קטגוריה (עוד 3 בלחיצה)</div>
+      </div>
+      <button onclick="closeNearMe()" style="background:rgba(255,255,255,0.18);color:#fff;border:none;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1rem;">×</button>
+    </div>
+    <div id="nearMap" style="width:100%;height:220px;background:#E5E7EB;"></div>
+    ${sections}
+  `;
+  setTimeout(() => initNearMap(myLat, myLng, db), 50);
+}
+
+function initNearMap(myLat, myLng, db) {
+  const el = document.getElementById('nearMap');
+  if (!el || typeof L === 'undefined') return;
+  const map = L.map(el).setView([myLat, myLng], 13);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution:'© OSM' }).addTo(map);
+  L.marker([myLat, myLng], { title:'אני' }).addTo(map).bindPopup('אני כאן');
+  NEAR_CATS.forEach(cat => {
+    (db[cat.key] || []).filter(it => it.lat && it.lng)
+      .map(it => ({ ...it, _dist: haversineKm(myLat, myLng, it.lat, it.lng) }))
+      .sort((a,b) => a._dist - b._dist).slice(0, 5)
+      .forEach(it => {
+        const dot = L.divIcon({ className:'', html:`<div style="background:${cat.color};width:14px;height:14px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 4px rgba(0,0,0,0.3);"></div>`, iconSize:[14,14] });
+        L.marker([it.lat, it.lng], { icon:dot }).addTo(map).bindPopup(`<b>${it.nameHe || it.name}</b><br>${it._dist.toFixed(2)} ק"מ`);
+      });
+  });
+}
+
+function closeNearMe() {
+  const t = document.getElementById('nearMeToggle');
+  if (t) { t.checked = false; toggleNearMe(t); }
+  navigateTo('home');
+}
+
 // ===== SEARCH =====
+function searchAll(query) {
+  const q = query.toLowerCase();
+  const db = getDB();
+  const cats = ['hotels','restaurants','attractions','shopping','nightlife','transport','casino','kids'];
+  const results = [];
+  cats.forEach(cat => {
+    (db[cat] || []).forEach(item => {
+      const hay = [item.name, item.nameEn, item.nameHe, item.description, item.address, ...(item.tags || [])]
+        .filter(Boolean).join(' ').toLowerCase();
+      if (hay.includes(q)) results.push({ ...item, category: cat });
+    });
+  });
+  return results;
+}
+
 function setupSearch() {
   const input = document.getElementById('searchInput');
   if (!input) return;
@@ -142,7 +351,7 @@ function startDiscoveryRotation() {
     setTimeout(() => {
       banner.onclick = () => openDetail(item._cat, item.id);
       banner.innerHTML = `
-        <div style="position:relative;width:100%;height:140px;border-radius:8px;overflow:hidden;">
+        <div style="position:relative;width:100%;height:140px;overflow:hidden;">
           <img src="${item.image}" alt="${item.name}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none'">
           <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.1) 0%,rgba(0,0,0,0) 40%,rgba(0,0,0,0.85) 100%);"></div>
           <div style="position:absolute;top:8px;right:8px;background:#E9C46A;color:#2C5F6E;font-size:0.65rem;padding:3px 10px;border-radius:12px;font-weight:700;">💡 ${catLabel[item._cat] || item._cat}</div>
@@ -497,6 +706,7 @@ function ITINERARY_TEMPLATE(it, idx, navUrl) {
               <i class="fas fa-expand-arrows-alt"></i> הגדלה אינטראקטיבית
             </button>
           </div>
+          ${nearMeToggleHTML()}
           <a href="${navUrl}" target="_blank" style="display:block;text-decoration:none;background:${it.color};color:#fff;text-align:center;padding:10px;font-weight:700;font-size:0.9rem;">
             <i class="fas fa-directions"></i> פתח ניווט ב-Google Maps
           </a>
@@ -968,26 +1178,133 @@ function renderLegalPage() {
   `;
 }
 
+const CURRENCY_FLAGS = { ILS:'🇮🇱', AED:'🇦🇪', USD:'🇺🇸', EUR:'🇪🇺' };
+const CURRENCY_NAMES = { ILS:'שקל', AED:'דירהם', USD:'דולר', EUR:'יורו' };
+let _curState = { rates:null, amount:'', from:'ILS', lastUpdate:'', loading:false };
+
 function renderCurrencyPage() {
   const page = document.getElementById('page-currency');
   if (!page) return;
+  _curState = { rates:null, amount:'', from:'ILS', lastUpdate:'', loading:true };
   page.innerHTML = `
-    <div class="page-header">
-      <button class="back-btn" onclick="navigateTo('home')"><i class="fas fa-arrow-right"></i></button>
-      <h2><i class="fas fa-exchange-alt" style="color:#E9C46A;margin-left:6px;"></i> המרת מטבע</h2>
-    </div>
-    <div style="padding:16px 20px;">
-      <div id="currencyWidget"></div>
-      <div style="margin-top:16px;background:#FDF6EC;border-right:3px solid #E9C46A;padding:12px 14px;border-radius:6px;font-size:0.85rem;color:#2C5F6E;line-height:1.7;">
-        <b>💡 טיפים</b><br>
-        • שערים מתעדכנים אחת לשעה.<br>
-        • החלפת כסף מומלצת ב-Al Ansari או UAE Exchange (סניפים בכל מקום).<br>
-        • כספומטים מקבלים ויזה/מאסטרקארד עם עמלה ~25 דירהם לעסקה.<br>
-        • מומלץ להחזיק מעט מזומן (דירהם) לטקסי וטיפים.
+    <div style="background:linear-gradient(160deg,#E76F51,#F4A261);min-height:100vh;color:#fff;padding:20px 18px 40px;">
+      <button onclick="navigateTo('home')" style="position:absolute;top:18px;right:18px;width:36px;height:36px;border-radius:18px;background:rgba(0,0,0,0.2);border:none;color:#fff;font-size:1.1rem;cursor:pointer;z-index:5;">×</button>
+      <div style="text-align:center;margin-top:6px;">
+        <div style="font-size:1.7rem;font-weight:800;">המרת מטבעות</div>
+        <div style="font-size:0.85rem;opacity:0.85;margin-top:2px;">שערים מתעדכנים בזמן אמת</div>
+        <div id="curUpdated" style="font-size:0.7rem;opacity:0.7;margin-top:4px;">טוען...</div>
       </div>
+      <div style="display:flex;justify-content:center;margin:14px 0 22px;">
+        <button onclick="loadCurrencyRates()" style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.18);border:none;padding:7px 18px;border-radius:20px;color:#fff;font-family:Heebo;font-weight:600;font-size:0.85rem;cursor:pointer;">
+          <span id="curRefreshIcon">🔄</span><span>רענן נתונים</span>
+        </button>
+      </div>
+      <div id="curBody" style="text-align:center;padding:30px;"><i class="fas fa-spinner fa-spin" style="font-size:1.5rem;"></i></div>
     </div>
   `;
-  setTimeout(() => { if (typeof loadCurrencyWidget === 'function') loadCurrencyWidget(); }, 100);
+  loadCurrencyRates();
+}
+
+function loadCurrencyRates() {
+  _curState.loading = true;
+  const upd = document.getElementById('curUpdated');
+  if (upd) upd.textContent = 'טוען...';
+  fetch('https://open.er-api.com/v6/latest/USD').then(r => r.json()).then(d => {
+    if (d.rates) _curState.rates = { ILS:d.rates.ILS, AED:d.rates.AED, USD:1, EUR:d.rates.EUR };
+    const src = d.time_last_update_utc;
+    if (src) {
+      const dt = new Date(src);
+      const pad = n => String(n).padStart(2,'0');
+      _curState.lastUpdate = `${pad(dt.getDate())}/${pad(dt.getMonth()+1)} ${pad(dt.getHours())}:${pad(dt.getMinutes())}`;
+    }
+    _curState.loading = false;
+    renderCurrencyBody();
+  }).catch(() => { _curState.loading = false; renderCurrencyBody(); });
+}
+
+function renderCurrencyBody() {
+  const body = document.getElementById('curBody');
+  const upd = document.getElementById('curUpdated');
+  if (upd) upd.textContent = _curState.lastUpdate ? `עודכן: ${_curState.lastUpdate}` : '';
+  if (!body) return;
+  if (!_curState.rates) { body.innerHTML = `<div style="color:#fff;opacity:0.8;">שגיאה בטעינת שערים</div>`; return; }
+  const order = ['EUR','USD','AED','ILS'];
+  const others = order.filter(c => c !== _curState.from);
+  const fromBtns = order.map(c => {
+    const active = c === _curState.from;
+    return `<button onclick="setCurrencyFrom('${c}')" style="display:flex;align-items:center;gap:8px;background:${active ? '#fff' : 'rgba(255,255,255,0.15)'};color:${active ? '#2C5F6E' : '#fff'};border:none;padding:11px 16px;border-radius:14px;min-width:110px;justify-content:center;font-family:Heebo;font-weight:600;font-size:0.85rem;cursor:pointer;">
+      <span style="font-size:1.1rem;">${CURRENCY_FLAGS[c]}</span>${CURRENCY_NAMES[c]}
+    </button>`;
+  }).join('');
+  const keys = ['7','8','9','4','5','6','1','2','3','.','0','⌫'];
+  const keypad = keys.map(k => `<button onclick="curKey('${k}')" style="width:23%;padding:10px 0;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.25);border-radius:8px;color:#fff;font-family:Heebo;font-weight:700;font-size:1rem;cursor:pointer;">${k}</button>`).join('');
+  const results = others.map(c => {
+    const v = curConvert(c);
+    return `<div style="background:rgba(255,255,255,0.15);border-radius:12px;padding:11px 14px;margin-bottom:8px;">
+      <div style="display:flex;align-items:baseline;justify-content:center;gap:8px;">
+        <span style="font-size:1.4rem;">${CURRENCY_FLAGS[c]}</span>
+        <span style="font-size:1.5rem;font-weight:900;">${v}</span>
+        <span style="font-size:0.85rem;font-weight:700;opacity:0.85;">${CURRENCY_NAMES[c]}</span>
+      </div>
+      <div style="font-size:0.7rem;opacity:0.65;text-align:center;margin-top:3px;">1 ${CURRENCY_NAMES[_curState.from]} = ${(_curState.rates[c]/_curState.rates[_curState.from]).toFixed(4)} ${CURRENCY_NAMES[c]}</div>
+    </div>`;
+  }).join('');
+  body.innerHTML = `
+    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:18px;">${fromBtns}</div>
+    <div style="background:rgba(255,255,255,0.15);border-radius:14px;padding:14px;margin-bottom:18px;border:2px solid rgba(255,255,255,0.4);position:relative;">
+      <input id="curAmountInput" inputmode="decimal" type="text" value="${_curState.amount}" oninput="curInput(this.value)" placeholder="הקלד סכום ב${CURRENCY_NAMES[_curState.from]}" style="width:100%;background:transparent;border:none;outline:none;color:#fff;font-size:1.6rem;font-weight:900;text-align:center;font-family:Heebo;direction:ltr;">
+      ${_curState.amount ? `<button onclick="curKey('clear')" style="position:absolute;top:50%;left:10px;transform:translateY(-50%);background:rgba(0,0,0,0.25);border:none;color:#fff;width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:0.8rem;">×</button>` : ''}
+    </div>
+    <div>${results}</div>
+    <div style="font-size:0.7rem;opacity:0.6;text-align:center;margin-top:14px;">מקור: open.er-api.com (שערים גלובליים, מתעדכנים יומית)</div>
+  `;
+  const inp = document.getElementById('curAmountInput');
+  if (inp && document.activeElement !== inp) {
+    inp.focus();
+    inp.setSelectionRange(inp.value.length, inp.value.length);
+  }
+}
+
+function curConvert(to) {
+  if (!_curState.rates || !_curState.amount) return '—';
+  const num = parseFloat(_curState.amount);
+  if (isNaN(num)) return '—';
+  const inUsd = num / _curState.rates[_curState.from];
+  return (inUsd * _curState.rates[to]).toFixed(2);
+}
+
+function setCurrencyFrom(c) { _curState.from = c; renderCurrencyBody(); }
+
+function curKey(k) {
+  if (k === 'clear') _curState.amount = '';
+  renderCurrencyBody();
+}
+
+function curInput(v) {
+  v = v.replace(/[^0-9.]/g, '');
+  const parts = v.split('.');
+  if (parts.length > 2) v = parts[0] + '.' + parts.slice(1).join('');
+  _curState.amount = v;
+  // update only results, not the input itself, to avoid losing focus
+  const order = ['EUR','USD','AED','ILS'];
+  const others = order.filter(c => c !== _curState.from);
+  const resultsHtml = others.map(c => {
+    const val = curConvert(c);
+    return `<div style="background:rgba(255,255,255,0.15);border-radius:12px;padding:11px 14px;margin-bottom:8px;">
+      <div style="display:flex;align-items:baseline;justify-content:center;gap:8px;">
+        <span style="font-size:1.4rem;">${CURRENCY_FLAGS[c]}</span>
+        <span style="font-size:1.5rem;font-weight:900;">${val}</span>
+        <span style="font-size:0.85rem;font-weight:700;opacity:0.85;">${CURRENCY_NAMES[c]}</span>
+      </div>
+      <div style="font-size:0.7rem;opacity:0.65;text-align:center;margin-top:3px;">1 ${CURRENCY_NAMES[_curState.from]} = ${(_curState.rates[c]/_curState.rates[_curState.from]).toFixed(4)} ${CURRENCY_NAMES[c]}</div>
+    </div>`;
+  }).join('');
+  // find the results container (the div right before the source line)
+  const body = document.getElementById('curBody');
+  if (!body) return;
+  const divs = body.querySelectorAll(':scope > div');
+  // last 2 are results + source; replace results
+  if (divs.length >= 2) divs[divs.length - 2].innerHTML = resultsHtml;
 }
 
 function navigateToNearestMetro() {
@@ -1440,7 +1757,7 @@ function renderListPage(category, title, filters, activeFilter) {
 
         </div>
       </div>
-    ` : '<div class="map-container"><div id="listMap" style="width:100%;height:100%;"></div></div>'}
+    ` : `<div class="map-container"><div id="listMap" style="width:100%;height:100%;"></div></div>${nearMeToggleHTML()}`}
     ${contentHTML}
     ${items.length > 10 ? `<button onclick="window.scrollTo({top:0,behavior:'smooth'})" style="position:fixed;bottom:80px;left:16px;background:#E76F51;color:#fff;border:none;width:46px;height:46px;border-radius:50%;font-size:1.1rem;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,0.25);z-index:50;display:flex;align-items:center;justify-content:center;" title="חזור לראש"><i class="fas fa-arrow-up"></i></button>` : ''}
   `;
@@ -1735,9 +2052,10 @@ function renderMapPage() {
         </div>
       `).join('')}
     </div>
-    <div style="height:calc(100vh - 240px);margin:0 12px;border-radius:16px;overflow:hidden;border:1px solid #E5E7EB;">
+    <div style="height:calc(100vh - 290px);margin:0 12px;border-radius:16px;overflow:hidden;border:1px solid #E5E7EB;">
       <div id="fullMap" style="width:100%;height:100%;"></div>
     </div>
+    ${nearMeToggleHTML()}
   `;
 
   setTimeout(() => {
@@ -1917,7 +2235,7 @@ function openDetail(category, id) {
           </div>
         ` : ''}
         ${reviewsHTML(item)}
-        ${item.lat ? `<div class="map-container" style="margin:0 0 12px;height:220px;"><div id="detailMap" style="width:100%;height:100%;"></div></div>` : ''}
+        ${item.lat ? `<div class="map-container" style="margin:0 0 12px;height:220px;"><div id="detailMap" style="width:100%;height:100%;"></div></div>${nearMeToggleHTML()}` : ''}
         <div class="modal-actions" style="flex-wrap:wrap;">
           ${item.lat ? `<button class="modal-btn primary" onclick="openNavigation(${item.lat},${item.lng})"><i class="fas fa-directions"></i> נווט</button>` : ''}
           ${item.googleUrl ? `<a href="${item.googleUrl}" target="_blank" class="modal-btn secondary"><i class="fab fa-google"></i> Google Maps</a>` : ''}
