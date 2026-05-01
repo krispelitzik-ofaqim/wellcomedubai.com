@@ -264,6 +264,10 @@ const DEFAULT_DATA = {
     { id:313, name:"Textile Souk", nameEn:"Textile Souk", nameHe:"שוק הטקסטיל", category:"shopping", subcategory:"souk", description:"שוק הבדים של בר דובאי. בדים, פשמינה וחליפות בהזמנה אישית.", image:"images/shopping/313.jpg", rating:4.2, price:"$-$$", priceRange:"זול-בינוני", address:"Bur Dubai", lat:25.2633, lng:55.2975, tags:["שוק","בדים","מסורתי"], featured:false },
     { id:314, name:"Perfume Souk", nameEn:"Perfume Souk", category:"shopping", subcategory:"souk", description:"שוק הבשמים של דיירה. עוד, בשמים ערביים ושמנים אתריים.", image:"images/shopping/shop_14.jpeg", rating:4.1, price:"$-$$$", priceRange:"זול-יקר", address:"Deira", lat:25.2700, lng:55.2950, tags:["שוק","בשמים","עוד"], featured:false },
     { id:315, name:"Souk Madinat", nameEn:"Souk Madinat Jumeirah", category:"shopping", subcategory:"souk", description:"שוק יוקרתי בסגנון ערבי מסורתי עם תעלות, גלריות ומסעדות.", image:"images/shopping/315.jpg", rating:4.6, price:"$$$", priceRange:"יוקרתי", address:"Madinat Jumeirah", lat:25.1348, lng:55.1863, tags:["שוק","יוקרה","תעלות"], featured:true },
+
+    // === ALCOHOL ===
+    { id:316, name:"African+Eastern", nameEn:"African+Eastern", category:"shopping", subcategory:"alcohol", description:"רשת חנויות אלכוהול מורשת. תיירים 21+ קונים עם דרכון בלבד (בלי רישיון). סניפים בדובאי ואבו דאבי.", image:"images/shopping/316.jpg", rating:4.3, price:"$$-$$$$", priceRange:"מותגים בינלאומיים", address:"סניפים ברחבי דובאי ואבו דאבי", lat:24.4539, lng:54.3773, tags:["אלכוהול","יין","תיירים"], featured:false },
+    { id:317, name:"MMI", nameEn:"Maritime & Mercantile International", category:"shopping", subcategory:"alcohol", description:"רשת חנויות אלכוהול מובילה. תיירים 21+ עם דרכון. סניפים נוחים בדובאי ואבו דאבי, מבחר רחב כולל וויסקי, יין ובירה.", image:"images/shopping/317.jpg", rating:4.4, price:"$$-$$$$", priceRange:"מותגים פרימיום", address:"סניפים ברחבי דובאי ואבו דאבי", lat:24.4664, lng:54.3667, tags:["אלכוהול","וויסקי","יין"], featured:false },
   ],
   nightlife: [
     // === CLUBS ===
@@ -388,7 +392,7 @@ const PRACTICAL_INFO = {
   ]
 };
 
-const DB_VERSION = 166;
+const DB_VERSION = 167;
 function getDB() {
   const ver = localStorage.getItem(DB_KEY + '_ver');
   if (ver && Number(ver) >= DB_VERSION) {

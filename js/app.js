@@ -63,7 +63,7 @@ function navigateTo(page, subcategory) {
     case 'hotels': renderListPage('hotels', 'מלונות', ['הכל','7 כוכבים','5 כוכבים','4-5 כוכבים','3-4 כוכבים','תקציבי'], subcategory); break;
     case 'restaurants': renderListPage('restaurants', 'מסעדות', ['הכל','יוקרתי מאוד','יוקרתי','עממי','ישראלי','לבנוני','טורקי','אוכל רחוב'], subcategory); break;
     case 'attractions': renderListPage('attractions', 'אטרקציות', ['הכל','חובה לביקור','מוזיאון','אומנות','אקסטרים','חוף','פארק מים','פארק שעשועים','סיור','גן חיות','ספארי מדבר','יהדות'], subcategory); break;
-    case 'shopping': renderListPage('shopping', 'קניונים ושווקים', ['הכל','קניון','שוק'], subcategory); break;
+    case 'shopping': renderListPage('shopping', 'קניונים ושווקים', ['הכל','קניון','שוק','אלכוהול'], subcategory); break;
     case 'nightlife': renderListPage('nightlife', 'בילויים', ['הכל','מועדון','בר גג','ביץ׳ קלאב','בידור','מופע'], subcategory); break;
     case 'kids': renderListPage('kids', 'ילדים ומשפחות', ['הכל','פארק שעשועים','פארק מים','אקווריום','מתחם ילדים','שלג'], subcategory); break;
     case 'transport': renderListPage('transport', 'תחבורה', ['הכל','מטרו','מונית','סירה','אפליקציה','אוטובוס','השכרת רכב'], subcategory); break;
@@ -408,7 +408,7 @@ const SUBCAT_HE = {
   '7star':'7 כוכבים','5star':'5 כוכבים','4-5star':'4-5 כוכבים','3-4star':'3-4 כוכבים','luxury':'יוקרה','business':'עסקים','budget':'תקציבי',
   'ultra-luxury':'יוקרתי מאוד','local':'עממי','israeli':'ישראלי','lebanese':'לבנוני','turkish':'טורקי','street':'אוכל רחוב','asian':'אסייתי','seafood':'פירות ים',
   'landmark':'חובה לביקור','museum':'מוזיאון','adventure':'הרפתקה','extreme':'אקסטרים','art':'אומנות','beach':'חוף','waterpark':'פארק מים','theme-park':'פארק שעשועים','tour':'סיור','zoo':'גן חיות','aquarium':'אקווריום','kids-zone':'מתחם ילדים','snow':'שלג','car-rental':'השכרת רכב','desert-safari':'ספארי מדבר',
-  'mall':'קניון','souk':'שוק','judaism':'יהדות',
+  'mall':'קניון','souk':'שוק','judaism':'יהדות','alcohol':'אלכוהול',
   'club':'מועדון','lounge':'לאונג\'','rooftop':'בר גג','beach-club':'ביץ׳ קלאב','entertainment':'בידור','show':'מופע',
   'metro':'מטרו','taxi':'מונית','boat':'סירה','app':'אפליקציה','bus':'אוטובוס',
   'casino':'קזינו','racing':'מרוצים','sport':'ספורט','shopping':'קניות'
@@ -1549,7 +1549,7 @@ const SUBCAT_MAP = {
   'יוקרתי מאוד':'ultra-luxury','יוקרתי':'luxury','עממי':'local','ישראלי':'israeli','לבנוני':'lebanese','טורקי':'turkish','אוכל רחוב':'street',
   'אסייתי':'asian','מקומי':'local','פירות ים':'seafood',
   'חובה לביקור':'landmark','מוזיאון':'museum','הרפתקה':'adventure','אקסטרים':'extreme','אומנות':'art','חוף':'beach','פארק מים':'waterpark','פארק שעשועים':'theme-park','סיור':'tour','גן חיות':'zoo','אקווריום':'aquarium','מתחם ילדים':'kids-zone','שלג':'snow','השכרת רכב':'car-rental','ספארי מדבר':'desert-safari',
-  'קניון':'mall','שוק':'souk','יהדות':'judaism',
+  'קניון':'mall','שוק':'souk','יהדות':'judaism','אלכוהול':'alcohol',
   'מועדון':'club','לאונג\'':'lounge','בר גג':'rooftop','ביץ׳ קלאב':'beach-club','בידור':'entertainment','מופע':'show',
   'מטרו':'metro','מונית':'taxi','סירה':'boat','אפליקציה':'app','אוטובוס':'bus',
   'קזינו':'casino','מרוצים':'racing','ספורט':'sport','קניות':'shopping'
