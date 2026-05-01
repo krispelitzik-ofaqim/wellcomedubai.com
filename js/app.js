@@ -48,7 +48,7 @@ function navigateTo(page, subcategory) {
   if (pageEl) { pageEl.classList.add('active'); pageEl.classList.add('fade-in'); }
 
   // List pages use page-list
-  if (['hotels','restaurants','attractions','shopping','nightlife','transport','casino'].includes(page)) {
+  if (['hotels','restaurants','attractions','shopping','nightlife','transport','casino','kids'].includes(page)) {
     document.getElementById('page-list').classList.add('active');
     document.getElementById('page-home')?.classList.remove('active');
   }
@@ -60,17 +60,23 @@ function navigateTo(page, subcategory) {
 
   switch(page) {
     case 'home': renderHome(); break;
-    case 'hotels': renderListPage('hotels', 'מלונות', ['הכל','7 כוכבים','5 כוכבים','3-4 כוכבים','תקציבי'], subcategory); break;
+    case 'hotels': renderListPage('hotels', 'מלונות', ['הכל','7 כוכבים','5 כוכבים','4-5 כוכבים','3-4 כוכבים','תקציבי'], subcategory); break;
     case 'restaurants': renderListPage('restaurants', 'מסעדות', ['הכל','יוקרתי מאוד','יוקרתי','עממי','ישראלי','לבנוני','טורקי','אוכל רחוב'], subcategory); break;
-    case 'attractions': renderListPage('attractions', 'אטרקציות', ['הכל','ציון דרך','מוזיאון','חוף','פארק מים','פארק שעשועים','סיור','גן חיות'], subcategory); break;
+    case 'attractions': renderListPage('attractions', 'אטרקציות', ['הכל','חובה לביקור','מוזיאון','אומנות','אקסטרים','חוף','פארק מים','פארק שעשועים','סיור','גן חיות','ספארי מדבר'], subcategory); break;
     case 'shopping': renderListPage('shopping', 'קניונים ושווקים', ['הכל','קניון','שוק'], subcategory); break;
-    case 'nightlife': renderListPage('nightlife', 'בילויים', ['הכל','מועדון','לאונג\'','בידור','מופע'], subcategory); break;
-    case 'transport': renderListPage('transport', 'תחבורה', ['הכל','מטרו','מונית','סירה','אפליקציה'], subcategory); break;
+    case 'nightlife': renderListPage('nightlife', 'בילויים', ['הכל','מועדון','בר גג','ביץ׳ קלאב','בידור','מופע'], subcategory); break;
+    case 'kids': renderListPage('kids', 'ילדים ומשפחות', ['הכל','פארק שעשועים','פארק מים','אקווריום','מתחם ילדים','שלג'], subcategory); break;
+    case 'transport': renderListPage('transport', 'תחבורה', ['הכל','מטרו','מונית','סירה','אפליקציה','אוטובוס','השכרת רכב'], subcategory); break;
     case 'casino': renderListPage('casino', 'בידור ומשחקים', ['הכל','קזינו','מרוצים','ספורט'], subcategory); break;
     case 'map': renderMapPage(); break;
     case 'flights': renderFlightsPage(); break;
     case 'livecams': renderLiveCamsPage(); break;
     case 'weather': renderWeatherPage(); break;
+    case 'currency': renderCurrencyPage(); break;
+    case 'itineraries': renderItinerariesPage(); break;
+    case 'legal': renderLegalPage(); break;
+    case 'mall': renderMallPage(subcategory); break;
+    case 'areas': renderAreasPage(); break;
     case 'info': renderInfoPage(); break;
   }
 }
@@ -119,6 +125,41 @@ function showSearchResults(query) {
 }
 
 // ===== HOME PAGE =====
+function startDiscoveryRotation() {
+  if (window._discoveryInterval) clearInterval(window._discoveryInterval);
+  const cats = ['restaurants','attractions','shopping','nightlife','kids','transport','casino'];
+  const db = getDB();
+  const pool = [];
+  cats.forEach(c => (db[c] || []).forEach(i => pool.push({ ...i, _cat: c })));
+  if (!pool.length) return;
+  const catLabel = { restaurants:'מסעדה', attractions:'אטרקציה', shopping:'קניות', nightlife:'בילוי', kids:'לילדים', transport:'תחבורה', casino:'בידור' };
+  const showItem = () => {
+    const banner = document.getElementById('discoveryBanner');
+    if (!banner) { clearInterval(window._discoveryInterval); return; }
+    const item = pool[Math.floor(Math.random() * pool.length)];
+    banner.style.transition = 'opacity 1.2s ease';
+    banner.style.opacity = '0';
+    setTimeout(() => {
+      banner.onclick = () => openDetail(item._cat, item.id);
+      banner.innerHTML = `
+        <div style="position:relative;width:100%;height:140px;border-radius:8px;overflow:hidden;">
+          <img src="${item.image}" alt="${item.name}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none'">
+          <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.1) 0%,rgba(0,0,0,0) 40%,rgba(0,0,0,0.85) 100%);"></div>
+          <div style="position:absolute;top:8px;right:8px;background:#E9C46A;color:#2C5F6E;font-size:0.65rem;padding:3px 10px;border-radius:12px;font-weight:700;">💡 ${catLabel[item._cat] || item._cat}</div>
+          ${item.rating ? `<div style="position:absolute;top:8px;left:8px;background:rgba(0,0,0,0.55);color:#E9C46A;font-size:0.7rem;padding:3px 8px;border-radius:10px;font-weight:600;">⭐ ${item.rating}</div>` : ''}
+          <div style="position:absolute;bottom:8px;right:12px;left:12px;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,0.7);">
+            <div style="font-weight:800;font-size:1rem;line-height:1.2;">${item.name}</div>
+            <div style="font-size:0.72rem;opacity:0.95;margin-top:2px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${item.description || item.address || ''}</div>
+          </div>
+        </div>
+      `;
+      banner.style.opacity = '1';
+    }, 1200);
+  };
+  showItem();
+  window._discoveryInterval = setInterval(showItem, 10000);
+}
+
 function renderHome() {
   const hotels = sortByRating(getAllItems('hotels')).slice(0, 6);
   const hotelsContainer = document.getElementById('topHotels');
@@ -128,9 +169,23 @@ function renderHome() {
   const attrContainer = document.getElementById('topAttractions');
   if (attrContainer) attrContainer.innerHTML = attractions.map(item => cardHTML(item, 'attractions')).join('');
 
-  const restShop = [...sortByRating(getAllItems('restaurants')).slice(0, 4), ...sortByRating(getAllItems('shopping')).slice(0, 3)];
-  const restShopContainer = document.getElementById('topRestShopping');
-  if (restShopContainer) restShopContainer.innerHTML = restShop.map(item => cardHTML(item, item.category)).join('');
+  const restaurants = sortByRating(getAllItems('restaurants')).slice(0, 6);
+  const restContainer = document.getElementById('topRestaurants');
+  if (restContainer) restContainer.innerHTML = restaurants.map(item => cardHTML(item, 'restaurants')).join('');
+
+  const shopping = sortByRating(getAllItems('shopping')).slice(0, 6);
+  const shopContainer = document.getElementById('topShopping');
+  if (shopContainer) shopContainer.innerHTML = shopping.map(item => cardHTML(item, 'shopping', true)).join('');
+
+  const kids = sortByRating(getAllItems('kids')).slice(0, 6);
+  const kidsContainer = document.getElementById('topKids');
+  if (kidsContainer) kidsContainer.innerHTML = kids.map(item => cardHTML(item, 'kids', true)).join('');
+
+  const nightlife = sortByRating(getAllItems('nightlife')).slice(0, 6);
+  const nightlifeContainer = document.getElementById('topNightlife');
+  if (nightlifeContainer) nightlifeContainer.innerHTML = nightlife.map(item => cardHTML(item, 'nightlife', true)).join('');
+
+  startDiscoveryRotation();
 
   // Load live widgets
   loadWeatherWidget();
@@ -140,30 +195,50 @@ function renderHome() {
 function isVerifiedImage(item, category) {
   return item.image && new RegExp(`^images/${category}/${item.id}\\.jpg$`).test(item.image);
 }
+const SUBCAT_HE = {
+  '7star':'7 כוכבים','5star':'5 כוכבים','4-5star':'4-5 כוכבים','3-4star':'3-4 כוכבים','luxury':'יוקרה','business':'עסקים','budget':'תקציבי',
+  'ultra-luxury':'יוקרתי מאוד','local':'עממי','israeli':'ישראלי','lebanese':'לבנוני','turkish':'טורקי','street':'אוכל רחוב','asian':'אסייתי','seafood':'פירות ים',
+  'landmark':'חובה לביקור','museum':'מוזיאון','adventure':'הרפתקה','extreme':'אקסטרים','art':'אומנות','beach':'חוף','waterpark':'פארק מים','theme-park':'פארק שעשועים','tour':'סיור','zoo':'גן חיות','aquarium':'אקווריום','kids-zone':'מתחם ילדים','snow':'שלג','car-rental':'השכרת רכב','desert-safari':'ספארי מדבר',
+  'mall':'קניון','souk':'שוק',
+  'club':'מועדון','lounge':'לאונג\'','rooftop':'בר גג','beach-club':'ביץ׳ קלאב','entertainment':'בידור','show':'מופע',
+  'metro':'מטרו','taxi':'מונית','boat':'סירה','app':'אפליקציה','bus':'אוטובוס',
+  'casino':'קזינו','racing':'מרוצים','sport':'ספורט','shopping':'קניות'
+};
+function subcategoryHe(sub) { return SUBCAT_HE[sub] || sub; }
+const CATEGORY_TITLE_COLORS = {
+  hotels:'#E9C46A', attractions:'#2A9D8F', restaurants:'#F4A261',
+  shopping:'#F4A261', nightlife:'#B85C8E', kids:'#E76F51',
+  transport:'#2A9D8F', casino:'#E9C46A'
+};
 const VERIFIED_BADGE = '<i class="fas fa-check-circle" title="תמונה מאומתת מויקיפדיה" style="color:#1DA1F2;font-size:0.85em;margin-right:4px;vertical-align:middle;"></i>';
 
-function cardHTML(item, category) {
+function cardHTML(item, category, mini) {
   const rating = item.googleRating || item.rating;
   const reviews = item.totalReviews;
-  const isRestaurant = (category === 'restaurants' || category === 'shopping');
+  const isRestaurant = (category === 'restaurants' || category === 'shopping' || category === 'nightlife' || category === 'kids' || category === 'attractions');
   const verified = isVerifiedImage(item, category) ? VERIFIED_BADGE : '';
 
   if (isRestaurant) {
-    // Square card - image top, white block bottom
+    const w = mini ? 120 : 180;
+    const fontTitle = mini ? '0.72rem' : '0.85rem';
+    const fontMeta = mini ? '0.6rem' : '0.7rem';
+    const fontRate = mini ? '0.65rem' : '0.8rem';
+    const pad = mini ? 6 : 10;
     return `
-      <div style="min-width:180px;width:180px;scroll-snap-align:start;background:#fff;border-radius:6px;overflow:hidden;cursor:pointer;border:1px solid #E5E7EB;box-shadow:0 2px 8px rgba(0,0,0,0.06);" onclick="openDetail('${category}', ${item.id})">
-        <div style="width:180px;height:180px;overflow:hidden;position:relative;">
+      <div style="min-width:${w}px;width:${w}px;scroll-snap-align:start;background:#fff;border-radius:6px;overflow:hidden;cursor:pointer;border:1px solid #E5E7EB;box-shadow:0 2px 8px rgba(0,0,0,0.06);" onclick="openDetail('${category}', ${item.id})">
+        <div style="width:${w}px;height:${w}px;overflow:hidden;position:relative;">
           <img src="${item.image}" alt="${item.name}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'">
-          ${verified ? '<div style="position:absolute;top:6px;left:6px;background:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 3px rgba(0,0,0,0.3);"><i class="fas fa-check-circle" title="מאומת" style="color:#1DA1F2;font-size:1rem;"></i></div>' : ''}
+          ${item.subcategory ? `<div style="position:absolute;top:6px;left:6px;background:${CATEGORY_TITLE_COLORS[category] || 'rgba(0,0,0,0.65)'};color:#fff;padding:${mini ? '2px 7px' : '3px 9px'};border-radius:10px;font-size:${mini ? '0.6rem' : '0.7rem'};font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,0.3);">${subcategoryHe(item.subcategory)}</div>` : ''}
+          ${item.nameHe ? `<div style="position:absolute;bottom:8px;right:8px;left:8px;color:#fff;font-weight:800;font-size:${mini ? '0.85rem' : '1.05rem'};text-shadow:0 2px 8px rgba(0,0,0,0.85),0 0 4px rgba(0,0,0,0.7);text-align:right;">${item.nameHe}</div>` : ''}
         </div>
-        <div style="padding:10px;">
-          <div style="font-weight:600;color:#2C5F6E;font-size:0.85rem;margin-bottom:2px;">${item.name}</div>
-          <div style="font-size:0.7rem;color:#6B7F8D;margin-bottom:4px;"><i class="fas fa-map-marker-alt" style="color:#F4A261;"></i> ${item.address || ''}</div>
+        <div style="padding:${pad}px;">
+          <div style="font-weight:600;color:#2C5F6E;font-size:${fontTitle};margin-bottom:2px;">${item.nameEn || item.name}</div>
+          <div style="font-size:${fontMeta};color:#6B7F8D;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"><i class="fas fa-map-marker-alt" style="color:#F4A261;"></i> ${item.address || ''}</div>
           <div style="display:flex;align-items:center;justify-content:space-between;">
-            <span style="color:#E9C46A;font-size:0.8rem;font-weight:600;"><i class="fas fa-star"></i> ${rating || '-'}</span>
-            <span style="color:#E76F51;font-size:0.75rem;font-weight:500;">${item.price || ''}</span>
+            <span style="color:#E9C46A;font-size:${fontRate};font-weight:600;"><i class="fas fa-star"></i> ${rating || '-'}</span>
+            <span style="color:#E76F51;font-size:${fontMeta};font-weight:500;">${item.price || ''}</span>
           </div>
-          ${item.isOpen === true ? '<div style="color:#2A9D8F;font-size:0.65rem;font-weight:600;margin-top:3px;">● פתוח</div>' : ''}
+          ${item.isOpen === true && !mini ? '<div style="color:#2A9D8F;font-size:0.65rem;font-weight:600;margin-top:3px;">● פתוח</div>' : ''}
         </div>
       </div>`;
   }
@@ -194,6 +269,826 @@ const MARKER_COLORS = {
   hotels:'#E9C46A', restaurants:'#E76F51', attractions:'#2A9D8F',
   shopping:'#F4A261', nightlife:'#E76F51', transport:'#2A9D8F', casino:'#E9C46A'
 };
+const SUBCAT_COLORS = {
+  '7star':'#C9A961', '5star':'#E76F51', '4-5star':'#2A9D8F',
+  '3-4star':'#6B8E5A', 'budget':'#6B7F8D'
+};
+function getMarkerColor(item) {
+  if (item.subcategory && SUBCAT_COLORS[item.subcategory]) return SUBCAT_COLORS[item.subcategory];
+  return MARKER_COLORS[item.category] || '#E76F51';
+}
+
+const DUBAI_METRO = {
+  red: ['Centrepoint','Emirates','Airport Terminal 3','Airport Terminal 1','City Centre Deira','Al Rigga','Union','BurJuman','ADCB','Max','World Trade Centre','Emirates Towers','Financial Centre','Burj Khalifa - Dubai Mall','Business Bay','Onpassive','Equiti','Mall of the Emirates','Sharaf DG','Dubai Internet City','Dubai Marina','DMCC','Jumeirah Lakes Towers','Sobha Realty','Ibn Battuta','Energy','Danube','Jebel Ali','UAE Exchange','The Gardens','Discovery Gardens','Al Furjan','Jumeirah Golf Estates','Dubai Investment Park','Expo 2020'],
+  green: ['Etisalat','Al Qusais','Dubai Airport Free Zone','Al Nahda','Stadium','Al Qiyadah','Abu Hail','Abu Baker Al Siddique','Salah Al Din','Union','Baniyas Square','Palm Deira','Al Ras','Al Ghubaiba','Sharaf DG','BurJuman','Oud Metha','Dubai Healthcare City','Al Jadaf','Creek'],
+  tram: ['Jumeirah Beach Residence 1','Jumeirah Beach Residence 2','Jumeirah Lakes Towers','Dubai Marina','Marina Towers','Mina Seyahi','Media City','Palm Jumeirah','Knowledge Village','Al Sufouh','Palm Gateway']
+};
+
+function jumpToMetroStation(line, station) {
+  if (!station) return;
+  const url = `https://www.google.com/maps/embed/v1/place?key=AIzaSyDIqkbn9__0EdYjyCRQv4w-Gi3tHWwSwro&q=${encodeURIComponent(station + ' Metro Station Dubai')}&zoom=16`;
+  openInFrame(url, `${station} - תחנת מטרו`);
+}
+
+const ITINERARIES = [
+  {
+    title: 'דובאי הישנה — מורשת ושווקים',
+    icon: '🕌', color: '#C9A961',
+    duration: 'יום מלא (~9 שעות)', bestFor: 'אוהבי תרבות והיסטוריה',
+    stops: [
+      { time: '09:00', name: 'Arabian Tea House', desc: 'ארוחת בוקר אמיראתית בלב Al Fahidi.', image: 'https://images.pexels.com/photos/14750357/pexels-photo-14750357.jpeg', lat:25.2631, lng:55.3006 },
+      { time: '10:30', name: 'שכונת Al Fahidi', desc: 'סיור רגלי בסמטאות, מוזיאונים וגלריות.', image: 'https://images.pexels.com/photos/30245006/pexels-photo-30245006.jpeg', lat:25.2625, lng:55.2986 },
+      { time: '12:00', name: 'אברה — דובאי קריק', desc: 'מעבורת מסורתית מבור דובאי לדיירה (1 דירהם).', image: 'https://images.pexels.com/photos/29196946/pexels-photo-29196946.jpeg', lat:25.2633, lng:55.2975 },
+      { time: '12:30', name: 'שוק התבלינים והזהב', desc: 'שוטטות בשווקים המסורתיים בדיירה.', image: 'https://images.pexels.com/photos/14749879/pexels-photo-14749879.jpeg', lat:25.2700, lng:55.3047 },
+      { time: '14:00', name: 'Al Ustad Special Kebab', desc: 'ארוחת צהריים ותיקה איראנית-עיראקית.', image: 'https://images.pexels.com/photos/14750466/pexels-photo-14750466.jpeg', lat:25.2595, lng:55.3005 },
+      { time: '16:00', name: 'Dubai Frame', desc: 'תצפית 360° מהמסגרת בגן Zabeel.', image: 'https://images.pexels.com/photos/26838210/pexels-photo-26838210.jpeg', lat:25.2353, lng:55.3009 },
+      { time: '19:00', name: 'Al Seef Heritage', desc: 'טיול ערב לאורך הקריק עם תאורה.', image: 'https://images.pexels.com/photos/35155690/pexels-photo-35155690.jpeg', lat:25.2615, lng:55.3020 }
+    ]
+  },
+  {
+    title: 'דובאי המודרנית — Downtown',
+    icon: '🌃', color: '#E76F51',
+    duration: 'יום מלא (~10 שעות)', bestFor: 'זוגות וצלמים',
+    stops: [
+      { time: '10:00', name: 'Burj Khalifa', desc: 'תצפית מקומה 124/148.', image: 'https://images.pexels.com/photos/26838210/pexels-photo-26838210.jpeg', lat:25.1972, lng:55.2744 },
+      { time: '12:30', name: 'Dubai Aquarium', desc: 'אקווריום + מנהרת כריש בקניון.', image: 'https://images.pexels.com/photos/14750186/pexels-photo-14750186.jpeg', lat:25.1985, lng:55.2796 },
+      { time: '13:30', name: 'Dubai Mall', desc: 'קניות וצהריים — TLV / Mosaica.', image: 'https://images.pexels.com/photos/14750359/pexels-photo-14750359.jpeg', lat:25.1985, lng:55.2796 },
+      { time: '17:00', name: 'CÉ LA VI / Atmosphere', desc: 'סאנדאון בבר גג עם נוף.', image: 'https://images.pexels.com/photos/34972118/pexels-photo-34972118.jpeg', lat:25.1965, lng:55.2730 },
+      { time: '19:30', name: 'Dubai Fountain', desc: 'מופע מזרקות מים (חינם, כל חצי שעה).', image: 'https://images.pexels.com/photos/29196946/pexels-photo-29196946.jpeg', lat:25.1953, lng:55.2754 },
+      { time: '20:30', name: 'HaSalon / Miznon', desc: 'ארוחת ערב ישראלית של אייל שני.', image: 'https://images.pexels.com/photos/14749935/pexels-photo-14749935.jpeg', lat:25.2122, lng:55.2799 }
+    ]
+  },
+  {
+    title: 'חוף ומרינה',
+    icon: '🏖️', color: '#2A9D8F',
+    duration: 'יום מלא', bestFor: 'אוהבי שמש וים',
+    stops: [
+      { time: '10:00', name: 'JBR Beach', desc: 'חוף, ספורט מים, וגלוש.', image: 'https://images.pexels.com/photos/14750186/pexels-photo-14750186.jpeg', lat:25.0780, lng:55.1340 },
+      { time: '13:00', name: 'Cove Beach', desc: 'ביץ׳ קלאב — בריכה, ארוחה, מוזיקה.', image: 'https://images.pexels.com/photos/26838210/pexels-photo-26838210.jpeg', lat:25.0810, lng:55.1240 },
+      { time: '16:00', name: 'Bluewaters Island', desc: 'הליכה על Bluewaters.', image: 'https://images.pexels.com/photos/14749932/pexels-photo-14749932.jpeg', lat:25.0797, lng:55.1193 },
+      { time: '17:00', name: 'Ain Dubai', desc: 'הגלגל הענק — תצפית של 250 מ׳.', image: 'https://images.pexels.com/photos/14750359/pexels-photo-14750359.jpeg', lat:25.0797, lng:55.1193 },
+      { time: '19:00', name: 'Dubai Marina Walk', desc: 'הליכת ערב לאורך המרינה.', image: 'https://images.pexels.com/photos/34596088/pexels-photo-34596088.jpeg', lat:25.0820, lng:55.1410 },
+      { time: '20:30', name: 'Pierchic / Drift', desc: 'דגים בנוף יוקרתי.', image: 'https://images.pexels.com/photos/14750466/pexels-photo-14750466.jpeg', lat:25.0950, lng:55.1530 }
+    ]
+  },
+  {
+    title: 'משפחות וילדים',
+    icon: '🎢', color: '#F4A261',
+    duration: 'יום מלא', bestFor: 'הורים עם ילדים',
+    stops: [
+      { time: '10:00', name: 'Aquaventure / Wild Wadi', desc: 'פארק מים — מגלשות וגלים.', image: 'https://images.pexels.com/photos/26838210/pexels-photo-26838210.jpeg', lat:25.1304, lng:55.1170 },
+      { time: '14:00', name: 'Lost Chambers Aquarium', desc: 'אקווריום תת-מימי באטלנטיס.', image: 'https://images.pexels.com/photos/14750186/pexels-photo-14750186.jpeg', lat:25.1304, lng:55.1170 },
+      { time: '16:00', name: 'KidZania', desc: 'עיר ילדים במקצועות.', image: 'https://images.pexels.com/photos/14749879/pexels-photo-14749879.jpeg', lat:25.1980, lng:55.2790 },
+      { time: '18:00', name: 'Ski Dubai', desc: 'מגלשת שלג + פינגווינים.', image: 'https://images.pexels.com/photos/14749932/pexels-photo-14749932.jpeg', lat:25.1181, lng:55.2005 },
+      { time: '20:00', name: 'La Perle Show', desc: 'מופע אקרובטי בלב Al Habtoor.', image: 'https://images.pexels.com/photos/14750359/pexels-photo-14750359.jpeg', lat:25.1850, lng:55.2448 }
+    ]
+  },
+  {
+    title: 'מדבר וספארי',
+    icon: '🐪', color: '#B85C8E',
+    duration: 'אחה״צ + ערב (~7 שעות)', bestFor: 'הרפתקנים',
+    stops: [
+      { time: '14:30', name: 'איסוף מהמלון', desc: 'רכבי 4x4 לכיוון המדבר.', image: 'https://images.pexels.com/photos/29352929/pexels-photo-29352929.jpeg', lat:25.2048, lng:55.2708 },
+      { time: '15:30', name: 'Dune Bashing', desc: 'נסיעה אקסטרים על הדיונות.', image: 'https://images.pexels.com/photos/30245006/pexels-photo-30245006.jpeg', lat:24.8500, lng:55.5300 },
+      { time: '17:00', name: 'גמלים + סנדבורד', desc: 'רכיבה ופעילות במדבר.', image: 'https://images.pexels.com/photos/14915303/pexels-photo-14915303.jpeg', lat:24.8400, lng:55.5350 },
+      { time: '18:00', name: 'שקיעה במדבר', desc: 'תמונות מרהיבות בזריחת/שקיעת השמש.', image: 'https://images.pexels.com/photos/34698507/pexels-photo-34698507.jpeg', lat:24.8350, lng:55.5400 },
+      { time: '19:00', name: 'מחנה בדואי', desc: 'ארוחת ערב, חינה, מופע ריקודים.', image: 'https://images.pexels.com/photos/36794534/pexels-photo-36794534.jpeg', lat:24.8350, lng:55.5400 },
+      { time: '22:00', name: 'חזרה למלון', desc: 'הסעה חזרה.', image: 'https://images.pexels.com/photos/29196946/pexels-photo-29196946.jpeg', lat:25.2048, lng:55.2708 }
+    ]
+  },
+  {
+    title: 'יום באבו דאבי',
+    icon: '🕌', color: '#5B9DC7',
+    duration: 'יום מלא (~12 שעות)', bestFor: 'תייר חוזר',
+    stops: [
+      { time: '07:00', name: 'אוטובוס E101', desc: 'מ-Ibn Battuta לאבו דאבי (~25 דירהם).', image: 'https://images.pexels.com/photos/29352929/pexels-photo-29352929.jpeg', lat:25.0440, lng:55.1230 },
+      { time: '09:30', name: 'מסגד שייח׳ זאיד', desc: 'אחד היפים בעולם — לבוש צנוע.', image: 'https://images.pexels.com/photos/14750357/pexels-photo-14750357.jpeg', lat:24.4128, lng:54.4747 },
+      { time: '12:00', name: 'Louvre Abu Dhabi', desc: 'מוזיאון אדריכלות מרהיבה.', image: 'https://images.pexels.com/photos/30245006/pexels-photo-30245006.jpeg', lat:24.5354, lng:54.3982 },
+      { time: '14:30', name: 'Yas Mall + Yas Marina', desc: 'קניות + Yas Beach.', image: 'https://images.pexels.com/photos/14750359/pexels-photo-14750359.jpeg', lat:24.4895, lng:54.6072 },
+      { time: '16:00', name: 'Ferrari World', desc: 'פארק שעשועים מקורה (לחובבי אדרנלין).', image: 'https://images.pexels.com/photos/14749879/pexels-photo-14749879.jpeg', lat:24.4836, lng:54.6075 },
+      { time: '20:00', name: 'אוטובוס חזרה', desc: 'חזרה לדובאי.', image: 'https://images.pexels.com/photos/35155690/pexels-photo-35155690.jpeg', lat:25.0440, lng:55.1230 }
+    ]
+  }
+];
+
+function findItemByStopName(name) {
+  const matches = findRelatedItems(name, 1);
+  if (matches.length) return { category: matches[0].category, id: matches[0].id };
+  return null;
+}
+
+function findRelatedItems(name, limit = 3) {
+  const db = getDB();
+  const norm = s => String(s || '').toLowerCase().replace(/[\s\-׳'’\.,/]/g, '');
+  const target = norm(name);
+  if (!target) return [];
+  const results = [];
+  for (const cat of Object.keys(db)) {
+    for (const item of (db[cat] || [])) {
+      const a = norm(item.name);
+      const b = norm(item.nameEn);
+      let score = 0;
+      if (a === target || b === target) score = 100;
+      else if (a && (a.includes(target) || target.includes(a))) score = 80;
+      else if (b && (b.includes(target) || target.includes(b))) score = 70;
+      else {
+        const words = name.toLowerCase().split(/\s+|\//);
+        for (const w of words) {
+          if (w.length < 3) continue;
+          const wn = norm(w);
+          if (a.includes(wn) || b.includes(wn)) score = Math.max(score, 40);
+          if ((item.tags || []).some(t => norm(t).includes(wn))) score = Math.max(score, 30);
+        }
+      }
+      if (score > 0) results.push({ ...item, score });
+    }
+  }
+  results.sort((x, y) => y.score - x.score || (y.rating || 0) - (x.rating || 0));
+  return results.slice(0, limit);
+}
+
+function buildItineraryMapUrl(it) {
+  const stops = it.stops.map(s => encodeURIComponent(s.name + ' Dubai'));
+  if (stops.length < 2) return '';
+  const origin = stops[0];
+  const destination = stops[stops.length - 1];
+  const waypoints = stops.slice(1, -1).join('|');
+  return `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}${waypoints ? '&waypoints=' + waypoints : ''}&travelmode=driving`;
+}
+
+function buildItineraryEmbedUrl(it) {
+  const stops = it.stops.map(s => encodeURIComponent(s.name + ' Dubai'));
+  if (stops.length < 2) return '';
+  const origin = stops[0];
+  const destination = stops[stops.length - 1];
+  const waypoints = stops.slice(1, -1).map(w => 'to:' + w).join('+');
+  return `https://maps.google.com/maps?saddr=${origin}&daddr=${waypoints ? waypoints + '+to:' + destination : destination}&hl=he&output=embed`;
+}
+
+function buildItineraryStaticMap(it, size = '600x250') {
+  const colorHex = (it.color || '#E76F51').replace('#', '0x');
+  const markers = it.stops.map((s, i) => `markers=color:${colorHex}%7Clabel:${i + 1}%7C${encodeURIComponent(s.name + ' Dubai, UAE')}`).join('&');
+  const pathPoints = it.stops.map(s => encodeURIComponent(s.name + ' Dubai, UAE')).join('%7C');
+  const path = `path=color:${colorHex}%7Cweight:4%7C${pathPoints}`;
+  return `https://maps.googleapis.com/maps/api/staticmap?center=Dubai&zoom=11&size=${size}&maptype=roadmap&language=en&${path}&${markers}&key=AIzaSyDIqkbn9__0EdYjyCRQv4w-Gi3tHWwSwro`;
+}
+
+let ITINERARY_STATES = null;
+async function renderItinerariesPage() {
+  const page = document.getElementById('page-itineraries');
+  if (!page) return;
+  if (!ITINERARY_STATES) ITINERARY_STATES = JSON.parse(JSON.stringify(ITINERARIES));
+  await loadAllAlbums();
+  page.innerHTML = `
+    <div class="page-header">
+      <button class="back-btn" onclick="navigateTo('home')"><i class="fas fa-arrow-right"></i></button>
+      <h2><i class="fas fa-route" style="color:#E9C46A;margin-left:6px;"></i> מסלולי יום</h2>
+    </div>
+    <div style="padding:12px 16px 80px;">
+      <div style="background:#FDF6EC;border-right:3px solid #E9C46A;padding:10px 14px;border-radius:6px;font-size:0.85rem;color:#2C5F6E;margin-bottom:14px;">
+        💡 גררו את התחנות (אייקון ⋮⋮) לסדר אישי שלכם. לחיצה על "פתח ניווט" תפתח Google Maps.
+      </div>
+      <div id="itineraries-list">${ITINERARY_STATES.map((it, idx) => renderItineraryCard(it, idx)).join('')}</div>
+    </div>
+  `;
+}
+
+function renderItineraryCard(it, idx) {
+  const navUrl = buildItineraryMapUrl(it);
+  return `<div id="itin-card-${idx}">${renderItineraryCardInner(it, idx)}</div>`;
+}
+
+function renderItineraryCardInner(it, idx) {
+  const navUrl = buildItineraryMapUrl(it);
+  return ITINERARY_TEMPLATE(it, idx, navUrl);
+}
+
+function ITINERARY_TEMPLATE(it, idx, navUrl) {
+  return `
+        <div style="background:#fff;border:1px solid #E5E7EB;border-radius:10px;overflow:hidden;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,0.04);">
+          <div class="itin-slider" id="itin-slider-${idx}" data-current="0" data-total="${it.stops.length}" style="position:relative;height:220px;overflow:hidden;">
+            ${it.stops.map((s, j) => `
+              <div class="itin-slide" data-idx="${j}" style="position:absolute;inset:0;opacity:${j === 0 ? 1 : 0};transition:opacity 0.4s;">
+                <img src="${s.image}" alt="${s.name}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'">
+                <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.3) 0%,rgba(0,0,0,0) 30%,rgba(0,0,0,0) 50%,rgba(0,0,0,0.85) 100%);"></div>
+                <div style="position:absolute;top:10px;right:12px;display:flex;align-items:center;gap:6px;">
+                  ${(() => { const r = parseInt(localStorage.getItem(`itin-rating-${idx}`) || '0'); return r ? `<div style="background:rgba(0,0,0,0.5);color:#E9C46A;font-size:0.85rem;padding:3px 8px;border-radius:10px;letter-spacing:1px;">${'★'.repeat(r)}${'☆'.repeat(5-r)}</div>` : ''; })()}
+                  <div style="font-size:1.8rem;">${it.icon}</div>
+                </div>
+                <div style="position:absolute;top:10px;left:12px;background:rgba(0,0,0,0.5);color:#fff;font-size:0.65rem;padding:3px 8px;border-radius:10px;">${j + 1}/${it.stops.length} · ${s.time}</div>
+                <div style="position:absolute;bottom:36px;right:14px;left:14px;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,0.7);">
+                  <div style="font-size:1.15rem;font-weight:800;line-height:1.2;">${it.title}</div>
+                  <div style="font-size:0.8rem;opacity:0.95;margin-top:3px;">${it.duration} · ${it.bestFor}</div>
+                  <div style="font-size:0.72rem;opacity:0.85;margin-top:2px;"><i class="fas fa-map-marker-alt"></i> ${s.name}</div>
+                </div>
+              </div>
+            `).join('')}
+            <button onclick="moveSlide('itin-slider-${idx}', -1)" style="position:absolute;top:50%;right:6px;transform:translateY(-50%);background:rgba(0,0,0,0.55);color:#fff;border:none;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;z-index:3;"><i class="fas fa-chevron-right"></i></button>
+            <button onclick="moveSlide('itin-slider-${idx}', 1)" style="position:absolute;top:50%;left:6px;transform:translateY(-50%);background:rgba(0,0,0,0.55);color:#fff;border:none;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;z-index:3;"><i class="fas fa-chevron-left"></i></button>
+            <div style="position:absolute;bottom:8px;left:0;right:0;display:flex;gap:4px;justify-content:center;z-index:2;">
+              ${it.stops.map((_, j) => `<div data-dot="${j}" style="width:6px;height:6px;border-radius:50%;background:${j === 0 ? '#fff' : 'rgba(255,255,255,0.4)'};transition:background 0.3s;"></div>`).join('')}
+            </div>
+          </div>
+          <div id="map-${idx}" style="position:relative;height:200px;overflow:hidden;transition:height 0.3s;" data-static="${buildItineraryStaticMap(it, '600x250')}" data-embed="${buildItineraryEmbedUrl(it)}">
+            <div id="map-${idx}-content" style="width:100%;height:100%;">
+              <img src="${buildItineraryStaticMap(it, '600x250')}" alt="מפת מסלול" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none'">
+            </div>
+            <button onclick="toggleMapSize('map-${idx}')" id="map-${idx}-btn" style="position:absolute;top:8px;right:8px;background:rgba(0,0,0,0.6);color:#fff;font-size:0.85rem;padding:6px 10px;border-radius:14px;font-weight:600;border:none;cursor:pointer;display:flex;align-items:center;gap:4px;z-index:5;">
+              <i class="fas fa-expand-arrows-alt"></i> הגדלה אינטראקטיבית
+            </button>
+          </div>
+          <a href="${navUrl}" target="_blank" style="display:block;text-decoration:none;background:${it.color};color:#fff;text-align:center;padding:10px;font-weight:700;font-size:0.9rem;">
+            <i class="fas fa-directions"></i> פתח ניווט ב-Google Maps
+          </a>
+          <div style="padding:12px 16px;">
+            ${it.stops.map((s, i) => {
+              const related = findRelatedItems(s.name, 3);
+              return `
+              <div draggable="true" ondragstart="onStopDragStart(event, ${idx}, ${i})" ondragover="event.preventDefault()" ondrop="onStopDrop(event, ${idx}, ${i})" style="border-bottom:1px solid #F5EFE6;">
+                <div onclick="toggleStopDrawer('drawer-${idx}-${i}')" style="display:flex;gap:10px;padding:8px 0;align-items:center;cursor:pointer;">
+                  <i class="fas fa-grip-vertical" style="color:#bbb;cursor:grab;font-size:0.85rem;"></i>
+                  <div style="background:${it.color};color:#fff;border-radius:50%;width:24px;height:24px;font-size:0.75rem;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;">${i + 1}</div>
+                  <div style="min-width:46px;font-weight:700;color:${it.color};font-size:0.85rem;direction:ltr;text-align:center;">${s.time}</div>
+                  <div style="flex:1;">
+                    <div style="font-weight:600;color:#2C5F6E;font-size:0.9rem;">${s.name}</div>
+                    <div style="color:#6B7F8D;font-size:0.78rem;line-height:1.4;margin-top:2px;">${s.desc}</div>
+                  </div>
+                  <i class="fas fa-chevron-down" id="drawer-${idx}-${i}-chevron" style="color:${it.color};font-size:0.85rem;transition:transform 0.3s;"></i>
+                </div>
+                <div id="drawer-${idx}-${i}" style="max-height:0;overflow:hidden;transition:max-height 0.6s;">
+                  <div style="padding:8px 0 12px;">
+                    ${related.length ? `
+                      <div style="font-size:0.7rem;color:#6B7F8D;margin-bottom:6px;font-weight:600;">ספקים מהמאגר שלנו:</div>
+                      <div style="display:flex;flex-direction:column;gap:6px;">
+                        ${related.map(r => `
+                          <div onclick="event.stopPropagation();openDetail('${r.category}', ${r.id})" style="display:flex;gap:10px;padding:8px;background:#FDF6EC;border-radius:6px;cursor:pointer;align-items:center;">
+                            <img src="${r.image}" style="width:48px;height:48px;object-fit:cover;border-radius:4px;" onerror="this.style.display='none'">
+                            <div style="flex:1;">
+                              <div style="font-weight:600;color:#2C5F6E;font-size:0.85rem;">${r.name}</div>
+                              <div style="color:#6B7F8D;font-size:0.7rem;">${r.address || ''} · ⭐ ${r.rating || '-'} · ${r.price || ''}</div>
+                            </div>
+                            <i class="fas fa-chevron-left" style="color:${it.color};font-size:0.75rem;"></i>
+                          </div>
+                        `).join('')}
+                      </div>
+                    ` : `<div style="font-size:0.78rem;color:#6B7F8D;text-align:center;padding:6px;">לא נמצא ספק במאגר.</div>`}
+                    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;">
+                      <a href="https://klook.tpk.lv/8HSINbXI" target="_blank" onclick="event.stopPropagation()" style="flex:1;min-width:120px;text-align:center;padding:7px;border-radius:6px;background:#fff;border:1px solid #FF5722;color:#FF5722;text-decoration:none;font-weight:600;font-size:0.75rem;"><i class="fas fa-ticket-alt"></i> Klook</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              `;
+            }).join('')}
+          </div>
+          ${(() => {
+            const saved = parseInt(localStorage.getItem(`itin-rating-${idx}`) || '0');
+            return `
+            <div style="background:#FDF6EC;padding:14px 16px;text-align:center;border-top:1px solid #F5EFE6;">
+              <div style="font-size:0.9rem;color:#2C5F6E;font-weight:700;margin-bottom:8px;">איך היה הסיור?</div>
+              <div id="rating-${idx}" style="display:flex;gap:8px;justify-content:center;">
+                ${[1,2,3,4,5].map(n => `<i class="fas fa-star" data-star="${n}" onclick="rateItinerary(${idx}, ${n})" style="font-size:1.6rem;color:${n <= saved ? '#E9C46A' : '#E5E7EB'};cursor:pointer;transition:color 0.2s;"></i>`).join('')}
+              </div>
+              ${saved ? `<div style="font-size:0.7rem;color:#6B7F8D;margin-top:6px;">הדירוג שלך: ${saved}/5 ⭐</div>` : '<div style="font-size:0.7rem;color:#6B7F8D;margin-top:6px;">לחצו על כוכב כדי לדרג</div>'}
+            </div>`;
+          })()}
+          ${renderAlbumSection(idx)}
+        </div>`;
+}
+
+let ALBUM_CACHE = {};
+
+function openAlbumDB() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open('wellcome-dubai-albums', 1);
+    req.onupgradeneeded = e => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains('entries')) {
+        db.createObjectStore('entries', { keyPath: 'id', autoIncrement: true });
+      }
+    };
+    req.onsuccess = e => resolve(e.target.result);
+    req.onerror = e => reject(e);
+  });
+}
+
+async function loadAllAlbums() {
+  try {
+    const db = await openAlbumDB();
+    return new Promise(resolve => {
+      const tx = db.transaction('entries', 'readonly');
+      const store = tx.objectStore('entries');
+      const req = store.getAll();
+      req.onsuccess = () => {
+        ALBUM_CACHE = {};
+        (req.result || []).forEach(e => {
+          if (!ALBUM_CACHE[e.idx]) ALBUM_CACHE[e.idx] = [];
+          ALBUM_CACHE[e.idx].push(e);
+        });
+        resolve(ALBUM_CACHE);
+      };
+      req.onerror = () => resolve({});
+    });
+  } catch (e) { return {}; }
+}
+
+async function addAlbumEntryIDB(entry) {
+  const db = await openAlbumDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction('entries', 'readwrite');
+    const store = tx.objectStore('entries');
+    const req = store.add(entry);
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = e => reject(e);
+  });
+}
+
+function compressImage(file, maxDim = 1200, quality = 0.78) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = new Image();
+      img.onload = () => {
+        let { width, height } = img;
+        if (width > height && width > maxDim) {
+          height = Math.round(height * maxDim / width);
+          width = maxDim;
+        } else if (height > maxDim) {
+          width = Math.round(width * maxDim / height);
+          height = maxDim;
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.onerror = reject;
+      img.src = e.target.result;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+function getAlbumEntries(idx) {
+  return ALBUM_CACHE[idx] || [];
+}
+function renderAlbumSection(idx) {
+  const entries = getAlbumEntries(idx);
+  return `
+    <div style="border-top:1px solid #F5EFE6;">
+      <div onclick="toggleStopDrawer('album-${idx}')" style="padding:12px 16px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;background:#fff;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <i class="fas fa-camera" style="color:#E9C46A;"></i>
+          <span style="font-weight:700;color:#2C5F6E;font-size:0.95rem;">אלבום הגולשים</span>
+          ${entries.length ? `<span style="background:#E9C46A;color:#2C5F6E;font-size:0.7rem;padding:2px 8px;border-radius:10px;font-weight:700;">${entries.length}</span>` : ''}
+        </div>
+        <i class="fas fa-chevron-down" id="album-${idx}-chevron" style="color:#6B7F8D;font-size:0.85rem;transition:transform 0.3s;"></i>
+      </div>
+      <div id="album-${idx}" style="max-height:0;overflow:hidden;transition:max-height 0.5s;">
+        <div style="padding:0 16px 16px;">
+          <div style="background:#FDF6EC;padding:12px;border-radius:8px;margin-bottom:10px;">
+            <input type="text" id="album-${idx}-name" placeholder="שם" style="width:100%;padding:8px;border-radius:6px;border:1px solid #E5E7EB;font-family:Heebo;font-size:0.85rem;margin-bottom:6px;">
+            <input type="text" id="album-${idx}-city" placeholder="עיר" style="width:100%;padding:8px;border-radius:6px;border:1px solid #E5E7EB;font-family:Heebo;font-size:0.85rem;margin-bottom:6px;">
+            <input type="file" id="album-${idx}-files" accept="image/*" multiple style="width:100%;padding:6px;border-radius:6px;border:1px solid #E5E7EB;font-family:Heebo;font-size:0.8rem;margin-bottom:8px;">
+            <button onclick="submitAlbum(${idx})" style="width:100%;padding:9px;border-radius:6px;background:#E76F51;color:#fff;border:none;font-family:Heebo;font-weight:700;font-size:0.85rem;cursor:pointer;">📤 העלה תמונות (עד 3)</button>
+          </div>
+          <div id="album-${idx}-gallery">${renderAlbumGallery(idx)}</div>
+        </div>
+      </div>
+    </div>`;
+}
+function renderAlbumGallery(idx) {
+  const entries = getAlbumEntries(idx);
+  if (!entries.length) return '<div style="text-align:center;color:#6B7F8D;font-size:0.78rem;padding:8px;">עדיין אין תמונות. תהיו הראשונים!</div>';
+  const allPhotos = [];
+  entries.slice().reverse().forEach(e => (e.images || []).forEach(src => allPhotos.push({ src, name: e.name, city: e.city })));
+  return `
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;">
+      ${allPhotos.map(p => `
+        <div style="position:relative;aspect-ratio:1/1;border-radius:6px;overflow:hidden;cursor:pointer;" onclick="openImageModal('${p.src}','${p.name.replace(/'/g, "\\'")}','${(p.city || '').replace(/'/g, "\\'")}')">
+          <img src="${p.src}" style="width:100%;height:100%;object-fit:cover;display:block;">
+          <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,0.85));color:#fff;padding:12px 6px 4px;font-size:0.6rem;line-height:1.2;text-shadow:0 1px 2px rgba(0,0,0,0.7);">
+            <div style="font-weight:700;">${p.name}</div>
+            ${p.city ? `<div style="opacity:0.85;font-size:0.55rem;">📍 ${p.city}</div>` : ''}
+          </div>
+        </div>
+      `).join('')}
+    </div>`;
+}
+
+function openImageModal(src, name, city) {
+  const modal = document.getElementById('detailModal');
+  if (!modal) return;
+  modal.innerHTML = `
+    <div style="position:fixed;inset:0;background:rgba(0,0,0,0.92);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:1;padding:20px;">
+      <button onclick="document.getElementById('detailModal').classList.remove('active')" style="position:absolute;top:14px;left:14px;background:rgba(255,255,255,0.2);border:none;color:#fff;width:42px;height:42px;border-radius:50%;cursor:pointer;font-size:1.2rem;font-weight:700;z-index:2;">✕</button>
+      <img src="${src}" style="max-width:100%;max-height:80vh;object-fit:contain;border-radius:8px;box-shadow:0 8px 30px rgba(0,0,0,0.5);">
+      <div style="color:#fff;text-align:center;margin-top:14px;">
+        <div style="font-weight:700;font-size:1.05rem;">${name}</div>
+        ${city ? `<div style="opacity:0.85;font-size:0.85rem;margin-top:2px;">📍 ${city}</div>` : ''}
+      </div>
+    </div>
+  `;
+  modal.classList.add('active');
+  modal.style.alignItems = 'stretch';
+  modal.style.justifyContent = 'stretch';
+  modal.onclick = (e) => { if (e.target === modal) modal.classList.remove('active'); };
+}
+async function submitAlbum(idx) {
+  const name = document.getElementById(`album-${idx}-name`).value.trim();
+  const city = document.getElementById(`album-${idx}-city`).value.trim();
+  const files = document.getElementById(`album-${idx}-files`).files;
+  if (!name) { alert('יש להזין שם'); return; }
+  if (!files.length) { alert('יש להעלות לפחות תמונה אחת'); return; }
+  const sliced = Array.from(files).slice(0, 3);
+  try {
+    const images = await Promise.all(sliced.map(f => compressImage(f)));
+    const entry = { idx, name, city, images, ts: Date.now() };
+    const id = await addAlbumEntryIDB(entry);
+    entry.id = id;
+    if (!ALBUM_CACHE[idx]) ALBUM_CACHE[idx] = [];
+    ALBUM_CACHE[idx].push(entry);
+    const card = document.getElementById(`itin-card-${idx}`);
+    if (card) card.innerHTML = renderItineraryCardInner(ITINERARY_STATES[idx], idx);
+    setTimeout(() => toggleStopDrawer(`album-${idx}`), 50);
+  } catch (e) {
+    console.error(e);
+    alert('שגיאה בהעלאת התמונות. נסה שוב.');
+  }
+}
+
+function rateItinerary(idx, n) {
+  localStorage.setItem(`itin-rating-${idx}`, String(n));
+  const container = document.getElementById(`rating-${idx}`);
+  if (!container) return;
+  const stars = container.querySelectorAll('[data-star]');
+  stars.forEach(s => {
+    const num = parseInt(s.dataset.star);
+    s.style.color = num <= n ? '#E9C46A' : '#E5E7EB';
+  });
+  const card = document.getElementById(`itin-card-${idx}`);
+  if (card && ITINERARY_STATES[idx]) {
+    card.innerHTML = renderItineraryCardInner(ITINERARY_STATES[idx], idx);
+  }
+}
+
+function onStopDragStart(e, idx, stopIdx) {
+  e.dataTransfer.setData('text/plain', `${idx}|${stopIdx}`);
+  e.dataTransfer.effectAllowed = 'move';
+}
+function onStopDrop(e, idx, targetStopIdx) {
+  e.preventDefault();
+  const parts = (e.dataTransfer.getData('text/plain') || '').split('|');
+  const sourceIdx = parseInt(parts[0]);
+  const sourceStopIdx = parseInt(parts[1]);
+  if (isNaN(sourceIdx) || isNaN(sourceStopIdx) || sourceIdx !== idx) return;
+  if (sourceStopIdx === targetStopIdx) return;
+  const it = ITINERARY_STATES[idx];
+  const [moved] = it.stops.splice(sourceStopIdx, 1);
+  it.stops.splice(targetStopIdx, 0, moved);
+  const card = document.getElementById(`itin-card-${idx}`);
+  if (card) card.innerHTML = renderItineraryCardInner(it, idx);
+}
+
+function toggleMapSize(id) {
+  const el = document.getElementById(id);
+  const content = document.getElementById(id + '-content');
+  const btn = document.getElementById(id + '-btn');
+  if (!el || !content) return;
+  const isExpanded = el.dataset.expanded === '1';
+  if (isExpanded) {
+    el.style.height = '200px';
+    content.innerHTML = `<img src="${el.dataset.static}" alt="מפת מסלול" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none'">`;
+    el.dataset.expanded = '0';
+    if (btn) btn.innerHTML = '<i class="fas fa-expand-arrows-alt"></i> הגדלה אינטראקטיבית';
+  } else {
+    el.style.height = '500px';
+    const idx = parseInt(id.replace('map-', ''));
+    const it = ITINERARY_STATES[idx];
+    const stops = it.stops.filter(s => s.lat && s.lng);
+    content.innerHTML = `<div id="${id}-leaflet" style="width:100%;height:100%;"></div>`;
+    setTimeout(() => {
+      const mapEl = document.getElementById(`${id}-leaflet`);
+      if (!mapEl || typeof L === 'undefined') return;
+      const center = [stops[0].lat, stops[0].lng];
+      const m = L.map(mapEl).setView(center, 11);
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png', { attribution:'&copy; CartoDB &copy; OSM', subdomains:'abcd' }).addTo(m);
+      stops.forEach((s, i) => {
+        L.marker([s.lat, s.lng]).addTo(m).bindPopup(`<b>${i + 1}. ${s.name}</b><br>${s.time}<br>${s.desc}`);
+      });
+      L.polyline(stops.map(s => [s.lat, s.lng]), { color: it.color, weight: 4 }).addTo(m);
+      m.fitBounds(stops.map(s => [s.lat, s.lng]), { padding: [30, 30] });
+    }, 100);
+    el.dataset.expanded = '1';
+    if (btn) btn.innerHTML = '<i class="fas fa-compress-arrows-alt"></i> הקטנה';
+  }
+}
+
+function toggleStopDrawer(id) {
+  const el = document.getElementById(id);
+  const chev = document.getElementById(id + '-chevron');
+  if (!el) return;
+  if (el.style.maxHeight && el.style.maxHeight !== '0px') {
+    el.style.maxHeight = '0px';
+    if (chev) chev.style.transform = 'rotate(0deg)';
+  } else {
+    el.style.maxHeight = '500px';
+    if (chev) chev.style.transform = 'rotate(180deg)';
+  }
+}
+
+function moveSlide(sliderId, dir) {
+  const slider = document.getElementById(sliderId);
+  if (!slider) return;
+  const slides = slider.querySelectorAll('.itin-slide');
+  const dots = slider.querySelectorAll('[data-dot]');
+  const total = slides.length;
+  let current = parseInt(slider.dataset.current || '0');
+  slides[current].style.opacity = '0';
+  if (dots[current]) dots[current].style.background = 'rgba(255,255,255,0.4)';
+  current = (current + dir + total) % total;
+  slides[current].style.opacity = '1';
+  if (dots[current]) dots[current].style.background = '#fff';
+  slider.dataset.current = String(current);
+}
+
+function startItinerarySliders() {}
+
+const MALL_INFO = {
+  'Dubai Mall': { brands:['Apple','Chanel','Louis Vuitton','Gucci','Hermès','Versace','Dior'], hours:'10:00–24:00', phone:'+971-800-382246', highlights:['Dubai Aquarium','Dubai Fountain','VR Park','KidZania','Burj Khalifa Lobby'] },
+  'Mall of the Emirates': { brands:['Harvey Nichols','Apple','Zara','H&M','Sephora'], hours:'10:00–24:00', phone:'+971-4-409-9000', highlights:['Ski Dubai','Magic Planet','Vox Cinemas'] },
+  'Dubai Festival City': { brands:['IKEA','Marks & Spencer','ACE','Carrefour'], hours:'10:00–22:00', phone:'+971-4-213-6213', highlights:['IMAGINE Show','Bounce','Hub Zero'] },
+  'Ibn Battuta Mall': { brands:['Carrefour','Centrepoint','Apple'], hours:'10:00–22:00', phone:'+971-4-362-1900', highlights:['Themed Halls (China, India, Persia)','Cinemas'] },
+  'City Walk': { brands:['Boutiques and lifestyle','Coffee shops'], hours:'10:00–24:00', phone:'+971-800-637222', highlights:['Hub Zero','Coca-Cola Arena','The Green Planet'] },
+  'Mercato Mall': { brands:['Centrepoint','Spinneys','H&M'], hours:'10:00–22:00', phone:'+971-4-344-4161', highlights:['Renaissance European theme','Family-friendly'] },
+  'Wafi Mall': { brands:['Designer brands','Wafi Gourmet'], hours:'10:00–22:00', phone:'+971-4-324-4555', highlights:['Egyptian theme architecture','Souk Khan Murjan'] },
+  'Nakheel Mall': { brands:['Local brands','Carrefour'], hours:'10:00–24:00', phone:'+971-4-453-0844', highlights:['View of Burj Al Arab','The View at The Palm'] },
+  'Cityland Mall': { brands:['Carrefour','Family stores'], hours:'10:00–24:00', phone:'+971-4-274-1414', highlights:['Central Park','Botanical garden'] },
+  'Dubai Hills Mall': { brands:['Carrefour','Boots','Sephora'], hours:'10:00–24:00', phone:'+971-4-512-5555', highlights:['Storm — biggest indoor coaster','Roxy Cinemas'] }
+};
+
+function findItemsAtLocation(locationName) {
+  const db = getDB();
+  const norm = s => String(s || '').toLowerCase();
+  const target = norm(locationName);
+  const results = { restaurants: [], kids: [], attractions: [], nightlife: [], hotels: [] };
+  ['restaurants','kids','attractions','nightlife','hotels'].forEach(cat => {
+    (db[cat] || []).forEach(item => {
+      const addr = norm(item.address);
+      if (addr.includes(target)) results[cat].push(item);
+    });
+  });
+  return results;
+}
+
+function renderMallPage(mallId) {
+  const page = document.getElementById('page-mall');
+  if (!page) return;
+  const id = parseInt(mallId);
+  const mall = (getDB().shopping || []).find(m => m.id === id);
+  if (!mall) { page.innerHTML = '<div class="page-header"><button class="back-btn" onclick="navigateTo(\'shopping\')"><i class="fas fa-arrow-right"></i></button><h2>קניון לא נמצא</h2></div>'; return; }
+  const info = MALL_INFO[mall.nameEn] || {};
+  const inside = findItemsAtLocation(mall.nameEn);
+
+  const sectionHTML = (label, items, cat) => {
+    const filtered = items.filter(i => i.id !== mall.id).slice(0, 6);
+    if (!filtered.length) return '';
+    return `
+      <div style="margin-top:18px;">
+        <h3 style="margin:0 0 8px;color:#2C5F6E;font-size:1rem;font-weight:700;">${label} (${filtered.length})</h3>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          ${filtered.map(i => `
+            <div onclick="openDetail('${cat}',${i.id})" style="background:#fff;border:1px solid #E5E7EB;border-radius:6px;overflow:hidden;cursor:pointer;">
+              <img src="${i.image}" style="width:100%;height:90px;object-fit:cover;" onerror="this.style.display='none'">
+              <div style="padding:8px;">
+                <div style="font-weight:600;color:#2C5F6E;font-size:0.78rem;">${i.name}</div>
+                <div style="font-size:0.65rem;color:#6B7F8D;margin-top:2px;">⭐ ${i.rating || '-'} · ${i.price || ''}</div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>`;
+  };
+
+  page.innerHTML = `
+    <div class="page-header">
+      <button class="back-btn" onclick="navigateTo('shopping')"><i class="fas fa-arrow-right"></i></button>
+      <h2>${mall.name}</h2>
+    </div>
+    <div style="padding:0 0 80px;">
+      <img src="${mall.image}" alt="${mall.name}" style="width:100%;height:200px;object-fit:cover;" onerror="this.style.display='none'">
+      <div style="padding:14px 16px;">
+        <div style="font-weight:800;color:#2C5F6E;font-size:1.2rem;">${mall.name}</div>
+        <div style="color:#6B7F8D;font-size:0.85rem;margin-top:2px;"><i class="fas fa-map-marker-alt" style="color:#F4A261;"></i> ${mall.address}</div>
+
+        ${(() => {
+          const r = inside.restaurants.length, k = inside.kids.length, a = inside.attractions.length, n = inside.nightlife.length;
+          const total = r + k + a + n;
+          if (!total) return '';
+          return `
+            <div style="margin-top:10px;background:linear-gradient(135deg,#E76F51,#F4A261);color:#fff;border-radius:8px;padding:10px 12px;">
+              <div style="font-weight:700;font-size:0.9rem;margin-bottom:6px;">🎯 ${total} פעילויות בתוך הקניון:</div>
+              <div style="display:flex;gap:6px;flex-wrap:wrap;font-size:0.7rem;">
+                ${r ? `<span style="background:rgba(255,255,255,0.25);padding:3px 9px;border-radius:10px;">🍽️ ${r} מסעדות</span>` : ''}
+                ${k ? `<span style="background:rgba(255,255,255,0.25);padding:3px 9px;border-radius:10px;">🎢 ${k} לילדים</span>` : ''}
+                ${a ? `<span style="background:rgba(255,255,255,0.25);padding:3px 9px;border-radius:10px;">🎭 ${a} אטרקציות</span>` : ''}
+                ${n ? `<span style="background:rgba(255,255,255,0.25);padding:3px 9px;border-radius:10px;">🌃 ${n} בילויים</span>` : ''}
+              </div>
+            </div>`;
+        })()}
+        <div style="display:flex;gap:8px;margin:10px 0;flex-wrap:wrap;font-size:0.8rem;">
+          ${info.hours ? `<span style="background:#FDF6EC;padding:4px 10px;border-radius:6px;color:#2C5F6E;"><i class="fas fa-clock" style="color:#E9C46A;"></i> ${info.hours}</span>` : ''}
+          ${info.phone ? `<a href="tel:${info.phone}" style="background:#FDF6EC;padding:4px 10px;border-radius:6px;color:#2C5F6E;text-decoration:none;"><i class="fas fa-phone" style="color:#2A9D8F;"></i> ${info.phone}</a>` : ''}
+        </div>
+        <div style="color:#2C5F6E;font-size:0.9rem;line-height:1.6;">${mall.description}</div>
+
+        <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;">
+          ${mall.lat ? `<a href="https://www.google.com/maps/search/?api=1&query=${mall.lat},${mall.lng}" target="_blank" style="flex:1;min-width:120px;text-align:center;padding:10px;background:#E76F51;color:#fff;border-radius:6px;text-decoration:none;font-weight:700;font-size:0.85rem;"><i class="fas fa-map-pin"></i> איפה זה?</a>` : ''}
+          ${mall.lat ? `<a href="https://www.google.com/maps/dir/?api=1&destination=${mall.lat},${mall.lng}" target="_blank" style="flex:1;min-width:120px;text-align:center;padding:10px;background:#2A9D8F;color:#fff;border-radius:6px;text-decoration:none;font-weight:700;font-size:0.85rem;"><i class="fas fa-directions"></i> נווט</a>` : ''}
+        </div>
+
+        ${info.highlights ? `
+          <div style="margin-top:18px;background:#FDF6EC;border-right:3px solid #E9C46A;padding:10px 14px;border-radius:6px;">
+            <div style="font-weight:700;color:#2C5F6E;margin-bottom:6px;font-size:0.9rem;">⭐ אטרקציות בולטות</div>
+            <ul style="margin:0;padding-right:18px;color:#2C5F6E;font-size:0.85rem;line-height:1.6;">
+              ${info.highlights.map(h => `<li>${h}</li>`).join('')}
+            </ul>
+          </div>
+        ` : ''}
+
+        ${info.brands ? `
+          <div style="margin-top:14px;">
+            <div style="font-weight:700;color:#2C5F6E;margin-bottom:6px;font-size:0.9rem;">🛍️ מותגים מובילים</div>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;">
+              ${info.brands.map(b => `<span style="background:#fff;border:1px solid #E5E7EB;padding:4px 10px;border-radius:14px;font-size:0.75rem;color:#2C5F6E;">${b}</span>`).join('')}
+            </div>
+          </div>
+        ` : ''}
+
+        ${sectionHTML('🍽️ מסעדות בקניון', inside.restaurants, 'restaurants')}
+        ${sectionHTML('🎢 לילדים', inside.kids, 'kids')}
+        ${sectionHTML('🎭 אטרקציות', inside.attractions, 'attractions')}
+        ${sectionHTML('🌃 בילויים', inside.nightlife, 'nightlife')}
+        ${sectionHTML('🏨 מלונות סמוכים', inside.hotels, 'hotels')}
+      </div>
+    </div>
+  `;
+}
+
+function renderLegalPage() {
+  const page = document.getElementById('page-legal');
+  if (!page) return;
+  const sections = [
+    { title:'אודותינו', icon:'fa-info-circle', color:'#2A9D8F', body:'WellCome Dubai — מדריך תיירים ישראלי לדובאי. מידע מקיף על מלונות, מסעדות כשרות וישראליות, אטרקציות, תחבורה ובילויים. כל המידע באתר נאסף ממקורות פתוחים ומבוסס על ניסיון מטיילים ישראליים שביקרו בדובאי.' },
+    { title:'תקנון השימוש', icon:'fa-file-contract', color:'#E76F51', body:'השימוש באתר מותנה בקבלת תנאי השימוש: 1) כל המידע מסופק "כפי שהוא" ללא אחריות. 2) המחירים, השעות והפרטים עלולים להשתנות — יש לוודא ישירות מול בית העסק. 3) WellCome Dubai אינו אחראי לעסקאות מול חברות צד שלישי (מלונות, מסעדות, ספקי תחבורה). 4) שימוש לא מסחרי בלבד. 5) הקישורים החיצוניים הם לצרכי נוחות בלבד.' },
+    { title:'מדיניות פרטיות', icon:'fa-user-shield', color:'#5B9DC7', body:'לא נאספים פרטים אישיים. נתוני המיקום (geolocation) משמשים אך ורק לחישוב תחנת המטרו הקרובה ואינם נשמרים. נתונים טכניים נשמרים בדפדפן (localStorage) למטרות תפעול בלבד — שערי מטבע, מזג אוויר, נתוני קטגוריות. לא נעשה שימוש בעוגיות שיווקיות.' },
+    { title:'צור קשר', icon:'fa-envelope', color:'#E9C46A', body:'יש לך הצעה, תיקון או רעיון? נשמח לשמוע!\n\nאימייל: krispelitzik@gmail.com\nוואטסאפ: 050-1234567 (זמני)\n\nתמיד מחפשים עוד תוספות, תיקוני מידע ושיתוף תמונות אמיתיות מהמקום.' }
+  ];
+  page.innerHTML = `
+    <div class="page-header">
+      <button class="back-btn" onclick="navigateTo('home')"><i class="fas fa-arrow-right"></i></button>
+      <h2><i class="fas fa-balance-scale" style="color:#2C5F6E;margin-left:6px;"></i> מידע משפטי</h2>
+    </div>
+    <div style="padding:12px 16px 80px;">
+      ${sections.map(s => `
+        <div style="background:#fff;border:1px solid #E5E7EB;border-radius:10px;overflow:hidden;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,0.04);">
+          <div style="background:${s.color};color:#fff;padding:12px 16px;font-weight:700;display:flex;align-items:center;gap:10px;">
+            <i class="fas ${s.icon}"></i> ${s.title}
+          </div>
+          <div style="padding:14px 16px;font-size:0.88rem;line-height:1.7;color:#2C5F6E;white-space:pre-line;">${s.body}</div>
+        </div>
+      `).join('')}
+      <div style="text-align:center;color:#6B7F8D;font-size:0.75rem;margin-top:20px;">
+        © 2026 WellCome Dubai · גרסה 1.0
+      </div>
+    </div>
+  `;
+}
+
+function renderCurrencyPage() {
+  const page = document.getElementById('page-currency');
+  if (!page) return;
+  page.innerHTML = `
+    <div class="page-header">
+      <button class="back-btn" onclick="navigateTo('home')"><i class="fas fa-arrow-right"></i></button>
+      <h2><i class="fas fa-exchange-alt" style="color:#E9C46A;margin-left:6px;"></i> המרת מטבע</h2>
+    </div>
+    <div style="padding:16px 20px;">
+      <div id="currencyWidget"></div>
+      <div style="margin-top:16px;background:#FDF6EC;border-right:3px solid #E9C46A;padding:12px 14px;border-radius:6px;font-size:0.85rem;color:#2C5F6E;line-height:1.7;">
+        <b>💡 טיפים</b><br>
+        • שערים מתעדכנים אחת לשעה.<br>
+        • החלפת כסף מומלצת ב-Al Ansari או UAE Exchange (סניפים בכל מקום).<br>
+        • כספומטים מקבלים ויזה/מאסטרקארד עם עמלה ~25 דירהם לעסקה.<br>
+        • מומלץ להחזיק מעט מזומן (דירהם) לטקסי וטיפים.
+      </div>
+    </div>
+  `;
+  setTimeout(() => { if (typeof loadCurrencyWidget === 'function') loadCurrencyWidget(); }, 100);
+}
+
+function navigateToNearestMetro() {
+  if (!navigator.geolocation) { alert('הדפדפן לא תומך באיתור מיקום'); return; }
+  navigator.geolocation.getCurrentPosition(
+    pos => {
+      const url = `https://www.google.com/maps/dir/?api=1&origin=${pos.coords.latitude},${pos.coords.longitude}&destination=Dubai+Metro+Station&travelmode=walking`;
+      window.open(url, '_blank');
+    },
+    err => alert('לא ניתן לקבל מיקום. אפשר/י גישה למיקום והנסה שוב.')
+  );
+}
+
+const DUBAI_AREAS = [
+  { name:'דאון טאון', color:'#E76F51', desc:'האזור האורבני החדיש והנוצץ — ברג׳ ח׳ליפה, Dubai Mall, מזרקות דובאי, מסעדות וגורדי שחקים. לב התיירות המודרנית.', poly:[[25.2105,55.2705],[25.2098,55.2812],[25.2050,55.2870],[25.1950,55.2870],[25.1830,55.2810],[25.1820,55.2705],[25.1900,55.2640],[25.2010,55.2640]] },
+  { name:'מרינה', color:'#2A9D8F', desc:'רצועת חוף 2 ק״מ, יאכטות, מסעדות, חיי לילה וגורדי שחקים. נבחרה ע״י Time Out לאחת מ-50 השכונות המגניבות בעולם.', poly:[[25.0950,55.1340],[25.0945,55.1455],[25.0870,55.1530],[25.0750,55.1530],[25.0700,55.1450],[25.0710,55.1350],[25.0810,55.1310]] },
+  { name:'פאלם ג׳ומיירה', color:'#E9C46A', desc:'אי מלאכותי בצורת דקל — אטרקציית סימן הזיהוי של דובאי. אתרי נופש יוקרתיים: Atlantis The Palm, FIVE Palm, Waldorf Astoria. חופים פרטיים ונוף ים.', poly:[[25.1430,55.1380],[25.1430,55.1620],[25.1330,55.1700],[25.1180,55.1700],[25.1040,55.1620],[25.1000,55.1500],[25.1040,55.1380],[25.1180,55.1300],[25.1330,55.1300]] },
+  { name:'JBR', color:'#F4A261', desc:'Jumeirah Beach Residence — טיילת תוססת על החוף, מסעדות, פעילויות מים ואקסטרים, מופעי רחוב. פופולרי במשפחות ובמקומיים.', poly:[[25.0930,55.1280],[25.0925,55.1450],[25.0820,55.1470],[25.0735,55.1430],[25.0720,55.1330],[25.0810,55.1280]] },
+  { name:'דיירה', color:'#6B8E5A', desc:'האזור המסורתי והוותיק — שוק הזהב, שוק התבלינים, שוק הטקסטיל, שוק הפשפשים. נחל דובאי וסירות אברה. מלונות זולים, ערך מצוין לכסף.', poly:[[25.2950,55.2900],[25.2980,55.3200],[25.2920,55.3380],[25.2780,55.3450],[25.2640,55.3380],[25.2600,55.3200],[25.2640,55.3030]] },
+  { name:'בור דובאי', color:'#C9A961', desc:'האזור ההיסטורי למגורים, שכונת אל-פאהידי, מוזיאון דובאי. מחלק את העיר בין צפון לדרום עם נחל דובאי.', poly:[[25.2720,55.2850],[25.2730,55.3050],[25.2680,55.3160],[25.2570,55.3180],[25.2440,55.3100],[25.2420,55.2960],[25.2480,55.2880]] },
+  { name:'ביזנס ביי', color:'#B85C8E', desc:'מרכז עסקים מודרני בסמוך לדאון טאון — מגדלי משרדים, מסעדות גורמה, מלונות עסקיים.', poly:[[25.1970,55.2580],[25.1970,55.2780],[25.1860,55.2820],[25.1740,55.2780],[25.1700,55.2680],[25.1780,55.2570]] },
+  { name:'DIFC', color:'#5B9DC7', desc:'המרכז הפיננסי של דובאי — בנקים, גלריות אמנות, מסעדות שף יוקרתיות. אווירה אורבנית מתוחכמת.', poly:[[25.2210,55.2740],[25.2200,55.2880],[25.2130,55.2920],[25.2050,55.2870],[25.2050,55.2780],[25.2120,55.2730]] },
+  { name:'ג׳ומיירה', color:'#A86F8E', desc:'25 ק״מ של רצועת חוף — מים טורקיז וחול לבן. החוף הציבורי מצוין למשפחות. ממסגד ג׳ומיירה ועד פאלם ג׳ומיירה.', poly:[[25.2300,55.2300],[25.2280,55.2580],[25.2200,55.2700],[25.2100,55.2680],[25.2030,55.2530],[25.2050,55.2350],[25.2150,55.2270]] },
+  { name:'אל ברשה', color:'#7FA77F', desc:'אזור מרכזי ושקט — קניון האמירויות, Ski Dubai, מלונות במחירים סבירים, שאטל למרכז. נוח לתחבורה.', poly:[[25.1280,55.1900],[25.1310,55.2100],[25.1230,55.2200],[25.1100,55.2200],[25.1010,55.2120],[25.1020,55.1980],[25.1130,55.1880]] }
+];
+
+let areasVisible = false;
+let areaShapes = [];
+
+function clearAreas() {
+  areaShapes.forEach(s => {
+    try {
+      if (s.setMap) s.setMap(null);
+      else if (map && map.removeLayer) map.removeLayer(s);
+    } catch(e) {}
+  });
+  areaShapes = [];
+}
+
+function drawAreas() {
+  if (!map) return;
+  clearAreas();
+  if (typeof google !== 'undefined' && google.maps && map.setOptions) {
+    const infoWin = new google.maps.InfoWindow();
+    DUBAI_AREAS.forEach(a => {
+      const poly = new google.maps.Polygon({
+        paths: a.poly.map(p => ({lat:p[0], lng:p[1]})),
+        strokeColor: a.color, strokeOpacity:0.8, strokeWeight:2,
+        fillColor: a.color, fillOpacity:0.18, map: map, clickable:true
+      });
+      poly.addListener('click', e => {
+        infoWin.setContent(`<div style="direction:rtl;font-family:Heebo,sans-serif;max-width:240px;border-top:4px solid ${a.color};padding-top:6px;">
+          <b style="color:${a.color};font-size:1rem;">${a.name}</b>
+          <p style="margin:6px 0 0;font-size:0.78rem;line-height:1.5;color:#2C5F6E;">${a.desc || ''}</p>
+        </div>`);
+        infoWin.setPosition(e.latLng);
+        infoWin.open(map);
+      });
+      areaShapes.push(poly);
+      const center = a.poly.reduce((acc,p) => [acc[0]+p[0]/a.poly.length, acc[1]+p[1]/a.poly.length], [0,0]);
+      const label = new google.maps.Marker({
+        position: {lat:center[0], lng:center[1]}, map: map, clickable:false,
+        icon: { path: google.maps.SymbolPath.CIRCLE, scale:0, fillOpacity:0, strokeOpacity:0 },
+        label: { text:a.name, color:a.color, fontWeight:'700', fontSize:'12px' }
+      });
+      areaShapes.push(label);
+    });
+  } else if (typeof L !== 'undefined' && map.addLayer) {
+    DUBAI_AREAS.forEach(a => {
+      const poly = L.polygon(a.poly, { color:a.color, fillOpacity:0.18, weight:2 }).addTo(map);
+      poly.bindPopup(`<div style="direction:rtl;max-width:220px;border-top:3px solid ${a.color};padding-top:6px;"><b style="color:${a.color};">${a.name}</b><p style="margin:6px 0 0;font-size:0.78rem;line-height:1.4;">${a.desc || ''}</p></div>`);
+      poly.bindTooltip(a.name, { permanent:true, direction:'center', className:'area-label' });
+      areaShapes.push(poly);
+    });
+  }
+}
+
+function toggleAreas() {
+  areasVisible = !areasVisible;
+  if (areasVisible) drawAreas(); else clearAreas();
+  document.querySelectorAll('.areas-toggle').forEach(b => {
+    b.style.background = areasVisible ? '#2A9D8F' : '#fff';
+    b.style.color = areasVisible ? '#fff' : '#2C5F6E';
+    b.style.borderColor = areasVisible ? '#2A9D8F' : '#E5E7EB';
+    b.textContent = areasVisible ? '✓ אזורים — מופעל' : '🗺️ הצג אזורי דובאי';
+  });
+  const strip = document.getElementById('areasStrip');
+  if (strip) strip.style.display = areasVisible ? 'flex' : 'none';
+}
+
+function focusOnArea(idx) {
+  const a = DUBAI_AREAS[idx];
+  if (!a || !map) return;
+  const center = a.poly.reduce((acc,p) => [acc[0]+p[0]/a.poly.length, acc[1]+p[1]/a.poly.length], [0,0]);
+  if (map.panTo && map.setZoom) {
+    map.panTo({ lat: center[0], lng: center[1] });
+    map.setZoom(13);
+  } else if (map.setView) {
+    map.setView(center, 13);
+  }
+}
 
 function clearMap() {
   try {
@@ -215,7 +1110,7 @@ function buildMap(elementId, zoom, items) {
   var mapMarkers = (items || []).filter(function(i){return i.lat && i.lng}).slice(0,15).map(function(i){
     return 'markers=color:0xE76F51%7C'+i.lat+','+i.lng;
   }).join('&');
-  var staticUrl = 'https://maps.googleapis.com/maps/api/staticmap?center=25.2048,55.2708&zoom='+(zoom||11)+'&size=600x300&maptype=roadmap&'+mapMarkers+'&key=AIzaSyDIqkbn9__0EdYjyCRQv4w-Gi3tHWwSwro';
+  var staticUrl = 'https://maps.googleapis.com/maps/api/staticmap?center=25.2048,55.2708&zoom='+(zoom||11)+'&size=600x300&maptype=roadmap&language=en&'+mapMarkers+'&key=AIzaSyDIqkbn9__0EdYjyCRQv4w-Gi3tHWwSwro';
 
   // Show static map immediately
   el.innerHTML = '<img src="'+staticUrl+'" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML=\'<div style=\\\'display:flex;align-items:center;justify-content:center;height:100%;color:#6B7F8D;text-align:center;\\\'>מפה לא זמינה</div>\'">';
@@ -240,7 +1135,7 @@ function buildStaticMap(el, items) {
     var color = '0xE76F51';
     return `markers=color:${color}|${i.lat},${i.lng}`;
   }).join('&');
-  var src = `https://maps.googleapis.com/maps/api/staticmap?center=25.2048,55.2708&zoom=11&size=600x300&maptype=roadmap&${markers}&key=AIzaSyDIqkbn9__0EdYjyCRQv4w-Gi3tHWwSwro`;
+  var src = `https://maps.googleapis.com/maps/api/staticmap?center=25.2048,55.2708&zoom=11&size=600x300&maptype=roadmap&language=en&${markers}&key=AIzaSyDIqkbn9__0EdYjyCRQv4w-Gi3tHWwSwro`;
   el.innerHTML = `<img src="${src}" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='<div style=\\'display:flex;align-items:center;justify-content:center;height:100%;color:#6B7F8D;text-align:center;\\'>מפה לא זמינה ברשת זו</div>'">`;
 }
 
@@ -252,14 +1147,14 @@ function buildGoogleMap(el, zoom, items) {
     mapTypeControl: true,
     streetViewControl: true,
     fullscreenControl: true,
-    language: 'he'
+    language: 'en'
   });
   const infoWin = new google.maps.InfoWindow();
   markers = [];
 
   (items || []).forEach(item => {
     if (!item.lat || !item.lng) return;
-    const color = MARKER_COLORS[item.category] || '#E76F51';
+    const color = getMarkerColor(item);
     const marker = new google.maps.Marker({
       position: { lat:item.lat, lng:item.lng },
       map: gmap, title: item.name,
@@ -267,13 +1162,15 @@ function buildGoogleMap(el, zoom, items) {
     });
     marker.addListener('click', () => {
       infoWin.setContent(`
-        <div style="direction:rtl;font-family:Heebo,sans-serif;padding:4px;min-width:180px;">
-          <b>${item.name}</b><br>
-          <span style="color:#666;font-size:12px;">${item.address||''}</span><br>
-          ${item.rating ? `⭐ ${item.rating} ` : ''}${item.price||''}<br>
-          <a href="https://www.google.com/maps/dir/?api=1&destination=${item.lat},${item.lng}" target="_blank" style="color:#E76F51;font-weight:600;">🧭 נווט</a>
-          &nbsp;|&nbsp;
-          <a href="#" onclick="openDetail('${item.category}',${item.id});return false;" style="color:#3B82F6;">📋 פרטים</a>
+        <div style="direction:rtl;font-family:Heebo,sans-serif;min-width:200px;max-width:280px;border-top:4px solid ${color};border-radius:4px;">
+          <div style="padding:8px 10px;background:${color}15;">
+            <b style="color:${color};">${item.name}</b><br>
+            <span style="color:#666;font-size:12px;">${item.address||''}</span><br>
+            ${item.rating ? `⭐ ${item.rating} ` : ''}${item.price||''}<br>
+            <a href="https://www.google.com/maps/dir/?api=1&destination=${item.lat},${item.lng}" target="_blank" style="color:${color};font-weight:600;">🧭 נווט</a>
+            &nbsp;|&nbsp;
+            <a href="#" onclick="openDetail('${item.category}',${item.id});return false;" style="color:#3B82F6;">📋 פרטים</a>
+          </div>
         </div>`);
       infoWin.open(gmap, marker);
     });
@@ -297,7 +1194,7 @@ function buildLeafletMap(el, zoom, items) {
 
   (items || []).forEach(item => {
     if (!item.lat || !item.lng) return;
-    const color = MARKER_COLORS[item.category] || '#E76F51';
+    const color = getMarkerColor(item);
     const icon = L.divIcon({
       className:'custom-marker',
       html:`<div style="background:${color};width:12px;height:12px;border-radius:50%;border:2px solid white;box-shadow:0 2px 6px rgba(0,0,0,0.3);"></div>`,
@@ -313,15 +1210,31 @@ function buildLeafletMap(el, zoom, items) {
   });
 }
 
+function focusMapItem(category, id) {
+  if (!id) return;
+  const item = (getAllItems(category) || []).find(i => String(i.id) === String(id));
+  if (!item || !item.lat || !item.lng) return;
+  if (!map) return;
+  if (map.panTo && map.setZoom) {
+    map.panTo({ lat: item.lat, lng: item.lng });
+    map.setZoom(15);
+    const m = markers.find(mk => mk.getPosition && mk.getPosition().lat() === item.lat && mk.getPosition().lng() === item.lng);
+    if (m && google.maps.event) google.maps.event.trigger(m, 'click');
+  } else if (map.setView) {
+    map.setView([item.lat, item.lng], 15);
+    map.eachLayer(l => { if (l.getLatLng && l.getLatLng().lat === item.lat && l.openPopup) l.openPopup(); });
+  }
+}
+
 // ===== LIST PAGE =====
 const SUBCAT_MAP = {
-  '7 כוכבים':'7star','5 כוכבים':'5star','3-4 כוכבים':'3-4star','יוקרה':'luxury','עסקים':'business','תקציבי':'budget',
+  '7 כוכבים':'7star','5 כוכבים':'5star','4-5 כוכבים':'4-5star','3-4 כוכבים':'3-4star','יוקרה':'luxury','עסקים':'business','תקציבי':'budget',
   'יוקרתי מאוד':'ultra-luxury','יוקרתי':'luxury','עממי':'local','ישראלי':'israeli','לבנוני':'lebanese','טורקי':'turkish','אוכל רחוב':'street',
   'אסייתי':'asian','מקומי':'local','פירות ים':'seafood',
-  'ציון דרך':'landmark','מוזיאון':'museum','הרפתקה':'adventure','חוף':'beach','פארק מים':'waterpark','פארק שעשועים':'theme-park','סיור':'tour','גן חיות':'zoo',
+  'חובה לביקור':'landmark','מוזיאון':'museum','הרפתקה':'adventure','אקסטרים':'extreme','אומנות':'art','חוף':'beach','פארק מים':'waterpark','פארק שעשועים':'theme-park','סיור':'tour','גן חיות':'zoo','אקווריום':'aquarium','מתחם ילדים':'kids-zone','שלג':'snow','השכרת רכב':'car-rental','ספארי מדבר':'desert-safari',
   'קניון':'mall','שוק':'souk',
-  'מועדון':'club','לאונג\'':'lounge','בידור':'entertainment','מופע':'show',
-  'מטרו':'metro','מונית':'taxi','סירה':'boat','אפליקציה':'app',
+  'מועדון':'club','לאונג\'':'lounge','בר גג':'rooftop','ביץ׳ קלאב':'beach-club','בידור':'entertainment','מופע':'show',
+  'מטרו':'metro','מונית':'taxi','סירה':'boat','אפליקציה':'app','אוטובוס':'bus',
   'קזינו':'casino','מרוצים':'racing','ספורט':'sport','קניות':'shopping'
 };
 
@@ -330,11 +1243,12 @@ function cardGridHTML(item, category) {
   return `
         <div style="background:#fff;border-radius:6px;overflow:hidden;border:1px solid #E5E7EB;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,0.05);position:relative;" onclick="openDetail('${category}', ${item.id})">
           <div style="position:relative;">
-            <img src="${item.image}" alt="${item.name}" style="width:100%;height:130px;object-fit:cover;" onerror="this.style.display='none'">
-            ${verified ? '<div style="position:absolute;top:6px;left:6px;background:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 3px rgba(0,0,0,0.3);"><i class="fas fa-check-circle" title="מאומת" style="color:#1DA1F2;font-size:1rem;"></i></div>' : ''}
+            <img src="${item.image}" alt="${item.name}" style="width:100%;height:220px;object-fit:cover;" onerror="this.style.display='none'">
+            ${item.subcategory ? `<div style="position:absolute;top:8px;left:8px;background:${CATEGORY_TITLE_COLORS[category] || 'rgba(0,0,0,0.65)'};color:#fff;padding:4px 11px;border-radius:12px;font-size:0.75rem;font-weight:700;box-shadow:0 1px 4px rgba(0,0,0,0.35);">${subcategoryHe(item.subcategory)}</div>` : ''}
+            ${item.nameHe ? `<div style="position:absolute;bottom:10px;right:12px;left:12px;color:#fff;font-weight:800;font-size:1.15rem;text-shadow:0 2px 10px rgba(0,0,0,0.85),0 0 5px rgba(0,0,0,0.7);text-align:right;">${item.nameHe}</div>` : ''}
           </div>
           <div style="padding:10px;">
-            <div style="font-weight:600;color:#2C5F6E;font-size:0.85rem;margin-bottom:3px;">${item.name}</div>
+            <div style="font-weight:600;color:#2C5F6E;font-size:0.85rem;margin-bottom:3px;">${item.nameEn || item.name}</div>
             ${item.stars ? `<div style="color:#E9C46A;font-size:0.7rem;margin-bottom:3px;">${'★'.repeat(Math.min(item.stars,5))}${item.stars > 5 ? '+' : ''}</div>` : ''}
             <div style="font-size:0.7rem;color:#6B7F8D;margin-bottom:4px;"><i class="fas fa-map-marker-alt" style="color:#F4A261;font-size:0.6rem;"></i> ${item.address || ''}</div>
             <div style="display:flex;align-items:center;justify-content:space-between;">
@@ -345,7 +1259,7 @@ function cardGridHTML(item, category) {
             <div style="display:flex;gap:6px;margin-top:6px;">
               ${item.lat ? `<a onclick="event.stopPropagation();openInFrame('https://www.google.com/maps?q=${item.lat},${item.lng}','${item.name.replace(/'/g,"\\'")} - מפה')" style="flex:1;padding:5px;border-radius:4px;border:none;background:#E76F51;color:#fff;font-size:0.65rem;text-align:center;text-decoration:none;font-family:Heebo;cursor:pointer;"><i class="fas fa-map-pin"></i> איפה זה</a>` : ''}
               ${item.lat ? `<a onclick="event.stopPropagation();openInFrame('https://www.google.com/maps/dir/?api=1&destination=${item.lat},${item.lng}&travelmode=driving','${item.name.replace(/'/g,"\\'")} - ניווט')" style="flex:1;padding:5px;border-radius:4px;border:none;background:#2A9D8F;color:#fff;font-size:0.65rem;text-align:center;text-decoration:none;font-family:Heebo;cursor:pointer;"><i class="fas fa-directions"></i> נווט</a>` : ''}
-              ${item.phone ? `<a href="tel:${item.phone}" onclick="event.stopPropagation()" style="flex:1;padding:5px;border-radius:4px;border:none;background:#E9C46A;color:#2C5F6E;font-size:0.65rem;text-align:center;text-decoration:none;font-family:Heebo;"><i class="fas fa-phone"></i> טלפון</a>` : ''}
+              <a href="https://www.google.com/search?q=${encodeURIComponent((item.nameEn || item.name) + ' Dubai' + (category === 'attractions' ? ' tickets opening hours' : category === 'hotels' ? ' official site' : ' menu hours'))}" target="_blank" onclick="event.stopPropagation()" style="flex:1;padding:5px;border-radius:4px;border:none;background:#E9C46A;color:#2C5F6E;font-size:0.65rem;text-align:center;text-decoration:none;font-family:Heebo;"><i class="fas fa-info-circle"></i> ${category === 'attractions' ? 'מחירים' : category === 'hotels' ? 'אתר' : 'תפריט'}</a>
             </div>
           </div>
         </div>`;
@@ -355,27 +1269,77 @@ function renderListPage(category, title, filters, activeFilter) {
   const page = document.getElementById('page-list');
   const items = getAllItems(category);
   const active = activeFilter || 'הכל';
-  const filtered = sortByRating(active === 'הכל' ? items : items.filter(i => i.subcategory === SUBCAT_MAP[active]));
+  const MAX_PER_PAGE = 20;
+  const filtered = sortByRating(active === 'הכל' ? items : items.filter(i => i.subcategory === SUBCAT_MAP[active])).slice(0, MAX_PER_PAGE);
 
   // Build content - grouped by subcategory when "All" is selected
   let contentHTML;
   if (active === 'הכל') {
     const groups = filters.filter(f => f !== 'הכל');
     contentHTML = groups.map(g => {
-      const groupItems = sortByRating(items.filter(i => i.subcategory === SUBCAT_MAP[g]));
+      const allInGroup = sortByRating(items.filter(i => i.subcategory === SUBCAT_MAP[g]));
+      const groupItems = allInGroup.slice(0, MAX_PER_PAGE);
       if (!groupItems.length) return '';
+      const hasMore = allInGroup.length > MAX_PER_PAGE;
       return `
         <div style="padding:14px 16px 6px;display:flex;align-items:center;gap:8px;">
           <div style="flex:1;height:1px;background:#E5E7EB;"></div>
-          <h3 style="margin:0;color:#2C5F6E;font-size:0.95rem;font-weight:700;">${g} <span style="color:#6B7F8D;font-size:0.75rem;font-weight:500;">(${groupItems.length})</span></h3>
+          <h3 style="margin:0;color:#2C5F6E;font-size:0.95rem;font-weight:700;">${g} <span style="color:#6B7F8D;font-size:0.75rem;font-weight:500;">(${allInGroup.length})</span></h3>
           <div style="flex:1;height:1px;background:#E5E7EB;"></div>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 16px 8px;">
+        <div style="display:grid;grid-template-columns:1fr;gap:10px;padding:0 16px 8px;">
           ${groupItems.map(item => cardGridHTML(item, category)).join('')}
-        </div>`;
+        </div>
+        ${hasMore ? `<div style="text-align:center;padding:0 16px 8px;"><button onclick="navigateTo('${category}','${g.replace(/'/g, "\\'")}')" style="background:#E76F51;color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;font-family:Heebo;font-size:0.85rem;">הצג את כל ${allInGroup.length} →</button></div>` : ''}`;
     }).join('');
   } else {
-    contentHTML = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 16px 20px;">${filtered.map(item => cardGridHTML(item, category)).join('')}</div>`;
+    contentHTML = `<div style="display:grid;grid-template-columns:1fr;gap:10px;padding:0 16px 20px;">${filtered.map(item => cardGridHTML(item, category)).join('')}</div>`;
+  }
+  if (category === 'transport' && active === 'מטרו') {
+    contentHTML = `
+      <div style="margin:0 16px 14px;background:#fff;border:1px solid #E5E7EB;border-radius:8px;overflow:hidden;">
+        <div style="background:#2C5F6E;color:#fff;padding:10px 14px;font-weight:700;font-size:0.95rem;"><i class="fas fa-clock"></i> לוח זמנים ותדירות</div>
+        <div style="padding:12px 14px;font-size:0.85rem;line-height:1.7;color:#2C5F6E;">
+
+          <div style="font-weight:700;color:#E76F51;margin-bottom:4px;">⏰ שעות פעילות</div>
+          <div style="margin-bottom:10px;">
+            ראשון–חמישי: 05:00 – 24:00<br>
+            שישי: 05:00 – 01:00 (למחרת)<br>
+            שבת: 05:00 – 24:00<br>
+            ימי חג: 10:00 – 24:00 (משתנה)
+          </div>
+
+          <div style="font-weight:700;color:#E76F51;margin-bottom:4px;">🚇 תדירות רכבות</div>
+          <div style="margin-bottom:10px;">
+            <b style="color:#D32F2F;">קו אדום</b><br>
+            • שעות שיא (06:30–10:00, 16:00–20:30): כל 4 דקות<br>
+            • שעות רגילות: כל 7-8 דקות<br>
+            <b style="color:#2A9D8F;">קו ירוק</b><br>
+            • שעות שיא: כל 5 דקות<br>
+            • שעות רגילות: כל 8-10 דקות<br>
+            <b style="color:#E76F00;">טראם</b><br>
+            • כל 8-12 דקות
+          </div>
+
+          <div style="font-weight:700;color:#E76F51;margin-bottom:4px;">🚆 רכבת ראשונה / אחרונה</div>
+          <div style="margin-bottom:10px;">
+            ראשונה (כל הקווים): <b>05:00</b><br>
+            אחרונה (א׳–ה׳, ש׳): <b>~23:30</b><br>
+            אחרונה שישי לילה: <b>~00:30</b>
+          </div>
+
+          <div style="font-weight:700;color:#E76F51;margin-bottom:4px;">📱 לוח זמנים בזמן אמת</div>
+          <div style="margin-bottom:6px;">
+            לבדיקה מדויקת לפי תחנה — אפליקציית RTA הרשמית או:
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <a href="https://www.rta.ae/" target="_blank" style="flex:1;text-align:center;padding:10px;background:#E76F51;color:#fff;text-decoration:none;border-radius:6px;font-weight:600;font-size:0.85rem;min-width:130px;"><i class="fas fa-globe"></i> RTA.ae</a>
+            <a href="https://apps.apple.com/ae/app/s-rta-dubai/id1483832550" target="_blank" style="flex:1;text-align:center;padding:10px;background:#000;color:#fff;text-decoration:none;border-radius:6px;font-weight:600;font-size:0.85rem;min-width:130px;"><i class="fab fa-apple"></i> אפליקציה iOS</a>
+            <a href="https://play.google.com/store/apps/details?id=ae.rta.smart" target="_blank" style="flex:1;text-align:center;padding:10px;background:#34A853;color:#fff;text-decoration:none;border-radius:6px;font-weight:600;font-size:0.85rem;min-width:130px;"><i class="fab fa-google-play"></i> אפליקציה Android</a>
+          </div>
+
+        </div>
+      </div>`;
   }
 
   page.innerHTML = `
@@ -384,11 +1348,101 @@ function renderListPage(category, title, filters, activeFilter) {
       <h2>${title}</h2>
     </div>
     <div class="filter-tabs">
-      ${filters.map(f => `<button class="filter-tab ${f === active ? 'active' : ''}" onclick="renderListPage('${category}','${title}',${JSON.stringify(filters)},'${f}')">${f}</button>`).join('')}
+      ${filters.map(f => {
+        const count = f === 'הכל' ? items.length : items.filter(i => i.subcategory === SUBCAT_MAP[f]).length;
+        const showCount = count > 1;
+        return `<button class="filter-tab ${f === active ? 'active' : ''}" onclick="navigateTo('${category}','${f.replace(/'/g, "\\'")}')">${f}${showCount ? ` <span style="opacity:0.7;font-size:0.75rem;">(${count})</span>` : ''}</button>`;
+      }).join('')}
     </div>
     ${category === 'hotels' ? '<div id="bookingWidget" style="padding:0 20px;"></div>' : ''}
-    <div class="map-container"><div id="listMap" style="width:100%;height:100%;"></div></div>
+    ${category === 'transport' && active === 'מטרו' ? `<div style="padding:0 16px 8px;display:flex;flex-direction:column;gap:8px;">
+      <select onchange="jumpToMetroStation('red', this.value)" style="width:100%;padding:10px;border-radius:8px;border:2px solid #D32F2F;background:#fff;font-family:Heebo;color:#D32F2F;font-size:0.9rem;font-weight:600;cursor:pointer;">
+        <option value="">🟥 קו אדום — בחר תחנה</option>
+        ${DUBAI_METRO.red.map(s => `<option value="${s}">${s}</option>`).join('')}
+      </select>
+      <select onchange="jumpToMetroStation('green', this.value)" style="width:100%;padding:10px;border-radius:8px;border:2px solid #2A9D8F;background:#fff;font-family:Heebo;color:#2A9D8F;font-size:0.9rem;font-weight:600;cursor:pointer;">
+        <option value="">🟩 קו ירוק — בחר תחנה</option>
+        ${DUBAI_METRO.green.map(s => `<option value="${s}">${s}</option>`).join('')}
+      </select>
+      <select onchange="jumpToMetroStation('tram', this.value)" style="width:100%;padding:10px;border-radius:8px;border:2px solid #F4A261;background:#fff;font-family:Heebo;color:#E76F00;font-size:0.9rem;font-weight:600;cursor:pointer;">
+        <option value="">🟧 טראם — בחר תחנה</option>
+        ${DUBAI_METRO.tram.map(s => `<option value="${s}">${s}</option>`).join('')}
+      </select>
+    </div>` : filtered.length > 0 ? `<div style="padding:0 16px 8px;display:flex;gap:8px;">
+      <select onchange="focusMapItem('${category}', this.value)" style="flex:1;padding:10px;border-radius:8px;border:1px solid #E5E7EB;background:#fff;font-family:Heebo;color:#2C5F6E;font-size:0.9rem;cursor:pointer;">
+        <option value="">📍 קפוץ למיקום על המפה...</option>
+        ${filtered.map(i => `<option value="${i.id}" style="color:${getMarkerColor({...i, category})};font-weight:600;">${i.name}${i.stars ? ' (' + i.stars + '★)' : ''}</option>`).join('')}
+      </select>
+      <button class="areas-toggle" onclick="toggleAreas()" title="הצג/הסתר אזורים" style="padding:10px 12px;border-radius:8px;border:1px solid ${areasVisible ? '#2A9D8F' : '#E5E7EB'};background:${areasVisible ? '#2A9D8F' : '#fff'};color:${areasVisible ? '#fff' : '#2C5F6E'};font-family:Heebo;font-size:0.85rem;font-weight:600;cursor:pointer;white-space:nowrap;transition:all 0.2s;">${areasVisible ? '✓ אזורים' : '🗺️ אזורים'}</button>
+    </div>` : ''}
+    ${category === 'transport' && active === 'מטרו' ? `
+      <div style="margin:0 16px 12px;border-radius:8px;overflow:hidden;border:1px solid #E5E7EB;cursor:pointer;background:#fff;" onclick="openInFrame('https://dubaimetrorail.com/dubai-metro-map/','מפת מטרו דובאי')">
+        <img src="images/transport/metro-map.png" alt="מפת מטרו דובאי" style="width:100%;height:auto;display:block;">
+        <div style="padding:8px;text-align:center;color:#2C5F6E;font-size:0.85rem;font-weight:600;background:#FDF6EC;"><i class="fas fa-external-link-alt"></i> לחץ למפה אינטראקטיבית — DubaiMetroRail.com</div>
+      </div>
+      <div style="padding:0 16px 12px;">
+        <button onclick="navigateToNearestMetro()" style="width:100%;padding:12px;background:linear-gradient(135deg,#E76F51,#D32F2F);color:#fff;border:none;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.95rem;cursor:pointer;box-shadow:0 2px 8px rgba(231,111,81,0.3);">
+          <i class="fas fa-location-arrow"></i> נווט לתחנת המטרו הקרובה אליי
+        </button>
+      </div>
+      <div style="margin:0 16px 14px;background:#fff;border:1px solid #E5E7EB;border-radius:8px;overflow:hidden;">
+        <div style="background:#2C5F6E;color:#fff;padding:10px 14px;font-weight:700;font-size:0.95rem;"><i class="fas fa-train"></i> מטרו דובאי — המדריך הקצר</div>
+        <div style="padding:12px 14px;font-size:0.85rem;line-height:1.7;color:#2C5F6E;">
+
+          <div style="font-weight:700;color:#E76F51;margin-bottom:4px;">🛤 קווים</div>
+          <div style="margin-bottom:10px;">
+            <b style="color:#D32F2F;">קו אדום</b> — שדה התעופה DXB ↔ Expo 2020 (52 ק״מ, 35 תחנות). דרך Deira City Centre, BurJuman, Burj Khalifa/Dubai Mall, Mall of the Emirates, Marina, Ibn Battuta.<br>
+            <b style="color:#2A9D8F;">קו ירוק</b> — Etisalat ↔ Creek (23 ק״מ, 20 תחנות). דרך Gold Souk, Union, BurJuman, Healthcare City.
+          </div>
+
+          <div style="font-weight:700;color:#E76F51;margin-bottom:4px;">🕐 שעות פעילות</div>
+          <div style="margin-bottom:10px;">
+            ראשון–חמישי: 05:00–24:00<br>
+            שישי: 05:00–01:00<br>
+            שבת: 05:00–24:00
+          </div>
+
+          <div style="font-weight:700;color:#E76F51;margin-bottom:4px;">💳 כרטיס Nol</div>
+          <div style="margin-bottom:10px;">
+            כרטיס נטען חכם — חובה לכניסה. סוגים:<br>
+            <b>אדום</b> — חד פעמי (לתייר חד פעמי).<br>
+            <b>כסוף</b> — לרוב הנוסעים.<br>
+            <b>זהב</b> — קרון VIP (פי 2 במחיר).<br>
+            ניתן לקנות בכל תחנה בקופה או במכונה.
+          </div>
+
+          <div style="font-weight:700;color:#E76F51;margin-bottom:4px;">💰 מחירים (שכבות אזוריות)</div>
+          <div style="margin-bottom:10px;">
+            אזור אחד: ~3 דירהם (₪3)<br>
+            שני אזורים: ~5 דירהם (₪5)<br>
+            יותר משניים: ~7.5 דירהם (₪7.5)<br>
+            יום שלם: 22 דירהם (₪22)
+          </div>
+
+          <div style="font-weight:700;color:#E76F51;margin-bottom:4px;">⭐ תחנות חשובות לתיירים</div>
+          <div style="margin-bottom:10px;">
+            • <b>Burj Khalifa / Dubai Mall</b> (אדום)<br>
+            • <b>Mall of the Emirates</b> (אדום) — קניון + Ski Dubai<br>
+            • <b>Dubai Marina / Ibn Battuta</b> (אדום) — מרינה + JBR<br>
+            • <b>BurJuman</b> — נקודת מעבר אדום ↔ ירוק<br>
+            • <b>Union</b> — נקודת מעבר אדום ↔ ירוק<br>
+            • <b>Gold Souk</b> (ירוק) — שוק הזהב
+          </div>
+
+          <div style="font-weight:700;color:#E76F51;margin-bottom:4px;">⚠️ טיפים חשובים</div>
+          <div>
+            • הקרון הראשון = Gold Class (יקר יותר).<br>
+            • קרון ייעודי לנשים וילדים בלבד — אסור לגברים, קנס 100 דירהם.<br>
+            • אסור לאכול/לשתות בתחנות וברכבות — קנס.<br>
+            • המטרו אוטומטי לחלוטין (ללא נהג).<br>
+            • לכל תחנה יציאות ממוספרות — שים לב לפני יציאה.
+          </div>
+
+        </div>
+      </div>
+    ` : '<div class="map-container"><div id="listMap" style="width:100%;height:100%;"></div></div>'}
     ${contentHTML}
+    ${items.length > 10 ? `<button onclick="window.scrollTo({top:0,behavior:'smooth'})" style="position:fixed;bottom:80px;left:16px;background:#E76F51;color:#fff;border:none;width:46px;height:46px;border-radius:50%;font-size:1.1rem;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,0.25);z-index:50;display:flex;align-items:center;justify-content:center;" title="חזור לראש"><i class="fas fa-arrow-up"></i></button>` : ''}
   `;
 
   // Booking.com widget for hotels page
@@ -454,17 +1508,14 @@ function renderFlightsPage() {
       </div>
 
       <!-- Quick links -->
+      <a href="https://aviasales.tpk.lv/X5SEJjUA" target="_blank" style="display:block;text-decoration:none;background:linear-gradient(135deg,#FF6B00,#E76F51);color:#fff;padding:16px;border-radius:8px;text-align:center;font-weight:800;font-size:1rem;margin-bottom:8px;box-shadow:0 4px 12px rgba(231,111,81,0.3);">
+        <i class="fas fa-search" style="margin-left:6px;"></i> חפש טיסות זול ב-Aviasales (השוואת מחירים מ-200+ חברות)
+      </a>
       <div style="display:flex;gap:8px;flex-wrap:wrap;">
-        <a onclick="openInFrame('https://www.skyscanner.co.il/transport/flights/tlv/dxb/','Skyscanner')" style="flex:1;text-align:center;padding:12px;border-radius:8px;background:#fff;border:1px solid #E5E7EB;text-decoration:none;color:#2C5F6E;font-weight:600;font-size:0.8rem;cursor:pointer;">
-          <i class="fas fa-search" style="color:#E76F51;display:block;font-size:1.2rem;margin-bottom:4px;"></i>Skyscanner
-        </a>
-        <a onclick="openInFrame('https://www.google.com/travel/flights?q=TLV%20to%20DXB','Google Flights')" style="flex:1;text-align:center;padding:12px;border-radius:8px;background:#fff;border:1px solid #E5E7EB;text-decoration:none;color:#2C5F6E;font-weight:600;font-size:0.8rem;cursor:pointer;">
-          <i class="fab fa-google" style="color:#2A9D8F;display:block;font-size:1.2rem;margin-bottom:4px;"></i>Google Flights
-        </a>
-        <a onclick="openInFrame('https://www.elal.com','אל על')" style="flex:1;text-align:center;padding:12px;border-radius:8px;background:#fff;border:1px solid #E5E7EB;text-decoration:none;color:#2C5F6E;font-weight:600;font-size:0.8rem;cursor:pointer;">
+        <a href="https://www.elal.com" target="_blank" style="flex:1;text-align:center;padding:12px;border-radius:8px;background:#fff;border:1px solid #E5E7EB;text-decoration:none;color:#2C5F6E;font-weight:600;font-size:0.8rem;cursor:pointer;">
           <i class="fas fa-plane" style="color:#E9C46A;display:block;font-size:1.2rem;margin-bottom:4px;"></i>אל על
         </a>
-        <a onclick="openInFrame('https://www.flydubai.com','FlyDubai')" style="flex:1;text-align:center;padding:12px;border-radius:8px;background:#fff;border:1px solid #E5E7EB;text-decoration:none;color:#2C5F6E;font-weight:600;font-size:0.8rem;cursor:pointer;">
+        <a href="https://www.flydubai.com" target="_blank" style="flex:1;text-align:center;padding:12px;border-radius:8px;background:#fff;border:1px solid #E5E7EB;text-decoration:none;color:#2C5F6E;font-weight:600;font-size:0.8rem;cursor:pointer;">
           <i class="fas fa-plane-departure" style="color:#F4A261;display:block;font-size:1.2rem;margin-bottom:4px;"></i>FlyDubai
         </a>
       </div>
@@ -529,7 +1580,7 @@ function renderWeatherPage() {
       <!-- Current -->
       <div style="background:linear-gradient(135deg,#2C5F6E,#2A9D8F);border-radius:8px;padding:24px;color:#fff;text-align:center;margin-bottom:16px;">
         <div style="font-size:0.85rem;opacity:0.8;">דובאי עכשיו</div>
-        <img src="https:${w.icon}" style="width:80px;height:80px;">
+        <div style="font-size:4rem;line-height:1;">${w.icon}</div>
         <div style="font-size:3rem;font-weight:800;">${w.temp}°C</div>
         <div style="font-size:1rem;margin-bottom:8px;">${w.condition}</div>
         <div style="display:flex;gap:16px;justify-content:center;font-size:0.8rem;opacity:0.85;">
@@ -550,7 +1601,7 @@ function renderWeatherPage() {
             <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #F5EFE6;">
               <div style="width:60px;font-weight:600;color:#2C5F6E;font-size:0.85rem;">${dayNames[dayNum]}</div>
               <div style="color:#6B7F8D;font-size:0.75rem;">${dateStr}</div>
-              <img src="https:${d.icon}" style="width:32px;height:32px;">
+              <div style="font-size:1.7rem;line-height:1;">${d.icon}</div>
               <div style="color:#6B7F8D;font-size:0.8rem;width:80px;">${d.condition}</div>
               <div style="font-weight:600;color:#E76F51;">${d.maxTemp}°</div>
               <div style="color:#6B7F8D;">${d.minTemp}°</div>
@@ -590,10 +1641,10 @@ function renderWeatherPage() {
 function renderLiveCamsPage() {
   const page = document.getElementById('page-livecams');
   const cams = [
-    { name:'ברג\' חליפה - שידור חי', embed:'https://www.youtube.com/embed/xKYvWgyxXXg?autoplay=1&mute=1', color:'#E76F51' },
-    { name:'דובאי Downtown', embed:'https://www.youtube.com/embed/EEhaQLAw-M8?autoplay=0&mute=1', color:'#2A9D8F' },
-    { name:'דובאי מרינה', embed:'https://www.skylinewebcams.com/embed/webcam/united-arab-emirates/dubai/dubai/dubai-marina.html', color:'#E9C46A' },
-    { name:'דובאי - קו הרקיע', embed:'https://www.skylinewebcams.com/embed/webcam/united-arab-emirates/dubai/dubai/dubai.html', color:'#F4A261' },
+    { name:'דובאי מרינה', desc:'מבט פנורמי על המרינה והגלגל הענק', img:'https://images.pexels.com/photos/14750359/pexels-photo-14750359.jpeg', url:'https://www.skylinewebcams.com/en/webcam/united-arab-emirates/dubai/dubai/dubai-marina.html', color:'#E9C46A' },
+    { name:'דובאי - קו הרקיע', desc:'תצפית רחבה על קו הרקיע של דובאי', img:'https://images.pexels.com/photos/26838210/pexels-photo-26838210.jpeg', url:'https://www.skylinewebcams.com/en/webcam/united-arab-emirates/dubai/dubai/dubai.html', color:'#F4A261' },
+    { name:'Fairmont The Palm', desc:'מבט מהפאלם — מרינה + גלגל ענק', img:'https://images.pexels.com/photos/14750186/pexels-photo-14750186.jpeg', url:'https://www.webcamtaxi.com/en/united-arab-emirates/dubai/fairmont-thepalm-cam.html', color:'#2A9D8F' },
+    { name:'Burj Khalifa Lake', desc:'מזרקת דובאי וברג׳ חליפה', img:'https://images.pexels.com/photos/29196946/pexels-photo-29196946.jpeg', url:'https://www.webcamtaxi.com/en/united-arab-emirates/dubai/burj-khalifa-lake-dubai.html', color:'#E76F51' },
   ];
 
   page.innerHTML = `
@@ -604,16 +1655,24 @@ function renderLiveCamsPage() {
     <div style="padding:12px 16px;">
       <div id="liveCamWeather" style="margin-bottom:12px;"></div>
 
-      ${cams.map((cam, i) => `
-        <div style="margin-bottom:14px;">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
-            <span style="background:rgba(255,0,0,0.85);color:#fff;font-size:0.55rem;padding:2px 8px;border-radius:10px;font-weight:700;">● LIVE</span>
-            <span style="font-weight:700;color:${cam.color};font-size:0.9rem;">${cam.name}</span>
+      <div style="background:#FFF3CD;color:#856404;padding:8px;font-size:0.75rem;text-align:center;border-radius:6px;margin-bottom:12px;">
+        ⚠️ לחיצה על מצלמה תפתח אותה באתר חיצוני (אתרים שמסרבים להיטען בתוך אפליקציה).
+      </div>
+
+      ${cams.map(cam => `
+        <a href="${cam.url}" target="_blank" style="display:block;text-decoration:none;margin-bottom:14px;background:#fff;border:1px solid #E5E7EB;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.05);">
+          <div style="position:relative;height:180px;background:#000;">
+            <img src="${cam.img}" style="width:100%;height:100%;object-fit:cover;opacity:0.85;" onerror="this.style.display='none'">
+            <div style="position:absolute;top:10px;right:10px;background:rgba(255,0,0,0.85);color:#fff;font-size:0.65rem;padding:3px 10px;border-radius:10px;font-weight:700;">● LIVE</div>
+            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+              <div style="background:rgba(0,0,0,0.6);color:#fff;border-radius:50%;width:60px;height:60px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;"><i class="fas fa-play"></i></div>
+            </div>
+            <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,0.85));color:#fff;padding:14px 12px 8px;">
+              <div style="font-weight:800;font-size:1rem;color:${cam.color};">${cam.name}</div>
+              <div style="font-size:0.75rem;opacity:0.9;margin-top:2px;">${cam.desc}</div>
+            </div>
           </div>
-          <div style="position:relative;width:100%;padding-bottom:56.25%;background:#000;border-radius:6px;overflow:hidden;">
-            <iframe src="${cam.embed}" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allowfullscreen loading="${i === 0 ? 'eager' : 'lazy'}"></iframe>
-          </div>
-        </div>
+        </a>
       `).join('')}
 
       <div style="margin-top:8px;background:#FDF6EC;border-radius:6px;padding:10px;border-right:3px solid #E9C46A;">
@@ -638,7 +1697,7 @@ function renderLiveCamsPage() {
               <div style="font-size:1.8rem;font-weight:700;">${w.temp}°C</div>
               <div style="font-size:0.8rem;">${w.condition}</div>
             </div>
-            <img src="https:${w.icon}" style="width:50px;height:50px;">
+            <div style="font-size:2.2rem;line-height:1;">${w.icon}</div>
           </div>
         `;
       }
@@ -661,9 +1720,22 @@ function renderMapPage() {
       <button class="filter-tab" onclick="filterMap('attractions',this)">אטרקציות</button>
       <button class="filter-tab" onclick="filterMap('shopping',this)">קניות</button>
       <button class="filter-tab" onclick="filterMap('nightlife',this)">בילויים</button>
+      <button class="filter-tab" onclick="filterMap('kids',this)">ילדים</button>
       <button class="filter-tab" onclick="filterMap('transport',this)">תחבורה</button>
+      <button class="filter-tab" onclick="filterMap('casino',this)">בידור</button>
     </div>
-    <div style="height:calc(100vh - 180px);margin:0 12px;border-radius:16px;overflow:hidden;border:1px solid #E5E7EB;">
+    <div style="padding:0 16px 8px;">
+      <button class="areas-toggle" onclick="toggleAreas()" style="width:100%;padding:10px;border-radius:8px;border:1px solid ${areasVisible ? '#2A9D8F' : '#E5E7EB'};background:${areasVisible ? '#2A9D8F' : '#fff'};color:${areasVisible ? '#fff' : '#2C5F6E'};font-family:Heebo;font-size:0.9rem;font-weight:700;cursor:pointer;">${areasVisible ? '✓ אזורים — מופעל' : '🗺️ הצג אזורי דובאי (10)'}</button>
+    </div>
+    <div id="areasStrip" style="display:${areasVisible ? 'flex' : 'none'};padding:0 16px 8px;overflow-x:auto;gap:8px;scroll-snap-type:x mandatory;">
+      ${DUBAI_AREAS.map((a, i) => `
+        <div onclick="focusOnArea(${i})" style="min-width:170px;max-width:170px;scroll-snap-align:start;background:#fff;border:2px solid ${a.color};border-radius:8px;padding:8px 10px;cursor:pointer;flex-shrink:0;">
+          <div style="font-weight:800;color:${a.color};font-size:0.88rem;margin-bottom:3px;">${a.name}</div>
+          <div style="font-size:0.7rem;line-height:1.35;color:#2C5F6E;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;">${(a.desc || '').split('—').slice(0, 1).join('').slice(0, 100) + '...'}</div>
+        </div>
+      `).join('')}
+    </div>
+    <div style="height:calc(100vh - 240px);margin:0 12px;border-radius:16px;overflow:hidden;border:1px solid #E5E7EB;">
       <div id="fullMap" style="width:100%;height:100%;"></div>
     </div>
   `;
@@ -806,6 +1878,13 @@ function renderInfoPage() {
 
 // ===== DETAIL MODAL =====
 function openDetail(category, id) {
+  if (category === 'shopping') {
+    const item = (getDB().shopping || []).find(i => i.id === id);
+    if (item && item.subcategory === 'mall') {
+      navigateTo('mall', String(id));
+      return;
+    }
+  }
   const item = getItem(category, id);
   if (!item) return;
 
@@ -843,33 +1922,16 @@ function openDetail(category, id) {
           ${item.lat ? `<button class="modal-btn primary" onclick="openNavigation(${item.lat},${item.lng})"><i class="fas fa-directions"></i> נווט</button>` : ''}
           ${item.googleUrl ? `<a href="${item.googleUrl}" target="_blank" class="modal-btn secondary"><i class="fab fa-google"></i> Google Maps</a>` : ''}
           ${item.webcam ? `<a href="${item.webcam}" target="_blank" class="modal-btn secondary" style="background:#2A9D8F;color:#fff;border:none;"><i class="fas fa-video"></i> מצלמה חיה</a>` : ''}
-          ${item.website ? `<a href="${item.website}" target="_blank" class="modal-btn secondary"><i class="fas fa-globe"></i> אתר</a>` : ''}
-          ${item.phone ? `<a href="tel:${item.phone}" class="modal-btn secondary"><i class="fas fa-phone"></i> התקשר</a>` : ''}
-          <button class="modal-btn secondary" onclick="shareItem('${item.name}','${item.address}')"><i class="fas fa-share-alt"></i> שתף</button>
+          <a href="${item.website || 'https://www.google.com/search?q=' + encodeURIComponent((item.nameEn || item.name) + ' Dubai' + (category === 'attractions' ? ' tickets opening hours' : ''))}" target="_blank" class="modal-btn secondary"><i class="fas ${category === 'attractions' ? 'fa-ticket-alt' : 'fa-globe'}"></i> ${category === 'hotels' ? 'אתר המלון' : category === 'attractions' ? 'מחירים ושעות' : 'אתר'}</a>
+          ${item.lat ? `<a href="https://www.google.com/maps/search/?api=1&query=${item.lat},${item.lng}" target="_blank" class="modal-btn secondary"><i class="fas fa-map-marker-alt"></i> איפה זה?</a>` : ''}
         </div>
-        ${item.lat ? `
-        <div style="margin-top:12px;border-top:1px solid #F5EFE6;padding-top:12px;">
-          <div style="font-weight:600;color:#2C5F6E;font-size:0.85rem;margin-bottom:8px;"><i class="fas fa-taxi" style="color:#E9C46A;"></i> הזמן נסיעה לכאן</div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap;">
-            <a href="https://www.careem.com/rides/?pickup=current&dropoff=${item.lat},${item.lng}&dropoff_name=${encodeURIComponent(item.nameEn || item.name)}" target="_blank"
-              style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;border-radius:8px;background:#2A9D8F;color:#fff;text-decoration:none;font-weight:600;font-size:0.85rem;min-width:120px;">
-              <i class="fas fa-car"></i> Careem
-            </a>
-            <a href="https://m.uber.com/ul/?action=setPickup&pickup=my_location&dropoff[latitude]=${item.lat}&dropoff[longitude]=${item.lng}&dropoff[nickname]=${encodeURIComponent(item.nameEn || item.name)}" target="_blank"
-              style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;border-radius:8px;background:#2C5F6E;color:#fff;text-decoration:none;font-weight:600;font-size:0.85rem;min-width:120px;">
-              <i class="fas fa-car-side"></i> Uber
-            </a>
-            <a href="https://www.google.com/maps/dir/?api=1&destination=${item.lat},${item.lng}&travelmode=transit" target="_blank"
-              style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;border-radius:8px;background:#E9C46A;color:#2C5F6E;text-decoration:none;font-weight:600;font-size:0.85rem;min-width:120px;">
-              <i class="fas fa-subway"></i> תחבורה ציבורית
-            </a>
-          </div>
-        </div>
-        ` : ''}
       </div>
     </div>
   `;
   modal.classList.add('active');
+  modal.scrollTop = 0;
+  const sheet = modal.querySelector('.modal-sheet');
+  if (sheet) sheet.scrollTop = 0;
   modal.onclick = (e) => { if (e.target === modal) closeDetail(); };
 
   if (item.lat) {
@@ -879,7 +1941,7 @@ function openDetail(category, id) {
       if (hasGoogle()) {
         const dm = new google.maps.Map(el, {
           center:{lat:item.lat,lng:item.lng}, zoom:16,
-          mapTypeControl:false, streetViewControl:true, language:'he'
+          mapTypeControl:false, streetViewControl:true, language:'en'
         });
         new google.maps.Marker({
           position:{lat:item.lat,lng:item.lng}, map:dm, title:item.name,

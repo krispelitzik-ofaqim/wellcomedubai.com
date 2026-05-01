@@ -85,10 +85,12 @@
             <div style="display:flex;gap:16px;margin-bottom:8px;justify-content:center;">
               <a onclick="navigateTo('shopping')" style="color:#F4A261;font-size:0.9rem;font-weight:600;cursor:pointer;text-decoration:none;text-shadow:0 1px 3px rgba(0,0,0,0.5);">קניות</a>
               <a onclick="navigateTo('nightlife')" style="color:#fff;font-size:0.9rem;font-weight:600;cursor:pointer;text-decoration:none;text-shadow:0 1px 3px rgba(0,0,0,0.5);">בילויים</a>
+              <a onclick="navigateTo('kids')" style="color:#E76F51;font-size:0.9rem;font-weight:700;cursor:pointer;text-decoration:none;text-shadow:0 1px 3px rgba(0,0,0,0.5);">ילדים</a>
               <a onclick="navigateTo('transport')" style="color:#E9C46A;font-size:0.9rem;font-weight:600;cursor:pointer;text-decoration:none;text-shadow:0 1px 3px rgba(0,0,0,0.5);">תחבורה</a>
-              <a onclick="navigateTo('casino')" style="color:#F4A261;font-size:0.9rem;font-weight:600;cursor:pointer;text-decoration:none;text-shadow:0 1px 3px rgba(0,0,0,0.5);">בידור</a>
+              <a onclick="navigateTo('casino')" style="color:#F4A261;font-size:0.9rem;font-weight:600;cursor:pointer;text-decoration:none;text-shadow:0 1px 3px rgba(0,0,0,0.5);">בידור ומשחקים</a>
             </div>
             <div style="display:flex;gap:16px;justify-content:center;">
+              <a onclick="navigateTo('itineraries')" style="color:#E9C46A;font-size:0.85rem;font-weight:700;cursor:pointer;text-decoration:none;text-shadow:0 1px 3px rgba(0,0,0,0.5);">מסלולי יום</a>
               <a onclick="navigateTo('map')" style="color:#fff;font-size:0.8rem;font-weight:600;cursor:pointer;text-decoration:none;text-shadow:0 1px 3px rgba(0,0,0,0.5);opacity:0.85;">מפה</a>
               <a onclick="navigateTo('livecams')" style="color:#E76F51;font-size:0.8rem;font-weight:700;cursor:pointer;text-decoration:none;text-shadow:0 1px 3px rgba(0,0,0,0.5);">LIVE</a>
               <a onclick="navigateTo('flights')" style="color:#2A9D8F;font-size:0.8rem;font-weight:700;cursor:pointer;text-decoration:none;text-shadow:0 1px 3px rgba(0,0,0,0.5);">טיסות</a>
@@ -99,10 +101,6 @@
 
       <!-- Search Results (hidden until search opens) -->
       <div id="searchResults" style="display:none;margin:0 20px 8px;"></div>
-
-      <!-- Weather + Currency -->
-      <div id="weatherWidget" style="margin:0 20px 8px;"></div>
-      <div id="currencyWidget" style="margin:0 20px 12px;"></div>
 
       <!-- Top Hotels -->
       <h2 style="padding:20px 20px 10px;font-size:1.5rem;font-weight:800;color:#2C5F6E;display:flex;align-items:center;justify-content:space-between;margin:0 20px;">
@@ -118,59 +116,44 @@
       <div class="cards-scroll" id="topAttractions"></div>
 
       <h2 style="padding:20px 20px 10px;font-size:1.5rem;font-weight:800;color:#2C5F6E;display:flex;align-items:center;justify-content:space-between;margin:0 20px;">
-        <span style="color:#F4A261;"><i class="fas fa-utensils" style="margin-left:8px;"></i>מסעדות וקניות</span>
+        <span style="color:#F4A261;"><i class="fas fa-utensils" style="margin-left:8px;"></i>מסעדות</span>
         <a href="#" onclick="navigateTo('restaurants');return false;" style="color:#E76F51;font-size:0.85rem;font-weight:600;text-decoration:none;">הכל &larr;</a>
       </h2>
-      <div class="cards-scroll" id="topRestShopping"></div>
+      <div class="cards-scroll" id="topRestaurants"></div>
 
-      <!-- Quick Action Buttons -->
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:16px 20px;">
-        <div onclick="navigateTo('info')" style="background:#E76F51;border-radius:6px;padding:18px 14px;cursor:pointer;display:flex;align-items:center;gap:10px;">
-          <i class="fas fa-first-aid" style="color:#fff;font-size:1.4rem;"></i>
+      <h2 style="padding:14px 20px 6px;font-size:1.05rem;font-weight:700;color:#2C5F6E;display:flex;align-items:center;justify-content:space-between;margin:0 20px;">
+        <span style="color:#F4A261;"><i class="fas fa-shopping-bag" style="margin-left:6px;font-size:0.9rem;"></i>קניות</span>
+        <a href="#" onclick="navigateTo('shopping');return false;" style="color:#E76F51;font-size:0.75rem;font-weight:600;text-decoration:none;">הכל &larr;</a>
+      </h2>
+      <div class="cards-scroll cards-scroll-mini" id="topShopping"></div>
+
+      <h2 style="padding:14px 20px 6px;font-size:1.05rem;font-weight:700;color:#2C5F6E;display:flex;align-items:center;justify-content:space-between;margin:0 20px;">
+        <span style="color:#B85C8E;"><i class="fas fa-glass-cheers" style="margin-left:6px;font-size:0.9rem;"></i>בילויים</span>
+        <a href="#" onclick="navigateTo('nightlife');return false;" style="color:#E76F51;font-size:0.75rem;font-weight:600;text-decoration:none;">הכל &larr;</a>
+      </h2>
+      <div class="cards-scroll cards-scroll-mini" id="topNightlife"></div>
+
+      <h2 style="padding:14px 20px 6px;font-size:1.05rem;font-weight:700;color:#2C5F6E;display:flex;align-items:center;justify-content:space-between;margin:0 20px;">
+        <span style="color:#E76F51;"><i class="fas fa-child" style="margin-left:6px;font-size:0.9rem;"></i>ילדים ומשפחות</span>
+        <a href="#" onclick="navigateTo('kids');return false;" style="color:#E76F51;font-size:0.75rem;font-weight:600;text-decoration:none;">הכל &larr;</a>
+      </h2>
+      <div class="cards-scroll cards-scroll-mini" id="topKids"></div>
+
+      <!-- Flights long banner -->
+      <div onclick="navigateTo('flights')" style="margin:16px 20px 12px;background:linear-gradient(135deg,#2C5F6E,#2A9D8F);border-radius:8px;padding:16px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <i class="fas fa-plane-departure" style="color:#E9C46A;font-size:1.6rem;"></i>
           <div>
-            <div style="color:#fff;font-weight:700;font-size:0.9rem;">מידע חיוני</div>
-            <div style="color:rgba(255,255,255,0.7);font-size:0.7rem;">חירום, ויזה, טיפים</div>
+            <div style="color:#fff;font-weight:800;font-size:1rem;">טיסות + לוח המראות / נחיתות</div>
+            <div style="color:rgba(255,255,255,0.75);font-size:0.78rem;margin-top:2px;">TLV ↔ DXB · בזמן אמת · רכישת כרטיסים</div>
           </div>
         </div>
-        <div onclick="navigateTo('weather')" style="background:#2A9D8F;border-radius:6px;padding:18px 14px;cursor:pointer;display:flex;align-items:center;gap:10px;">
-          <i class="fas fa-cloud-sun" style="color:#fff;font-size:1.4rem;"></i>
-          <div>
-            <div style="color:#fff;font-weight:700;font-size:0.9rem;">מזג האוויר</div>
-            <div style="color:rgba(255,255,255,0.7);font-size:0.7rem;">תחזית + מצלמות חיות</div>
-          </div>
-        </div>
-        <div onclick="scrollToWidget('currencyWidget')" style="background:#E9C46A;border-radius:6px;padding:18px 14px;cursor:pointer;display:flex;align-items:center;gap:10px;">
-          <i class="fas fa-calculator" style="color:#2C5F6E;font-size:1.4rem;"></i>
-          <div>
-            <div style="color:#2C5F6E;font-weight:700;font-size:0.9rem;">המרת מטבע</div>
-            <div style="color:rgba(44,95,110,0.7);font-size:0.7rem;">שקל ↔ דירהם</div>
-          </div>
-        </div>
-        <div onclick="showLegalInfo()" style="background:#2C5F6E;border-radius:6px;padding:18px 14px;cursor:pointer;display:flex;align-items:center;gap:10px;">
-          <i class="fas fa-balance-scale" style="color:#E9C46A;font-size:1.4rem;"></i>
-          <div>
-            <div style="color:#fff;font-weight:700;font-size:0.9rem;">מידע משפטי</div>
-            <div style="color:rgba(255,255,255,0.7);font-size:0.7rem;">חוקים ונהלים</div>
-          </div>
-        </div>
+        <i class="fas fa-chevron-left" style="color:#E9C46A;font-size:1rem;"></i>
       </div>
 
-      <!-- Flight teaser -->
-      <div onclick="navigateTo('flights')" style="margin:0 20px 12px;background:linear-gradient(135deg,#2C5F6E,#2A9D8F);border-radius:8px;padding:14px 16px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;">
-        <div style="display:flex;align-items:center;gap:10px;">
-          <i class="fas fa-plane-departure" style="color:#E9C46A;font-size:1.2rem;"></i>
-          <div>
-            <div style="color:#fff;font-weight:700;font-size:0.9rem;">טיסות + לוח המראות/נחיתות</div>
-            <div style="color:rgba(255,255,255,0.7);font-size:0.75rem;">TLV ↔ DXB | מחירים בזמן אמת</div>
-          </div>
-        </div>
-        <i class="fas fa-chevron-left" style="color:#E9C46A;"></i>
-      </div>
-
-      <!-- Quick Tip -->
-      <div onclick="navigateTo('info')" style="margin:8px 20px;padding:10px 14px;background:#FDF6EC;border-radius:6px;border-right:3px solid #E9C46A;cursor:pointer;display:flex;align-items:center;gap:8px;">
-        <i class="fas fa-lightbulb" style="color:#E9C46A;font-size:0.9rem;"></i>
-        <span style="font-size:0.8rem;color:#2C5F6E;"><b>טיפ:</b> ישראלים מקבלים ויזה אוטומטית בנחיתה. הטיסה ~3 שעות!</span>
+      <!-- Rotating Discovery Banner -->
+      <div id="discoveryBanner" style="margin:10px 20px;border-radius:8px;overflow:hidden;cursor:pointer;min-height:140px;transition:opacity 0.4s;">
+        <div style="text-align:center;padding:50px 20px;color:#6B7F8D;font-size:0.85rem;">טוען המלצות...</div>
       </div>
     </div>
 
@@ -189,6 +172,21 @@
     <!-- WEATHER PAGE -->
     <div id="page-weather" class="page"></div>
 
+    <!-- CURRENCY PAGE -->
+    <div id="page-currency" class="page"></div>
+
+    <!-- ITINERARIES PAGE -->
+    <div id="page-itineraries" class="page"></div>
+
+    <!-- LEGAL PAGE -->
+    <div id="page-legal" class="page"></div>
+
+    <!-- MALL DETAIL PAGE -->
+    <div id="page-mall" class="page"></div>
+
+    <!-- AREAS GUIDE PAGE -->
+    <div id="page-areas" class="page"></div>
+
     <!-- INFO PAGE -->
     <div id="page-info" class="page"></div>
   </main>
@@ -202,22 +200,22 @@
       <i class="fas fa-home"></i>
       <span>בית</span>
     </button>
-    <button class="nav-item" data-page="hotels">
-      <i class="fas fa-hotel"></i>
-      <span>מלונות</span>
+    <button class="nav-item" data-page="weather">
+      <i class="fas fa-cloud-sun"></i>
+      <span>מזג אוויר</span>
     </button>
-    <button class="nav-item" data-page="attractions">
-      <i class="fas fa-star"></i>
-      <span>לגלות</span>
+    <button class="nav-item" data-page="currency">
+      <i class="fas fa-exchange-alt"></i>
+      <span>המרת מטבע</span>
     </button>
-    <button class="nav-item" data-page="flights">
-      <i class="fas fa-plane"></i>
-      <span>טיסות</span>
+    <button class="nav-item" data-page="legal">
+      <i class="fas fa-balance-scale"></i>
+      <span>מידע משפטי</span>
     </button>
-    <button class="nav-item" data-page="info">
-      <i class="fas fa-info-circle"></i>
-      <span>מידע</span>
-    </button>
+    <a href="https://wa.me/972501234567?text=שלום%20מהאפליקציית%20WellCome%20Dubai" target="_blank" class="nav-item" style="text-decoration:none;color:#25D366;">
+      <i class="fab fa-whatsapp" style="color:#25D366;"></i>
+      <span>וואטסאפ</span>
+    </a>
   </nav>
 </div>
 
@@ -230,7 +228,7 @@
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDIqkbn9__0EdYjyCRQv4w-Gi3tHWwSwro&libraries=places&language=he" async defer onerror="window._googleMapsBlocked=true;"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDIqkbn9__0EdYjyCRQv4w-Gi3tHWwSwro&libraries=places&language=en" async defer onerror="window._googleMapsBlocked=true;"></script>
 <script src="js/data.js?v=104"></script>
 <script src="js/places.js?v=11"></script>
 <script src="js/booking.js?v=11"></script>

@@ -246,14 +246,15 @@ body {
 /* ===== DETAIL MODAL ===== */
 .modal-overlay {
   position:fixed; inset:0; z-index:200;
-  background:rgba(0,0,0,0.7); backdrop-filter:blur(4px);
-  display:none; align-items:flex-end; justify-content:center;
+  background:rgba(0,0,0,0.7);
+  display:none; justify-content:center;
 }
 .modal-overlay.active { display:flex; }
 .modal-sheet {
   background:#FFFFFF; width:100%; max-width:500px;
-  max-height:95vh; border-radius:8px 8px 0 0;
-  overflow-y:auto; animation:slideUp 0.3s ease;
+  height:100vh; max-height:100vh; border-radius:0;
+  overflow-y:auto; -webkit-overflow-scrolling:touch;
+  animation:slideUp 0.3s ease;
   box-shadow:0 -4px 30px rgba(0,0,0,0.15);
 }
 @keyframes slideUp { from { transform:translateY(100%); } }
@@ -277,11 +278,12 @@ body {
 .modal-btn.primary:hover { background:var(--gold-light); }
 .modal-btn.secondary { background:#FDF6EC; color:#2C5F6E; border:1px solid #E5E7EB; }
 .modal-close {
-  position:absolute; top:12px; left:12px;
-  width:36px; height:36px; border-radius:50%;
-  background:rgba(0,0,0,0.5); border:none;
-  color:white; font-size:1.2rem; cursor:pointer;
+  position:fixed; top:12px; left:12px;
+  width:40px; height:40px; border-radius:50%;
+  background:rgba(0,0,0,0.7); border:none;
+  color:white; font-size:1.3rem; cursor:pointer;
   display:flex; align-items:center; justify-content:center;
+  z-index:1000;
 }
 
 /* ===== BOTTOM NAV ===== */
