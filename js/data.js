@@ -227,6 +227,10 @@ const DEFAULT_DATA = {
     { id:254, name:"שיט דהאו על הקריק", nameEn:"Dhow Cruise Dubai Creek", category:"attractions", subcategory:"tour", description:"שיט בסירת עץ מסורתית על נחל דובאי — אווירה רומנטית, ארוחת ערב והופעה.", image:"images/attractions/254.jpg", rating:4.6, price:"$$", priceRange:"₪250-450", address:"Dubai Creek, Deira", lat:25.2633, lng:55.2975, tags:["סיור","סירה","מסורתי"], featured:true },
     { id:255, name:"שיט יאכטה במרינה", nameEn:"Marina Yacht Cruise", category:"attractions", subcategory:"tour", description:"שיט יאכטה פרטית במרינה — חוף Bluewaters, פאלם וברג׳ אל-ערב מהמים. כולל ברביקיו.", image:"images/attractions/255.jpg", rating:4.7, price:"$$$$", priceRange:"₪400-1,500", address:"Dubai Marina", lat:25.0820, lng:55.1410, tags:["סיור","יאכטה","ים"], featured:true },
 
+    // === JUDAISM ===
+    { id:256, name:"בית הכנסת JCC UAE", nameEn:"Jewish Community Center UAE", category:"attractions", subcategory:"judaism", description:"מרכז קהילתי יהודי ובית כנסת אורתודוקסי פעיל בדובאי בהובלת הרב לוי דוכמן. תפילות, בר/בת מצווה, אירועים. מסעדה כשרה במקום.", image:"images/attractions/256.jpg", rating:4.9, price:"חינם", priceRange:"חינם", address:"Villa Centro, Umm Suqeim", lat:25.1500, lng:55.2100, tags:["יהדות","בית כנסת","קהילה"], featured:true },
+    { id:257, name:"בית האברהם", nameEn:"Abrahamic Family House", category:"attractions", subcategory:"judaism", description:"מתחם בין-דתי באבו דאבי הכולל בית כנסת (Moses Ben Maimon), כנסייה ומסגד. נפתח 2023 כסמל לסובלנות. בית הכנסת הראשון שנבנה בארה״ב מ-1958.", image:"images/attractions/257.jpg", rating:4.8, price:"חינם", priceRange:"חינם", address:"Saadiyat Island, Abu Dhabi", lat:24.5304, lng:54.4031, tags:["יהדות","בין-דתי","אבו דאבי"], featured:true },
+
     // === LANDMARK ===
     { id:242, name:"Ain Dubai (גלגל ענק)", nameEn:"Ain Dubai", category:"attractions", subcategory:"landmark", description:"הגלגל הענק הגבוה בעולם (250 מ׳) על אי בלוווטרס. תצפית פנורמית של 38 דקות לכל הסיבוב, נוף לפאלם ולקו הרקיע של דובאי.", image:"images/attractions/242.jpg", rating:4.6, price:"$$", priceRange:"₪130-500", address:"Bluewaters Island", lat:25.0797, lng:55.1193, tags:["ציון דרך","תצפית","גלגל ענק"], featured:true },
 
@@ -384,7 +388,7 @@ const PRACTICAL_INFO = {
   ]
 };
 
-const DB_VERSION = 165;
+const DB_VERSION = 166;
 function getDB() {
   const ver = localStorage.getItem(DB_KEY + '_ver');
   if (ver && Number(ver) >= DB_VERSION) {
