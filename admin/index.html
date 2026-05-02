@@ -281,81 +281,23 @@
     `;
   }
 
-  // ===== FILES (GitHub Contents API) =====
-  const GH_OWNER = 'krispelitzik-ofaqim';
-  const GH_REPO = 'wellcomedubai.com';
-  const GH_PATHS = { images: 'images/uploads', audio: 'assets/audio' };
-
-  function ghToken() { return localStorage.getItem('gh_pat') || ''; }
-  function ghHeaders() {
-    return { 'Authorization': 'token ' + ghToken(), 'Accept': 'application/vnd.github+json' };
-  }
-  async function ghList(path) {
-    const r = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${path}`, { headers: ghHeaders() });
-    if (r.status === 404) return [];
-    if (!r.ok) throw new Error('list ' + r.status);
-    return r.json();
-  }
-  async function ghPut(path, base64, message) {
-    const existing = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${path}`, { headers: ghHeaders() }).then(r => r.ok ? r.json() : null);
-    const body = { message: message || ('upload ' + path), content: base64 };
-    if (existing && existing.sha) body.sha = existing.sha;
-    const r = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${path}`, { method: 'PUT', headers: { ...ghHeaders(), 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
-    if (!r.ok) { const t = await r.text(); throw new Error('upload ' + r.status + ': ' + t); }
-    return r.json();
-  }
-  async function ghDelete(path, sha) {
-    const r = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${path}`, { method: 'DELETE', headers: { ...ghHeaders(), 'Content-Type': 'application/json' }, body: JSON.stringify({ message: 'delete ' + path, sha }) });
-    if (!r.ok) throw new Error('delete ' + r.status);
-    return r.json();
-  }
-  function fileToBase64(file) {
-    return new Promise((resolve, reject) => {
-      const r = new FileReader();
-      r.onload = () => resolve(r.result.split(',')[1]);
-      r.onerror = reject;
-      r.readAsDataURL(file);
-    });
-  }
-  function safeName(name) {
-    return name.normalize('NFKD').replace(/[^\w.\-]+/g, '_');
-  }
-
+  // ===== FILES (read-only listing of admin/files folder) =====
   let _filesTab = 'images';
 
   async function renderFilesSection() {
     const content = document.getElementById('adminContent');
-    if (!ghToken()) {
-      content.innerHTML = `
-        <div class="admin-header"><h2><i class="fas fa-folder-open"></i> קבצים</h2></div>
-        <div style="background:#fff;border-radius:10px;padding:24px;max-width:560px;">
-          <h3 style="color:#2C5F6E;margin:0 0 8px;">חיבור ל-GitHub (חד-פעמי)</h3>
-          <p style="color:#6B7F8D;font-size:0.85rem;line-height:1.6;margin:0 0 14px;">
-            כדי להעלות קבצים ישירות לאתר, צריך GitHub Personal Access Token.<br>
-            1. לחץ <a href="https://github.com/settings/tokens/new?scopes=repo&description=WellCome%20Dubai%20Admin" target="_blank" style="color:#E76F51;font-weight:700;">כאן ליצירת טוקן</a> (סקופ: repo)<br>
-            2. העתק את הטוקן (מתחיל ב-ghp_)<br>
-            3. הדבק כאן ושמור.
-          </p>
-          <input type="password" id="patInput" placeholder="ghp_..." style="width:100%;padding:11px;border:1px solid #E5E7EB;border-radius:8px;font-family:monospace;direction:ltr;margin-bottom:10px;">
-          <button onclick="saveGhToken()" style="background:#E76F51;color:#fff;border:none;padding:11px 22px;border-radius:8px;font-family:Heebo;font-weight:700;cursor:pointer;">שמור טוקן</button>
-          <div id="patErr" style="color:#E76F51;margin-top:10px;font-size:0.85rem;"></div>
-        </div>`;
-      return;
-    }
     content.innerHTML = `
-      <div class="admin-header" style="display:flex;justify-content:space-between;align-items:center;">
-        <h2><i class="fas fa-folder-open"></i> קבצים</h2>
-        <button onclick="clearGhToken()" style="background:#fff;border:1px solid #E5E7EB;color:#6B7F8D;padding:6px 14px;border-radius:6px;font-family:Heebo;cursor:pointer;font-size:0.8rem;">נתק GitHub</button>
+      <div class="admin-header"><h2><i class="fas fa-folder-open"></i> קבצים</h2></div>
+      <div style="background:#FDF6EC;border-right:4px solid #E76F51;padding:12px 16px;border-radius:6px;margin-bottom:14px;font-size:0.85rem;color:#2C5F6E;line-height:1.7;">
+        <b>איך מוסיפים קבצים:</b><br>
+        1. גרור את הקבצים אל תיקייה זו במחשב: <code style="background:#fff;padding:2px 6px;border-radius:3px;">~/Desktop/wellcome-dubai/admin/files/${_filesTab}/</code><br>
+        2. בקש מקלוד "דחף את הקבצים החדשים"<br>
+        3. תוך 1-2 דקות הם יופיעו כאן ובאתר.
       </div>
       <div style="display:flex;gap:8px;margin-bottom:14px;">
         <button onclick="setFilesTab('images')" style="padding:10px 20px;border:none;border-radius:8px;background:${_filesTab==='images'?'#E76F51':'#fff'};color:${_filesTab==='images'?'#fff':'#2C5F6E'};font-family:Heebo;font-weight:700;cursor:pointer;">🖼️ תמונות</button>
         <button onclick="setFilesTab('audio')" style="padding:10px 20px;border:none;border-radius:8px;background:${_filesTab==='audio'?'#2A9D8F':'#fff'};color:${_filesTab==='audio'?'#fff':'#2C5F6E'};font-family:Heebo;font-weight:700;cursor:pointer;">🎵 שמע</button>
-      </div>
-      <div id="dropZone" ondragover="event.preventDefault();this.style.background='#FDF6EC';" ondragleave="this.style.background='#fff';" ondrop="handleDrop(event)" style="background:#fff;border:2px dashed #E5E7EB;border-radius:10px;padding:24px;text-align:center;color:#6B7F8D;margin-bottom:14px;cursor:pointer;" onclick="document.getElementById('fileInput').click()">
-        <i class="fas fa-cloud-upload-alt" style="font-size:1.8rem;color:#E76F51;"></i>
-        <div style="margin-top:8px;font-weight:600;">גרור קבצים לכאן או לחץ לבחירה</div>
-        <div style="font-size:0.78rem;margin-top:4px;opacity:0.7;">${_filesTab === 'images' ? 'JPG / PNG / WebP' : 'MP3 / WAV / M4A'}</div>
-        <input type="file" id="fileInput" accept="${_filesTab === 'images' ? 'image/*' : 'audio/*'}" multiple style="display:none;" onchange="handleFiles(this.files)">
+        <button onclick="refreshFilesList()" style="margin-right:auto;padding:10px 16px;border:1px solid #E5E7EB;border-radius:8px;background:#fff;color:#6B7F8D;font-family:Heebo;font-weight:600;cursor:pointer;"><i class="fas fa-rotate-right"></i> רענן</button>
       </div>
       <div id="uploadStatus" style="margin-bottom:10px;"></div>
       <div id="filesList">טוען...</div>
@@ -363,70 +305,27 @@
     refreshFilesList();
   }
 
-  async function saveGhToken() {
-    const v = document.getElementById('patInput').value.trim();
-    const err = document.getElementById('patErr');
-    err.textContent = '';
-    if (!v.startsWith('ghp_') && !v.startsWith('github_pat_')) { err.textContent = 'הטוקן חייב להתחיל ב-ghp_ או github_pat_'; return; }
-    localStorage.setItem('gh_pat', v);
-    // verify
-    try {
-      const r = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}`, { headers: ghHeaders() });
-      if (!r.ok) throw new Error('בדיקת גישה נכשלה (' + r.status + ')');
-      renderFilesSection();
-    } catch (e) {
-      localStorage.removeItem('gh_pat');
-      err.textContent = e.message;
-    }
-  }
-  function clearGhToken() {
-    if (confirm('לנתק את GitHub?')) { localStorage.removeItem('gh_pat'); renderFilesSection(); }
-  }
   function setFilesTab(t) { _filesTab = t; renderFilesSection(); }
-
-  function handleDrop(e) {
-    e.preventDefault();
-    e.currentTarget.style.background = '#fff';
-    handleFiles(e.dataTransfer.files);
-  }
-
-  async function handleFiles(files) {
-    const status = document.getElementById('uploadStatus');
-    const arr = Array.from(files);
-    for (let i = 0; i < arr.length; i++) {
-      const f = arr[i];
-      const name = safeName(f.name);
-      const path = `${GH_PATHS[_filesTab]}/${name}`;
-      status.innerHTML = `<div style="background:#FDF6EC;padding:10px 14px;border-radius:6px;color:#2C5F6E;">⏳ מעלה ${i+1}/${arr.length}: ${name}</div>`;
-      try {
-        const b64 = await fileToBase64(f);
-        await ghPut(path, b64);
-      } catch (e) {
-        status.innerHTML = `<div style="background:#FEE2E2;padding:10px 14px;border-radius:6px;color:#991B1B;">✗ שגיאה ב-${name}: ${e.message}</div>`;
-        return;
-      }
-    }
-    status.innerHTML = `<div style="background:#D1FAE5;padding:10px 14px;border-radius:6px;color:#065F46;">✓ הועלו ${arr.length} קבצים. האתר יתעדכן תוך 1-2 דקות.</div>`;
-    refreshFilesList();
-  }
 
   async function refreshFilesList() {
     const list = document.getElementById('filesList');
     if (!list) return;
     try {
-      const items = await ghList(GH_PATHS[_filesTab]);
-      const files = items.filter(i => i.type === 'file');
-      if (!files.length) { list.innerHTML = `<div style="text-align:center;color:#6B7F8D;padding:30px;">אין קבצים עדיין</div>`; return; }
+      const r = await fetch('files/index.json?t=' + Date.now());
+      if (!r.ok) throw new Error('index.json לא נמצא');
+      const idx = await r.json();
+      const files = idx[_filesTab] || [];
+      if (!files.length) {
+        list.innerHTML = `<div style="text-align:center;color:#6B7F8D;padding:30px;background:#fff;border-radius:8px;">אין קבצים בתיקייה. גרור קבצים לתיקייה ובקש מקלוד לדחוף.</div>`;
+        return;
+      }
       if (_filesTab === 'images') {
         list.innerHTML = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;">${files.map(f => `
           <div style="background:#fff;border-radius:8px;overflow:hidden;border:1px solid #E5E7EB;">
-            <div style="height:120px;overflow:hidden;background:#F5EFE6;"><img src="${f.download_url}" style="width:100%;height:100%;object-fit:cover;"></div>
+            <div style="height:120px;overflow:hidden;background:#F5EFE6;"><img src="files/images/${encodeURIComponent(f)}" style="width:100%;height:100%;object-fit:cover;"></div>
             <div style="padding:8px;">
-              <div style="font-size:0.72rem;color:#2C5F6E;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${f.name}</div>
-              <div style="display:flex;gap:4px;margin-top:6px;">
-                <button onclick="copyFilePath('${f.path}')" style="flex:1;background:#2A9D8F;color:#fff;border:none;padding:5px;border-radius:4px;font-size:0.65rem;font-family:Heebo;cursor:pointer;">העתק נתיב</button>
-                <button onclick="deleteFile('${f.path}','${f.sha}')" style="background:#FEE2E2;color:#991B1B;border:none;padding:5px 8px;border-radius:4px;font-size:0.65rem;cursor:pointer;">×</button>
-              </div>
+              <div style="font-size:0.72rem;color:#2C5F6E;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${f}</div>
+              <button onclick="copyFilePath('admin/files/images/${f}')" style="width:100%;margin-top:6px;background:#2A9D8F;color:#fff;border:none;padding:5px;border-radius:4px;font-size:0.65rem;font-family:Heebo;cursor:pointer;">העתק נתיב</button>
             </div>
           </div>`).join('')}</div>`;
       } else {
@@ -434,22 +333,15 @@
           <div style="background:#fff;border-radius:8px;padding:10px 12px;border:1px solid #E5E7EB;display:flex;align-items:center;gap:10px;">
             <i class="fas fa-music" style="color:#2A9D8F;font-size:1.2rem;"></i>
             <div style="flex:1;min-width:0;">
-              <div style="font-weight:600;color:#2C5F6E;font-size:0.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${f.name}</div>
-              <audio controls src="${f.download_url}" style="width:100%;margin-top:4px;height:32px;"></audio>
+              <div style="font-weight:600;color:#2C5F6E;font-size:0.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${f}</div>
+              <audio controls src="files/audio/${encodeURIComponent(f)}" style="width:100%;margin-top:4px;height:32px;"></audio>
             </div>
-            <button onclick="copyFilePath('${f.path}')" style="background:#2A9D8F;color:#fff;border:none;padding:6px 10px;border-radius:4px;font-size:0.7rem;font-family:Heebo;cursor:pointer;">העתק</button>
-            <button onclick="deleteFile('${f.path}','${f.sha}')" style="background:#FEE2E2;color:#991B1B;border:none;padding:6px 9px;border-radius:4px;font-size:0.75rem;cursor:pointer;">×</button>
+            <button onclick="copyFilePath('admin/files/audio/${f}')" style="background:#2A9D8F;color:#fff;border:none;padding:6px 10px;border-radius:4px;font-size:0.7rem;font-family:Heebo;cursor:pointer;">העתק</button>
           </div>`).join('')}</div>`;
       }
     } catch (e) {
-      list.innerHTML = `<div style="background:#FEE2E2;padding:14px;border-radius:8px;color:#991B1B;">שגיאה בטעינה: ${e.message}</div>`;
+      list.innerHTML = `<div style="background:#FEE2E2;padding:14px;border-radius:8px;color:#991B1B;">שגיאה: ${e.message}</div>`;
     }
-  }
-
-  async function deleteFile(path, sha) {
-    if (!confirm('למחוק ' + path + '?')) return;
-    try { await ghDelete(path, sha); refreshFilesList(); }
-    catch (e) { alert('שגיאה: ' + e.message); }
   }
 
   function copyFilePath(path) {
