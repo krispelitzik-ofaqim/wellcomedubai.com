@@ -687,7 +687,7 @@ const CATEGORY_TITLE_COLORS = {
   shopping:'#F4A261', nightlife:'#B85C8E', kids:'#E76F51',
   transport:'#2A9D8F', casino:'#E9C46A'
 };
-const VERIFIED_BADGE = '<i class="fas fa-check-circle" title="תמונה מאומתת מויקיפדיה" style="color:#1DA1F2;font-size:0.85em;margin-right:4px;vertical-align:middle;"></i>';
+const VERIFIED_BADGE = '';
 
 function cardHTML(item, category, mini) {
   const rating = item.googleRating || item.rating;
@@ -722,7 +722,6 @@ function cardHTML(item, category, mini) {
     <div class="listing-card" onclick="openDetail('${category}', ${item.id})" style="position:relative;">
       <img class="card-img" src="${item.image}" alt="${item.name}" onerror="this.style.display='none'">
       <button onclick="event.stopPropagation();addToMyTrip('${category}', ${item.id})" title="הוסף לטיול שלי" style="position:absolute;top:8px;left:8px;background:rgba(0,0,0,0.65);color:#E9C46A;border:none;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:0.78rem;display:flex;align-items:center;justify-content:center;z-index:3;box-shadow:0 1px 4px rgba(0,0,0,0.4);">🎒+</button>
-      ${verified ? '<div style="position:absolute;top:8px;right:8px;background:#fff;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 3px rgba(0,0,0,0.3);z-index:2;"><i class="fas fa-check-circle" title="מאומת" style="color:#1DA1F2;font-size:1.1rem;"></i></div>' : ''}
       <div class="card-body">
         <div class="card-title" style="color:#2C5F6E;">${item.name}</div>
         <div class="card-location" style="color:#6B7F8D;"><i class="fas fa-map-marker-alt" style="color:#F4A261;"></i> ${item.address || ''}</div>
