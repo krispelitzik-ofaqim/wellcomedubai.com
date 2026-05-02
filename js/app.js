@@ -1192,7 +1192,6 @@ function ITINERARY_TEMPLATE(it, idx, navUrl) {
           <a href="${navUrl}" target="_blank" style="display:block;text-decoration:none;background:${it.color};color:#fff;text-align:center;padding:10px;font-weight:700;font-size:0.9rem;">
             <i class="fas fa-directions"></i> פתח ניווט ב-Google Maps
           </a>
-          <button onclick="addItineraryToMyTrip(${idx})" style="display:block;width:100%;background:#FDF6EC;color:#E76F51;border:none;border-top:1px solid #F5EFE6;text-align:center;padding:10px;font-weight:700;font-size:0.85rem;cursor:pointer;font-family:Heebo;">📌 הצמד מסלול שלם ל"הטיול שלי"</button>
           <div style="padding:12px 16px;">
             ${it.stops.map((s, i) => {
               const related = findRelatedItems(s.name, 8).filter(r => r.category === 'restaurants').slice(0, 3);
