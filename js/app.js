@@ -83,7 +83,187 @@ function navigateTo(page, subcategory) {
     case 'areas': renderAreasPage(); break;
     case 'info': renderInfoPage(); break;
     case 'near': renderNearMePage(); break;
+    case 'mytrip': renderMyTripPage(); break;
   }
+}
+
+// ===== MY TRIP =====
+const MYTRIP_KEY = 'mytrip_v1';
+function getMyTrip() {
+  try {
+    const raw = localStorage.getItem(MYTRIP_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch(e) {}
+  return { startDate: '', days: 3, items: [] };
+}
+function saveMyTrip(t) { localStorage.setItem(MYTRIP_KEY, JSON.stringify(t)); }
+
+function addToMyTrip(category, id, opts) {
+  const item = getItem(category, id);
+  if (!item) return;
+  const trip = getMyTrip();
+  const entry = {
+    uid: 'i_' + Date.now() + '_' + Math.random().toString(36).slice(2,7),
+    category, id,
+    name: item.nameHe || item.name,
+    image: item.image,
+    address: item.address || '',
+    lat: item.lat, lng: item.lng,
+    day: opts?.day || 1,
+    time: opts?.time || '',
+    note: ''
+  };
+  trip.items.push(entry);
+  saveMyTrip(trip);
+  showTripToast(`✓ נוסף ל"הטיול שלי": ${entry.name}`);
+}
+
+function addItineraryToMyTrip(idx) {
+  const it = (window.ITINERARY_STATES || ITINERARIES)[idx];
+  if (!it) return;
+  const trip = getMyTrip();
+  const day = trip.items.length ? Math.max(...trip.items.map(i => i.day)) + 1 : 1;
+  it.stops.forEach(s => {
+    trip.items.push({
+      uid: 'i_' + Date.now() + '_' + Math.random().toString(36).slice(2,7),
+      category: 'itinerary-stop', id: 0,
+      name: s.name, image: s.image, address: '', lat: s.lat, lng: s.lng,
+      day, time: s.time || '', note: it.title
+    });
+  });
+  saveMyTrip(trip);
+  showTripToast(`✓ נוסף מסלול "${it.title}" כיום ${day} בטיול שלך`);
+}
+
+function showTripToast(msg) {
+  const t = document.createElement('div');
+  t.textContent = msg;
+  t.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#2A9D8F;color:#fff;padding:10px 18px;border-radius:24px;font-family:Heebo;font-size:0.85rem;font-weight:700;z-index:9999;box-shadow:0 4px 12px rgba(0,0,0,0.3);';
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2400);
+}
+
+function removeTripItem(uid) {
+  const trip = getMyTrip();
+  trip.items = trip.items.filter(i => i.uid !== uid);
+  saveMyTrip(trip);
+  renderMyTripPage();
+}
+
+function updateTripItemTime(uid, time) {
+  const trip = getMyTrip();
+  const it = trip.items.find(i => i.uid === uid);
+  if (it) { it.time = time; saveMyTrip(trip); }
+}
+function updateTripItemDay(uid, day) {
+  const trip = getMyTrip();
+  const it = trip.items.find(i => i.uid === uid);
+  if (it) { it.day = parseInt(day) || 1; saveMyTrip(trip); renderMyTripPage(); }
+}
+function updateTripMeta(field, val) {
+  const trip = getMyTrip();
+  if (field === 'days') trip.days = Math.max(1, Math.min(30, parseInt(val) || 1));
+  else trip[field] = val;
+  saveMyTrip(trip);
+  renderMyTripPage();
+}
+function clearMyTrip() {
+  if (!confirm('למחוק את כל הטיול שלי?')) return;
+  saveMyTrip({ startDate: '', days: 3, items: [] });
+  renderMyTripPage();
+}
+
+function onTripDragStart(e, uid) {
+  e.dataTransfer.setData('text/plain', 'trip|' + uid);
+  e.dataTransfer.effectAllowed = 'move';
+}
+function onTripDrop(e, targetDay, targetUid) {
+  e.preventDefault();
+  const parts = (e.dataTransfer.getData('text/plain') || '').split('|');
+  if (parts[0] !== 'trip') return;
+  const srcUid = parts[1];
+  const trip = getMyTrip();
+  const src = trip.items.find(i => i.uid === srcUid);
+  if (!src) return;
+  src.day = targetDay;
+  if (targetUid && targetUid !== srcUid) {
+    const idxSrc = trip.items.indexOf(src);
+    trip.items.splice(idxSrc, 1);
+    const idxTgt = trip.items.findIndex(i => i.uid === targetUid);
+    trip.items.splice(idxTgt, 0, src);
+  }
+  saveMyTrip(trip);
+  renderMyTripPage();
+}
+
+function dateForDay(startDate, dayN) {
+  if (!startDate) return '';
+  const d = new Date(startDate);
+  d.setDate(d.getDate() + (dayN - 1));
+  return d.toLocaleDateString('he-IL', { weekday:'long', day:'2-digit', month:'2-digit' });
+}
+
+function renderMyTripPage() {
+  const page = document.getElementById('page-mytrip');
+  if (!page) return;
+  const trip = getMyTrip();
+  const dayBuckets = {};
+  for (let d = 1; d <= trip.days; d++) dayBuckets[d] = [];
+  trip.items.forEach(i => { (dayBuckets[i.day] || (dayBuckets[i.day] = [])).push(i); });
+  Object.keys(dayBuckets).forEach(d => {
+    dayBuckets[d].sort((a, b) => (a.time || '99').localeCompare(b.time || '99'));
+  });
+  page.innerHTML = `
+    <div class="page-header">
+      <button class="back-btn" onclick="navigateTo('home')"><i class="fas fa-arrow-right"></i></button>
+      <h2><i class="fas fa-suitcase-rolling" style="color:#E76F51;margin-left:6px;"></i> הטיול שלי</h2>
+    </div>
+    <div style="padding:12px 16px 80px;">
+      <div style="background:#fff;border:1px solid #E5E7EB;border-radius:10px;padding:14px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,0.04);">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px;">
+          <div>
+            <label style="font-size:0.75rem;color:#6B7F8D;font-weight:600;">תאריך התחלה</label>
+            <input type="date" value="${trip.startDate || ''}" onchange="updateTripMeta('startDate', this.value)" style="width:100%;padding:8px;border:1px solid #E5E7EB;border-radius:6px;font-family:Heebo;font-size:0.88rem;color:#2C5F6E;box-sizing:border-box;">
+          </div>
+          <div>
+            <label style="font-size:0.75rem;color:#6B7F8D;font-weight:600;">מס׳ ימים</label>
+            <input type="number" min="1" max="30" value="${trip.days}" onchange="updateTripMeta('days', this.value)" style="width:100%;padding:8px;border:1px solid #E5E7EB;border-radius:6px;font-family:Heebo;font-size:0.88rem;color:#2C5F6E;box-sizing:border-box;">
+          </div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;font-size:0.78rem;color:#6B7F8D;">
+          <span>${trip.items.length} פריטים בסך הכל</span>
+          ${trip.items.length ? `<button onclick="clearMyTrip()" style="background:none;border:none;color:#E76F51;font-family:Heebo;font-size:0.78rem;cursor:pointer;font-weight:600;"><i class="fas fa-trash"></i> מחק הכל</button>` : ''}
+        </div>
+      </div>
+      ${!trip.items.length ? `
+        <div style="background:#FDF6EC;border-radius:10px;padding:30px 20px;text-align:center;color:#6B7F8D;">
+          <i class="fas fa-suitcase-rolling" style="font-size:2.5rem;color:#E9C46A;margin-bottom:12px;"></i>
+          <div style="font-size:0.95rem;font-weight:700;color:#2C5F6E;margin-bottom:8px;">הטיול ריק</div>
+          <div style="font-size:0.8rem;line-height:1.6;">לחצו על 🎒+ בכל כרטיס (מלון, מסעדה, אטרקציה, מסלול) כדי להוסיף לטיול.</div>
+        </div>
+      ` : Object.keys(dayBuckets).sort((a,b)=>parseInt(a)-parseInt(b)).map(d => `
+        <div ondragover="event.preventDefault()" ondrop="onTripDrop(event, ${d}, null)" style="background:#fff;border-right:4px solid #E76F51;border-radius:8px;padding:12px;margin-bottom:12px;box-shadow:0 1px 4px rgba(0,0,0,0.05);">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;border-bottom:1px solid #F5EFE6;padding-bottom:8px;">
+            <div style="font-weight:800;color:#2C5F6E;font-size:0.95rem;">📅 יום ${d}</div>
+            <div style="font-size:0.72rem;color:#6B7F8D;">${dateForDay(trip.startDate, parseInt(d))} · ${dayBuckets[d].length} פריטים</div>
+          </div>
+          ${dayBuckets[d].length ? dayBuckets[d].map(it => `
+            <div draggable="true" ondragstart="onTripDragStart(event, '${it.uid}')" ondragover="event.preventDefault()" ondrop="onTripDrop(event, ${d}, '${it.uid}')" style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid #F5EFE6;align-items:center;">
+              <i class="fas fa-grip-vertical" style="color:#bbb;cursor:grab;font-size:0.85rem;"></i>
+              ${it.image ? `<img src="${it.image}" style="width:44px;height:44px;border-radius:6px;object-fit:cover;flex-shrink:0;" onerror="this.style.display='none'">` : ''}
+              <div style="flex:1;min-width:0;">
+                <div style="font-weight:700;color:#2C5F6E;font-size:0.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${it.name}</div>
+                ${it.address || it.note ? `<div style="font-size:0.7rem;color:#6B7F8D;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${it.note ? '🗺️ ' + it.note : ''} ${it.address ? '· ' + it.address : ''}</div>` : ''}
+              </div>
+              <input type="time" value="${it.time || ''}" onchange="updateTripItemTime('${it.uid}', this.value)" style="width:78px;padding:4px;border:1px solid #E5E7EB;border-radius:4px;font-family:Heebo;font-size:0.78rem;flex-shrink:0;">
+              <select onchange="updateTripItemDay('${it.uid}', this.value)" style="padding:4px;border:1px solid #E5E7EB;border-radius:4px;font-family:Heebo;font-size:0.75rem;flex-shrink:0;">${Array.from({length:trip.days},(_,i)=>i+1).map(n=>`<option value="${n}" ${n==it.day?'selected':''}>י${n}</option>`).join('')}</select>
+              <button onclick="removeTripItem('${it.uid}')" style="background:none;border:none;color:#E76F51;cursor:pointer;font-size:0.95rem;flex-shrink:0;"><i class="fas fa-times"></i></button>
+            </div>
+          `).join('') : `<div style="text-align:center;color:#9CA3AF;font-size:0.78rem;padding:14px;">אין פריטים ביום זה — גררו לכאן או הוסיפו מהקטגוריות</div>`}
+        </div>
+      `).join('')}
+    </div>
+  `;
 }
 
 // ===== NEAR ME =====
@@ -522,7 +702,8 @@ function cardHTML(item, category, mini) {
     const fontRate = mini ? '0.65rem' : '0.8rem';
     const pad = mini ? 6 : 10;
     return `
-      <div style="min-width:${w}px;width:${w}px;scroll-snap-align:start;background:#fff;border-radius:6px;overflow:hidden;cursor:pointer;border:1px solid #E5E7EB;box-shadow:0 2px 8px rgba(0,0,0,0.06);" onclick="openDetail('${category}', ${item.id})">
+      <div style="min-width:${w}px;width:${w}px;scroll-snap-align:start;background:#fff;border-radius:6px;overflow:hidden;cursor:pointer;border:1px solid #E5E7EB;box-shadow:0 2px 8px rgba(0,0,0,0.06);position:relative;" onclick="openDetail('${category}', ${item.id})">
+        <button onclick="event.stopPropagation();addToMyTrip('${category}', ${item.id})" title="הוסף לטיול שלי" style="position:absolute;top:6px;right:6px;background:rgba(0,0,0,0.65);color:#E9C46A;border:none;width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:0.75rem;display:flex;align-items:center;justify-content:center;z-index:3;box-shadow:0 1px 4px rgba(0,0,0,0.4);">🎒+</button>
         <div style="width:${w}px;height:${w}px;overflow:hidden;position:relative;">
           <img src="${item.image}" alt="${item.name}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'">
           ${item.subcategory ? `<div style="position:absolute;top:6px;left:6px;background:${CATEGORY_TITLE_COLORS[category] || 'rgba(0,0,0,0.65)'};color:#fff;padding:${mini ? '2px 7px' : '3px 9px'};border-radius:10px;font-size:${mini ? '0.6rem' : '0.7rem'};font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,0.3);">${subcategoryHe(item.subcategory)}</div>` : ''}
@@ -540,6 +721,7 @@ function cardHTML(item, category, mini) {
   return `
     <div class="listing-card" onclick="openDetail('${category}', ${item.id})" style="position:relative;">
       <img class="card-img" src="${item.image}" alt="${item.name}" onerror="this.style.display='none'">
+      <button onclick="event.stopPropagation();addToMyTrip('${category}', ${item.id})" title="הוסף לטיול שלי" style="position:absolute;top:8px;left:8px;background:rgba(0,0,0,0.65);color:#E9C46A;border:none;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:0.78rem;display:flex;align-items:center;justify-content:center;z-index:3;box-shadow:0 1px 4px rgba(0,0,0,0.4);">🎒+</button>
       ${verified ? '<div style="position:absolute;top:8px;right:8px;background:#fff;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 3px rgba(0,0,0,0.3);z-index:2;"><i class="fas fa-check-circle" title="מאומת" style="color:#1DA1F2;font-size:1.1rem;"></i></div>' : ''}
       <div class="card-body">
         <div class="card-title" style="color:#2C5F6E;">${item.name}</div>
@@ -731,9 +913,10 @@ async function renderItinerariesPage() {
       <button class="back-btn" onclick="navigateTo('home')"><i class="fas fa-arrow-right"></i></button>
       <h2><i class="fas fa-route" style="color:#E9C46A;margin-left:6px;"></i> מסלולים מוכנים</h2>
     </div>
-    <div style="display:flex;gap:8px;padding:10px 16px 0;">
-      <button onclick="switchItinView('day')" style="flex:1;padding:10px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.88rem;cursor:pointer;border:1px solid ${view==='day'?'#E9C46A':'#E5E7EB'};background:${view==='day'?'#E9C46A':'#fff'};color:${view==='day'?'#2C5F6E':'#6B7F8D'};">📅 מסלולי יום</button>
-      <button onclick="switchItinView('star')" style="flex:1;padding:10px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.88rem;cursor:pointer;border:1px solid ${view==='star'?'#E9C46A':'#E5E7EB'};background:${view==='star'?'#E9C46A':'#fff'};color:${view==='star'?'#2C5F6E':'#6B7F8D'};">🌟 טיולי כוכב</button>
+    <div style="display:flex;gap:6px;padding:10px 16px 0;">
+      <button onclick="switchItinView('day')" style="flex:1;padding:9px 4px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.78rem;cursor:pointer;border:1px solid ${view==='day'?'#E9C46A':'#E5E7EB'};background:${view==='day'?'#E9C46A':'#fff'};color:${view==='day'?'#2C5F6E':'#6B7F8D'};">📅 מסלולי יום</button>
+      <button onclick="switchItinView('star')" style="flex:1;padding:9px 4px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.78rem;cursor:pointer;border:1px solid ${view==='star'?'#E9C46A':'#E5E7EB'};background:${view==='star'?'#E9C46A':'#fff'};color:${view==='star'?'#2C5F6E':'#6B7F8D'};">🌟 טיולי כוכב</button>
+      <button onclick="navigateTo('mytrip')" style="flex:1;padding:9px 4px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.78rem;cursor:pointer;border:1px solid #E76F51;background:#E76F51;color:#fff;">🎒 הטיול שלי</button>
     </div>
     <div style="padding:12px 16px 80px;">
       ${view === 'day' ? `
@@ -949,6 +1132,7 @@ function ITINERARY_TEMPLATE(it, idx, navUrl) {
           <a href="${navUrl}" target="_blank" style="display:block;text-decoration:none;background:${it.color};color:#fff;text-align:center;padding:10px;font-weight:700;font-size:0.9rem;">
             <i class="fas fa-directions"></i> פתח ניווט ב-Google Maps
           </a>
+          <button onclick="addItineraryToMyTrip(${idx})" style="display:block;width:100%;background:#FDF6EC;color:#E76F51;border:none;border-top:1px solid #F5EFE6;text-align:center;padding:10px;font-weight:700;font-size:0.85rem;cursor:pointer;font-family:Heebo;">🎒 הוסף מסלול שלם ל"הטיול שלי"</button>
           <div style="padding:12px 16px;">
             ${it.stops.map((s, i) => {
               const related = findRelatedItems(s.name, 8).filter(r => r.category === 'restaurants').slice(0, 3);
@@ -1890,6 +2074,7 @@ function cardGridHTML(item, category) {
   const verified = isVerifiedImage(item, category);
   return `
         <div style="background:#fff;border-radius:6px;overflow:hidden;border:1px solid #E5E7EB;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,0.05);position:relative;" onclick="openDetail('${category}', ${item.id})">
+          <button onclick="event.stopPropagation();addToMyTrip('${category}', ${item.id})" title="הוסף לטיול שלי" style="position:absolute;top:10px;right:10px;background:rgba(0,0,0,0.7);color:#E9C46A;border:none;width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:0.85rem;display:flex;align-items:center;justify-content:center;z-index:3;box-shadow:0 2px 6px rgba(0,0,0,0.4);">🎒+</button>
           <div style="position:relative;">
             <img src="${item.image}" alt="${item.name}" style="width:100%;height:220px;object-fit:cover;" onerror="this.style.display='none'">
             ${item.subcategory ? `<div style="position:absolute;top:8px;left:8px;background:${CATEGORY_TITLE_COLORS[category] || 'rgba(0,0,0,0.65)'};color:#fff;padding:4px 11px;border-radius:12px;font-size:0.75rem;font-weight:700;box-shadow:0 1px 4px rgba(0,0,0,0.35);">${subcategoryHe(item.subcategory)}</div>` : ''}
@@ -2565,6 +2750,7 @@ function openDetail(category, id) {
         ` : ''}
         ${reviewsHTML(item)}
         ${item.lat ? `<div class="map-container" style="margin:0 0 12px;height:220px;"><div id="detailMap" style="width:100%;height:100%;"></div></div>${nearMeToggleHTML()}` : ''}
+        <button onclick="addToMyTrip('${category}', ${item.id})" style="width:100%;background:#E76F51;color:#fff;border:none;padding:12px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.95rem;cursor:pointer;margin-bottom:10px;">🎒 הוסף ל"הטיול שלי"</button>
         <div class="modal-actions" style="flex-wrap:wrap;">
           ${item.lat ? `<button class="modal-btn primary" onclick="openNavigation(${item.lat},${item.lng})"><i class="fas fa-directions"></i> נווט</button>` : ''}
           ${item.googleUrl ? `<a href="${item.googleUrl}" target="_blank" class="modal-btn secondary"><i class="fab fa-google"></i> Google Maps</a>` : ''}
