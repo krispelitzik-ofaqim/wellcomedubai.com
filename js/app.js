@@ -464,7 +464,25 @@ function renderHome() {
 
   // Load live widgets
   loadWeatherWidget();
+  loadInlineWeatherBanner();
   loadCurrencyWidget();
+}
+
+async function loadInlineWeatherBanner() {
+  const el = document.getElementById('weatherInlineBanner');
+  if (!el) return;
+  try {
+    const w = await getDubaiWeather();
+    if (!w) return;
+    el.innerHTML = `
+      <div style="font-size:2rem;line-height:1;">${w.icon}</div>
+      <div style="flex:1;">
+        <div style="color:#fff;font-weight:800;font-size:0.92rem;">מזג אויר בדובאי</div>
+        <div style="color:#fff;font-size:1.4rem;font-weight:800;line-height:1.1;margin-top:2px;">${w.temp}°C</div>
+        <div style="color:rgba(255,255,255,0.9);font-size:0.7rem;margin-top:1px;">${w.condition} · מרגיש ${w.feelsLike}°</div>
+      </div>
+    `;
+  } catch(e) {}
 }
 
 function isVerifiedImage(item, category) {
