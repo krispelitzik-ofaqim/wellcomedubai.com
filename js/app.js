@@ -1761,8 +1761,8 @@ function renderCurrencyPage() {
   if (!page) return;
   _curState = { rates:null, amount:'', from:'ILS', lastUpdate:'', loading:true };
   page.innerHTML = `
-    <div style="background:linear-gradient(160deg,#E76F51,#F4A261);min-height:100vh;color:#fff;padding:20px 18px 40px;">
-      <button onclick="navigateTo('home')" style="position:absolute;top:18px;right:18px;width:36px;height:36px;border-radius:18px;background:rgba(0,0,0,0.2);border:none;color:#fff;font-size:1.1rem;cursor:pointer;z-index:5;">×</button>
+    <div style="background:linear-gradient(160deg,#E76F51,#F4A261);min-height:100vh;color:#fff;padding:20px 18px 40px;position:relative;">
+      <button onclick="navigateTo('home')" style="position:fixed;top:14px;right:14px;width:42px;height:42px;border-radius:50%;background:rgba(0,0,0,0.55);border:2px solid rgba(255,255,255,0.4);color:#fff;font-size:1.3rem;font-weight:700;cursor:pointer;z-index:9999;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,0,0,0.3);">✕</button>
       <div style="text-align:center;margin-top:6px;">
         <div style="font-size:1.7rem;font-weight:800;">המרת מטבעות</div>
         <div style="font-size:0.85rem;opacity:0.85;margin-top:2px;">שערים מתעדכנים בזמן אמת</div>
