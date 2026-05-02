@@ -823,7 +823,19 @@ function buildStarHubMap(h, size = '600x300') {
   return `https://maps.googleapis.com/maps/api/staticmap?size=${size}&maptype=roadmap&language=en&${centerMarker}&${spokeMarkers}&${paths}&key=AIzaSyDIqkbn9__0EdYjyCRQv4w-Gi3tHWwSwro`;
 }
 
-function renderStarHub(h, idx) {
+let STAR_HUB_STATES = null;
+function getStarHub(idx) {
+  if (!STAR_HUB_STATES) STAR_HUB_STATES = JSON.parse(JSON.stringify(STAR_HUBS));
+  return STAR_HUB_STATES[idx];
+}
+
+function renderStarHub(h0, idx) {
+  const h = getStarHub(idx) || h0;
+  return `<div id="star-card-${idx}">${renderStarHubInner(h, idx)}</div>`;
+}
+
+function renderStarHubInner(h, idx) {
+  const albumKey = 'star-' + idx;
   return `
     <div style="background:#fff;border:1px solid #E5E7EB;border-radius:10px;overflow:hidden;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,0.04);">
       <div style="background:${h.color};color:#fff;padding:12px 16px;display:flex;align-items:center;gap:10px;">
@@ -832,22 +844,60 @@ function renderStarHub(h, idx) {
           <div style="font-weight:800;font-size:1rem;line-height:1.2;">🌟 ${h.name}</div>
           <div style="font-size:0.72rem;opacity:0.92;margin-top:2px;">${h.spokes.length} זרועות</div>
         </div>
+        ${(() => { const r = parseInt(localStorage.getItem(`star-rating-${idx}`) || '0'); return r ? `<div style="background:rgba(0,0,0,0.25);color:#E9C46A;font-size:0.85rem;padding:3px 8px;border-radius:10px;letter-spacing:1px;">${'★'.repeat(r)}${'☆'.repeat(5-r)}</div>` : ''; })()}
       </div>
       <div style="height:240px;background:#F5F5F5;">
         <img src="${buildStarHubMap(h, '600x300')}" alt="כוכב ${h.name}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none'">
       </div>
       <div style="padding:12px 14px;color:#2C5F6E;font-size:0.85rem;line-height:1.6;background:#FDF6EC;border-bottom:1px solid #F5EFE6;">${h.desc}</div>
-      <div style="padding:10px 14px;">
+      <div style="padding:6px 14px 10px;">
+        <div style="font-size:0.72rem;color:#6B7F8D;padding:4px 0 6px;">💡 גררו את הזרועות (⋮⋮) לסדר אישי</div>
         ${h.spokes.map((s, i) => `
-          <div style="display:flex;align-items:center;gap:10px;padding:7px 0;${i < h.spokes.length-1 ? 'border-bottom:1px solid #F5EFE6;' : ''}">
+          <div draggable="true" ondragstart="onStarSpokeDragStart(event, ${idx}, ${i})" ondragover="event.preventDefault()" ondrop="onStarSpokeDrop(event, ${idx}, ${i})" style="display:flex;align-items:center;gap:10px;padding:7px 0;${i < h.spokes.length-1 ? 'border-bottom:1px solid #F5EFE6;' : ''}">
+            <i class="fas fa-grip-vertical" style="color:#bbb;cursor:grab;font-size:0.85rem;"></i>
             <div style="background:${h.color};color:#fff;border-radius:50%;width:22px;height:22px;font-size:0.72rem;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;">${i+1}</div>
             <div style="flex:1;color:#2C5F6E;font-size:0.85rem;">${s.name}</div>
             <a href="https://www.google.com/maps/dir/?api=1&origin=${h.center.lat},${h.center.lng}&destination=${s.lat},${s.lng}&travelmode=walking" target="_blank" style="color:${h.color};font-size:0.78rem;text-decoration:none;font-weight:600;"><i class="fas fa-walking"></i> נווט</a>
           </div>
         `).join('')}
       </div>
+      ${(() => {
+        const saved = parseInt(localStorage.getItem(`star-rating-${idx}`) || '0');
+        return `
+        <div style="background:#FDF6EC;padding:14px 16px;text-align:center;border-top:1px solid #F5EFE6;">
+          <div style="font-size:0.9rem;color:#2C5F6E;font-weight:700;margin-bottom:8px;">איך היה הכוכב?</div>
+          <div style="display:flex;gap:8px;justify-content:center;">
+            ${[1,2,3,4,5].map(n => `<i class="fas fa-star" onclick="rateStarHub(${idx}, ${n})" style="font-size:1.6rem;color:${n <= saved ? '#E9C46A' : '#E5E7EB'};cursor:pointer;transition:color 0.2s;"></i>`).join('')}
+          </div>
+          ${saved ? `<div style="font-size:0.7rem;color:#6B7F8D;margin-top:6px;">הדירוג שלך: ${saved}/5 ⭐</div>` : '<div style="font-size:0.7rem;color:#6B7F8D;margin-top:6px;">לחצו על כוכב כדי לדרג</div>'}
+        </div>`;
+      })()}
+      ${renderAlbumSection(albumKey)}
     </div>
   `;
+}
+
+function rateStarHub(idx, n) {
+  localStorage.setItem(`star-rating-${idx}`, String(n));
+  const card = document.getElementById(`star-card-${idx}`);
+  if (card) card.innerHTML = renderStarHubInner(getStarHub(idx), idx);
+}
+
+function onStarSpokeDragStart(e, idx, spokeIdx) {
+  e.dataTransfer.setData('text/plain', `star|${idx}|${spokeIdx}`);
+  e.dataTransfer.effectAllowed = 'move';
+}
+function onStarSpokeDrop(e, idx, targetIdx) {
+  e.preventDefault();
+  const parts = (e.dataTransfer.getData('text/plain') || '').split('|');
+  if (parts[0] !== 'star') return;
+  const sIdx = parseInt(parts[1]), spokeIdx = parseInt(parts[2]);
+  if (sIdx !== idx || spokeIdx === targetIdx) return;
+  const h = getStarHub(idx);
+  const [m] = h.spokes.splice(spokeIdx, 1);
+  h.spokes.splice(targetIdx, 0, m);
+  const card = document.getElementById(`star-card-${idx}`);
+  if (card) card.innerHTML = renderStarHubInner(h, idx);
 }
 
 function renderItineraryCard(it, idx) {
