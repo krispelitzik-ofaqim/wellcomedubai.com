@@ -212,9 +212,8 @@ function renderNearList(myLat, myLng) {
         <div style="flex:1;padding:10px 12px 10px 0;display:flex;flex-direction:column;justify-content:center;min-width:0;">
           <div style="font-weight:700;color:#2C5F6E;font-size:0.92rem;line-height:1.2;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${it.nameHe || it.name}</div>
           <div style="color:#6B7F8D;font-size:0.72rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"><i class="fas fa-map-marker-alt" style="color:${cat.color};font-size:0.65rem;margin-left:4px;"></i>${it.address || ''}</div>
-          <div style="display:flex;gap:8px;margin-top:5px;align-items:center;">
+          <div style="margin-top:5px;">
             <span style="background:${cat.color};color:#fff;padding:2px 8px;border-radius:10px;font-size:0.65rem;font-weight:700;">${it._dist.toFixed(1)} ק"מ</span>
-            ${it.rating ? `<span style="color:#E9C46A;font-size:0.7rem;font-weight:600;"><i class="fas fa-star"></i> ${it.rating}</span>` : ''}
           </div>
         </div>
       </div>`;
@@ -443,10 +442,6 @@ function cardHTML(item, category, mini) {
         <div style="padding:${pad}px;">
           <div style="font-weight:600;color:#2C5F6E;font-size:${fontTitle};margin-bottom:2px;">${item.nameEn || item.name}</div>
           <div style="font-size:${fontMeta};color:#6B7F8D;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"><i class="fas fa-map-marker-alt" style="color:#F4A261;"></i> ${item.address || ''}</div>
-          <div style="display:flex;align-items:center;justify-content:space-between;">
-            <span style="color:#E9C46A;font-size:${fontRate};font-weight:600;"><i class="fas fa-star"></i> ${rating || '-'}</span>
-            <span style="color:#E76F51;font-size:${fontMeta};font-weight:500;">${item.price || ''}</span>
-          </div>
           ${item.isOpen === true && !mini ? '<div style="color:#2A9D8F;font-size:0.65rem;font-weight:600;margin-top:3px;">● פתוח</div>' : ''}
         </div>
       </div>`;
@@ -461,13 +456,7 @@ function cardHTML(item, category, mini) {
         <div class="card-title" style="color:#2C5F6E;">${item.name}</div>
         <div class="card-location" style="color:#6B7F8D;"><i class="fas fa-map-marker-alt" style="color:#F4A261;"></i> ${item.address || ''}</div>
         ${item.stars ? `<div style="color:#E9C46A;font-size:0.75rem;margin-bottom:4px;">${'★'.repeat(item.stars)}</div>` : ''}
-        <div class="card-footer">
-          <span class="card-rating" style="color:#E9C46A;">
-            <i class="fas fa-star"></i> ${rating || '-'}
-            ${reviews ? `<span style="color:#6B7F8D;font-size:0.7rem;">(${reviews})</span>` : ''}
-          </span>
-          <span class="card-price" style="color:#E76F51;">${item.priceRange || item.price || ''}</span>
-        </div>
+        ${item.priceRange ? `<div style="color:#E76F51;font-size:0.75rem;font-weight:500;margin-top:4px;">${item.priceRange}</div>` : ''}
         ${item.isOpen === true ? '<div style="color:#2A9D8F;font-size:0.7rem;font-weight:600;margin-top:4px;">● פתוח עכשיו</div>' : ''}
       </div>
     </div>`;
@@ -1568,10 +1557,7 @@ function cardGridHTML(item, category) {
             <div style="font-weight:600;color:#2C5F6E;font-size:0.85rem;margin-bottom:3px;">${item.nameEn || item.name}</div>
             ${item.stars ? `<div style="color:#E9C46A;font-size:0.7rem;margin-bottom:3px;">${'★'.repeat(Math.min(item.stars,5))}${item.stars > 5 ? '+' : ''}</div>` : ''}
             <div style="font-size:0.7rem;color:#6B7F8D;margin-bottom:4px;"><i class="fas fa-map-marker-alt" style="color:#F4A261;font-size:0.6rem;"></i> ${item.address || ''}</div>
-            <div style="display:flex;align-items:center;justify-content:space-between;">
-              ${item.rating ? `<span style="color:#E9C46A;font-size:0.75rem;font-weight:600;"><i class="fas fa-star"></i> ${item.googleRating || item.rating}</span>` : ''}
-              <span style="color:#E76F51;font-size:0.65rem;font-weight:600;">${item.priceRange || item.price || ''}</span>
-            </div>
+            ${item.priceRange ? `<div style="color:#E76F51;font-size:0.7rem;font-weight:600;margin-top:2px;">${item.priceRange}</div>` : ''}
             ${item.isOpen === true ? '<div style="color:#2A9D8F;font-size:0.6rem;font-weight:600;margin-top:3px;">● פתוח</div>' : ''}
             <div style="display:flex;gap:6px;margin-top:6px;">
               ${item.lat ? `<a onclick="event.stopPropagation();openInFrame('https://www.google.com/maps?q=${item.lat},${item.lng}','${item.name.replace(/'/g,"\\'")} - מפה')" style="flex:1;padding:5px;border-radius:4px;border:none;background:#E76F51;color:#fff;font-size:0.65rem;text-align:center;text-decoration:none;font-family:Heebo;cursor:pointer;"><i class="fas fa-map-pin"></i> איפה זה</a>` : ''}
