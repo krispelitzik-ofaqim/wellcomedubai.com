@@ -392,7 +392,7 @@ function showSearchResults(query) {
         <div class="card-desc">${item.description?.substring(0, 60)}...</div>
         <div class="card-meta">
           ${item.rating ? `<span class="card-rating"><i class="fas fa-star"></i> ${item.rating}</span>` : ''}
-          <span class="card-price">${item.price || ''}</span>
+          ${item.category !== 'transport' ? `<span class="card-price">${item.price || ''}</span>` : ''}
         </div>
       </div>
     </div>
@@ -522,7 +522,7 @@ function cardHTML(item, category, mini) {
       <div class="card-body">
         <div class="card-title" style="color:#2C5F6E;">${item.name}</div>
         <div class="card-location" style="color:#6B7F8D;"><i class="fas fa-map-marker-alt" style="color:#F4A261;"></i> ${item.address || ''}</div>
-        ${item.priceRange ? `<div style="color:#E76F51;font-size:0.75rem;font-weight:500;margin-top:4px;">${item.priceRange}</div>` : ''}
+        ${item.priceRange && category !== 'transport' ? `<div style="color:#E76F51;font-size:0.75rem;font-weight:500;margin-top:4px;">${item.priceRange}</div>` : ''}
         ${item.isOpen === true ? '<div style="color:#2A9D8F;font-size:0.7rem;font-weight:600;margin-top:4px;">● פתוח עכשיו</div>' : ''}
       </div>
     </div>`;
@@ -1543,7 +1543,7 @@ function buildGoogleMap(el, zoom, items) {
           <div style="padding:8px 10px;background:${color}15;">
             <b style="color:${color};">${item.name}</b><br>
             <span style="color:#666;font-size:12px;">${item.address||''}</span><br>
-            ${item.rating ? `⭐ ${item.rating} ` : ''}${item.price||''}<br>
+            ${item.rating ? `⭐ ${item.rating} ` : ''}${item.category !== 'transport' ? (item.price||'') : ''}<br>
             <a href="https://www.google.com/maps/dir/?api=1&destination=${item.lat},${item.lng}" target="_blank" style="color:${color};font-weight:600;">🧭 נווט</a>
             &nbsp;|&nbsp;
             <a href="#" onclick="openDetail('${item.category}',${item.id});return false;" style="color:#3B82F6;">📋 פרטים</a>
@@ -1581,7 +1581,7 @@ function buildLeafletMap(el, zoom, items) {
       .addTo(map)
       .bindPopup(`<div style="direction:rtl;font-family:Heebo,sans-serif;">
         <b>${item.name}</b><br>${item.address||''}<br>
-        ${item.rating ? '⭐ '+item.rating : ''} ${item.price||''}<br>
+        ${item.rating ? '⭐ '+item.rating : ''} ${item.category !== 'transport' ? (item.price||'') : ''}<br>
         <a href="https://www.google.com/maps/dir/?api=1&destination=${item.lat},${item.lng}" target="_blank" style="color:#E76F51;font-weight:600;">🧭 נווט בגוגל</a>
       </div>`);
   });
@@ -1627,7 +1627,7 @@ function cardGridHTML(item, category) {
           <div style="padding:10px;">
             <div style="font-weight:600;color:#2C5F6E;font-size:0.85rem;margin-bottom:3px;">${item.nameEn || item.name}</div>
             <div style="font-size:0.7rem;color:#6B7F8D;margin-bottom:4px;"><i class="fas fa-map-marker-alt" style="color:#F4A261;font-size:0.6rem;"></i> ${item.address || ''}</div>
-            ${item.priceRange ? `<div style="color:#E76F51;font-size:0.7rem;font-weight:600;margin-top:2px;">${item.priceRange}</div>` : ''}
+            ${item.priceRange && category !== 'transport' ? `<div style="color:#E76F51;font-size:0.7rem;font-weight:600;margin-top:2px;">${item.priceRange}</div>` : ''}
             ${item.isOpen === true ? '<div style="color:#2A9D8F;font-size:0.6rem;font-weight:600;margin-top:3px;">● פתוח</div>' : ''}
             <div style="display:flex;gap:6px;margin-top:6px;">
               ${item.lat ? `<a onclick="event.stopPropagation();openInFrame('https://www.google.com/maps?q=${item.lat},${item.lng}','${item.name.replace(/'/g,"\\'")} - מפה')" style="flex:1;padding:5px;border-radius:4px;border:none;background:#E76F51;color:#fff;font-size:0.65rem;text-align:center;text-decoration:none;font-family:Heebo;cursor:pointer;"><i class="fas fa-map-pin"></i> איפה זה</a>` : ''}
@@ -2276,7 +2276,7 @@ function openDetail(category, id) {
         <div class="modal-subtitle"><i class="fas fa-map-marker-alt"></i> ${item.address || ''}</div>
         <div style="margin-bottom:12px;">${ratingHTML(item)}</div>
         <div class="modal-stats">
-          ${item.priceRange ? `<div class="modal-stat"><span class="stat-value">${item.price}</span><span class="stat-label">${item.priceRange}</span></div>` : ''}
+          ${item.priceRange && category !== 'transport' ? `<div class="modal-stat"><span class="stat-value">${item.price}</span><span class="stat-label">${item.priceRange}</span></div>` : ''}
           ${item.phone ? `<div class="modal-stat"><span class="stat-value"><i class="fas fa-phone"></i></span><span class="stat-label">${item.phone}</span></div>` : ''}
         </div>
         ${item.hours && item.hours.length ? `
