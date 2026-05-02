@@ -55,6 +55,9 @@
     <button class="admin-nav-item" data-section="files" onclick="showSection('files')">
       <i class="fas fa-folder-open"></i> קבצים
     </button>
+    <button class="admin-nav-item" data-section="recordings" onclick="showSection('recordings')">
+      <i class="fas fa-microphone"></i> הקלטות
+    </button>
     <button class="admin-nav-item" data-section="hotels" onclick="showSection('hotels')">
       <i class="fas fa-hotel"></i> מלונות
     </button>
@@ -114,6 +117,9 @@
       </button>
       <button class="admin-nav-item mobile-nav" data-section="files" onclick="showSection('files');toggleMobileMenu();" style="display:flex;width:100%;padding:14px 20px;font-size:0.95rem;">
         <i class="fas fa-folder-open"></i> קבצים
+      </button>
+      <button class="admin-nav-item mobile-nav" data-section="recordings" onclick="showSection('recordings');toggleMobileMenu();" style="display:flex;width:100%;padding:14px 20px;font-size:0.95rem;">
+        <i class="fas fa-microphone"></i> הקלטות
       </button>
       <button class="admin-nav-item mobile-nav" data-section="hotels" onclick="showSection('hotels');toggleMobileMenu();" style="display:flex;width:100%;padding:14px 20px;font-size:0.95rem;">
         <i class="fas fa-hotel"></i> מלונות
@@ -229,6 +235,8 @@
       renderPreviewSection();
     } else if (section === 'files') {
       renderFilesSection();
+    } else if (section === 'recordings') {
+      renderRecordingsSection();
     } else {
       renderCategorySection(section);
     }
@@ -384,6 +392,173 @@
       const s = document.getElementById('uploadStatus');
       if (s) s.innerHTML = `<div style="background:#D1FAE5;padding:8px 14px;border-radius:6px;color:#065F46;font-size:0.85rem;">✓ הועתק: ${path}</div>`;
     });
+  }
+
+  // ===== RECORDINGS =====
+  let _recScripts = null;
+  let _recAudioFiles = [];
+  const REC_LS_KEY = 'rec_drafts';
+
+  async function renderRecordingsSection() {
+    const content = document.getElementById('adminContent');
+    content.innerHTML = `
+      <div class="admin-header" style="display:flex;justify-content:space-between;align-items:center;">
+        <h2><i class="fas fa-microphone"></i> הקלטות</h2>
+        <button onclick="newRecording()" style="background:#E76F51;color:#fff;border:none;padding:9px 18px;border-radius:8px;font-family:Heebo;font-weight:700;cursor:pointer;"><i class="fas fa-plus"></i> הקלטה חדשה</button>
+      </div>
+      <div style="background:#FDF6EC;border-right:4px solid #E76F51;padding:12px 16px;border-radius:6px;margin-bottom:14px;font-size:0.85rem;color:#2C5F6E;line-height:1.7;">
+        <b>זרימת עבודה:</b> כתוב כאן טקסט להקלטה → הקלט/ייצר MP3 → העלה לקבצים → קשר את הקובץ להקלטה כאן.
+      </div>
+      <div id="recStatus" style="margin-bottom:10px;"></div>
+      <div id="recList">טוען...</div>
+    `;
+    try {
+      const r = await fetch('recordings/scripts.json?t=' + Date.now());
+      const fileScripts = r.ok ? await r.json() : [];
+      const drafts = JSON.parse(localStorage.getItem(REC_LS_KEY) || '[]');
+      const merged = mergeRecordings(fileScripts, drafts);
+      _recScripts = merged;
+    } catch (e) {
+      _recScripts = JSON.parse(localStorage.getItem(REC_LS_KEY) || '[]');
+    }
+    try {
+      const idxR = await fetch('files/index.json?t=' + Date.now());
+      const idx = idxR.ok ? await idxR.json() : { audio: {} };
+      _recAudioFiles = [];
+      Object.entries(idx.audio || {}).forEach(([folder, files]) => {
+        files.forEach(f => _recAudioFiles.push({ path: `admin/files/audio/${folder}/${f}`, label: `${folder}/${f}` }));
+      });
+    } catch (e) { _recAudioFiles = []; }
+    renderRecordingsList();
+  }
+
+  function mergeRecordings(file, drafts) {
+    const map = new Map();
+    file.forEach(s => map.set(s.id, s));
+    drafts.forEach(s => map.set(s.id, { ...map.get(s.id), ...s, _draft: true }));
+    return Array.from(map.values());
+  }
+
+  function renderRecordingsList() {
+    const list = document.getElementById('recList');
+    if (!_recScripts.length) {
+      list.innerHTML = `<div style="text-align:center;color:#6B7F8D;padding:30px;background:#fff;border-radius:8px;">אין הקלטות עדיין. לחץ "+ הקלטה חדשה" להתחיל.</div>`;
+      return;
+    }
+    list.innerHTML = _recScripts.map(s => `
+      <div style="background:#fff;border-radius:8px;padding:14px;margin-bottom:10px;border-right:4px solid ${s.audio ? '#2A9D8F' : '#E9C46A'};">
+        <div style="display:flex;justify-content:space-between;align-items:start;gap:10px;">
+          <div style="flex:1;min-width:0;">
+            <div style="font-weight:700;color:#2C5F6E;font-size:0.95rem;">${s.title}${s._draft ? ' <span style="background:#E9C46A;color:#fff;font-size:0.6rem;padding:2px 6px;border-radius:8px;font-weight:700;">טיוטה</span>' : ''}</div>
+            <div style="color:#6B7F8D;font-size:0.78rem;margin-top:3px;">${s.target ? `📍 ${s.target.label || (s.target.category + ' / ' + s.target.id)}` : '📍 לא מוקצה'}</div>
+            <div style="color:#2C5F6E;font-size:0.82rem;margin-top:8px;line-height:1.5;max-height:60px;overflow:hidden;">${(s.text || '').substring(0, 220)}${(s.text || '').length > 220 ? '...' : ''}</div>
+            ${s.audio ? `<audio controls src="${s.audio.replace('admin/', '')}" style="width:100%;margin-top:8px;height:34px;"></audio>` : `<div style="margin-top:8px;color:#E9C46A;font-size:0.78rem;font-weight:600;">⏺ עדיין לא הוקלט</div>`}
+          </div>
+          <div style="display:flex;flex-direction:column;gap:4px;">
+            <button onclick="editRecording('${s.id}')" style="background:#2A9D8F;color:#fff;border:none;padding:6px 12px;border-radius:6px;font-family:Heebo;font-size:0.75rem;cursor:pointer;font-weight:600;">ערוך</button>
+            <button onclick="deleteRecording('${s.id}')" style="background:#FEE2E2;color:#991B1B;border:none;padding:6px 12px;border-radius:6px;font-family:Heebo;font-size:0.75rem;cursor:pointer;font-weight:600;">מחק</button>
+          </div>
+        </div>
+      </div>
+    `).join('') + (
+      hasUnsavedDrafts() ? `
+        <div style="background:#FEF3C7;border-right:4px solid #E9C46A;padding:12px 16px;border-radius:6px;margin-top:14px;color:#92400E;font-size:0.85rem;">
+          <b>יש טיוטות שלא נשמרו לאתר.</b> תגיד לקלוד: <code style="background:#fff;padding:2px 6px;border-radius:3px;">דחף את ההקלטות</code>
+        </div>` : ''
+    );
+  }
+
+  function hasUnsavedDrafts() { return _recScripts.some(s => s._draft); }
+
+  function newRecording() {
+    const id = 'rec_' + Date.now();
+    openRecordingForm({ id, title: '', text: '', target: null, audio: '' });
+  }
+
+  function editRecording(id) {
+    const s = _recScripts.find(r => r.id === id);
+    if (s) openRecordingForm(s);
+  }
+
+  function openRecordingForm(rec) {
+    const cats = ['hotels','restaurants','attractions','shopping','nightlife','transport','casino','kids'];
+    const catLabel = { hotels:'מלונות', restaurants:'מסעדות', attractions:'אטרקציות', shopping:'קניות', nightlife:'בילויים', transport:'תחבורה', casino:'בידור', kids:'ילדים' };
+    const formModal = document.getElementById('formModal');
+    const formContent = document.getElementById('formContent');
+    formContent.innerHTML = `
+      <h3 style="margin:0 0 16px;color:#2C5F6E;">${rec.title ? 'ערוך הקלטה' : 'הקלטה חדשה'}</h3>
+      <label style="display:block;margin-bottom:6px;font-weight:600;color:#2C5F6E;font-size:0.85rem;">כותרת</label>
+      <input id="recTitle" value="${rec.title || ''}" style="width:100%;padding:10px;border:1px solid #E5E7EB;border-radius:8px;font-family:Heebo;margin-bottom:14px;">
+      <label style="display:block;margin-bottom:6px;font-weight:600;color:#2C5F6E;font-size:0.85rem;">קטגוריה</label>
+      <select id="recCat" onchange="loadItemsForCat(this.value)" style="width:100%;padding:10px;border:1px solid #E5E7EB;border-radius:8px;font-family:Heebo;margin-bottom:14px;">
+        <option value="">— ללא קישור —</option>
+        ${cats.map(c => `<option value="${c}" ${rec.target && rec.target.category === c ? 'selected' : ''}>${catLabel[c]}</option>`).join('')}
+      </select>
+      <label style="display:block;margin-bottom:6px;font-weight:600;color:#2C5F6E;font-size:0.85rem;">פריט ספציפי (אופציונלי)</label>
+      <select id="recItem" style="width:100%;padding:10px;border:1px solid #E5E7EB;border-radius:8px;font-family:Heebo;margin-bottom:14px;">
+        <option value="">— כל הקטגוריה —</option>
+      </select>
+      <label style="display:block;margin-bottom:6px;font-weight:600;color:#2C5F6E;font-size:0.85rem;">קובץ אודיו (אופציונלי)</label>
+      <select id="recAudio" style="width:100%;padding:10px;border:1px solid #E5E7EB;border-radius:8px;font-family:Heebo;margin-bottom:14px;">
+        <option value="">— עדיין לא הוקלט —</option>
+        ${_recAudioFiles.map(a => `<option value="${a.path}" ${rec.audio === a.path ? 'selected' : ''}>${a.label}</option>`).join('')}
+      </select>
+      <label style="display:block;margin-bottom:6px;font-weight:600;color:#2C5F6E;font-size:0.85rem;">טקסט להקלטה</label>
+      <textarea id="recText" rows="8" style="width:100%;padding:10px;border:1px solid #E5E7EB;border-radius:8px;font-family:Heebo;direction:rtl;margin-bottom:18px;">${rec.text || ''}</textarea>
+      <div style="display:flex;gap:8px;justify-content:flex-end;">
+        <button onclick="closeRecForm()" style="background:#fff;border:1px solid #E5E7EB;color:#6B7F8D;padding:10px 22px;border-radius:8px;font-family:Heebo;font-weight:600;cursor:pointer;">בטל</button>
+        <button onclick="saveRecording('${rec.id}')" style="background:#E76F51;color:#fff;border:none;padding:10px 22px;border-radius:8px;font-family:Heebo;font-weight:700;cursor:pointer;">שמור טיוטה</button>
+      </div>
+    `;
+    formModal.classList.add('active');
+    if (rec.target && rec.target.category) loadItemsForCat(rec.target.category, rec.target.id);
+  }
+
+  function loadItemsForCat(cat, selectedId) {
+    const sel = document.getElementById('recItem');
+    if (!cat) { sel.innerHTML = `<option value="">— כל הקטגוריה —</option>`; return; }
+    const items = (DEFAULT_DATA[cat] || []);
+    sel.innerHTML = `<option value="">— כל הקטגוריה —</option>` +
+      items.map(it => `<option value="${it.id}" ${selectedId == it.id ? 'selected' : ''}>${it.id} · ${it.nameHe || it.name}</option>`).join('');
+  }
+
+  function saveRecording(id) {
+    const title = document.getElementById('recTitle').value.trim();
+    const text = document.getElementById('recText').value.trim();
+    const cat = document.getElementById('recCat').value;
+    const itemId = document.getElementById('recItem').value;
+    const audio = document.getElementById('recAudio').value;
+    if (!title) { alert('כותרת חובה'); return; }
+    let target = null;
+    if (cat) {
+      const catLabel = { hotels:'מלונות', restaurants:'מסעדות', attractions:'אטרקציות', shopping:'קניות', nightlife:'בילויים', transport:'תחבורה', casino:'בידור', kids:'ילדים' };
+      target = { category: cat, label: catLabel[cat] };
+      if (itemId) {
+        const item = (DEFAULT_DATA[cat] || []).find(i => String(i.id) === itemId);
+        target.id = parseInt(itemId, 10);
+        if (item) target.label += ' / ' + (item.nameHe || item.name);
+      }
+    }
+    const drafts = JSON.parse(localStorage.getItem(REC_LS_KEY) || '[]');
+    const idx = drafts.findIndex(d => d.id === id);
+    const entry = { id, title, text, target, audio };
+    if (idx >= 0) drafts[idx] = entry; else drafts.push(entry);
+    localStorage.setItem(REC_LS_KEY, JSON.stringify(drafts));
+    closeRecForm();
+    renderRecordingsSection();
+  }
+
+  function deleteRecording(id) {
+    if (!confirm('למחוק?')) return;
+    const drafts = JSON.parse(localStorage.getItem(REC_LS_KEY) || '[]').filter(d => d.id !== id);
+    drafts.push({ id, _deleted: true });
+    localStorage.setItem(REC_LS_KEY, JSON.stringify(drafts));
+    _recScripts = _recScripts.filter(s => s.id !== id);
+    renderRecordingsList();
+  }
+
+  function closeRecForm() {
+    document.getElementById('formModal').classList.remove('active');
   }
 
   // ===== DASHBOARD =====
