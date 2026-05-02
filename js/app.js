@@ -983,15 +983,15 @@ const STAR_HUBS = [
       {name:'Textile Souk', lat:25.2620, lng:55.2980}
     ]
   },
-  { name:'Mall of Emirates', icon:'❄️', color:'#B85C8E', center:{lat:25.1183,lng:55.2002},
-    desc:'הקניון הוותיק עם Ski Dubai, פארק שעשועים מקורה ומסעדות.',
+  { name:'Al Barsha (Mall of Emirates)', icon:'❄️', color:'#B85C8E', center:{lat:25.1183,lng:55.2002},
+    desc:'אזור Al Barsha סביב Mall of Emirates — קניון ענק עם Ski Dubai, מלונות, מסעדות ותחנת מטרו.',
     spokes:[
       {name:'Mall of Emirates', lat:25.1183, lng:55.2002},
-      {name:'Ski Dubai', lat:25.1183, lng:55.2002},
-      {name:'Magic Planet', lat:25.1183, lng:55.2002},
-      {name:'VOX Cinemas', lat:25.1183, lng:55.2002},
-      {name:'Harvey Nichols', lat:25.1183, lng:55.2002},
-      {name:'Apple Store', lat:25.1183, lng:55.2002}
+      {name:'Ski Dubai (בקניון)', lat:25.1175, lng:55.1986},
+      {name:'Mall of Emirates Metro', lat:25.1184, lng:55.2050},
+      {name:'Sheraton Mall of Emirates', lat:25.1160, lng:55.2030},
+      {name:'Holiday Inn Al Barsha', lat:25.1102, lng:55.1980},
+      {name:'Pullman Dubai Mall of Emirates', lat:25.1196, lng:55.2010}
     ]
   }
 ];
@@ -1048,7 +1048,6 @@ function renderStarHubInner(h, idx) {
           </div>
         `).join('')}
       </div>
-      <button onclick="addStarHubToMyTrip(${idx})" style="display:block;width:100%;background:#FDF6EC;color:${h.color};border:none;border-top:1px solid #F5EFE6;text-align:center;padding:10px;font-weight:700;font-size:0.85rem;cursor:pointer;font-family:Heebo;">⭐ הצמד טיול כוכב שלם ל"הטיול שלי"</button>
       ${(() => {
         const saved = parseInt(localStorage.getItem(`star-rating-${idx}`) || '0');
         return `
