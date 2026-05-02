@@ -522,7 +522,6 @@ function cardHTML(item, category, mini) {
       <div class="card-body">
         <div class="card-title" style="color:#2C5F6E;">${item.name}</div>
         <div class="card-location" style="color:#6B7F8D;"><i class="fas fa-map-marker-alt" style="color:#F4A261;"></i> ${item.address || ''}</div>
-        ${item.stars ? `<div style="color:#E9C46A;font-size:0.75rem;margin-bottom:4px;">${'★'.repeat(item.stars)}</div>` : ''}
         ${item.priceRange ? `<div style="color:#E76F51;font-size:0.75rem;font-weight:500;margin-top:4px;">${item.priceRange}</div>` : ''}
         ${item.isOpen === true ? '<div style="color:#2A9D8F;font-size:0.7rem;font-weight:600;margin-top:4px;">● פתוח עכשיו</div>' : ''}
       </div>
@@ -1627,7 +1626,6 @@ function cardGridHTML(item, category) {
           </div>
           <div style="padding:10px;">
             <div style="font-weight:600;color:#2C5F6E;font-size:0.85rem;margin-bottom:3px;">${item.nameEn || item.name}</div>
-            ${item.stars ? `<div style="color:#E9C46A;font-size:0.7rem;margin-bottom:3px;">${'★'.repeat(Math.min(item.stars,5))}${item.stars > 5 ? '+' : ''}</div>` : ''}
             <div style="font-size:0.7rem;color:#6B7F8D;margin-bottom:4px;"><i class="fas fa-map-marker-alt" style="color:#F4A261;font-size:0.6rem;"></i> ${item.address || ''}</div>
             ${item.priceRange ? `<div style="color:#E76F51;font-size:0.7rem;font-weight:600;margin-top:2px;">${item.priceRange}</div>` : ''}
             ${item.isOpen === true ? '<div style="color:#2A9D8F;font-size:0.6rem;font-weight:600;margin-top:3px;">● פתוח</div>' : ''}
@@ -1746,7 +1744,7 @@ function renderListPage(category, title, filters, activeFilter) {
     </div>` : filtered.length > 0 ? `<div style="padding:0 16px 8px;display:flex;gap:8px;">
       <select onchange="focusMapItem('${category}', this.value)" style="flex:1;padding:10px;border-radius:8px;border:1px solid #E5E7EB;background:#fff;font-family:Heebo;color:#2C5F6E;font-size:0.9rem;cursor:pointer;">
         <option value="">📍 קפוץ למיקום על המפה...</option>
-        ${filtered.map(i => `<option value="${i.id}" style="color:${getMarkerColor({...i, category})};font-weight:600;">${i.name}${i.stars ? ' (' + i.stars + '★)' : ''}</option>`).join('')}
+        ${filtered.map(i => `<option value="${i.id}" style="color:${getMarkerColor({...i, category})};font-weight:600;">${i.name}</option>`).join('')}
       </select>
       <button class="areas-toggle" onclick="toggleAreas()" title="הצג/הסתר אזורים" style="padding:10px 12px;border-radius:8px;border:1px solid ${areasVisible ? '#2A9D8F' : '#E5E7EB'};background:${areasVisible ? '#2A9D8F' : '#fff'};color:${areasVisible ? '#fff' : '#2C5F6E'};font-family:Heebo;font-size:0.85rem;font-weight:600;cursor:pointer;white-space:nowrap;transition:all 0.2s;">${areasVisible ? '✓ אזורים' : '🗺️ אזורים'}</button>
     </div>` : ''}
