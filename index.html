@@ -123,6 +123,37 @@
       </h2>
       <div class="cards-scroll" id="topRestaurants"></div>
 
+      <!-- Learn About Dubai -->
+      <h2 style="padding:14px 20px 6px;font-size:1.05rem;font-weight:700;color:#2C5F6E;display:flex;align-items:center;justify-content:space-between;margin:0 20px;">
+        <span style="color:#2A9D8F;"><i class="fas fa-book-open" style="margin-left:6px;font-size:0.9rem;"></i>להכיר את דובאי</span>
+      </h2>
+      <div class="cards-scroll" id="learnCards" style="padding-bottom:8px;">
+        <div onclick="openLearn('welcome')" style="min-width:160px;width:160px;scroll-snap-align:start;background:linear-gradient(135deg,#E76F51,#F4A261);border-radius:10px;padding:14px 12px;cursor:pointer;color:#fff;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,0.1);">
+          <div style="font-size:1.6rem;">👋</div>
+          <div style="font-weight:800;font-size:0.85rem;margin-top:6px;line-height:1.3;">ברוכים הבאים</div>
+        </div>
+        <div onclick="openLearn('tips')" style="min-width:160px;width:160px;scroll-snap-align:start;background:linear-gradient(135deg,#E9C46A,#F4A261);border-radius:10px;padding:14px 12px;cursor:pointer;color:#2C5F6E;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,0.1);">
+          <div style="font-size:1.6rem;">💡</div>
+          <div style="font-weight:800;font-size:0.85rem;margin-top:6px;line-height:1.3;">טיפים וקודים מקומיים</div>
+        </div>
+        <div onclick="openLearn('history')" style="min-width:160px;width:160px;scroll-snap-align:start;background:linear-gradient(135deg,#2A9D8F,#2C5F6E);border-radius:10px;padding:14px 12px;cursor:pointer;color:#fff;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,0.1);">
+          <div style="font-size:1.6rem;">📜</div>
+          <div style="font-weight:800;font-size:0.85rem;margin-top:6px;line-height:1.3;">היסטוריה כללית</div>
+        </div>
+        <div onclick="openLearn('israelis')" style="min-width:160px;width:160px;scroll-snap-align:start;background:linear-gradient(135deg,#B85C8E,#E76F51);border-radius:10px;padding:14px 12px;cursor:pointer;color:#fff;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,0.1);">
+          <div style="font-size:1.6rem;">🇮🇱</div>
+          <div style="font-weight:800;font-size:0.85rem;margin-top:6px;line-height:1.3;">ישראלים בדובאי</div>
+        </div>
+        <div onclick="openLearn('economy')" style="min-width:160px;width:160px;scroll-snap-align:start;background:linear-gradient(135deg,#2C5F6E,#2A9D8F);border-radius:10px;padding:14px 12px;cursor:pointer;color:#fff;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,0.1);">
+          <div style="font-size:1.6rem;">📊</div>
+          <div style="font-weight:800;font-size:0.85rem;margin-top:6px;line-height:1.3;">כלכלה מקומית</div>
+        </div>
+        <div onclick="openLearn('tourism')" style="min-width:160px;width:160px;scroll-snap-align:start;background:linear-gradient(135deg,#F4A261,#E9C46A);border-radius:10px;padding:14px 12px;cursor:pointer;color:#2C5F6E;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,0.1);">
+          <div style="font-size:1.6rem;">✈️</div>
+          <div style="font-weight:800;font-size:0.85rem;margin-top:6px;line-height:1.3;">תיירות והקשר הישראלי</div>
+        </div>
+      </div>
+
       <!-- More Categories toggle -->
       <div onclick="toggleMoreCats(this)" style="margin:18px 20px 6px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;">
         <span style="color:#2C5F6E;font-weight:700;font-size:1rem;"><i class="fas fa-layer-group" style="color:#E76F51;margin-left:8px;"></i>קטגוריות נוספות</span>
@@ -308,6 +339,36 @@
       if (nextEl) nextEl.style.opacity = '1';
     }, 10000);
   })();
+
+  let _learnData = null;
+  async function openLearn(id) {
+    if (!_learnData) {
+      try {
+        const r = await fetch('data/learn.json?t=' + Date.now());
+        _learnData = await r.json();
+      } catch(e) { alert('שגיאה בטעינה'); return; }
+    }
+    const item = _learnData[id];
+    if (!item) return;
+    const modal = document.getElementById('detailModal');
+    modal.innerHTML = `
+      <div style="background:#fff;width:92%;max-width:520px;max-height:88vh;border-radius:14px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 10px 40px rgba(0,0,0,0.3);">
+        <div style="background:linear-gradient(135deg,${item.color},#2C5F6E);padding:18px 20px;color:#fff;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span style="font-size:1.8rem;">${item.icon}</span>
+            <span style="font-weight:800;font-size:1.1rem;">${item.title}</span>
+          </div>
+          <button onclick="closeFrame()" style="background:rgba(255,255,255,0.25);border:none;color:#fff;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1rem;">×</button>
+        </div>
+        ${item.audio ? `<div style="padding:12px 20px;border-bottom:1px solid #E5E7EB;background:#FDF6EC;"><audio controls src="${item.audio}" style="width:100%;"></audio></div>` : `<div style="padding:10px 20px;border-bottom:1px solid #E5E7EB;background:#FDF6EC;color:#6B7F8D;font-size:0.78rem;text-align:center;">⏺ הקלטה תבוא בקרוב</div>`}
+        <div style="padding:20px;overflow-y:auto;color:#2C5F6E;line-height:1.8;font-size:0.95rem;">${item.text}</div>
+      </div>
+    `;
+    modal.classList.add('active');
+    modal.style.alignItems = 'center';
+    modal.style.justifyContent = 'center';
+    modal.onclick = (e) => { if (e.target === modal) closeFrame(); };
+  }
 
   function toggleMoreCats(el) {
     const sec = document.getElementById('moreCatsSections');
