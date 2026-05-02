@@ -4,37 +4,66 @@ const RAPID_KEY = '425b399aaamsh5f1513665b08931p1f07b6jsne67eed469583';
 // ==============================
 // 1. WEATHER - WeatherAPI.com
 // ==============================
+function wmoCondition(code) {
+  const map = {
+    0:'בהיר',1:'כמעט בהיר',2:'מעונן חלקית',3:'מעונן',
+    45:'ערפל',48:'ערפל מקפיא',
+    51:'טפטוף קל',53:'טפטוף',55:'טפטוף חזק',
+    61:'גשם קל',63:'גשם',65:'גשם חזק',
+    71:'שלג קל',73:'שלג',75:'שלג חזק',
+    80:'ממטרים',81:'ממטרים',82:'ממטרים חזקים',
+    95:'סופת רעמים',96:'סופת ברד',99:'סופת ברד חזקה'
+  };
+  return map[code] || 'לא ידוע';
+}
+function wmoEmoji(code) {
+  if (code === 0 || code === 1) return '☀️';
+  if (code === 2) return '🌤️';
+  if (code === 3) return '☁️';
+  if (code === 45 || code === 48) return '🌫️';
+  if (code >= 51 && code <= 65) return '🌧️';
+  if (code >= 71 && code <= 75) return '❄️';
+  if (code >= 80 && code <= 82) return '🌦️';
+  if (code >= 95) return '⛈️';
+  return '🌡️';
+}
+
 async function getDubaiWeather() {
-  const cached = getServiceCache('weather');
+  const cached = getServiceCache('weather3');
   if (cached) return cached;
 
+  const url = 'https://api.open-meteo.com/v1/forecast?latitude=25.2048&longitude=55.2708&current=temperature_2m,relative_humidity_2m,apparent_temperature,wind_speed_10m,weather_code,uv_index&daily=temperature_2m_max,temperature_2m_min,weather_code&timezone=auto&forecast_days=7';
   try {
-    const resp = await fetch('https://weatherapi-com.p.rapidapi.com/forecast.json?q=Dubai&days=7&lang=he', {
-      headers: { 'x-rapidapi-key': RAPID_KEY, 'x-rapidapi-host': 'weatherapi-com.p.rapidapi.com' }
-    });
+    const ctl = new AbortController();
+    const timer = setTimeout(() => ctl.abort(), 10000);
+    const resp = await fetch(url, { signal: ctl.signal, cache: 'no-store' });
+    clearTimeout(timer);
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
     const data = await resp.json();
-    if (data.current) {
-      const result = {
-        temp: Math.round(data.current.temp_c),
-        feelsLike: Math.round(data.current.feelslike_c),
-        condition: data.current.condition.text,
-        icon: data.current.condition.icon,
-        humidity: data.current.humidity,
-        wind: Math.round(data.current.wind_kph),
-        uv: data.current.uv,
-        forecast: (data.forecast?.forecastday || []).map(d => ({
-          date: d.date,
-          maxTemp: Math.round(d.day.maxtemp_c),
-          minTemp: Math.round(d.day.mintemp_c),
-          condition: d.day.condition.text,
-          icon: d.day.condition.icon
-        }))
-      };
-      setServiceCache('weather', result, 30 * 60 * 1000); // 30 min
-      return result;
-    }
-  } catch(e) { console.error('Weather error:', e); }
-  return null;
+    if (!data.current) throw new Error('No current data');
+    const code = data.current.weather_code;
+    const result = {
+      temp: Math.round(data.current.temperature_2m),
+      feelsLike: Math.round(data.current.apparent_temperature),
+      condition: wmoCondition(code),
+      icon: wmoEmoji(code),
+      humidity: Math.round(data.current.relative_humidity_2m),
+      wind: Math.round(data.current.wind_speed_10m),
+      uv: Math.round((data.current.uv_index || 0) * 10) / 10,
+      forecast: (data.daily?.time || []).map((dt, i) => ({
+        date: dt,
+        maxTemp: Math.round(data.daily.temperature_2m_max[i]),
+        minTemp: Math.round(data.daily.temperature_2m_min[i]),
+        condition: wmoCondition(data.daily.weather_code[i]),
+        icon: wmoEmoji(data.daily.weather_code[i])
+      }))
+    };
+    setServiceCache('weather3', result, 30 * 60 * 1000);
+    return result;
+  } catch(e) {
+    console.error('Weather error:', e);
+    return null;
+  }
 }
 
 function renderWeatherWidget() {
@@ -57,7 +86,7 @@ async function loadWeatherWidget() {
           <div style="font-size:2.2rem;font-weight:700;">${w.temp}°C</div>
           <div style="font-size:0.85rem;">${w.condition}</div>
         </div>
-        <img src="https:${w.icon}" style="width:64px;height:64px;">
+        <div style="font-size:3.5rem;line-height:1;">${w.icon}</div>
       </div>
       <div style="display:flex;gap:16px;font-size:0.75rem;opacity:0.85;margin-bottom:10px;">
         <span><i class="fas fa-thermometer-half"></i> מרגיש ${w.feelsLike}°</span>
@@ -72,7 +101,7 @@ async function loadWeatherWidget() {
             return `
               <div style="flex:0 0 auto;text-align:center;min-width:52px;">
                 <div style="font-size:0.65rem;opacity:0.8;">${dayNames[dayNum]}</div>
-                <img src="https:${d.icon}" style="width:28px;height:28px;">
+                <div style="font-size:1.5rem;line-height:1;">${d.icon}</div>
                 <div style="font-size:0.7rem;font-weight:600;">${d.maxTemp}°/${d.minTemp}°</div>
               </div>`;
           }).join('')}
@@ -91,23 +120,25 @@ async function loadWeatherWidget() {
 // 2. CURRENCY - ExchangeRate
 // ==============================
 async function getCurrencyRates() {
-  const cached = getServiceCache('currency');
+  const cached = getServiceCache('currency2');
   if (cached) return cached;
 
   try {
-    const resp = await fetch('https://currency-conversion-and-exchange-rates.p.rapidapi.com/latest?base=ILS', {
-      headers: { 'x-rapidapi-key': RAPID_KEY, 'x-rapidapi-host': 'currency-conversion-and-exchange-rates.p.rapidapi.com' }
-    });
+    const resp = await fetch('https://open.er-api.com/v6/latest/ILS');
     const data = await resp.json();
-    if (data.rates) {
+    console.log('Currency API response:', data);
+    const rates = data.rates || {};
+    const aed = rates.AED;
+    const usd = rates.USD;
+    const eur = rates.EUR;
+    if (aed && usd && eur) {
       const result = {
-        ilsToAed: data.rates.AED?.toFixed(4),
-        ilsToUsd: data.rates.USD?.toFixed(4),
-        aedToIls: (1 / data.rates.AED)?.toFixed(4),
-        usdToIls: (1 / data.rates.USD)?.toFixed(4),
+        rates: { ILS: 1, AED: aed, USD: usd, EUR: eur },
+        ilsToAed: aed.toFixed(4),
+        aedToIls: (1 / aed).toFixed(4),
         timestamp: new Date().toLocaleString('he-IL')
       };
-      setServiceCache('currency', result, 60 * 60 * 1000); // 1 hour
+      setServiceCache('currency2', result, 60 * 60 * 1000); // 1 hour
       return result;
     }
   } catch(e) { console.error('Currency error:', e); }
@@ -124,29 +155,35 @@ async function loadCurrencyWidget() {
   const c = await getCurrencyRates();
   if (!c) { el.innerHTML = ''; return; }
 
+  const r = c.rates || {};
   el.innerHTML = `
     <div style="background:#fff;border-radius:8px;padding:16px;border:1px solid #E5E7EB;">
       <div style="font-weight:700;color:#2C5F6E;font-size:0.9rem;margin-bottom:10px;">
-        <i class="fas fa-exchange-alt" style="color:#E9C46A;"></i> המרת מטבע - זמן אמת
+        <i class="fas fa-exchange-alt" style="color:#E9C46A;"></i> מחשבון המרת מטבע
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
-        <div style="background:#FDF6EC;border-radius:8px;padding:10px;text-align:center;">
-          <div style="font-size:0.75rem;color:#6B7F8D;">1 שקל =</div>
-          <div style="font-size:1.3rem;font-weight:700;color:#E76F51;">${c.ilsToAed} AED</div>
-        </div>
-        <div style="background:#FDF6EC;border-radius:8px;padding:10px;text-align:center;">
-          <div style="font-size:0.75rem;color:#6B7F8D;">1 דירהם =</div>
-          <div style="font-size:1.3rem;font-weight:700;color:#2A9D8F;">${c.aedToIls} ₪</div>
-        </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;font-size:0.75rem;">
+        <div style="background:#FDF6EC;border-radius:6px;padding:8px;text-align:center;"><b style="color:#E76F51;">1 ₪</b> = ${r.AED?.toFixed(3)} AED</div>
+        <div style="background:#FDF6EC;border-radius:6px;padding:8px;text-align:center;"><b style="color:#2A9D8F;">1 AED</b> = ${(1/r.AED).toFixed(3)} ₪</div>
+        <div style="background:#FDF6EC;border-radius:6px;padding:8px;text-align:center;"><b style="color:#5B9DC7;">1 $</b> = ${(r.AED/r.USD).toFixed(3)} AED</div>
+        <div style="background:#FDF6EC;border-radius:6px;padding:8px;text-align:center;"><b style="color:#B85C8E;">1 €</b> = ${(r.AED/r.EUR).toFixed(3)} AED</div>
       </div>
       <!-- Calculator -->
-      <div style="display:flex;gap:8px;align-items:center;">
-        <input type="number" id="currCalcInput" value="100" oninput="calcCurrency()" style="flex:1;padding:8px;border-radius:6px;border:1px solid #E5E7EB;font-family:Heebo;font-size:0.9rem;text-align:center;direction:ltr;">
-        <select id="currCalcDir" onchange="calcCurrency()" style="padding:8px;border-radius:6px;border:1px solid #E5E7EB;font-family:Heebo;font-size:0.85rem;">
-          <option value="ilsToAed">₪ → AED</option>
-          <option value="aedToIls">AED → ₪</option>
+      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
+        <input type="number" id="currCalcInput" value="100" oninput="calcCurrency()" style="flex:1;min-width:70px;padding:8px;border-radius:6px;border:1px solid #E5E7EB;font-family:Heebo;font-size:0.95rem;text-align:center;direction:ltr;font-weight:700;">
+        <select id="currFrom" onchange="calcCurrency()" style="padding:8px;border-radius:6px;border:1px solid #E5E7EB;font-family:Heebo;font-size:0.85rem;font-weight:600;">
+          <option value="ILS">₪ שקל</option>
+          <option value="AED">AED דירהם</option>
+          <option value="USD">$ דולר</option>
+          <option value="EUR">€ יורו</option>
         </select>
-        <div id="currCalcResult" style="flex:1;padding:8px;border-radius:6px;background:#2C5F6E;color:#fff;text-align:center;font-weight:600;font-size:0.9rem;"></div>
+        <span style="color:#6B7F8D;font-weight:700;">←</span>
+        <select id="currTo" onchange="calcCurrency()" style="padding:8px;border-radius:6px;border:1px solid #E5E7EB;font-family:Heebo;font-size:0.85rem;font-weight:600;">
+          <option value="AED">AED דירהם</option>
+          <option value="ILS">₪ שקל</option>
+          <option value="USD">$ דולר</option>
+          <option value="EUR">€ יורו</option>
+        </select>
+        <div id="currCalcResult" style="flex:1;min-width:90px;padding:8px;border-radius:6px;background:#2C5F6E;color:#fff;text-align:center;font-weight:700;font-size:0.95rem;"></div>
       </div>
       <div style="font-size:0.65rem;color:#aaa;margin-top:6px;text-align:left;direction:ltr;">Updated: ${c.timestamp}</div>
     </div>
@@ -156,19 +193,17 @@ async function loadCurrencyWidget() {
 
 function calcCurrency() {
   const input = parseFloat(document.getElementById('currCalcInput')?.value || 0);
-  const dir = document.getElementById('currCalcDir')?.value;
+  const from = document.getElementById('currFrom')?.value || 'ILS';
+  const to = document.getElementById('currTo')?.value || 'AED';
   const result = document.getElementById('currCalcResult');
   if (!result) return;
-
-  getServiceCache('currency') || getCurrencyRates().then(() => {});
-  const c = getServiceCache('currency');
-  if (!c) return;
-
-  if (dir === 'ilsToAed') {
-    result.textContent = (input * parseFloat(c.ilsToAed)).toFixed(2) + ' AED';
-  } else {
-    result.textContent = (input * parseFloat(c.aedToIls)).toFixed(2) + ' ₪';
-  }
+  const c = getServiceCache('currency2');
+  if (!c || !c.rates) return;
+  const r = c.rates;
+  if (!r[from] || !r[to]) return;
+  const symbols = { ILS: '₪', AED: 'AED', USD: '$', EUR: '€' };
+  const output = input * r[to] / r[from];
+  result.textContent = output.toFixed(2) + ' ' + symbols[to];
 }
 
 // ==============================
