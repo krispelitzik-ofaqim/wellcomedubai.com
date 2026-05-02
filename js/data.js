@@ -229,10 +229,11 @@ const DEFAULT_DATA = {
 
     // === JUDAISM ===
     { id:256, name:"בית הכנסת JCC UAE", nameEn:"Jewish Community Center UAE", category:"attractions", subcategory:"judaism", description:"מרכז קהילתי יהודי ובית כנסת אורתודוקסי פעיל בדובאי בהובלת הרב לוי דוכמן. תפילות, בר/בת מצווה, אירועים. מסעדה כשרה במקום.", image:"images/attractions/256.jpg", rating:4.9, price:"חינם", priceRange:"חינם", address:"Villa Centro, Umm Suqeim", lat:25.1500, lng:55.2100, tags:["יהדות","בית כנסת","קהילה"], featured:true },
+    { id:258, name:"The View at the Palm", nameEn:"The View at the Palm Jumeirah", category:"attractions", subcategory:"landmark", description:"מרפסת תצפית בקומה 52 (240 מ׳) של מגדל Palm Tower. נוף 360° לפאלם ג'ומיירה, Atlantis וקו הרקיע. כולל תצוגה אינטראקטיבית של תולדות הפאלם.", image:"images/attractions/258.jpg", rating:4.4, price:"$$", priceRange:"AED 100-180", address:"Palm Tower, Palm Jumeirah", lat:25.1153, lng:55.1391, tags:["תצפית","פאלם","ציון דרך"], featured:true },
+    { id:259, name:"Sky Views Dubai", nameEn:"Sky Views Observatory", category:"attractions", subcategory:"landmark", description:"מרפסת תצפית בגובה 219 מ׳ במלון Address Sky View. כוללת מסלול זכוכית בין שני המגדלים, ומגלשה חיצונית מקומה 53. נוף ל-Burj Khalifa.", image:"images/attractions/259.jpg", rating:4.5, price:"$$", priceRange:"AED 100-300", address:"Address Sky View Hotel, Downtown", lat:25.1942, lng:55.2745, tags:["תצפית","זכוכית","מגלשה"], featured:true },
     { id:257, name:"בית האברהם", nameEn:"Abrahamic Family House", category:"attractions", subcategory:"judaism", description:"מתחם בין-דתי באבו דאבי הכולל בית כנסת (Moses Ben Maimon), כנסייה ומסגד. נפתח 2023 כסמל לסובלנות. בית הכנסת הראשון שנבנה בארה״ב מ-1958.", image:"images/attractions/257.jpg", rating:4.8, price:"חינם", priceRange:"חינם", address:"Saadiyat Island, Abu Dhabi", lat:24.5304, lng:54.4031, tags:["יהדות","בין-דתי","אבו דאבי"], featured:true },
 
     // === LANDMARK ===
-    { id:242, name:"Ain Dubai (גלגל ענק)", nameEn:"Ain Dubai", category:"attractions", subcategory:"landmark", description:"הגלגל הענק הגבוה בעולם (250 מ׳) על אי בלוווטרס. תצפית פנורמית של 38 דקות לכל הסיבוב, נוף לפאלם ולקו הרקיע של דובאי.", image:"images/attractions/242.jpg", rating:4.6, price:"$$", priceRange:"₪130-500", address:"Bluewaters Island", lat:25.0797, lng:55.1193, tags:["ציון דרך","תצפית","גלגל ענק"], featured:true },
 
     // === NEW & UNIQUE ===
     { id:241, name:"Sweet Museum (חדש!)", nameEn:"Sweet Museum Dubai", category:"attractions", subcategory:"museum", description:"מוזיאון הממתקים החדש בדובאי 🍬 — 14 חדרים אינסטגרם-פרנדלי בנושא ממתקים, שוקולד וקינוחים. פטיש ענק, אמבט שוקולד, חדר סוכריות. מתאים לילדים ולמבוגרים.", image:"images/attractions/241.jpg", rating:4.6, price:"$$", priceRange:"₪80-150", address:"The Avenue, City Walk", lat:25.2080, lng:55.2480, tags:["מוזיאון","ממתקים","אינסטגרם","חדש"], featured:true },
@@ -290,8 +291,6 @@ const DEFAULT_DATA = {
     { id:415, name:"Zero Gravity", nameEn:"Zero Gravity", nameHe:"זירו גרביטי", category:"nightlife", subcategory:"beach-club", description:"ביץ׳ קלאב פעיל עם בריכה ומסיבות DJ.", image:"images/nightlife/zero-gravity.png", rating:4.4, price:"$$$", priceRange:"₪300-800", address:"Skydive Dubai, Marina", lat:25.0930, lng:55.1397, tags:["ביץ׳ קלאב","מסיבות","DJ"], featured:false },
 
     // === ENTERTAINMENT ===
-    { id:403, name:"Ain Dubai", nameEn:"Ain Dubai", nameHe:"עין דובאי", category:"nightlife", subcategory:"entertainment", description:"הגלגל הענק הגבוה בעולם (250 מטר).", image:"images/nightlife/403.jpg", rating:4.6, price:"$$", priceRange:"₪130-500", address:"Bluewaters Island", lat:25.0797, lng:55.1193, tags:["גלגל ענק","תצפית","רומנטי"], featured:true },
-    { id:416, name:"Dubai Frame", nameEn:"Dubai Frame", category:"nightlife", subcategory:"entertainment", description:"מסגרת ענקית עם תצפית 360°.", image:"images/nightlife/dubai-frame.png", rating:4.5, price:"$", priceRange:"₪50-200", address:"Zabeel Park", lat:25.2353, lng:55.3009, tags:["תצפית","מסגרת","אדריכלות"], featured:false },
     { id:417, name:"Dubai Fountain (חזרה!)", nameEn:"Dubai Fountain", category:"nightlife", subcategory:"entertainment", description:"חזרה אחרי שדרוג — אפקטים חדשניים, מוזיקה מרהיבה, סנכרון עם תאורת ברג׳ ח׳ליפה. חינם, כל חצי שעה מ-18:00 עד 23:00.", image:"images/nightlife/dubai-fountain.png", rating:4.8, price:"חינם", priceRange:"חינם", address:"Burj Khalifa Lake", lat:25.1953, lng:55.2754, tags:["מזרקה","חינם","ערב","חדש"], featured:true },
     { id:420, name:"Dubai Drone Show", nameEn:"Dubai Drone Show", nameHe:"מופע הרחפנים", category:"nightlife", subcategory:"entertainment", description:"מופע מרהיב של מאות רחפנים בשמי דובאי — תמונות תלת-ממד, לוגו אקספו וזיקוקים. חינם, מתקיים בעיקר בלילות שישי-שבת ובחגים מעל ברג׳ ח׳ליפה ו-Bluewaters.", image:"images/nightlife/drone-show.png", rating:4.9, price:"חינם", priceRange:"חינם", address:"Burj Khalifa / Bluewaters / Beach", lat:25.1953, lng:55.2754, tags:["רחפנים","חינם","מופע"], featured:true },
     { id:421, name:"Palm Fountain", nameEn:"Palm Fountain The Pointe", nameHe:"מזרקת פאלם", category:"nightlife", subcategory:"entertainment", description:"מזרקה אינטראקטיבית הגדולה בעולם (שיא גינס) — 105,000 רגל מרובע מים, 3,000 LED. חינם, מופעים כל 30 דקות מ-19:00.", image:"images/nightlife/palm-fountain.png", rating:4.7, price:"חינם", priceRange:"חינם", address:"The Pointe, Palm Jumeirah", lat:25.1138, lng:55.1387, tags:["מזרקה","חינם","פאלם","שיא גינס"], featured:true },
@@ -395,7 +394,7 @@ const PRACTICAL_INFO = {
   ]
 };
 
-const DB_VERSION = 169;
+const DB_VERSION = 170;
 function getDB() {
   const ver = localStorage.getItem(DB_KEY + '_ver');
   if (ver && Number(ver) >= DB_VERSION) {
