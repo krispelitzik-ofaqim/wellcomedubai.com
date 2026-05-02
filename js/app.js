@@ -1030,8 +1030,11 @@ function renderStarHubInner(h, idx) {
         </div>
         ${(() => { const r = parseInt(localStorage.getItem(`star-rating-${idx}`) || '0'); return r ? `<div style="background:rgba(0,0,0,0.25);color:#E9C46A;font-size:0.85rem;padding:3px 8px;border-radius:10px;letter-spacing:1px;">${'★'.repeat(r)}${'☆'.repeat(5-r)}</div>` : ''; })()}
       </div>
-      <div style="height:240px;background:#F5F5F5;">
+      <div style="height:240px;background:#F5F5F5;position:relative;cursor:zoom-in;" onclick="openStarHubMapModal(${idx})">
         <img src="${buildStarHubMap(h, '600x300')}" alt="כוכב ${h.name}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none'">
+        <div style="position:absolute;top:8px;right:8px;background:rgba(0,0,0,0.7);color:#fff;font-size:0.78rem;padding:6px 12px;border-radius:14px;font-weight:600;display:flex;align-items:center;gap:5px;">
+          <i class="fas fa-expand-arrows-alt"></i> הגדל
+        </div>
       </div>
       <div style="padding:12px 14px;color:#2C5F6E;font-size:0.85rem;line-height:1.6;background:#FDF6EC;border-bottom:1px solid #F5EFE6;">${h.desc}</div>
       <div style="padding:6px 14px 10px;">
@@ -1066,6 +1069,45 @@ function rateStarHub(idx, n) {
   localStorage.setItem(`star-rating-${idx}`, String(n));
   const card = document.getElementById(`star-card-${idx}`);
   if (card) card.innerHTML = renderStarHubInner(getStarHub(idx), idx);
+}
+
+function openStarHubMapModal(idx) {
+  const h = getStarHub(idx);
+  if (!h) return;
+  const modal = document.getElementById('detailModal');
+  if (!modal) return;
+  const bigMap = buildStarHubMap(h, '1200x800');
+  modal.innerHTML = `
+    <div style="position:fixed;inset:0;background:rgba(0,0,0,0.95);display:flex;flex-direction:column;z-index:1;">
+      <div style="background:${h.color};color:#fff;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="font-size:1.4rem;">${h.icon}</span>
+          <div>
+            <div style="font-weight:800;font-size:1rem;">⭐ ${h.name}</div>
+            <div style="font-size:0.72rem;opacity:0.9;">${h.spokes.length} זרועות · לחץ ✕ לסגור</div>
+          </div>
+        </div>
+        <button onclick="document.getElementById('detailModal').classList.remove('active')" style="background:rgba(255,255,255,0.25);border:none;color:#fff;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1.1rem;">✕</button>
+      </div>
+      <div style="flex:1;overflow:auto;background:#000;display:flex;align-items:center;justify-content:center;">
+        <img src="${bigMap}" style="max-width:100%;max-height:100%;object-fit:contain;display:block;" onerror="this.style.display='none'">
+      </div>
+      <div style="background:#fff;max-height:40vh;overflow-y:auto;padding:12px 16px;flex-shrink:0;">
+        <div style="font-weight:700;color:#2C5F6E;font-size:0.9rem;margin-bottom:8px;">תחנות ב${h.name}:</div>
+        ${h.spokes.map((s, i) => `
+          <div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid #F5EFE6;">
+            <div style="background:${h.color};color:#fff;border-radius:50%;width:22px;height:22px;font-size:0.72rem;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;">${i+1}</div>
+            <div style="flex:1;color:#2C5F6E;font-size:0.85rem;">${s.name}</div>
+            <a href="https://www.google.com/maps/dir/?api=1&origin=${h.center.lat},${h.center.lng}&destination=${s.lat},${s.lng}&travelmode=walking" target="_blank" style="color:${h.color};font-size:0.78rem;text-decoration:none;font-weight:600;"><i class="fas fa-walking"></i> נווט</a>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+  modal.classList.add('active');
+  modal.style.alignItems = 'stretch';
+  modal.style.justifyContent = 'stretch';
+  modal.onclick = (e) => { if (e.target === modal) modal.classList.remove('active'); };
 }
 
 function addStarHubToMyTrip(idx) {
