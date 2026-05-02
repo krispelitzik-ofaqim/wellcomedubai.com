@@ -99,6 +99,49 @@ function nearMeToggleHTML() {
     </div>`;
 }
 
+window.ITIN_RESTAURANTS_ON = window.ITIN_RESTAURANTS_ON || {};
+function itinRestaurantsToggleHTML(idx) {
+  const id = `irt_${idx}`;
+  const isOn = !!window.ITIN_RESTAURANTS_ON[idx];
+  return `
+    <div style="margin:10px 12px;display:flex;align-items:center;justify-content:space-between;background:#fff;border-radius:8px;padding:10px 14px;box-shadow:0 2px 6px rgba(0,0,0,0.1);">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <i class="fas fa-utensils" style="color:#E76F51;font-size:1rem;"></i>
+        <span style="color:#2C5F6E;font-weight:700;font-size:0.88rem;">הפעל חיפוש מסעדות קרובות אליי במהלך הסיור</span>
+      </div>
+      <label style="position:relative;display:inline-block;width:44px;height:24px;cursor:pointer;flex-shrink:0;">
+        <input type="checkbox" id="${id}" ${isOn ? 'checked' : ''} onchange="toggleItinRestaurants(${idx}, this)" style="opacity:0;width:0;height:0;">
+        <span class="irt-track" style="position:absolute;inset:0;background:${isOn ? '#2A9D8F' : '#9CA3AF'};border-radius:24px;transition:0.25s;"></span>
+        <span class="irt-knob" style="position:absolute;top:3px;${isOn ? 'left:3px' : 'right:3px'};width:18px;height:18px;background:#fff;border-radius:50%;transition:0.25s;box-shadow:0 1px 3px rgba(0,0,0,0.3);"></span>
+      </label>
+    </div>`;
+}
+
+function toggleItinRestaurants(idx, input) {
+  const on = input.checked;
+  window.ITIN_RESTAURANTS_ON[idx] = on;
+  const label = input.parentElement;
+  const track = label.querySelector('.irt-track');
+  const knob = label.querySelector('.irt-knob');
+  track.style.background = on ? '#2A9D8F' : '#9CA3AF';
+  knob.style.left = on ? '3px' : '';
+  knob.style.right = on ? '' : '3px';
+  renderItinRestaurants(idx);
+}
+
+function renderItinRestaurants(idx) {
+  const container = document.getElementById(`itin-restaurants-${idx}`);
+  if (!container) return;
+  if (!window.ITIN_RESTAURANTS_ON[idx]) { container.innerHTML = ''; return; }
+  const list = sortByRating(getAllItems('restaurants')).slice(0, 6);
+  container.innerHTML = `
+    <div style="padding:10px 0 4px;font-size:0.8rem;color:#6B7280;font-weight:600;">🍽️ מסעדות מומלצות (${list.length})</div>
+    <div style="display:flex;flex-direction:column;gap:8px;padding-bottom:8px;">
+      ${list.map(item => cardHTML(item, 'restaurants', true)).join('')}
+    </div>
+  `;
+}
+
 function loadHomeNearRow() {
   const el = document.getElementById('topNear');
   if (!el) return;
@@ -695,13 +738,14 @@ function ITINERARY_TEMPLATE(it, idx, navUrl) {
               <i class="fas fa-expand-arrows-alt"></i> הגדלה אינטראקטיבית
             </button>
           </div>
-          ${nearMeToggleHTML()}
+          ${itinRestaurantsToggleHTML(idx)}
+          <div id="itin-restaurants-${idx}" style="padding:0 12px;"></div>
           <a href="${navUrl}" target="_blank" style="display:block;text-decoration:none;background:${it.color};color:#fff;text-align:center;padding:10px;font-weight:700;font-size:0.9rem;">
             <i class="fas fa-directions"></i> פתח ניווט ב-Google Maps
           </a>
           <div style="padding:12px 16px;">
             ${it.stops.map((s, i) => {
-              const related = findRelatedItems(s.name, 3);
+              const related = findRelatedItems(s.name, 8).filter(r => r.category === 'restaurants').slice(0, 3);
               return `
               <div draggable="true" ondragstart="onStopDragStart(event, ${idx}, ${i})" ondragover="event.preventDefault()" ondrop="onStopDrop(event, ${idx}, ${i})" style="border-bottom:1px solid #F5EFE6;">
                 <div onclick="toggleStopDrawer('drawer-${idx}-${i}')" style="display:flex;gap:10px;padding:8px 0;align-items:center;cursor:pointer;">
