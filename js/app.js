@@ -104,15 +104,15 @@ function itinRestaurantsToggleHTML(idx) {
   const id = `irt_${idx}`;
   const isOn = !!window.ITIN_RESTAURANTS_ON[idx];
   return `
-    <div style="margin:10px 12px;display:flex;align-items:center;justify-content:space-between;background:#fff;border-radius:8px;padding:10px 14px;box-shadow:0 2px 6px rgba(0,0,0,0.1);">
-      <div style="display:flex;align-items:center;gap:8px;">
-        <i class="fas fa-utensils" style="color:#E76F51;font-size:1rem;"></i>
-        <span style="color:#2C5F6E;font-weight:700;font-size:0.88rem;">הפעל חיפוש מסעדות קרובות אליי במהלך הסיור</span>
+    <div style="display:flex;align-items:center;justify-content:space-between;background:#FDF6EC;border-top:1px solid #F5EFE6;border-bottom:1px solid #F5EFE6;padding:8px 14px;">
+      <div style="display:flex;align-items:center;gap:8px;min-width:0;">
+        <i class="fas fa-utensils" style="color:#E76F51;font-size:0.95rem;"></i>
+        <span style="color:#2C5F6E;font-weight:700;font-size:0.82rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">הפעל חיפוש מסעדות קרובות אליי במהלך הסיור</span>
       </div>
-      <label style="position:relative;display:inline-block;width:44px;height:24px;cursor:pointer;flex-shrink:0;">
+      <label style="position:relative;display:inline-block;width:40px;height:22px;cursor:pointer;flex-shrink:0;">
         <input type="checkbox" id="${id}" ${isOn ? 'checked' : ''} onchange="toggleItinRestaurants(${idx}, this)" style="opacity:0;width:0;height:0;">
-        <span class="irt-track" style="position:absolute;inset:0;background:${isOn ? '#2A9D8F' : '#9CA3AF'};border-radius:24px;transition:0.25s;"></span>
-        <span class="irt-knob" style="position:absolute;top:3px;${isOn ? 'left:3px' : 'right:3px'};width:18px;height:18px;background:#fff;border-radius:50%;transition:0.25s;box-shadow:0 1px 3px rgba(0,0,0,0.3);"></span>
+        <span class="irt-track" style="position:absolute;inset:0;background:${isOn ? '#2A9D8F' : '#9CA3AF'};border-radius:22px;transition:0.25s;"></span>
+        <span class="irt-knob" style="position:absolute;top:3px;${isOn ? 'left:3px' : 'right:3px'};width:16px;height:16px;background:#fff;border-radius:50%;transition:0.25s;box-shadow:0 1px 3px rgba(0,0,0,0.3);"></span>
       </label>
     </div>`;
 }
@@ -133,11 +133,35 @@ function renderItinRestaurants(idx) {
   const container = document.getElementById(`itin-restaurants-${idx}`);
   if (!container) return;
   if (!window.ITIN_RESTAURANTS_ON[idx]) { container.innerHTML = ''; return; }
-  const list = sortByRating(getAllItems('restaurants')).slice(0, 6);
+  const it = (ITINERARY_STATES || ITINERARIES)[idx];
+  if (!it) return;
+  const slider = document.getElementById(`itin-slider-${idx}`);
+  const cur = slider ? parseInt(slider.dataset.current || '0') : 0;
+  const stop = it.stops[cur];
+  const restaurants = getAllItems('restaurants').filter(r => r.lat && r.lng);
+  let list;
+  if (stop && stop.lat && stop.lng) {
+    const distKm = (a, b) => {
+      const R = 6371, dLat = (b.lat-a.lat)*Math.PI/180, dLng = (b.lng-a.lng)*Math.PI/180;
+      const x = Math.sin(dLat/2)**2 + Math.cos(a.lat*Math.PI/180)*Math.cos(b.lat*Math.PI/180)*Math.sin(dLng/2)**2;
+      return 2*R*Math.asin(Math.sqrt(x));
+    };
+    list = restaurants
+      .map(r => ({ ...r, _dist: distKm(stop, r) }))
+      .sort((a, b) => a._dist - b._dist)
+      .slice(0, 6);
+  } else {
+    list = sortByRating(restaurants).slice(0, 6);
+  }
   container.innerHTML = `
-    <div style="padding:10px 0 4px;font-size:0.8rem;color:#6B7280;font-weight:600;">🍽️ מסעדות מומלצות (${list.length})</div>
-    <div style="display:flex;flex-direction:column;gap:8px;padding-bottom:8px;">
-      ${list.map(item => cardHTML(item, 'restaurants', true)).join('')}
+    <div style="padding:10px 12px 4px;font-size:0.8rem;color:#6B7280;font-weight:600;">🍽️ מסעדות ליד: ${stop ? stop.name : ''}</div>
+    <div style="display:flex;flex-direction:column;gap:8px;padding:0 0 8px;">
+      ${list.map(item => `
+        <div style="position:relative;">
+          ${item._dist != null ? `<div style="position:absolute;top:6px;left:6px;background:rgba(0,0,0,0.6);color:#fff;font-size:0.65rem;padding:2px 7px;border-radius:10px;z-index:2;">${item._dist.toFixed(1)} ק"מ</div>` : ''}
+          ${cardHTML(item, 'restaurants', true)}
+        </div>
+      `).join('')}
     </div>
   `;
 }
@@ -730,6 +754,7 @@ function ITINERARY_TEMPLATE(it, idx, navUrl) {
               ${it.stops.map((_, j) => `<div data-dot="${j}" style="width:6px;height:6px;border-radius:50%;background:${j === 0 ? '#fff' : 'rgba(255,255,255,0.4)'};transition:background 0.3s;"></div>`).join('')}
             </div>
           </div>
+          <div id="itin-restaurants-${idx}" style="padding:0 12px;"></div>
           <div id="map-${idx}" style="position:relative;height:200px;overflow:hidden;transition:height 0.3s;" data-static="${buildItineraryStaticMap(it, '600x250')}" data-embed="${buildItineraryEmbedUrl(it)}">
             <div id="map-${idx}-content" style="width:100%;height:100%;">
               <img src="${buildItineraryStaticMap(it, '600x250')}" alt="מפת מסלול" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none'">
@@ -739,7 +764,6 @@ function ITINERARY_TEMPLATE(it, idx, navUrl) {
             </button>
           </div>
           ${itinRestaurantsToggleHTML(idx)}
-          <div id="itin-restaurants-${idx}" style="padding:0 12px;"></div>
           <a href="${navUrl}" target="_blank" style="display:block;text-decoration:none;background:${it.color};color:#fff;text-align:center;padding:10px;font-weight:700;font-size:0.9rem;">
             <i class="fas fa-directions"></i> פתח ניווט ב-Google Maps
           </a>
@@ -1056,6 +1080,10 @@ function moveSlide(sliderId, dir) {
   slides[current].style.opacity = '1';
   if (dots[current]) dots[current].style.background = '#fff';
   slider.dataset.current = String(current);
+  const m = sliderId.match(/^itin-slider-(\d+)$/);
+  if (m && window.ITIN_RESTAURANTS_ON && window.ITIN_RESTAURANTS_ON[m[1]]) {
+    renderItinRestaurants(parseInt(m[1]));
+  }
 }
 
 function startItinerarySliders() {}
