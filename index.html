@@ -353,15 +353,9 @@
     const modal = document.getElementById('detailModal');
     modal.innerHTML = `
       <div style="background:#fff;width:92%;max-width:520px;max-height:88vh;border-radius:14px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 10px 40px rgba(0,0,0,0.3);">
-        <div style="background:linear-gradient(135deg,${item.color},#2C5F6E);padding:18px 20px;color:#fff;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;">
-          <div style="display:flex;align-items:center;gap:10px;">
-            <span style="font-size:1.8rem;">${item.icon}</span>
-            <span style="font-weight:800;font-size:1.1rem;">${item.title}</span>
-          </div>
-          <button onclick="closeFrame()" style="background:rgba(255,255,255,0.25);border:none;color:#fff;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1rem;">×</button>
-        </div>
-        ${item.audio ? `<div style="padding:12px 20px;border-bottom:1px solid #E5E7EB;background:#FDF6EC;"><audio controls src="${item.audio}" style="width:100%;"></audio></div>` : `<div style="padding:10px 20px;border-bottom:1px solid #E5E7EB;background:#FDF6EC;color:#6B7F8D;font-size:0.78rem;text-align:center;">⏺ הקלטה תבוא בקרוב</div>`}
-        <div style="padding:20px;overflow-y:auto;color:#2C5F6E;line-height:1.8;font-size:0.95rem;">${item.text}</div>
+        <button onclick="closeFrame()" style="position:absolute;top:14px;left:14px;background:rgba(0,0,0,0.5);border:none;color:#fff;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1rem;z-index:5;">×</button>
+        ${item.audio ? `<div style="padding:14px 20px;border-bottom:1px solid #E5E7EB;background:#FDF6EC;"><audio controls src="${item.audio}" style="width:100%;"></audio></div>` : ''}
+        <div style="padding:24px 22px;overflow-y:auto;color:#2C5F6E;line-height:1.85;font-size:1rem;">${item.text}</div>
       </div>
     `;
     modal.classList.add('active');
