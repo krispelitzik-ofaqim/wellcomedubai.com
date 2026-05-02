@@ -1876,8 +1876,10 @@ function renderWeatherPage() {
   setTimeout(async () => {
     const el = document.getElementById('weatherPageContent');
     if (!el) return;
-    const w = await getDubaiWeather();
-    if (!w) { el.innerHTML = '<div style="color:#6B7F8D;">לא ניתן לטעון מזג אוויר כרגע.</div>'; return; }
+    let w;
+    try { w = await getDubaiWeather(); }
+    catch(e) { el.innerHTML = `<div style="color:#E76F51;padding:20px;">שגיאה: ${e.message}<br><button onclick="renderWeatherPage()" style="margin-top:10px;background:#E76F51;color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;font-family:Heebo;">נסה שוב</button></div>`; return; }
+    if (!w) { el.innerHTML = `<div style="color:#6B7F8D;padding:20px;">לא ניתן לטעון מזג אוויר כרגע.<br><button onclick="localStorage.removeItem('dubai_service_cache');renderWeatherPage()" style="margin-top:10px;background:#E76F51;color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;font-family:Heebo;">נסה שוב</button></div>`; return; }
 
     el.innerHTML = `
       <!-- Current -->
