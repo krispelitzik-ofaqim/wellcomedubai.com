@@ -2,13 +2,13 @@
 const AERO_HOST = 'aerodatabox.p.rapidapi.com';
 
 async function getAirportFlights(direction) {
-  const cached = getServiceCache(`dxb_${direction}`);
+  const cached = getServiceCache(`dxb3_${direction}`);
   if (cached) return cached;
 
   try {
     const now = new Date();
     const from = now.toISOString().split('.')[0];
-    const later = new Date(now.getTime() + 6 * 60 * 60 * 1000);
+    const later = new Date(now.getTime() + 12 * 60 * 60 * 1000);
     const to = later.toISOString().split('.')[0];
 
     const resp = await fetch(
@@ -18,22 +18,35 @@ async function getAirportFlights(direction) {
     const data = await resp.json();
 
     const flights = (direction === 'Departure' ? data.departures : data.arrivals) || [];
-    const result = flights.slice(0, 30).map(f => ({
-      flight: f.number,
-      airline: f.airline?.name || '',
-      airlineLogo: f.airline?.name ? `https://logo.clearbit.com/${(f.airline.name).toLowerCase().replace(/\s/g,'')}.com` : '',
-      origin: direction === 'Arrival' ? (f.departure?.airport?.name || f.departure?.airport?.icao || '') : 'DXB',
-      originCode: direction === 'Arrival' ? (f.departure?.airport?.iata || '') : 'DXB',
-      destination: direction === 'Departure' ? (f.arrival?.airport?.name || f.arrival?.airport?.icao || '') : 'DXB',
-      destinationCode: direction === 'Departure' ? (f.arrival?.airport?.iata || '') : 'DXB',
-      scheduled: f.departure?.scheduledTime?.local || f.arrival?.scheduledTime?.local || '',
-      actual: f.departure?.actualTime?.local || f.arrival?.actualTime?.local || '',
-      terminal: f.departure?.terminal || f.arrival?.terminal || '',
-      status: f.status || '',
-      isTLV: (f.departure?.airport?.iata === 'TLV' || f.arrival?.airport?.iata === 'TLV')
-    }));
+    const isDepart = direction === 'Departure';
+    const result = flights.slice(0, 100).map(f => {
+      const m = f.movement || {};
+      const otherAirport = m.airport || {};
+      return {
+        flight: f.number,
+        airline: f.airline?.name || '',
+        airlineLogo: f.airline?.name ? `https://logo.clearbit.com/${(f.airline.name).toLowerCase().replace(/\s/g,'')}.com` : '',
+        origin: isDepart ? 'DXB' : (otherAirport.name || otherAirport.icao || ''),
+        originCode: isDepart ? 'DXB' : (otherAirport.iata || ''),
+        destination: isDepart ? (otherAirport.name || otherAirport.icao || '') : 'DXB',
+        destinationCode: isDepart ? (otherAirport.iata || '') : 'DXB',
+        scheduled: m.scheduledTime?.local || m.scheduledTimeLocal || '',
+        actual: m.actualTime?.local || m.revisedTime?.local || m.predictedTime?.local || '',
+        terminal: m.terminal || '',
+        status: f.status || '',
+        isTLV: (() => {
+          const codes = [otherAirport.iata, otherAirport.icao].filter(Boolean).map(c => String(c).toUpperCase());
+          const name = String(otherAirport.name || '').toLowerCase();
+          const airline = (f.airline?.name || '').toLowerCase();
+          if (codes.includes('TLV') || codes.includes('LLBG')) return true;
+          if (name.includes('tel aviv') || name.includes('ben gurion')) return true;
+          if (airline.includes('el al') || airline.includes('israir') || airline.includes('arkia')) return true;
+          return false;
+        })()
+      };
+    });
 
-    setServiceCache(`dxb_${direction}`, result, 10 * 60 * 1000); // 10 min cache
+    setServiceCache(`dxb3_${direction}`, result, 10 * 60 * 1000); // 10 min cache
     return result;
   } catch(e) {
     console.error('Airport flights error:', e);
@@ -97,21 +110,22 @@ function renderFlightBoard(containerId) {
     <div style="background:#fff;border-radius:8px;overflow:hidden;border:1px solid #E5E7EB;">
       <!-- Header -->
       <div style="background:linear-gradient(135deg,#2C5F6E,#1a4a5a);padding:12px 16px;">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+        <div style="margin-bottom:6px;">
           <div style="display:flex;align-items:center;gap:8px;">
             <i class="fas fa-plane" style="color:#E9C46A;font-size:1rem;"></i>
-            <span style="color:#fff;font-weight:700;font-size:0.9rem;">נמל התעופה דובאי (DXB)</span>
+            <span style="color:#fff;font-weight:700;font-size:0.95rem;">נמל התעופה דובאי (DXB)</span>
           </div>
-          <span style="color:rgba(255,255,255,0.7);font-size:0.7rem;">${new Date().toLocaleDateString('he-IL',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}</span>
+          <div style="color:rgba(255,255,255,0.75);font-size:0.78rem;margin-top:3px;padding-right:24px;">${new Date().toLocaleDateString('he-IL',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}</div>
         </div>
         <div style="display:flex;gap:4px;align-items:center;" id="boardTabs">
-          <span style="background:rgba(255,0,0,0.85);color:#fff;font-size:0.5rem;padding:2px 6px;border-radius:8px;font-weight:700;animation:pulse 1.5s infinite;">● LIVE</span>
           <button onclick="loadFlightBoard('Departure')" id="tabDep" style="padding:6px 14px;border-radius:6px;border:none;font-family:Heebo;font-size:0.8rem;font-weight:600;cursor:pointer;background:#E9C46A;color:#2C5F6E;">
             <i class="fas fa-plane-departure"></i> המראות
           </button>
           <button onclick="loadFlightBoard('Arrival')" id="tabArr" style="padding:6px 14px;border-radius:6px;border:none;font-family:Heebo;font-size:0.8rem;font-weight:600;cursor:pointer;background:rgba(255,255,255,0.15);color:#fff;">
             <i class="fas fa-plane-arrival"></i> נחיתות
           </button>
+          <span id="dubaiClock" style="color:#E9C46A;font-weight:700;direction:ltr;font-size:0.85rem;margin-right:auto;">${new Date().toLocaleTimeString('he-IL',{timeZone:'Asia/Dubai',hour:'2-digit',minute:'2-digit'})} 🇦🇪</span>
+          <span style="background:rgba(255,0,0,0.85);color:#fff;font-size:0.55rem;padding:3px 7px;border-radius:8px;font-weight:700;animation:pulse 1.5s infinite;">● LIVE</span>
         </div>
       </div>
       <div id="flightBoardContent" style="padding:8px;">
@@ -124,6 +138,13 @@ function renderFlightBoard(containerId) {
   `;
 
   loadFlightBoard('Departure');
+
+  if (window._dubaiClockInterval) clearInterval(window._dubaiClockInterval);
+  window._dubaiClockInterval = setInterval(() => {
+    const el = document.getElementById('dubaiClock');
+    if (el) el.innerHTML = new Date().toLocaleTimeString('he-IL',{timeZone:'Asia/Dubai',hour:'2-digit',minute:'2-digit'}) + ' 🇦🇪';
+    else clearInterval(window._dubaiClockInterval);
+  }, 30000);
 }
 
 async function loadFlightBoard(direction) {
@@ -145,7 +166,10 @@ async function loadFlightBoard(direction) {
 
   content.innerHTML = '<div style="text-align:center;padding:30px;color:#6B7F8D;"><i class="fas fa-spinner fa-spin" style="color:#E76F51;"></i> טוען...</div>';
 
-  const flights = await getAirportFlights(direction);
+  const allFlights = await getAirportFlights(direction);
+  const tlvFlights = (allFlights || []).filter(f => f.isTLV);
+  const flights = tlvFlights.length > 0 ? tlvFlights : (allFlights || []);
+  const noTLV = tlvFlights.length === 0;
 
   if (!flights || flights.length === 0) {
     content.innerHTML = '<div style="text-align:center;padding:20px;color:#6B7F8D;font-size:0.85rem;">לא ניתן לטעון נתוני טיסות כרגע. נסה שוב מאוחר יותר.</div>';
@@ -155,17 +179,20 @@ async function loadFlightBoard(direction) {
   const isDepart = direction === 'Departure';
 
   content.innerHTML = `
+    ${noTLV ? '<div style="background:#FFF3CD;color:#856404;padding:8px;font-size:0.7rem;text-align:center;border-radius:4px;margin-bottom:6px;">⚠️ לא נמצאו טיסות מזוהות לישראל ב-12 ש׳ הקרובות. מציג את כל הטיסות.</div>' : ''}
     <!-- Table header -->
-    <div style="display:grid;grid-template-columns:55px 1fr 50px;gap:3px;padding:6px 4px;font-size:0.6rem;color:#6B7F8D;font-weight:600;border-bottom:1px solid #F5EFE6;">
+    <div style="display:grid;grid-template-columns:60px 50px 1fr 60px;gap:4px;padding:8px 4px;font-size:0.72rem;color:#6B7F8D;font-weight:600;border-bottom:1px solid #F5EFE6;">
       <span>טיסה</span>
+      <span>${isDepart ? 'יעד' : 'מוצא'}</span>
       <span>חברה</span>
       <span>סטטוס</span>
     </div>
     ${flights.map(f => `
-      <div style="display:grid;grid-template-columns:55px 1fr 50px;gap:3px;padding:5px 4px;font-size:0.7rem;align-items:center;border-bottom:1px solid #faf5ed;cursor:pointer;${f.isTLV ? 'background:#FFF8E7;' : ''}" onclick="openFlightDetail('${f.flight}','${f.airline}','${isDepart ? f.destination : f.origin}','${isDepart ? f.destinationCode : f.originCode}','${formatTime(f.scheduled)}','${formatTime(f.actual)}','${f.terminal}','${f.status}','${isDepart ? 'departure' : 'arrival'}','${f.isTLV}')">
-        <span style="font-weight:600;color:#E76F51;font-size:0.65rem;">${f.flight}</span>
-        <span style="color:#2C5F6E;font-size:0.68rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${f.airline}</span>
-        <span style="background:${statusBg(f.status)};color:${statusColor(f.status)};font-size:0.55rem;font-weight:700;padding:2px 5px;border-radius:4px;text-align:center;">${statusHebrew(f.status)}</span>
+      <div style="display:grid;grid-template-columns:60px 50px 1fr 60px;gap:4px;padding:8px 4px;font-size:0.85rem;align-items:center;border-bottom:1px solid #faf5ed;cursor:pointer;${f.isTLV ? 'background:#FFF8E7;' : ''}" onclick="openFlightDetail('${f.flight}','${f.airline}','${isDepart ? f.destination : f.origin}','${isDepart ? f.destinationCode : f.originCode}','${formatTime(f.scheduled)}','${formatTime(f.actual)}','${f.terminal}','${f.status}','${isDepart ? 'departure' : 'arrival'}','${f.isTLV}')">
+        <span style="font-weight:700;color:#E76F51;font-size:0.8rem;">${f.flight}</span>
+        <span style="font-weight:800;color:#2A9D8F;font-size:0.8rem;direction:ltr;text-align:center;">${(isDepart ? f.destinationCode : f.originCode) || '—'}</span>
+        <span style="color:#2C5F6E;font-size:0.78rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${f.airline}</span>
+        <span style="background:${statusBg(f.status)};color:${statusColor(f.status)};font-size:0.65rem;font-weight:700;padding:3px 6px;border-radius:4px;text-align:center;">${statusHebrew(f.status)}</span>
       </div>
     `).join('')}
     <div style="text-align:center;padding:8px;font-size:0.7rem;color:#aaa;">
@@ -183,10 +210,10 @@ function openFlightDetail(flight, airline, city, cityCode, scheduled, actual, te
   if (!modal) return;
 
   modal.innerHTML = `
-    <div class="modal-sheet" style="max-width:440px;">
+    <div class="modal-sheet" style="max-width:440px;height:auto;max-height:100vh;border-radius:8px;margin:auto;align-self:center;position:relative;">
       <!-- Header -->
       <div style="background:linear-gradient(135deg,#2C5F6E,#2A9D8F);padding:20px;color:#fff;">
-        <button onclick="document.getElementById('detailModal').classList.remove('active')" style="position:absolute;top:12px;left:12px;background:rgba(255,255,255,0.2);border:none;color:#fff;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1rem;">✕</button>
+        <button onclick="document.getElementById('detailModal').classList.remove('active')" style="position:absolute;top:10px;left:10px;background:rgba(255,255,255,0.25);border:none;color:#fff;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1.1rem;font-weight:700;z-index:10;display:flex;align-items:center;justify-content:center;">✕</button>
         <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
           <i class="fas fa-${isDepart ? 'plane-departure' : 'plane-arrival'}" style="font-size:1.8rem;color:#E9C46A;"></i>
           <div>
