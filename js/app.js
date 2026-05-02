@@ -702,7 +702,7 @@ function cardHTML(item, category, mini) {
     const fontRate = mini ? '0.65rem' : '0.8rem';
     const pad = mini ? 6 : 10;
     return `
-      <div style="min-width:${w}px;width:${w}px;scroll-snap-align:start;background:#fff;border-radius:6px;overflow:hidden;cursor:pointer;border:1px solid #E5E7EB;box-shadow:0 2px 8px rgba(0,0,0,0.06);position:relative;" onclick="openDetail('${category}', ${item.id})">
+      <div class="card-hover" style="min-width:${w}px;width:${w}px;scroll-snap-align:start;background:#fff;border-radius:6px;overflow:hidden;cursor:pointer;border:1px solid #E5E7EB;box-shadow:0 2px 8px rgba(0,0,0,0.06);position:relative;transition:all 0.3s;" onclick="openDetail('${category}', ${item.id})">
         <button onclick="event.stopPropagation();addToMyTrip('${category}', ${item.id})" title="הוסף לטיול שלי" style="position:absolute;top:6px;right:6px;background:rgba(0,0,0,0.65);color:#fff;border:none;width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:0.75rem;display:flex;align-items:center;justify-content:center;z-index:3;box-shadow:0 1px 4px rgba(0,0,0,0.4);">❤️</button>
         <div style="width:${w}px;height:${w}px;overflow:hidden;position:relative;">
           <img src="${item.image}" alt="${item.name}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'">
@@ -2132,7 +2132,7 @@ const SUBCAT_MAP = {
 function cardGridHTML(item, category) {
   const verified = isVerifiedImage(item, category);
   return `
-        <div style="background:#fff;border-radius:6px;overflow:hidden;border:1px solid #E5E7EB;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,0.05);position:relative;" onclick="openDetail('${category}', ${item.id})">
+        <div class="card-hover" style="background:#fff;border-radius:6px;overflow:hidden;border:1px solid #E5E7EB;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,0.05);position:relative;transition:all 0.3s;" onclick="openDetail('${category}', ${item.id})">
           <button onclick="event.stopPropagation();addToMyTrip('${category}', ${item.id})" title="הוסף לטיול שלי" style="position:absolute;top:10px;right:10px;background:rgba(0,0,0,0.7);color:#fff;border:none;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;z-index:3;box-shadow:0 2px 6px rgba(0,0,0,0.4);">❤️</button>
           <div style="position:relative;">
             <img src="${item.image}" alt="${item.name}" style="width:100%;height:220px;object-fit:cover;" onerror="this.style.display='none'">
