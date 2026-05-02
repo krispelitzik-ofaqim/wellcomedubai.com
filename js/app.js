@@ -2389,28 +2389,32 @@ function renderFlightsPage() {
             <input type="date" id="flightPageReturn" value="${weekLater.toISOString().split('T')[0]}" style="width:100%;padding:10px;border-radius:6px;border:none;font-family:Heebo;font-size:0.85rem;color:#2C5F6E;">
           </div>
         </div>
-        <button onclick="doFlightPageSearch()" style="width:100%;padding:12px;border-radius:8px;background:#E9C46A;color:#2C5F6E;border:none;font-family:Heebo;font-weight:700;cursor:pointer;font-size:0.95rem;">
-          <i class="fas fa-search"></i> חפש טיסות
-        </button>
+        <div style="display:flex;gap:8px;">
+          <button onclick="doFlightPageSearch()" style="flex:1;padding:12px;border-radius:8px;background:#E9C46A;color:#2C5F6E;border:none;font-family:Heebo;font-weight:700;cursor:pointer;font-size:0.9rem;">
+            <i class="fas fa-search"></i> תוצאות מהירות
+          </button>
+          <button onclick="goToAviasales()" style="flex:1;padding:12px;border-radius:8px;background:#FF6B00;color:#fff;border:none;font-family:Heebo;font-weight:700;cursor:pointer;font-size:0.9rem;">
+            <i class="fas fa-external-link-alt"></i> חפש ב-Aviasales
+          </button>
+        </div>
         <div id="flightPageResults" style="margin-top:12px;"></div>
       </div>
 
-      <!-- Quick links -->
-      <a href="https://aviasales.tpk.lv/X5SEJjUA" target="_blank" style="display:block;text-decoration:none;background:linear-gradient(135deg,#FF6B00,#E76F51);color:#fff;padding:16px;border-radius:8px;text-align:center;font-weight:800;font-size:1rem;margin-bottom:8px;box-shadow:0 4px 12px rgba(231,111,81,0.3);">
-        <i class="fas fa-search" style="margin-left:6px;"></i> חפש טיסות זול ב-Aviasales (השוואת מחירים מ-200+ חברות)
-      </a>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;">
-        <a href="https://www.elal.com" target="_blank" style="flex:1;text-align:center;padding:12px;border-radius:8px;background:#fff;border:1px solid #E5E7EB;text-decoration:none;color:#2C5F6E;font-weight:600;font-size:0.8rem;cursor:pointer;">
-          <i class="fas fa-plane" style="color:#E9C46A;display:block;font-size:1.2rem;margin-bottom:4px;"></i>אל על
-        </a>
-        <a href="https://www.flydubai.com" target="_blank" style="flex:1;text-align:center;padding:12px;border-radius:8px;background:#fff;border:1px solid #E5E7EB;text-decoration:none;color:#2C5F6E;font-weight:600;font-size:0.8rem;cursor:pointer;">
-          <i class="fas fa-plane-departure" style="color:#F4A261;display:block;font-size:1.2rem;margin-bottom:4px;"></i>FlyDubai
-        </a>
-      </div>
     </div>
   `;
 
   renderFlightBoard('flightsPageBoard');
+}
+
+function goToAviasales() {
+  const depart = document.getElementById('flightPageDepart')?.value || '';
+  const ret = document.getElementById('flightPageReturn')?.value || '';
+  const params = new URLSearchParams({
+    origin_iata: 'TLV', destination_iata: 'DXB',
+    depart_date: depart, return_date: ret,
+    adults: '1', currency: 'ILS', marker: 'X5SEJjUA'
+  });
+  window.open(`https://aviasales.tpk.lv/X5SEJjUA?${params.toString()}`, '_blank');
 }
 
 async function doFlightPageSearch() {
