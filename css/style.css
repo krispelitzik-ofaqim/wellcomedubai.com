@@ -262,10 +262,11 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; heig
 .modal-overlay.active { display:flex; }
 .modal-sheet {
   background:#FFFFFF; width:100%; max-width:500px;
-  height:100vh; max-height:100vh; border-radius:0;
-  overflow-y:auto; -webkit-overflow-scrolling:touch;
+  height:100dvh; max-height:100dvh; border-radius:0;
+  overflow-y:scroll; -webkit-overflow-scrolling:touch; overscroll-behavior:contain;
   animation:slideUp 0.3s ease;
   box-shadow:0 -4px 30px rgba(0,0,0,0.15);
+  padding-bottom:env(safe-area-inset-bottom,40px);
 }
 @keyframes slideUp { from { transform:translateY(100%); } }
 .modal-img { width:100%; height:220px; object-fit:cover; }
