@@ -239,7 +239,7 @@ function renderMyTripPage() {
         <div style="background:#FDF6EC;border-radius:10px;padding:30px 20px;text-align:center;color:#6B7F8D;">
           <i class="fas fa-suitcase-rolling" style="font-size:2.5rem;color:#E9C46A;margin-bottom:12px;"></i>
           <div style="font-size:0.95rem;font-weight:700;color:#2C5F6E;margin-bottom:8px;">הטיול ריק</div>
-          <div style="font-size:0.8rem;line-height:1.6;">לחצו על 🎒+ בכל כרטיס (מלון, מסעדה, אטרקציה, מסלול) כדי להוסיף לטיול.</div>
+          <div style="font-size:0.8rem;line-height:1.6;">לחצו על ❤️ בכרטיסים (מלון/מסעדה/אטרקציה), 📌 על מסלול יום, או ⭐ על טיול כוכב.</div>
         </div>
       ` : Object.keys(dayBuckets).sort((a,b)=>parseInt(a)-parseInt(b)).map(d => `
         <div ondragover="event.preventDefault()" ondrop="onTripDrop(event, ${d}, null)" style="background:#fff;border-right:4px solid #E76F51;border-radius:8px;padding:12px;margin-bottom:12px;box-shadow:0 1px 4px rgba(0,0,0,0.05);">
@@ -703,7 +703,7 @@ function cardHTML(item, category, mini) {
     const pad = mini ? 6 : 10;
     return `
       <div style="min-width:${w}px;width:${w}px;scroll-snap-align:start;background:#fff;border-radius:6px;overflow:hidden;cursor:pointer;border:1px solid #E5E7EB;box-shadow:0 2px 8px rgba(0,0,0,0.06);position:relative;" onclick="openDetail('${category}', ${item.id})">
-        <button onclick="event.stopPropagation();addToMyTrip('${category}', ${item.id})" title="הוסף לטיול שלי" style="position:absolute;top:6px;right:6px;background:rgba(0,0,0,0.65);color:#E9C46A;border:none;width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:0.75rem;display:flex;align-items:center;justify-content:center;z-index:3;box-shadow:0 1px 4px rgba(0,0,0,0.4);">🎒+</button>
+        <button onclick="event.stopPropagation();addToMyTrip('${category}', ${item.id})" title="הוסף לטיול שלי" style="position:absolute;top:6px;right:6px;background:rgba(0,0,0,0.65);color:#fff;border:none;width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:0.75rem;display:flex;align-items:center;justify-content:center;z-index:3;box-shadow:0 1px 4px rgba(0,0,0,0.4);">❤️</button>
         <div style="width:${w}px;height:${w}px;overflow:hidden;position:relative;">
           <img src="${item.image}" alt="${item.name}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'">
           ${item.subcategory ? `<div style="position:absolute;top:6px;left:6px;background:${CATEGORY_TITLE_COLORS[category] || 'rgba(0,0,0,0.65)'};color:#fff;padding:${mini ? '2px 7px' : '3px 9px'};border-radius:10px;font-size:${mini ? '0.6rem' : '0.7rem'};font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,0.3);">${subcategoryHe(item.subcategory)}</div>` : ''}
@@ -721,7 +721,7 @@ function cardHTML(item, category, mini) {
   return `
     <div class="listing-card" onclick="openDetail('${category}', ${item.id})" style="position:relative;">
       <img class="card-img" src="${item.image}" alt="${item.name}" onerror="this.style.display='none'">
-      <button onclick="event.stopPropagation();addToMyTrip('${category}', ${item.id})" title="הוסף לטיול שלי" style="position:absolute;top:8px;left:8px;background:rgba(0,0,0,0.65);color:#E9C46A;border:none;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:0.78rem;display:flex;align-items:center;justify-content:center;z-index:3;box-shadow:0 1px 4px rgba(0,0,0,0.4);">🎒+</button>
+      <button onclick="event.stopPropagation();addToMyTrip('${category}', ${item.id})" title="הוסף לטיול שלי" style="position:absolute;top:8px;left:8px;background:rgba(0,0,0,0.65);color:#fff;border:none;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:0.95rem;display:flex;align-items:center;justify-content:center;z-index:3;box-shadow:0 1px 4px rgba(0,0,0,0.4);">❤️</button>
       <div class="card-body">
         <div class="card-title" style="color:#2C5F6E;">${item.name}</div>
         <div class="card-location" style="color:#6B7F8D;"><i class="fas fa-map-marker-alt" style="color:#F4A261;"></i> ${item.address || ''}</div>
@@ -914,8 +914,8 @@ async function renderItinerariesPage() {
     </div>
     <div style="display:flex;gap:6px;padding:10px 16px 0;">
       <button onclick="switchItinView('day')" style="flex:1;padding:9px 4px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.78rem;cursor:pointer;border:1px solid ${view==='day'?'#E9C46A':'#E5E7EB'};background:${view==='day'?'#E9C46A':'#fff'};color:${view==='day'?'#2C5F6E':'#6B7F8D'};">📅 מסלולי יום</button>
-      <button onclick="switchItinView('star')" style="flex:1;padding:9px 4px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.78rem;cursor:pointer;border:1px solid ${view==='star'?'#E9C46A':'#E5E7EB'};background:${view==='star'?'#E9C46A':'#fff'};color:${view==='star'?'#2C5F6E':'#6B7F8D'};">🌟 טיולי כוכב</button>
-      <button onclick="navigateTo('mytrip')" style="flex:1;padding:9px 4px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.78rem;cursor:pointer;border:1px solid #E76F51;background:#E76F51;color:#fff;">🎒 הטיול שלי</button>
+      <button onclick="switchItinView('star')" style="flex:1;padding:9px 4px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.78rem;cursor:pointer;border:1px solid ${view==='star'?'#E9C46A':'#E5E7EB'};background:${view==='star'?'#E9C46A':'#fff'};color:${view==='star'?'#2C5F6E':'#6B7F8D'};">⭐ טיולי כוכב</button>
+      <button onclick="navigateTo('mytrip')" style="flex:1;padding:9px 4px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.78rem;cursor:pointer;border:1px solid #E76F51;background:#E76F51;color:#fff;">❤️ הטיול שלי</button>
     </div>
     <div style="padding:12px 16px 80px;">
       ${view === 'day' ? `
@@ -1001,8 +1001,10 @@ function buildStarHubMap(h, size = '600x300') {
   const colorHex = h.color.replace('#','0x');
   const centerMarker = `markers=color:${colorHex}%7Csize:mid%7Clabel:%E2%98%85%7C${c}`;
   const spokeMarkers = h.spokes.map((s,i) => `markers=color:${colorHex}%7Csize:small%7Clabel:${i+1}%7C${s.lat},${s.lng}`).join('&');
-  const paths = h.spokes.map(s => `path=color:${colorHex}%7Cweight:2%7C${c}%7C${s.lat},${s.lng}`).join('&');
-  return `https://maps.googleapis.com/maps/api/staticmap?size=${size}&maptype=roadmap&language=en&${centerMarker}&${spokeMarkers}&${paths}&key=AIzaSyDIqkbn9__0EdYjyCRQv4w-Gi3tHWwSwro`;
+  // Glow effect: dark wide outline behind + bright neon inside
+  const outlinePaths = h.spokes.map(s => `path=color:0x000000FF%7Cweight:7%7C${c}%7C${s.lat},${s.lng}`).join('&');
+  const glowPaths = h.spokes.map(s => `path=color:0xFFFF00FF%7Cweight:4%7C${c}%7C${s.lat},${s.lng}`).join('&');
+  return `https://maps.googleapis.com/maps/api/staticmap?size=${size}&maptype=roadmap&language=en&${centerMarker}&${spokeMarkers}&${outlinePaths}&${glowPaths}&key=AIzaSyDIqkbn9__0EdYjyCRQv4w-Gi3tHWwSwro`;
 }
 
 let STAR_HUB_STATES = null;
@@ -1023,7 +1025,7 @@ function renderStarHubInner(h, idx) {
       <div style="background:${h.color};color:#fff;padding:12px 16px;display:flex;align-items:center;gap:10px;">
         <div style="font-size:1.6rem;">${h.icon}</div>
         <div style="flex:1;">
-          <div style="font-weight:800;font-size:1rem;line-height:1.2;">🌟 ${h.name}</div>
+          <div style="font-weight:800;font-size:1rem;line-height:1.2;">⭐ ${h.name}</div>
           <div style="font-size:0.72rem;opacity:0.92;margin-top:2px;">${h.spokes.length} זרועות</div>
         </div>
         ${(() => { const r = parseInt(localStorage.getItem(`star-rating-${idx}`) || '0'); return r ? `<div style="background:rgba(0,0,0,0.25);color:#E9C46A;font-size:0.85rem;padding:3px 8px;border-radius:10px;letter-spacing:1px;">${'★'.repeat(r)}${'☆'.repeat(5-r)}</div>` : ''; })()}
@@ -1043,6 +1045,7 @@ function renderStarHubInner(h, idx) {
           </div>
         `).join('')}
       </div>
+      <button onclick="addStarHubToMyTrip(${idx})" style="display:block;width:100%;background:#FDF6EC;color:${h.color};border:none;border-top:1px solid #F5EFE6;text-align:center;padding:10px;font-weight:700;font-size:0.85rem;cursor:pointer;font-family:Heebo;">⭐ הצמד טיול כוכב שלם ל"הטיול שלי"</button>
       ${(() => {
         const saved = parseInt(localStorage.getItem(`star-rating-${idx}`) || '0');
         return `
@@ -1063,6 +1066,23 @@ function rateStarHub(idx, n) {
   localStorage.setItem(`star-rating-${idx}`, String(n));
   const card = document.getElementById(`star-card-${idx}`);
   if (card) card.innerHTML = renderStarHubInner(getStarHub(idx), idx);
+}
+
+function addStarHubToMyTrip(idx) {
+  const h = getStarHub(idx);
+  if (!h) return;
+  const trip = getMyTrip();
+  const day = trip.items.length ? Math.max(...trip.items.map(i => i.day)) + 1 : 1;
+  h.spokes.forEach(s => {
+    trip.items.push({
+      uid: 'i_' + Date.now() + '_' + Math.random().toString(36).slice(2,7),
+      category: 'star-spoke', id: 0,
+      name: s.name, image: '', address: '', lat: s.lat, lng: s.lng,
+      day, time: '', note: '⭐ ' + h.name
+    });
+  });
+  saveMyTrip(trip);
+  showTripToast(`✓ נוסף טיול כוכב "${h.name}" כיום ${day} בטיול שלך`);
 }
 
 function onStarSpokeDragStart(e, idx, spokeIdx) {
@@ -1131,7 +1151,7 @@ function ITINERARY_TEMPLATE(it, idx, navUrl) {
           <a href="${navUrl}" target="_blank" style="display:block;text-decoration:none;background:${it.color};color:#fff;text-align:center;padding:10px;font-weight:700;font-size:0.9rem;">
             <i class="fas fa-directions"></i> פתח ניווט ב-Google Maps
           </a>
-          <button onclick="addItineraryToMyTrip(${idx})" style="display:block;width:100%;background:#FDF6EC;color:#E76F51;border:none;border-top:1px solid #F5EFE6;text-align:center;padding:10px;font-weight:700;font-size:0.85rem;cursor:pointer;font-family:Heebo;">🎒 הוסף מסלול שלם ל"הטיול שלי"</button>
+          <button onclick="addItineraryToMyTrip(${idx})" style="display:block;width:100%;background:#FDF6EC;color:#E76F51;border:none;border-top:1px solid #F5EFE6;text-align:center;padding:10px;font-weight:700;font-size:0.85rem;cursor:pointer;font-family:Heebo;">📌 הצמד מסלול שלם ל"הטיול שלי"</button>
           <div style="padding:12px 16px;">
             ${it.stops.map((s, i) => {
               const related = findRelatedItems(s.name, 8).filter(r => r.category === 'restaurants').slice(0, 3);
@@ -2073,7 +2093,7 @@ function cardGridHTML(item, category) {
   const verified = isVerifiedImage(item, category);
   return `
         <div style="background:#fff;border-radius:6px;overflow:hidden;border:1px solid #E5E7EB;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,0.05);position:relative;" onclick="openDetail('${category}', ${item.id})">
-          <button onclick="event.stopPropagation();addToMyTrip('${category}', ${item.id})" title="הוסף לטיול שלי" style="position:absolute;top:10px;right:10px;background:rgba(0,0,0,0.7);color:#E9C46A;border:none;width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:0.85rem;display:flex;align-items:center;justify-content:center;z-index:3;box-shadow:0 2px 6px rgba(0,0,0,0.4);">🎒+</button>
+          <button onclick="event.stopPropagation();addToMyTrip('${category}', ${item.id})" title="הוסף לטיול שלי" style="position:absolute;top:10px;right:10px;background:rgba(0,0,0,0.7);color:#fff;border:none;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;z-index:3;box-shadow:0 2px 6px rgba(0,0,0,0.4);">❤️</button>
           <div style="position:relative;">
             <img src="${item.image}" alt="${item.name}" style="width:100%;height:220px;object-fit:cover;" onerror="this.style.display='none'">
             ${item.subcategory ? `<div style="position:absolute;top:8px;left:8px;background:${CATEGORY_TITLE_COLORS[category] || 'rgba(0,0,0,0.65)'};color:#fff;padding:4px 11px;border-radius:12px;font-size:0.75rem;font-weight:700;box-shadow:0 1px 4px rgba(0,0,0,0.35);">${subcategoryHe(item.subcategory)}</div>` : ''}
@@ -2749,7 +2769,7 @@ function openDetail(category, id) {
         ` : ''}
         ${reviewsHTML(item)}
         ${item.lat ? `<div class="map-container" style="margin:0 0 12px;height:220px;"><div id="detailMap" style="width:100%;height:100%;"></div></div>${nearMeToggleHTML()}` : ''}
-        <button onclick="addToMyTrip('${category}', ${item.id})" style="width:100%;background:#E76F51;color:#fff;border:none;padding:12px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.95rem;cursor:pointer;margin-bottom:10px;">🎒 הוסף ל"הטיול שלי"</button>
+        <button onclick="addToMyTrip('${category}', ${item.id})" style="width:100%;background:#E76F51;color:#fff;border:none;padding:12px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.95rem;cursor:pointer;margin-bottom:10px;">❤️ הוסף ל"הטיול שלי"</button>
         <div class="modal-actions" style="flex-wrap:wrap;">
           ${item.lat ? `<button class="modal-btn primary" onclick="openNavigation(${item.lat},${item.lng})"><i class="fas fa-directions"></i> נווט</button>` : ''}
           ${item.googleUrl ? `<a href="${item.googleUrl}" target="_blank" class="modal-btn secondary"><i class="fab fa-google"></i> Google Maps</a>` : ''}
