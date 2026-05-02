@@ -128,6 +128,10 @@
         <span style="color:#2A9D8F;"><i class="fas fa-book-open" style="margin-left:6px;font-size:0.9rem;"></i>להכיר את דובאי</span>
       </h2>
       <div class="cards-scroll" id="learnCards" style="padding-bottom:8px;">
+        <div onclick="openLearn('promo')" style="min-width:120px;width:120px;height:120px;scroll-snap-align:start;border-radius:10px;cursor:pointer;color:#fff;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,0.2);background:linear-gradient(180deg,rgba(0,0,0,0.05) 0%,rgba(0,0,0,0.7) 100%),url('images/icon-new.jpg') center/cover;display:flex;flex-direction:column;justify-content:flex-end;padding:8px;border:2px solid #E9C46A;">
+          <div style="font-weight:800;font-size:0.78rem;line-height:1.2;text-shadow:0 1px 3px rgba(0,0,0,0.95);">על האפליקציה</div>
+          <div style="font-weight:600;font-size:0.62rem;color:#E9C46A;margin-top:2px;text-shadow:0 1px 3px rgba(0,0,0,0.95);">למה שווה? 🎯</div>
+        </div>
         <div onclick="openLearn('welcome')" style="min-width:120px;width:120px;height:120px;scroll-snap-align:start;border-radius:10px;cursor:pointer;color:#fff;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,0.15);background-image:linear-gradient(180deg,rgba(0,0,0,0.15) 0%,rgba(0,0,0,0.65) 100%),url('images/Yizhak/portrait-woman-visiting-luxurious-city-dubai.jpg');background-size:cover;background-position:center;display:flex;flex-direction:column;justify-content:flex-end;padding:8px;">
           <div style="font-weight:800;font-size:0.82rem;line-height:1.2;text-shadow:0 1px 3px rgba(0,0,0,0.85);">ברוכים הבאים</div>
         </div>
@@ -145,6 +149,9 @@
         </div>
         <div onclick="openLearn('tourism')" style="min-width:120px;width:120px;height:120px;scroll-snap-align:start;border-radius:10px;cursor:pointer;color:#fff;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,0.15);background-image:linear-gradient(180deg,rgba(0,0,0,0.15) 0%,rgba(0,0,0,0.65) 100%),url('images/Yizhak/tourism-family-dubai.jpg');background-size:cover;background-position:center;display:flex;flex-direction:column;justify-content:flex-end;padding:8px;">
           <div style="font-weight:800;font-size:0.82rem;line-height:1.2;text-shadow:0 1px 3px rgba(0,0,0,0.85);">תיירות והקשר הישראלי</div>
+        </div>
+        <div onclick="openLearn('vocabulary')" style="min-width:120px;width:120px;height:120px;scroll-snap-align:start;border-radius:10px;cursor:pointer;color:#fff;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,0.15);background:linear-gradient(135deg,#5B9DC7,#2A9D8F);display:flex;flex-direction:column;justify-content:flex-end;padding:8px;">
+          <div style="font-weight:800;font-size:0.82rem;line-height:1.2;text-shadow:0 1px 3px rgba(0,0,0,0.85);">אוצר מילים בסיסי</div>
         </div>
       </div>
 
@@ -232,6 +239,10 @@
 
     <!-- LEGAL PAGE -->
     <div id="page-legal" class="page"></div>
+    <div id="page-about" class="page"></div>
+    <div id="page-terms" class="page"></div>
+    <div id="page-privacy" class="page"></div>
+    <div id="page-contact" class="page"></div>
 
     <!-- MALL DETAIL PAGE -->
     <div id="page-mall" class="page"></div>
@@ -258,7 +269,7 @@
     </button>
     <button class="nav-item" data-page="legal">
       <i class="fas fa-info-circle"></i>
-      <span>מידע משפטי</span>
+      <span>מידע</span>
     </button>
     <a href="https://wa.me/972501234567?text=שלום%20מהאפליקציית%20WellCome%20Dubai" target="_blank" class="nav-item" style="text-decoration:none;color:#25D366;">
       <i class="fab fa-whatsapp" style="color:#25D366;"></i>

@@ -75,6 +75,10 @@ function navigateTo(page, subcategory) {
     case 'currency': renderCurrencyPage(); break;
     case 'itineraries': renderItinerariesPage(); break;
     case 'legal': renderLegalPage(); break;
+    case 'about': renderInfoSubPage('about'); break;
+    case 'terms': renderInfoSubPage('terms'); break;
+    case 'privacy': renderInfoSubPage('privacy'); break;
+    case 'contact': renderInfoSubPage('contact'); break;
     case 'mall': renderMallPage(subcategory); break;
     case 'areas': renderAreasPage(); break;
     case 'info': renderInfoPage(); break;
@@ -721,16 +725,127 @@ async function renderItinerariesPage() {
   if (!page) return;
   if (!ITINERARY_STATES) ITINERARY_STATES = JSON.parse(JSON.stringify(ITINERARIES));
   await loadAllAlbums();
+  const view = window.ITIN_VIEW || 'day';
   page.innerHTML = `
     <div class="page-header">
       <button class="back-btn" onclick="navigateTo('home')"><i class="fas fa-arrow-right"></i></button>
-      <h2><i class="fas fa-route" style="color:#E9C46A;margin-left:6px;"></i> מסלולי יום</h2>
+      <h2><i class="fas fa-route" style="color:#E9C46A;margin-left:6px;"></i> מסלולים מוכנים</h2>
+    </div>
+    <div style="display:flex;gap:8px;padding:10px 16px 0;">
+      <button onclick="switchItinView('day')" style="flex:1;padding:10px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.88rem;cursor:pointer;border:1px solid ${view==='day'?'#E9C46A':'#E5E7EB'};background:${view==='day'?'#E9C46A':'#fff'};color:${view==='day'?'#2C5F6E':'#6B7F8D'};">📅 מסלולי יום</button>
+      <button onclick="switchItinView('star')" style="flex:1;padding:10px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.88rem;cursor:pointer;border:1px solid ${view==='star'?'#E9C46A':'#E5E7EB'};background:${view==='star'?'#E9C46A':'#fff'};color:${view==='star'?'#2C5F6E':'#6B7F8D'};">🌟 טיולי כוכב</button>
     </div>
     <div style="padding:12px 16px 80px;">
-      <div style="background:#FDF6EC;border-right:3px solid #E9C46A;padding:10px 14px;border-radius:6px;font-size:0.85rem;color:#2C5F6E;margin-bottom:14px;">
-        💡 גררו את התחנות (אייקון ⋮⋮) לסדר אישי שלכם. לחיצה על "פתח ניווט" תפתח Google Maps.
+      ${view === 'day' ? `
+        <div style="background:#FDF6EC;border-right:3px solid #E9C46A;padding:10px 14px;border-radius:6px;font-size:0.85rem;color:#2C5F6E;margin-bottom:14px;">
+          💡 גררו את התחנות (אייקון ⋮⋮) לסדר אישי שלכם. לחיצה על "פתח ניווט" תפתח Google Maps.
+        </div>
+        <div id="itineraries-list">${ITINERARY_STATES.map((it, idx) => renderItineraryCard(it, idx)).join('')}</div>
+      ` : `
+        <div style="background:#FDF6EC;border-right:3px solid #E9C46A;padding:10px 14px;border-radius:6px;font-size:0.85rem;color:#2C5F6E;margin-bottom:14px;">
+          💡 כל כוכב = נקודת מרכז עם אטרקציות מסביב. בחרו אזור — תכננו את היום בלי לזוז רחוק.
+        </div>
+        <div>${STAR_HUBS.map((h, i) => renderStarHub(h, i)).join('')}</div>
+      `}
+    </div>
+  `;
+}
+
+function switchItinView(v) {
+  window.ITIN_VIEW = v;
+  renderItinerariesPage();
+}
+
+const STAR_HUBS = [
+  { name:'דובאי מרינה', icon:'⛵', color:'#5B9DC7', center:{lat:25.0820,lng:55.1410},
+    desc:'נמל מודרני עם פרומנדה, יאכטות, מועדוני חוף וגורדי שחקים.',
+    spokes:[
+      {name:'פרומנדה Marina Walk', lat:25.0820, lng:55.1410},
+      {name:'JBR + The Beach', lat:25.0795, lng:55.1340},
+      {name:'Ain Dubai (Bluewaters)', lat:25.0786, lng:55.1255},
+      {name:'Skydive Dubai', lat:25.0890, lng:55.1370},
+      {name:'יאכטה / סירת מנוע', lat:25.0820, lng:55.1410},
+      {name:'Zero Gravity Beach Club', lat:25.0930, lng:55.1397}
+    ]
+  },
+  { name:'Downtown Dubai', icon:'🏙️', color:'#E76F51', center:{lat:25.1972,lng:55.2744},
+    desc:'לב העיר — מגדל בורג׳ ח׳ליפה, דובאי מול ומופע המזרקות.',
+    spokes:[
+      {name:'Burj Khalifa', lat:25.1972, lng:55.2744},
+      {name:'Dubai Mall', lat:25.1972, lng:55.2796},
+      {name:'Dubai Fountain', lat:25.1955, lng:55.2745},
+      {name:'Souk Al Bahar', lat:25.1956, lng:55.2773},
+      {name:'Dubai Aquarium', lat:25.1972, lng:55.2796},
+      {name:'Dubai Opera', lat:25.1936, lng:55.2728}
+    ]
+  },
+  { name:'Palm Jumeirah', icon:'🌴', color:'#F4A261', center:{lat:25.1124,lng:55.1390},
+    desc:'אי דקל עם מלונות יוקרה, פארקי מים, מסעדות מישלן וביץ׳ קלאבים.',
+    spokes:[
+      {name:'Atlantis The Palm', lat:25.1305, lng:55.1175},
+      {name:'Aquaventure Waterpark', lat:25.1295, lng:55.1183},
+      {name:'The Pointe', lat:25.1342, lng:55.1212},
+      {name:'View at the Palm', lat:25.1124, lng:55.1390},
+      {name:'Nobu Dubai', lat:25.1305, lng:55.1175},
+      {name:'Monorail Palm', lat:25.0917, lng:55.1502}
+    ]
+  },
+  { name:'Old Dubai (Deira)', icon:'🕌', color:'#2A9D8F', center:{lat:25.2655,lng:55.2962},
+    desc:'דובאי הישנה — שוקי הזהב והתבלינים, סירות ה-Abra והמחוז ההיסטורי.',
+    spokes:[
+      {name:'Gold Souk', lat:25.2697, lng:55.2967},
+      {name:'Spice Souk', lat:25.2680, lng:55.2960},
+      {name:'Abra Boats (Creek)', lat:25.2638, lng:55.2972},
+      {name:'Al Fahidi Historic', lat:25.2630, lng:55.2980},
+      {name:'Dubai Museum', lat:25.2632, lng:55.2972},
+      {name:'Textile Souk', lat:25.2620, lng:55.2980}
+    ]
+  },
+  { name:'Mall of Emirates', icon:'❄️', color:'#B85C8E', center:{lat:25.1183,lng:55.2002},
+    desc:'הקניון הוותיק עם Ski Dubai, פארק שעשועים מקורה ומסעדות.',
+    spokes:[
+      {name:'Mall of Emirates', lat:25.1183, lng:55.2002},
+      {name:'Ski Dubai', lat:25.1183, lng:55.2002},
+      {name:'Magic Planet', lat:25.1183, lng:55.2002},
+      {name:'VOX Cinemas', lat:25.1183, lng:55.2002},
+      {name:'Harvey Nichols', lat:25.1183, lng:55.2002},
+      {name:'Apple Store', lat:25.1183, lng:55.2002}
+    ]
+  }
+];
+
+function buildStarHubMap(h, size = '600x300') {
+  const c = `${h.center.lat},${h.center.lng}`;
+  const colorHex = h.color.replace('#','0x');
+  const centerMarker = `markers=color:${colorHex}%7Csize:mid%7Clabel:%E2%98%85%7C${c}`;
+  const spokeMarkers = h.spokes.map((s,i) => `markers=color:${colorHex}%7Csize:small%7Clabel:${i+1}%7C${s.lat},${s.lng}`).join('&');
+  const paths = h.spokes.map(s => `path=color:${colorHex}%7Cweight:2%7C${c}%7C${s.lat},${s.lng}`).join('&');
+  return `https://maps.googleapis.com/maps/api/staticmap?size=${size}&maptype=roadmap&language=en&${centerMarker}&${spokeMarkers}&${paths}&key=AIzaSyDIqkbn9__0EdYjyCRQv4w-Gi3tHWwSwro`;
+}
+
+function renderStarHub(h, idx) {
+  return `
+    <div style="background:#fff;border:1px solid #E5E7EB;border-radius:10px;overflow:hidden;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,0.04);">
+      <div style="background:${h.color};color:#fff;padding:12px 16px;display:flex;align-items:center;gap:10px;">
+        <div style="font-size:1.6rem;">${h.icon}</div>
+        <div style="flex:1;">
+          <div style="font-weight:800;font-size:1rem;line-height:1.2;">🌟 ${h.name}</div>
+          <div style="font-size:0.72rem;opacity:0.92;margin-top:2px;">${h.spokes.length} זרועות</div>
+        </div>
       </div>
-      <div id="itineraries-list">${ITINERARY_STATES.map((it, idx) => renderItineraryCard(it, idx)).join('')}</div>
+      <div style="height:240px;background:#F5F5F5;">
+        <img src="${buildStarHubMap(h, '600x300')}" alt="כוכב ${h.name}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none'">
+      </div>
+      <div style="padding:12px 14px;color:#2C5F6E;font-size:0.85rem;line-height:1.6;background:#FDF6EC;border-bottom:1px solid #F5EFE6;">${h.desc}</div>
+      <div style="padding:10px 14px;">
+        ${h.spokes.map((s, i) => `
+          <div style="display:flex;align-items:center;gap:10px;padding:7px 0;${i < h.spokes.length-1 ? 'border-bottom:1px solid #F5EFE6;' : ''}">
+            <div style="background:${h.color};color:#fff;border-radius:50%;width:22px;height:22px;font-size:0.72rem;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;">${i+1}</div>
+            <div style="flex:1;color:#2C5F6E;font-size:0.85rem;">${s.name}</div>
+            <a href="https://www.google.com/maps/dir/?api=1&origin=${h.center.lat},${h.center.lng}&destination=${s.lat},${s.lng}&travelmode=walking" target="_blank" style="color:${h.color};font-size:0.78rem;text-decoration:none;font-weight:600;"><i class="fas fa-walking"></i> נווט</a>
+          </div>
+        `).join('')}
+      </div>
     </div>
   `;
 }
@@ -1226,34 +1341,122 @@ function renderMallPage(mallId) {
   `;
 }
 
+const INFO_SECTIONS = {
+  about: {
+    key:'about', title:'אודותינו', icon:'fa-info-circle', color:'#2A9D8F',
+    body:`WellCome Dubai — המדריך הישראלי המלא לדובאי.\n\nהחזון שלנו\nלהיות הכתובת העברית הראשונה של תייר ישראלי שמתכנן ביקור באמירויות. אנחנו מאמינים שטיול חכם מתחיל במידע אמין, נגיש ועדכני — בעברית, עם רגישות לקודים המקומיים.\n\nמה תמצאו כאן\n• מלונות — מדורגים לפי כוכבים ויוקרה\n• מסעדות — דגש על מסעדות כשרות, ישראליות וים-תיכוניות\n• אטרקציות — חובה לראות, פעילויות מים, פארקי שעשועים, ספארי מדבר\n• תחבורה — מטרו, מוניות, השכרת רכב, אפליקציות הסעה\n• בילוי, קניות, ילדים — והכל במפה אחת\n• מסלולי יום מוכנים, מזג אוויר חי, המרת מטבעות, לוחות טיסות חיים\n\nמקורות המידע\nהנתונים נאספים ממקורות פתוחים (Google Maps, אתרי הספקים, Wikipedia), מתחזקים ע"י משתמשי האתר ומעודכנים באופן שוטף. אנחנו לא מקבלים תשלום מאף ספק — הדירוגים אובייקטיביים.\n\nישראלים בדובאי\nמאז הסכמי אברהם (2020), דובאי הפכה ליעד פופולרי לישראלים. האתר נבנה תוך הבנה של הצרכים הייחודיים של המטייל הישראלי — כשרות, שפה, מנהגים מקומיים וביטחון.`
+  },
+  terms: {
+    key:'terms', title:'תקנון השימוש', icon:'fa-file-contract', color:'#E76F51',
+    body:`עודכן לאחרונה: מאי 2026\n\n1. כללי\nהשימוש באתר WellCome Dubai (להלן: "האתר") כפוף לתנאי שימוש אלה. גלישה באתר מהווה הסכמה לכל הסעיפים שלהלן.\n\n2. מהות השירות\nהאתר מספק מידע תיירותי על דובאי לקהל הישראלי. השירות ניתן ללא תשלום, ללא רישום, וללא איסוף נתונים אישיים.\n\n3. אחריות והגבלות\n• כל המידע מסופק "כפי שהוא" (AS-IS), ללא אחריות מפורשת או משתמעת.\n• מחירים, שעות פתיחה, אזורי שירות ופרטי קשר עלולים להשתנות — חובה לוודא ישירות מול בית העסק לפני קבלת החלטות.\n• WellCome Dubai אינו אחראי לטעויות, השמטות, או נזק כלשהו שנגרם משימוש במידע.\n\n4. צד שלישי\nקישורים, מפות, מידע על מלונות/מסעדות/חברות תחבורה הם לצורכי נוחות בלבד. WellCome Dubai אינו אחראי לעסקאות, חוויות או שירותים שמספק כל גורם חיצוני.\n\n5. שימוש מותר\nשימוש באתר מותר למטרות פרטיות בלבד. אסור להעתיק, להפיץ, או לעשות שימוש מסחרי בתכנים ללא אישור בכתב.\n\n6. קניין רוחני\nכל הזכויות שמורות. תמונות הספקים שייכות לבעליהן ומופיעות לצורך זיהוי בלבד.\n\n7. שינויים בתקנון\nWellCome Dubai רשאי לעדכן תנאים אלו בכל עת. המשך שימוש לאחר עדכון מהווה הסכמה לשינויים.\n\n8. סמכות שיפוט\nעל תנאי שימוש אלה יחול הדין הישראלי. סמכות שיפוט בלעדית לבתי המשפט בתל אביב.`
+  },
+  privacy: {
+    key:'privacy', title:'מדיניות פרטיות', icon:'fa-user-shield', color:'#5B9DC7',
+    body:`עודכן לאחרונה: מאי 2026\n\nאיזה מידע אנחנו אוספים?\nWellCome Dubai פועל ללא רישום משתמשים. לא נאספים שמות, אימיילים, מספרי טלפון או כל פרט מזהה.\n\nנתוני מיקום (Geolocation)\nכאשר תלחצו על "הראה לי מה קרוב אליי", הדפדפן יבקש הרשאה לגישה למיקום. הנתון משמש אך ורק לחישוב מרחק לאטרקציות, ולא נשלח לשרת או נשמר בשום מקום.\n\nאחסון מקומי (LocalStorage)\nהדפדפן שומר נתונים טכניים על המכשיר שלכם, ללא שליחה לשרת:\n• שערי מטבע ומזג אוויר (זמני, להאצה)\n• נתוני המאגר של ספקים (קטגוריות, מסלולים)\n• דירוגים אישיים שהוספתם למסלולים\n\nתוכלו למחוק את כל הנתונים בכל רגע — Settings → Clear Browsing Data.\n\nשירותי צד שלישי\n• Google Maps — מציג מפות ונווטים. כפוף למדיניות הפרטיות של Google.\n• Open-Meteo — שירות מזג אוויר חינמי, ללא איסוף נתונים.\n• AeroDataBox / Booking — ספקי לוחות טיסות וזמינות מלונות (כאשר רלוונטי).\n• GitHub Pages — אחסון האתר.\n\nעוגיות (Cookies)\nהאתר אינו משתמש בעוגיות שיווק או מעקב.\n\nזכויות המשתמש\n• זכות עיון: כל הנתונים נשמרים מקומית במכשיר שלכם — אתם בשליטה מלאה.\n• זכות מחיקה: ניקוי נתוני הדפדפן ימחק הכל.\n• זכות התנגדות: ניתן לסרב להרשאת מיקום ללא פגיעה ביכולת הגלישה.\n\nשאלות?\nניתן לפנות אלינו בעמוד "צור קשר".`
+  },
+  contact: {
+    key:'contact', title:'צור קשר', icon:'fa-envelope', color:'#E9C46A',
+    body:''
+  }
+};
+
 function renderLegalPage() {
   const page = document.getElementById('page-legal');
   if (!page) return;
-  const sections = [
-    { title:'אודותינו', icon:'fa-info-circle', color:'#2A9D8F', body:'WellCome Dubai — מדריך תיירים ישראלי לדובאי. מידע מקיף על מלונות, מסעדות כשרות וישראליות, אטרקציות, תחבורה ובילויים. כל המידע באתר נאסף ממקורות פתוחים ומבוסס על ניסיון מטיילים ישראליים שביקרו בדובאי.' },
-    { title:'תקנון השימוש', icon:'fa-file-contract', color:'#E76F51', body:'השימוש באתר מותנה בקבלת תנאי השימוש: 1) כל המידע מסופק "כפי שהוא" ללא אחריות. 2) המחירים, השעות והפרטים עלולים להשתנות — יש לוודא ישירות מול בית העסק. 3) WellCome Dubai אינו אחראי לעסקאות מול חברות צד שלישי (מלונות, מסעדות, ספקי תחבורה). 4) שימוש לא מסחרי בלבד. 5) הקישורים החיצוניים הם לצרכי נוחות בלבד.' },
-    { title:'מדיניות פרטיות', icon:'fa-user-shield', color:'#5B9DC7', body:'לא נאספים פרטים אישיים. נתוני המיקום (geolocation) משמשים אך ורק לחישוב תחנת המטרו הקרובה ואינם נשמרים. נתונים טכניים נשמרים בדפדפן (localStorage) למטרות תפעול בלבד — שערי מטבע, מזג אוויר, נתוני קטגוריות. לא נעשה שימוש בעוגיות שיווקיות.' },
-    { title:'צור קשר', icon:'fa-envelope', color:'#E9C46A', body:'יש לך הצעה, תיקון או רעיון? נשמח לשמוע!\n\nאימייל: krispelitzik@gmail.com\nוואטסאפ: 050-1234567 (זמני)\n\nתמיד מחפשים עוד תוספות, תיקוני מידע ושיתוף תמונות אמיתיות מהמקום.' }
-  ];
+  const items = Object.values(INFO_SECTIONS);
   page.innerHTML = `
     <div class="page-header">
       <button class="back-btn" onclick="navigateTo('home')"><i class="fas fa-arrow-right"></i></button>
-      <h2><i class="fas fa-balance-scale" style="color:#2C5F6E;margin-left:6px;"></i> מידע משפטי</h2>
+      <h2><i class="fas fa-info-circle" style="color:#2C5F6E;margin-left:6px;"></i> מידע</h2>
     </div>
-    <div style="padding:12px 16px 80px;">
-      ${sections.map(s => `
-        <div style="background:#fff;border:1px solid #E5E7EB;border-radius:10px;overflow:hidden;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,0.04);">
-          <div style="background:${s.color};color:#fff;padding:12px 16px;font-weight:700;display:flex;align-items:center;gap:10px;">
-            <i class="fas ${s.icon}"></i> ${s.title}
-          </div>
-          <div style="padding:14px 16px;font-size:0.88rem;line-height:1.7;color:#2C5F6E;white-space:pre-line;">${s.body}</div>
-        </div>
+    <div style="padding:12px 16px 80px;display:flex;flex-direction:column;gap:10px;">
+      ${items.map(s => `
+        <button onclick="navigateTo('${s.key}')" style="background:#fff;border:1px solid #E5E7EB;border-right:5px solid ${s.color};border-radius:10px;padding:16px;cursor:pointer;display:flex;align-items:center;gap:12px;font-family:Heebo;text-align:right;box-shadow:0 2px 8px rgba(0,0,0,0.04);">
+          <div style="width:40px;height:40px;border-radius:50%;background:${s.color};color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.05rem;flex-shrink:0;"><i class="fas ${s.icon}"></i></div>
+          <div style="flex:1;font-weight:700;color:#2C5F6E;font-size:0.95rem;">${s.title}</div>
+          <i class="fas fa-chevron-left" style="color:${s.color};font-size:0.85rem;"></i>
+        </button>
       `).join('')}
       <div style="text-align:center;color:#6B7F8D;font-size:0.75rem;margin-top:20px;">
         © 2026 WellCome Dubai · גרסה 1.0
       </div>
     </div>
   `;
+}
+
+function renderInfoSubPage(key) {
+  const page = document.getElementById(`page-${key}`);
+  if (!page) return;
+  const s = INFO_SECTIONS[key];
+  if (!s) return;
+  const inner = key === 'contact' ? renderContactForm() : `<div style="background:#fff;border:1px solid #E5E7EB;border-radius:10px;padding:18px;font-size:0.92rem;line-height:1.8;color:#2C5F6E;white-space:pre-line;box-shadow:0 2px 8px rgba(0,0,0,0.04);">${s.body}</div>`;
+  page.innerHTML = `
+    <div class="page-header">
+      <button class="back-btn" onclick="navigateTo('legal')"><i class="fas fa-arrow-right"></i></button>
+      <h2><i class="fas ${s.icon}" style="color:${s.color};margin-left:6px;"></i> ${s.title}</h2>
+    </div>
+    <div style="padding:16px 20px 80px;">${inner}</div>
+  `;
+}
+
+function renderContactForm() {
+  return `
+    <div style="background:#fff;border:1px solid #E5E7EB;border-radius:10px;padding:18px;box-shadow:0 2px 8px rgba(0,0,0,0.04);margin-bottom:14px;">
+      <div style="color:#2C5F6E;font-size:0.92rem;line-height:1.7;margin-bottom:16px;">
+        יש לכם הצעה, תיקון, שיתוף תמונה או רעיון לשיתוף פעולה? נשמח לשמוע!
+      </div>
+      <form onsubmit="submitContactForm(event)">
+        <div style="margin-bottom:12px;">
+          <label style="display:block;color:#2C5F6E;font-weight:600;font-size:0.85rem;margin-bottom:5px;">שם מלא *</label>
+          <input type="text" name="name" required style="width:100%;padding:10px;border:1px solid #E5E7EB;border-radius:6px;font-family:Heebo;font-size:0.9rem;color:#2C5F6E;box-sizing:border-box;">
+        </div>
+        <div style="margin-bottom:12px;">
+          <label style="display:block;color:#2C5F6E;font-weight:600;font-size:0.85rem;margin-bottom:5px;">אימייל *</label>
+          <input type="email" name="email" required style="width:100%;padding:10px;border:1px solid #E5E7EB;border-radius:6px;font-family:Heebo;font-size:0.9rem;direction:ltr;text-align:left;box-sizing:border-box;">
+        </div>
+        <div style="margin-bottom:12px;">
+          <label style="display:block;color:#2C5F6E;font-weight:600;font-size:0.85rem;margin-bottom:5px;">נושא *</label>
+          <select name="topic" required style="width:100%;padding:10px;border:1px solid #E5E7EB;border-radius:6px;font-family:Heebo;font-size:0.9rem;color:#2C5F6E;background:#fff;box-sizing:border-box;">
+            <option value="">בחר נושא...</option>
+            <option value="error">דיווח על שגיאה / מידע לא מעודכן</option>
+            <option value="suggestion">הצעה לשיפור / תוספת</option>
+            <option value="photo">שיתוף תמונה אמיתית מהמקום</option>
+            <option value="partnership">שיתוף פעולה עסקי</option>
+            <option value="other">אחר</option>
+          </select>
+        </div>
+        <div style="margin-bottom:14px;">
+          <label style="display:block;color:#2C5F6E;font-weight:600;font-size:0.85rem;margin-bottom:5px;">הודעה *</label>
+          <textarea name="message" required rows="5" style="width:100%;padding:10px;border:1px solid #E5E7EB;border-radius:6px;font-family:Heebo;font-size:0.9rem;color:#2C5F6E;resize:vertical;min-height:100px;box-sizing:border-box;"></textarea>
+        </div>
+        <div style="display:flex;gap:10px;">
+          <button type="submit" style="flex:1;background:#E9C46A;color:#2C5F6E;border:none;padding:12px;border-radius:6px;font-family:Heebo;font-weight:700;font-size:0.95rem;cursor:pointer;"><i class="fas fa-envelope"></i> שלח באימייל</button>
+          <button type="button" onclick="submitContactForm(null, true)" style="flex:1;background:#25D366;color:#fff;border:none;padding:12px;border-radius:6px;font-family:Heebo;font-weight:700;font-size:0.95rem;cursor:pointer;"><i class="fab fa-whatsapp"></i> שלח בוואטסאפ</button>
+        </div>
+      </form>
+    </div>
+    <div style="background:#FDF6EC;border-radius:10px;padding:14px;font-size:0.82rem;color:#2C5F6E;text-align:center;">
+      או צור קשר ישיר:<br>
+      <a href="mailto:krispelitzik@gmail.com" style="color:#E76F51;font-weight:700;text-decoration:none;">krispelitzik@gmail.com</a>
+    </div>
+  `;
+}
+
+function submitContactForm(e, viaWhatsApp) {
+  if (e) e.preventDefault();
+  const form = document.querySelector('#page-contact form');
+  if (!form) return;
+  const fd = new FormData(form);
+  const name = fd.get('name'), email = fd.get('email'), topic = fd.get('topic'), message = fd.get('message');
+  if (!name || !email || !topic || !message) { alert('נא למלא את כל השדות'); return; }
+  const topicLabels = { error:'דיווח על שגיאה', suggestion:'הצעה לשיפור', photo:'שיתוף תמונה', partnership:'שיתוף פעולה', other:'אחר' };
+  const subject = `[WellCome Dubai] ${topicLabels[topic] || topic} — ${name}`;
+  const body = `שם: ${name}\nאימייל: ${email}\nנושא: ${topicLabels[topic] || topic}\n\n${message}`;
+  if (viaWhatsApp) {
+    window.open(`https://wa.me/972501234567?text=${encodeURIComponent(subject + '\n\n' + body)}`, '_blank');
+  } else {
+    window.location.href = `mailto:krispelitzik@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  }
 }
 
 const CURRENCY_FLAGS = { ILS:'🇮🇱', AED:'🇦🇪', USD:'🇺🇸', EUR:'🇪🇺' };
