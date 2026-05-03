@@ -218,6 +218,9 @@ function renderMyTripPage() {
       <button class="back-btn" onclick="navigateTo('home')"><i class="fas fa-arrow-right"></i></button>
       <h2><i class="fas fa-suitcase-rolling" style="color:#E76F51;margin-left:6px;"></i> הטיול שלי</h2>
     </div>
+    <div style="background:#FDF6EC;border-right:3px solid #E76F51;padding:10px 14px;margin:0 16px;border-radius:6px;font-size:0.82rem;color:#2C5F6E;line-height:1.5;">
+      💡 הוסף לכאן אלמנטים לתכנון הטיול שלך על ידי לחיצה על <strong>+</strong> בכל קטגוריה באפליקציה.
+    </div>
     <div style="padding:12px 16px 80px;">
       <div style="background:#fff;border:1px solid #E5E7EB;border-radius:10px;padding:14px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,0.04);">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px;">
@@ -2823,8 +2826,11 @@ function openDetail(category, id) {
   `;
   modal.classList.add('active');
   modal.scrollTop = 0;
+  modal.style.alignItems = 'flex-start';
+  modal.style.justifyContent = 'center';
   const sheet = modal.querySelector('.modal-sheet');
   if (sheet) sheet.scrollTop = 0;
+  modal.scrollTop = 0;
   modal.onclick = (e) => { if (e.target === modal) closeDetail(); };
 
   if (item.lat) {
