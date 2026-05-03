@@ -2865,13 +2865,21 @@ async function renderGalleryPage() {
       <h2><i class="fas fa-images" style="color:#E76F51;margin-left:6px;"></i> הגלרייה שלנו</h2>
     </div>
     <div style="padding:12px 14px 80px;">
-      <div style="background:#000;border-radius:10px;overflow:hidden;position:relative;aspect-ratio:4/3;">
+      <div style="background:#000;border-radius:10px;overflow:hidden;position:relative;aspect-ratio:4/3;margin-bottom:18px;">
         <img id="galleryPageImg" src="${images[cur] ? galleryImgUrl(images[cur]) : ''}" style="width:100%;height:100%;object-fit:contain;display:block;" onerror="this.style.display='none'">
         ${images.length > 1 ? `
           <button onclick="navGalleryPage(-1)" style="position:absolute;top:50%;right:10px;transform:translateY(-50%);background:rgba(0,0,0,0.55);color:#fff;border:none;width:44px;height:44px;border-radius:50%;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;"><i class="fas fa-chevron-right"></i></button>
           <button onclick="navGalleryPage(1)" style="position:absolute;top:50%;left:10px;transform:translateY(-50%);background:rgba(0,0,0,0.55);color:#fff;border:none;width:44px;height:44px;border-radius:50%;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;"><i class="fas fa-chevron-left"></i></button>
           <div style="position:absolute;bottom:10px;left:0;right:0;text-align:center;color:#fff;font-size:0.78rem;text-shadow:0 1px 3px rgba(0,0,0,0.6);"><span id="galleryPageCount">${cur + 1} / ${images.length}</span></div>
         ` : ''}
+      </div>
+      <div style="font-weight:700;color:#2C5F6E;font-size:0.95rem;margin-bottom:8px;">כל התמונות (${images.length})</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        ${images.map((name, i) => `
+          <div onclick="openGalleryAt(${i})" style="aspect-ratio:1/1;border-radius:8px;overflow:hidden;cursor:pointer;background:#F5F5F5;border:${i === cur ? '2px solid #E76F51' : '1px solid #E5E7EB'};">
+            <img src="${galleryImgUrl(name)}" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none'">
+          </div>
+        `).join('')}
       </div>
     </div>
   `;
