@@ -2820,12 +2820,16 @@ function moveHotelSlide(dir) {
 }
 
 function galleryImgUrl(name) { return 'images/gallery/' + encodeURIComponent(name); }
+function openGalleryAt(idx) {
+  window._galleryPageIdx = idx || 0;
+  navigateTo('gallery');
+}
 function renderHomeGalleryPreview() {
   const el = document.getElementById('homeGalleryPreview');
   if (!el) return;
   const imgs = (window.GALLERY_IMAGES || []).slice(0, 12);
   el.innerHTML = imgs.map((name, i) => `
-    <div onclick="openGalleryImage(${i})" style="min-width:130px;width:130px;height:130px;scroll-snap-align:start;border-radius:8px;overflow:hidden;cursor:pointer;background:#F5F5F5;flex-shrink:0;box-shadow:0 2px 6px rgba(0,0,0,0.06);">
+    <div onclick="openGalleryAt(${i})" style="min-width:130px;width:130px;height:130px;scroll-snap-align:start;border-radius:8px;overflow:hidden;cursor:pointer;background:#F5F5F5;flex-shrink:0;box-shadow:0 2px 6px rgba(0,0,0,0.06);">
       <img src="${galleryImgUrl(name)}" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none'">
     </div>
   `).join('');
@@ -2839,24 +2843,36 @@ async function renderGalleryPage() {
     try { const r = await fetch('data/gallery.json?v=2'); if (r.ok) window.GALLERY_IMAGES = await r.json(); } catch {}
   }
   const images = window.GALLERY_IMAGES || [];
+  const cur = window._galleryPageIdx || 0;
   page.innerHTML = `
     <div class="page-header">
       <button class="back-btn" onclick="navigateTo('home')"><i class="fas fa-arrow-right"></i></button>
       <h2><i class="fas fa-images" style="color:#E76F51;margin-left:6px;"></i> הגלרייה שלנו</h2>
     </div>
     <div style="padding:12px 14px 80px;">
-      <div style="background:#FDF6EC;border-right:3px solid #E76F51;padding:10px 14px;border-radius:6px;font-size:0.82rem;color:#2C5F6E;line-height:1.5;margin-bottom:14px;">
-        💎 מבחר תמונות אמיתיות של דובאי — מהמלאי הפרטי שלנו, עם חתימת WellCome Dubai.
-      </div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;">
-        ${images.map((name, i) => `
-          <div style="aspect-ratio:1/1;border-radius:8px;overflow:hidden;cursor:pointer;background:#F5F5F5;" onclick="openGalleryImage(${i})">
-            <img src="${galleryImgUrl(name)}" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none'">
-          </div>
-        `).join('')}
+      <div style="background:#000;border-radius:10px;overflow:hidden;position:relative;aspect-ratio:4/3;">
+        <img id="galleryPageImg" src="${images[cur] ? galleryImgUrl(images[cur]) : ''}" style="width:100%;height:100%;object-fit:contain;display:block;" onerror="this.style.display='none'">
+        ${images.length > 1 ? `
+          <button onclick="navGalleryPage(-1)" style="position:absolute;top:50%;right:10px;transform:translateY(-50%);background:rgba(0,0,0,0.55);color:#fff;border:none;width:44px;height:44px;border-radius:50%;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;"><i class="fas fa-chevron-right"></i></button>
+          <button onclick="navGalleryPage(1)" style="position:absolute;top:50%;left:10px;transform:translateY(-50%);background:rgba(0,0,0,0.55);color:#fff;border:none;width:44px;height:44px;border-radius:50%;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;"><i class="fas fa-chevron-left"></i></button>
+          <div style="position:absolute;bottom:10px;left:0;right:0;text-align:center;color:#fff;font-size:0.78rem;text-shadow:0 1px 3px rgba(0,0,0,0.6);"><span id="galleryPageCount">${cur + 1} / ${images.length}</span></div>
+        ` : ''}
       </div>
     </div>
   `;
+}
+
+function navGalleryPage(dir) {
+  const images = window.GALLERY_IMAGES || [];
+  if (!images.length) return;
+  let idx = (window._galleryPageIdx || 0) + dir;
+  if (idx < 0) idx = images.length - 1;
+  if (idx >= images.length) idx = 0;
+  window._galleryPageIdx = idx;
+  const img = document.getElementById('galleryPageImg');
+  const count = document.getElementById('galleryPageCount');
+  if (img) img.src = galleryImgUrl(images[idx]);
+  if (count) count.textContent = `${idx + 1} / ${images.length}`;
 }
 
 function openGalleryImage(idx) {
