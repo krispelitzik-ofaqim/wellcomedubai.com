@@ -138,8 +138,20 @@ async function enrichCategoryWithGoogle(category) {
 }
 
 // Sort items by Google rating
+function hasCustomImage(item) {
+  const img = (item && item.image) || '';
+  if (!img) return false;
+  if (img.startsWith('https://images.pexels.com')) return false;
+  if (/\/(?:kids|hotel|rest|night|attr|shop|transp|cam|safari|car)_\d+\./i.test(img)) return false;
+  if (/\/\d+\.(?:jpg|jpeg|png)$/i.test(img)) return false;
+  return true;
+}
+
 function sortByRating(items) {
   return [...items].sort((a, b) => {
+    const aReal = hasCustomImage(a) ? 1 : 0;
+    const bReal = hasCustomImage(b) ? 1 : 0;
+    if (bReal !== aReal) return bReal - aReal;
     const rA = a.googleRating || a.rating || 0;
     const rB = b.googleRating || b.rating || 0;
     if (rB !== rA) return rB - rA;

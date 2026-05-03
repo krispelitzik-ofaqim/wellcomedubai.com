@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "name": "Burj Al Arab Jumeirah",
+    "candidates": [
+      "1_a.jpg",
+      "1_b.jpg",
+      "1_c.jpg"
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Atlantis The Royal",
+    "candidates": [
+      "2_a.jpg",
+      "2_b.jpg",
+      "2_c.jpg"
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Armani Hotel Dubai",
+    "candidates": [
+      "3_a.jpg",
+      "3_b.jpg",
+      "3_c.jpg"
+    ]
+  }
+]

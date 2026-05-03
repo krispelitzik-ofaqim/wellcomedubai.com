@@ -20,6 +20,7 @@ function initApp() {
   setupNavigation();
   setupSearch();
   fetch('data/hotel-photos.json?v=1').then(r => r.ok ? r.json() : null).then(j => { if (j) window.HOTEL_PHOTOS = j; }).catch(() => {});
+  fetch('data/gallery.json?v=1').then(r => r.ok ? r.json() : null).then(j => { if (j) { window.GALLERY_IMAGES = j; renderHomeGalleryPreview(); } }).catch(() => {});
   // Enrich data with Google Places in background
   setTimeout(() => enrichAllCategories(), 2000);
 }
@@ -85,6 +86,7 @@ function navigateTo(page, subcategory) {
     case 'info': renderInfoPage(); break;
     case 'near': renderNearMePage(); break;
     case 'mytrip': renderMyTripPage(); break;
+    case 'gallery': renderGalleryPage(); break;
   }
 }
 
@@ -655,6 +657,7 @@ function renderHome() {
   loadWeatherWidget();
   loadInlineWeatherBanner();
   loadCurrencyWidget();
+  renderHomeGalleryPreview();
 }
 
 async function loadInlineWeatherBanner() {
@@ -2814,6 +2817,72 @@ function moveHotelSlide(dir) {
   slides[cur].style.opacity = '1';
   if (dots[cur]) dots[cur].style.background = '#fff';
   slider.dataset.current = String(cur);
+}
+
+function renderHomeGalleryPreview() {
+  const el = document.getElementById('homeGalleryPreview');
+  if (!el) return;
+  const imgs = (window.GALLERY_IMAGES || []).slice(0, 12);
+  el.innerHTML = imgs.map(name => `
+    <div onclick="openGalleryImage('${name}')" style="min-width:130px;width:130px;height:130px;scroll-snap-align:start;border-radius:8px;overflow:hidden;cursor:pointer;background:#F5F5F5;flex-shrink:0;box-shadow:0 2px 6px rgba(0,0,0,0.06);">
+      <img src="images/gallery/${name}" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none'">
+    </div>
+  `).join('');
+}
+
+function renderGalleryPage() {
+  const page = document.getElementById('page-gallery');
+  if (!page) return;
+  const images = window.GALLERY_IMAGES || [];
+  page.innerHTML = `
+    <div class="page-header">
+      <button class="back-btn" onclick="navigateTo('home')"><i class="fas fa-arrow-right"></i></button>
+      <h2><i class="fas fa-images" style="color:#E76F51;margin-left:6px;"></i> הגלרייה שלנו</h2>
+    </div>
+    <div style="padding:12px 14px 80px;">
+      <div style="background:#FDF6EC;border-right:3px solid #E76F51;padding:10px 14px;border-radius:6px;font-size:0.82rem;color:#2C5F6E;line-height:1.5;margin-bottom:14px;">
+        💎 מבחר תמונות אמיתיות של דובאי — מהמלאי הפרטי שלנו, עם חתימת WellCome Dubai.
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;">
+        ${images.map(name => `
+          <div style="aspect-ratio:1/1;border-radius:8px;overflow:hidden;cursor:pointer;background:#F5F5F5;" onclick="openGalleryImage('${name}')">
+            <img src="images/gallery/${name}" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none'">
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function openGalleryImage(name) {
+  const modal = document.getElementById('detailModal');
+  if (!modal) return;
+  const images = window.GALLERY_IMAGES || [];
+  const idx = images.indexOf(name);
+  modal.innerHTML = `
+    <div style="position:fixed;inset:0;background:rgba(0,0,0,0.95);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:1;padding:0;">
+      <button onclick="document.getElementById('detailModal').classList.remove('active')" style="position:absolute;top:14px;left:14px;background:rgba(255,255,255,0.2);border:none;color:#fff;width:42px;height:42px;border-radius:50%;cursor:pointer;font-size:1.2rem;font-weight:700;z-index:2;">✕</button>
+      <img id="galleryViewerImg" src="images/gallery/${name}" style="max-width:100%;max-height:88vh;object-fit:contain;display:block;">
+      <div style="color:#fff;text-align:center;margin-top:14px;font-size:0.78rem;opacity:0.7;">${idx + 1} / ${images.length}</div>
+      ${images.length > 1 ? `
+        <button onclick="navGallery(-1)" style="position:absolute;top:50%;right:14px;transform:translateY(-50%);background:rgba(255,255,255,0.18);border:none;color:#fff;width:48px;height:48px;border-radius:50%;cursor:pointer;font-size:1.1rem;"><i class="fas fa-chevron-right"></i></button>
+        <button onclick="navGallery(1)" style="position:absolute;top:50%;left:14px;transform:translateY(-50%);background:rgba(255,255,255,0.18);border:none;color:#fff;width:48px;height:48px;border-radius:50%;cursor:pointer;font-size:1.1rem;"><i class="fas fa-chevron-left"></i></button>
+      ` : ''}
+    </div>
+  `;
+  modal.classList.add('active');
+  modal.style.alignItems = 'stretch';
+  modal.style.justifyContent = 'stretch';
+  window._galleryIdx = idx;
+}
+
+function navGallery(dir) {
+  const images = window.GALLERY_IMAGES || [];
+  if (!images.length) return;
+  let idx = (window._galleryIdx || 0) + dir;
+  if (idx < 0) idx = images.length - 1;
+  if (idx >= images.length) idx = 0;
+  openGalleryImage(images[idx]);
 }
 
 function openDetail(category, id) {

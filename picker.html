@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>בחירת תמונות אטרקציות</title>
+<style>
+  body { font-family: -apple-system, sans-serif; background:#f5f5f5; margin:0; padding:20px; }
+  h1 { color:#2C5F6E; }
+  .item { background:#fff; border-radius:8px; padding:16px; margin-bottom:14px; box-shadow:0 2px 6px rgba(0,0,0,0.08); }
+  .name { font-weight:700; color:#2C5F6E; margin-bottom:10px; font-size:1.05rem; }
+  .row { display:flex; gap:10px; flex-wrap:wrap; }
+  .cand { cursor:pointer; border:3px solid transparent; border-radius:6px; overflow:hidden; transition:all 0.15s; }
+  .cand img { width:200px; height:140px; object-fit:cover; display:block; }
+  .cand:hover { border-color:#F4A261; }
+  .cand.picked { border-color:#2A9D8F; box-shadow:0 0 0 2px rgba(42,157,143,0.3); }
+  .cand.skip { background:#eee; padding:8px 14px; border:3px solid transparent; border-radius:6px; display:flex; align-items:center; font-weight:600; color:#6B7F8D; }
+  .cand.skip.picked { background:#fde9e0; border-color:#E76F51; color:#E76F51; }
+  .toolbar { position:sticky; top:0; background:#2C5F6E; color:#fff; padding:14px 20px; margin:-20px -20px 20px; display:flex; gap:14px; align-items:center; z-index:10; }
+  .toolbar button { background:#2A9D8F; color:#fff; border:none; padding:8px 18px; border-radius:6px; font-weight:600; cursor:pointer; font-family:inherit; }
+  .toolbar .stat { margin-right:auto; font-size:0.9rem; }
+</style>
+</head>
+<body>
+<div class="toolbar">
+  <span class="stat" id="stat">טוען...</span>
+  <button onclick="exportPicks()">⬇ ייצא picks.json</button>
+</div>
+<h1 id="pageHeader">טוען...</h1>
+<div id="list">טוען...</div>
+<script>
+const CATEGORY = new URLSearchParams(location.search).get('cat') || 'attractions';
+const STORAGE_KEY = CATEGORY + '_picks';
+let picks = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+let meta = [];
+
+const CAT_LABELS = { attractions:'אטרקציות', hotels:'מלונות', restaurants:'מסעדות', shopping:'קניות', nightlife:'בילויים', kids:'ילדים' };
+async function load() {
+  const r = await fetch(`images/${CATEGORY}/_candidates.json`);
+  meta = await r.json();
+  const lbl = CAT_LABELS[CATEGORY] || CATEGORY;
+  document.title = `בחירת תמונות — ${lbl}`;
+  document.getElementById('pageHeader').textContent = `בחירת תמונה לכל ${lbl === 'מלונות' ? 'מלון' : lbl === 'אטרקציות' ? 'אטרקציה' : 'פריט'}`;
+  render();
+}
+
+function render() {
+  const list = document.getElementById('list');
+  list.innerHTML = meta.map(item => {
+    if (!item.candidates.length) return `<div class="item"><div class="name">${item.id} — ${item.name}</div><div style="color:#999;">אין מועמדות</div></div>`;
+    const opts = item.candidates.map(file => {
+      const cls = picks[item.id] === file ? 'picked' : '';
+      return `<div class="cand ${cls}" onclick="pick(${item.id},'${file}')"><img src="images/${CATEGORY}/${file}" loading="lazy"></div>`;
+    }).join('');
+    const skipCls = picks[item.id] === '__skip' ? 'picked' : '';
+    return `<div class="item"><div class="name">${item.id} — ${item.name}</div><div class="row">${opts}<div class="cand skip ${skipCls}" onclick="pick(${item.id},'__skip')">דלג</div></div></div>`;
+  }).join('');
+  updateStat();
+}
+
+function pick(id, file) {
+  picks[id] = file;
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(picks));
+  render();
+}
+
+function updateStat() {
+  const total = meta.length;
+  const done = Object.keys(picks).filter(k => picks[k] && picks[k] !== '__skip').length;
+  const skipped = Object.values(picks).filter(v => v === '__skip').length;
+  document.getElementById('stat').textContent = `${done}/${total} נבחרו, ${skipped} דולגו`;
+}
+
+function exportPicks() {
+  const blob = new Blob([JSON.stringify(picks, null, 2)], { type:'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'picks.json';
+  a.click();
+}
+load();
+</script>
+</body>
+</html>

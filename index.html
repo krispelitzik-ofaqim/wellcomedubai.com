@@ -222,6 +222,12 @@
         </div>
       </div>
 
+      <!-- Gallery preview on home — title + scrollable thumbs (click thumb=full screen, click title=full gallery) -->
+      <div onclick="navigateTo('gallery')" style="margin:18px 0 6px;text-align:center;cursor:pointer;color:#2C5F6E;font-weight:700;font-size:1rem;">
+        הגלרייה שלנו <i class="fas fa-chevron-down" style="color:#E76F51;font-size:0.9rem;display:inline-block;"></i>
+      </div>
+      <div class="cards-scroll" id="homeGalleryPreview" style="padding:6px 16px 24px;"></div>
+
     </div>
 
     <!-- NEAR ME PAGE -->
@@ -255,6 +261,7 @@
     <div id="page-privacy" class="page"></div>
     <div id="page-contact" class="page"></div>
     <div id="page-mytrip" class="page"></div>
+    <div id="page-gallery" class="page"></div>
 
     <!-- MALL DETAIL PAGE -->
     <div id="page-mall" class="page"></div>
