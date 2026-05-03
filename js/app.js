@@ -2785,6 +2785,7 @@ function openDetail(category, id) {
       <div style="position:relative;">
         <img class="modal-img" src="${item.image}" alt="${item.name}" onerror="this.style.display='none'">
         <button class="modal-close" onclick="closeDetail()"><i class="fas fa-times"></i></button>
+        <button onclick="addToMyTrip('${category}', ${item.id})" title="הוסף לטיול שלי" class="add-trip-btn" style="position:absolute;top:14px;right:14px;background:rgba(255,255,255,0.95);color:#2C5F6E;border:none;width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:1.6rem;font-weight:700;display:flex;align-items:center;justify-content:center;line-height:1;box-shadow:0 3px 10px rgba(0,0,0,0.4);z-index:3;">+</button>
       </div>
       <div class="modal-body">
         <div class="modal-title">${item.name}</div>
@@ -2809,7 +2810,6 @@ function openDetail(category, id) {
         ` : ''}
         ${reviewsHTML(item)}
         ${item.lat ? `<div class="map-container" style="margin:0 0 12px;height:220px;"><div id="detailMap" style="width:100%;height:100%;"></div></div>${nearMeToggleHTML()}` : ''}
-        <button onclick="addToMyTrip('${category}', ${item.id})" style="width:100%;background:#E76F51;color:#fff;border:none;padding:12px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.95rem;cursor:pointer;margin-bottom:10px;">❤️ הוסף ל"הטיול שלי"</button>
         <div class="modal-actions" style="flex-wrap:wrap;">
           ${category === 'hotels' ? `<a href="https://search.hotellook.com/hotels?destination=${encodeURIComponent((item.nameEn || item.name) + ' Dubai')}&adults=2&marker=X5SEJjUA" target="_blank" class="modal-btn primary" style="background:#2A9D8F;"><i class="fas fa-bed"></i> הזמן מלון</a>` : ''}
           ${item.lat ? `<button class="modal-btn primary" onclick="openNavigation(${item.lat},${item.lng})"><i class="fas fa-directions"></i> נווט</button>` : ''}
