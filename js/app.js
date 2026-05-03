@@ -19,6 +19,7 @@ function initApp() {
   renderHome();
   setupNavigation();
   setupSearch();
+  fetch('data/hotel-photos.json?v=1').then(r => r.ok ? r.json() : null).then(j => { if (j) window.HOTEL_PHOTOS = j; }).catch(() => {});
   // Enrich data with Google Places in background
   setTimeout(() => enrichAllCategories(), 2000);
 }
@@ -2771,6 +2772,50 @@ function renderInfoPage() {
 }
 
 // ===== DETAIL MODAL =====
+const PLACES_PHOTO_KEY = 'AIzaSyDVYlYuM6saMxbhi2aKNCtiv6J8mR8LLgw';
+function placePhotoUrl(name, w = 900) {
+  return `https://places.googleapis.com/v1/${name}/media?maxWidthPx=${w}&key=${PLACES_PHOTO_KEY}`;
+}
+
+function renderHotelPhotoSlider(item, data) {
+  const photos = data.photos || [];
+  return `
+    <div style="position:relative;background:#000;">
+      <div id="hotelSlider" data-current="0" data-total="${photos.length}" style="position:relative;height:240px;overflow:hidden;">
+        ${photos.map((p, i) => `
+          <div class="hps-slide" data-idx="${i}" style="position:absolute;inset:0;opacity:${i === 0 ? 1 : 0};transition:opacity 0.4s;">
+            <img src="${placePhotoUrl(p.name, 1000)}" style="width:100%;height:100%;object-fit:cover;display:block;" loading="lazy" onerror="this.style.display='none'">
+            <div style="position:absolute;bottom:0;left:0;right:0;padding:14px 12px 8px;background:linear-gradient(transparent,rgba(0,0,0,0.7));color:#fff;font-size:0.65rem;text-align:left;direction:ltr;">📷 ${p.attribution}</div>
+          </div>
+        `).join('')}
+        ${photos.length > 1 ? `
+          <button onclick="moveHotelSlide(-1)" style="position:absolute;top:50%;right:8px;transform:translateY(-50%);background:rgba(0,0,0,0.55);color:#fff;border:none;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;z-index:3;"><i class="fas fa-chevron-right"></i></button>
+          <button onclick="moveHotelSlide(1)" style="position:absolute;top:50%;left:8px;transform:translateY(-50%);background:rgba(0,0,0,0.55);color:#fff;border:none;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;z-index:3;"><i class="fas fa-chevron-left"></i></button>
+          <div style="position:absolute;top:8px;left:0;right:0;display:flex;gap:4px;justify-content:center;z-index:2;">
+            ${photos.map((_, i) => `<div data-dot="${i}" style="width:6px;height:6px;border-radius:50%;background:${i === 0 ? '#fff' : 'rgba(255,255,255,0.45)'};transition:0.25s;"></div>`).join('')}
+          </div>` : ''}
+      </div>
+      <button class="modal-close" onclick="closeDetail()"><i class="fas fa-times"></i></button>
+      <button onclick="addToMyTrip('hotels', ${item.id})" title="הוסף לטיול שלי" class="add-trip-btn" style="position:absolute;top:14px;right:14px;background:rgba(255,255,255,0.95);color:#2C5F6E;border:none;width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:1.6rem;font-weight:700;display:flex;align-items:center;justify-content:center;line-height:1;box-shadow:0 3px 10px rgba(0,0,0,0.4);z-index:3;">+</button>
+    </div>
+  `;
+}
+
+function moveHotelSlide(dir) {
+  const slider = document.getElementById('hotelSlider');
+  if (!slider) return;
+  const slides = slider.querySelectorAll('.hps-slide');
+  const dots = slider.querySelectorAll('[data-dot]');
+  const total = slides.length;
+  let cur = parseInt(slider.dataset.current || '0');
+  slides[cur].style.opacity = '0';
+  if (dots[cur]) dots[cur].style.background = 'rgba(255,255,255,0.45)';
+  cur = (cur + dir + total) % total;
+  slides[cur].style.opacity = '1';
+  if (dots[cur]) dots[cur].style.background = '#fff';
+  slider.dataset.current = String(cur);
+}
+
 function openDetail(category, id) {
   if (category === 'shopping') {
     const item = (getDB().shopping || []).find(i => i.id === id);
@@ -2785,11 +2830,11 @@ function openDetail(category, id) {
   const modal = document.getElementById('detailModal');
   modal.innerHTML = `
     <div class="modal-sheet">
-      <div style="position:relative;">
+      ${category === 'hotels' && window.HOTEL_PHOTOS && window.HOTEL_PHOTOS[item.id]?.photos?.length ? renderHotelPhotoSlider(item, window.HOTEL_PHOTOS[item.id]) : `<div style="position:relative;">
         <img class="modal-img" src="${item.image}" alt="${item.name}" onerror="this.style.display='none'">
         <button class="modal-close" onclick="closeDetail()"><i class="fas fa-times"></i></button>
         <button onclick="addToMyTrip('${category}', ${item.id})" title="הוסף לטיול שלי" class="add-trip-btn" style="position:absolute;top:14px;right:14px;background:rgba(255,255,255,0.95);color:#2C5F6E;border:none;width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:1.6rem;font-weight:700;display:flex;align-items:center;justify-content:center;line-height:1;box-shadow:0 3px 10px rgba(0,0,0,0.4);z-index:3;">+</button>
-      </div>
+      </div>`}
       <div class="modal-body">
         <div class="modal-title">${item.name}</div>
         <div class="modal-subtitle"><i class="fas fa-map-marker-alt"></i> ${item.address || ''}</div>
