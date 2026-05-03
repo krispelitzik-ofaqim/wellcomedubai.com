@@ -667,11 +667,10 @@ async function loadInlineWeatherBanner() {
     const w = await getDubaiWeather();
     if (!w) return;
     el.innerHTML = `
-      <div style="font-size:2rem;line-height:1;">${w.icon}</div>
-      <div style="flex:1;">
-        <div style="color:#fff;font-weight:800;font-size:0.92rem;">מזג אויר בדובאי</div>
-        <div style="color:#fff;font-size:1.4rem;font-weight:800;line-height:1.1;margin-top:2px;">${w.temp}°C</div>
-        <div style="color:rgba(255,255,255,0.9);font-size:0.7rem;margin-top:1px;">${w.condition} · מרגיש ${w.feelsLike}°</div>
+      <div style="width:38px;height:38px;border-radius:10px;background:rgba(255,255,255,0.18);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.4rem;line-height:1;">${w.icon}</div>
+      <div style="position:relative;min-width:0;">
+        <div style="color:#fff;font-weight:800;font-size:1rem;line-height:1.2;">${w.temp}°C · ${w.condition}</div>
+        <div style="color:rgba(255,255,255,0.78);font-size:0.74rem;margin-top:3px;">דובאי · מרגיש ${w.feelsLike}°</div>
       </div>
     `;
   } catch(e) {}
