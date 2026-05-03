@@ -2242,7 +2242,6 @@ function renderListPage(category, title, filters, activeFilter) {
         return `<button class="filter-tab ${f === active ? 'active' : ''}" onclick="navigateTo('${category}','${f.replace(/'/g, "\\'")}')">${f}${showCount ? ` <span style="opacity:0.7;font-size:0.75rem;">(${count})</span>` : ''}</button>`;
       }).join('')}
     </div>
-    ${category === 'hotels' ? '<div id="bookingWidget" style="padding:0 20px;"></div>' : ''}
     ${category === 'transport' && active === 'מטרו' ? `<div style="padding:0 16px 8px;display:flex;flex-direction:column;gap:8px;">
       <select onchange="jumpToMetroStation('red', this.value)" style="width:100%;padding:10px;border-radius:8px;border:2px solid #D32F2F;background:#fff;font-family:Heebo;color:#D32F2F;font-size:0.9rem;font-weight:600;cursor:pointer;">
         <option value="">🟥 קו אדום — בחר תחנה</option>
@@ -2333,10 +2332,6 @@ function renderListPage(category, title, filters, activeFilter) {
     ${items.length > 10 ? `<button onclick="window.scrollTo({top:0,behavior:'smooth'})" style="position:fixed;bottom:80px;left:16px;background:#E76F51;color:#fff;border:none;width:46px;height:46px;border-radius:50%;font-size:1.1rem;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,0.25);z-index:50;display:flex;align-items:center;justify-content:center;" title="חזור לראש"><i class="fas fa-arrow-up"></i></button>` : ''}
   `;
 
-  // Booking.com widget for hotels page
-  if (category === 'hotels') {
-    setTimeout(() => renderBookingWidget('bookingWidget'), 100);
-  }
 
   setTimeout(() => {
     clearMap();
@@ -2814,6 +2809,7 @@ function openDetail(category, id) {
         ${reviewsHTML(item)}
         ${item.lat ? `<div class="map-container" style="margin:0 0 12px;height:220px;"><div id="detailMap" style="width:100%;height:100%;"></div></div>${nearMeToggleHTML()}` : ''}
         <button onclick="addToMyTrip('${category}', ${item.id})" style="width:100%;background:#E76F51;color:#fff;border:none;padding:12px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.95rem;cursor:pointer;margin-bottom:10px;">❤️ הוסף ל"הטיול שלי"</button>
+        ${category === 'hotels' ? `<a href="https://search.hotellook.com/hotels?destination=${encodeURIComponent((item.nameEn || item.name) + ' Dubai')}&adults=2&marker=X5SEJjUA" target="_blank" style="display:block;text-align:center;background:linear-gradient(135deg,#FF6B00,#E76F51);color:#fff;padding:12px;border-radius:8px;font-family:Heebo;font-weight:800;font-size:0.95rem;text-decoration:none;margin-bottom:10px;box-shadow:0 4px 12px rgba(255,107,0,0.3);"><i class="fas fa-bed"></i> השווה והזמן ב-Hotellook</a>` : ''}
         <div class="modal-actions" style="flex-wrap:wrap;">
           ${item.lat ? `<button class="modal-btn primary" onclick="openNavigation(${item.lat},${item.lng})"><i class="fas fa-directions"></i> נווט</button>` : ''}
           ${item.googleUrl ? `<a href="${item.googleUrl}" target="_blank" class="modal-btn secondary"><i class="fab fa-google"></i> Google Maps</a>` : ''}
