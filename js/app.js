@@ -2801,7 +2801,7 @@ function openDetail(category, id) {
           </details>
         ` : ''}
         ${item.tags ? `<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;">${item.tags.map(t => `<span class="card-tag">${t}</span>`).join('')}</div>` : ''}
-        <div class="modal-desc">${item.description}</div>
+        <div class="modal-desc">${item.description}${category === 'hotels' ? ` <a href="${item.website || 'https://www.google.com/search?q=' + encodeURIComponent((item.nameEn || item.name) + ' Dubai official site')}" target="_blank" style="color:#2A9D8F;font-weight:600;text-decoration:underline;font-size:0.85rem;white-space:nowrap;"><i class="fas fa-globe" style="font-size:0.75rem;"></i> אתר רשמי</a>` : ''}</div>
         ${item.googlePhotos && item.googlePhotos.length ? `
           <div style="display:flex;gap:6px;overflow-x:auto;margin-bottom:12px;">
             ${item.googlePhotos.map(url => `<img src="${url}" style="height:80px;border-radius:4px;flex-shrink:0;" onerror="this.style.display='none'">`).join('')}
@@ -2810,12 +2810,12 @@ function openDetail(category, id) {
         ${reviewsHTML(item)}
         ${item.lat ? `<div class="map-container" style="margin:0 0 12px;height:220px;"><div id="detailMap" style="width:100%;height:100%;"></div></div>${nearMeToggleHTML()}` : ''}
         <button onclick="addToMyTrip('${category}', ${item.id})" style="width:100%;background:#E76F51;color:#fff;border:none;padding:12px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.95rem;cursor:pointer;margin-bottom:10px;">❤️ הוסף ל"הטיול שלי"</button>
-        ${category === 'hotels' ? `<a href="https://search.hotellook.com/hotels?destination=${encodeURIComponent((item.nameEn || item.name) + ' Dubai')}&adults=2&marker=X5SEJjUA" target="_blank" style="display:block;text-align:center;background:linear-gradient(135deg,#FF6B00,#E76F51);color:#fff;padding:12px;border-radius:8px;font-family:Heebo;font-weight:800;font-size:0.95rem;text-decoration:none;margin-bottom:10px;box-shadow:0 4px 12px rgba(255,107,0,0.3);"><i class="fas fa-bed"></i> השווה והזמן ב-Hotellook</a>` : ''}
         <div class="modal-actions" style="flex-wrap:wrap;">
+          ${category === 'hotels' ? `<a href="https://search.hotellook.com/hotels?destination=${encodeURIComponent((item.nameEn || item.name) + ' Dubai')}&adults=2&marker=X5SEJjUA" target="_blank" class="modal-btn primary" style="background:#2A9D8F;"><i class="fas fa-bed"></i> הזמן מלון</a>` : ''}
           ${item.lat ? `<button class="modal-btn primary" onclick="openNavigation(${item.lat},${item.lng})"><i class="fas fa-directions"></i> נווט</button>` : ''}
           ${item.googleUrl ? `<a href="${item.googleUrl}" target="_blank" class="modal-btn secondary"><i class="fab fa-google"></i> Google Maps</a>` : ''}
           ${item.webcam ? `<a href="${item.webcam}" target="_blank" class="modal-btn secondary" style="background:#2A9D8F;color:#fff;border:none;"><i class="fas fa-video"></i> מצלמה חיה</a>` : ''}
-          <a href="${item.website || 'https://www.google.com/search?q=' + encodeURIComponent((item.nameEn || item.name) + ' Dubai' + (category === 'attractions' ? ' tickets opening hours' : ''))}" target="_blank" class="modal-btn secondary"><i class="fas ${category === 'attractions' ? 'fa-ticket-alt' : 'fa-globe'}"></i> ${category === 'hotels' ? 'אתר המלון' : category === 'attractions' ? 'מחירים ושעות' : 'אתר'}</a>
+          ${category !== 'hotels' ? `<a href="${item.website || 'https://www.google.com/search?q=' + encodeURIComponent((item.nameEn || item.name) + ' Dubai' + (category === 'attractions' ? ' tickets opening hours' : ''))}" target="_blank" class="modal-btn secondary"><i class="fas ${category === 'attractions' ? 'fa-ticket-alt' : 'fa-globe'}"></i> ${category === 'attractions' ? 'מחירים ושעות' : 'אתר'}</a>` : ''}
           ${item.lat ? `<a href="https://www.google.com/maps/search/?api=1&query=${item.lat},${item.lng}" target="_blank" class="modal-btn secondary"><i class="fas fa-map-marker-alt"></i> איפה זה?</a>` : ''}
         </div>
       </div>
