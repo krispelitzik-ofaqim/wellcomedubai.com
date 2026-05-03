@@ -2831,9 +2831,13 @@ function renderHomeGalleryPreview() {
   `).join('');
 }
 
-function renderGalleryPage() {
+async function renderGalleryPage() {
   const page = document.getElementById('page-gallery');
   if (!page) return;
+  if (!window.GALLERY_IMAGES) {
+    page.innerHTML = '<div style="padding:40px;text-align:center;color:#6B7F8D;"><i class="fas fa-spinner fa-spin"></i> טוען תמונות...</div>';
+    try { const r = await fetch('data/gallery.json?v=2'); if (r.ok) window.GALLERY_IMAGES = await r.json(); } catch {}
+  }
   const images = window.GALLERY_IMAGES || [];
   page.innerHTML = `
     <div class="page-header">
@@ -2888,7 +2892,20 @@ function navGallery(dir) {
   openGalleryImage(idx);
 }
 
+async function ensureHotelPhotos() {
+  if (window.HOTEL_PHOTOS) return window.HOTEL_PHOTOS;
+  try {
+    const r = await fetch('data/hotel-photos.json?v=2');
+    if (r.ok) window.HOTEL_PHOTOS = await r.json();
+  } catch(e) {}
+  return window.HOTEL_PHOTOS;
+}
+
 function openDetail(category, id) {
+  if (category === 'hotels' && !window.HOTEL_PHOTOS) {
+    ensureHotelPhotos().then(() => openDetail(category, id));
+    return;
+  }
   if (category === 'shopping') {
     const item = (getDB().shopping || []).find(i => i.id === id);
     if (item && item.subcategory === 'mall') {
