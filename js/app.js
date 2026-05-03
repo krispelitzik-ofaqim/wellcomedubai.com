@@ -239,7 +239,7 @@ function renderMyTripPage() {
         <div style="background:#FDF6EC;border-radius:10px;padding:30px 20px;text-align:center;color:#6B7F8D;">
           <i class="fas fa-suitcase-rolling" style="font-size:2.5rem;color:#E9C46A;margin-bottom:12px;"></i>
           <div style="font-size:0.95rem;font-weight:700;color:#2C5F6E;margin-bottom:8px;">הטיול ריק</div>
-          <div style="font-size:0.8rem;line-height:1.6;">לחצו על ❤️ בכרטיסים (מלון/מסעדה/אטרקציה), 📌 על מסלול יום, או ⭐ על טיול כוכב.</div>
+          <div style="font-size:0.8rem;line-height:1.6;">לחצו על + בכרטיסים (מלון/מסעדה/אטרקציה) כדי להוסיף לטיול. הפריטים שתבחרו יסומנו בלב ❤️ כאן.</div>
         </div>
       ` : Object.keys(dayBuckets).sort((a,b)=>parseInt(a)-parseInt(b)).map(d => `
         <div ondragover="event.preventDefault()" ondrop="onTripDrop(event, ${d}, null)" style="background:#fff;border-right:4px solid #E76F51;border-radius:8px;padding:12px;margin-bottom:12px;box-shadow:0 1px 4px rgba(0,0,0,0.05);">
@@ -250,6 +250,7 @@ function renderMyTripPage() {
           ${dayBuckets[d].length ? dayBuckets[d].map(it => `
             <div draggable="true" ondragstart="onTripDragStart(event, '${it.uid}')" ondragover="event.preventDefault()" ondrop="onTripDrop(event, ${d}, '${it.uid}')" style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid #F5EFE6;align-items:center;">
               <i class="fas fa-grip-vertical" style="color:#bbb;cursor:grab;font-size:0.85rem;"></i>
+              <span style="font-size:0.95rem;flex-shrink:0;">❤️</span>
               ${it.image ? `<img src="${it.image}" style="width:44px;height:44px;border-radius:6px;object-fit:cover;flex-shrink:0;" onerror="this.style.display='none'">` : ''}
               <div style="flex:1;min-width:0;">
                 <div style="font-weight:700;color:#2C5F6E;font-size:0.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${it.name}</div>
@@ -703,7 +704,7 @@ function cardHTML(item, category, mini) {
     const pad = mini ? 6 : 10;
     return `
       <div class="card-hover" style="min-width:${w}px;width:${w}px;scroll-snap-align:start;background:#fff;border-radius:6px;overflow:hidden;cursor:pointer;border:1px solid #E5E7EB;box-shadow:0 2px 8px rgba(0,0,0,0.06);position:relative;transition:all 0.3s;" onclick="openDetail('${category}', ${item.id})">
-        <button onclick="event.stopPropagation();addToMyTrip('${category}', ${item.id})" title="הוסף לטיול שלי" style="position:absolute;top:6px;right:6px;background:rgba(0,0,0,0.65);color:#fff;border:none;width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:0.75rem;display:flex;align-items:center;justify-content:center;z-index:3;box-shadow:0 1px 4px rgba(0,0,0,0.4);">❤️</button>
+        <button onclick="event.stopPropagation();addToMyTrip('${category}', ${item.id})" title="הוסף לטיול שלי" class="add-trip-btn" style="position:absolute;top:6px;right:6px;background:rgba(255,255,255,0.95);color:#2C5F6E;border:none;width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:1.1rem;font-weight:700;display:flex;align-items:center;justify-content:center;z-index:3;box-shadow:0 2px 6px rgba(0,0,0,0.45);line-height:1;">+</button>
         <div style="width:${w}px;height:${w}px;overflow:hidden;position:relative;">
           <img src="${item.image}" alt="${item.name}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'">
           ${item.subcategory ? `<div style="position:absolute;top:6px;left:6px;background:${CATEGORY_TITLE_COLORS[category] || 'rgba(0,0,0,0.65)'};color:#fff;padding:${mini ? '2px 7px' : '3px 9px'};border-radius:10px;font-size:${mini ? '0.6rem' : '0.7rem'};font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,0.3);">${subcategoryHe(item.subcategory)}</div>` : ''}
@@ -721,7 +722,7 @@ function cardHTML(item, category, mini) {
   return `
     <div class="listing-card" onclick="openDetail('${category}', ${item.id})" style="position:relative;">
       <img class="card-img" src="${item.image}" alt="${item.name}" onerror="this.style.display='none'">
-      <button onclick="event.stopPropagation();addToMyTrip('${category}', ${item.id})" title="הוסף לטיול שלי" style="position:absolute;top:8px;left:8px;background:rgba(0,0,0,0.65);color:#fff;border:none;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:0.95rem;display:flex;align-items:center;justify-content:center;z-index:3;box-shadow:0 1px 4px rgba(0,0,0,0.4);">❤️</button>
+      <button onclick="event.stopPropagation();addToMyTrip('${category}', ${item.id})" title="הוסף לטיול שלי" class="add-trip-btn" style="position:absolute;top:8px;left:8px;background:rgba(255,255,255,0.95);color:#2C5F6E;border:none;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1.4rem;font-weight:700;display:flex;align-items:center;justify-content:center;z-index:3;box-shadow:0 2px 8px rgba(0,0,0,0.45);line-height:1;">+</button>
       <div class="card-body">
         <div class="card-title" style="color:#2C5F6E;">${item.name}</div>
         <div class="card-location" style="color:#6B7F8D;"><i class="fas fa-map-marker-alt" style="color:#F4A261;"></i> ${item.address || ''}</div>
@@ -2133,7 +2134,7 @@ function cardGridHTML(item, category) {
   const verified = isVerifiedImage(item, category);
   return `
         <div class="card-hover" style="background:#fff;border-radius:6px;overflow:hidden;border:1px solid #E5E7EB;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,0.05);position:relative;transition:all 0.3s;" onclick="openDetail('${category}', ${item.id})">
-          <button onclick="event.stopPropagation();addToMyTrip('${category}', ${item.id})" title="הוסף לטיול שלי" style="position:absolute;top:10px;right:10px;background:rgba(0,0,0,0.7);color:#fff;border:none;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;z-index:3;box-shadow:0 2px 6px rgba(0,0,0,0.4);">❤️</button>
+          <button onclick="event.stopPropagation();addToMyTrip('${category}', ${item.id})" title="הוסף לטיול שלי" class="add-trip-btn" style="position:absolute;top:10px;right:10px;background:rgba(255,255,255,0.95);color:#2C5F6E;border:none;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1.5rem;font-weight:700;display:flex;align-items:center;justify-content:center;z-index:3;box-shadow:0 3px 10px rgba(0,0,0,0.45);line-height:1;">+</button>
           <div style="position:relative;">
             <img src="${item.image}" alt="${item.name}" style="width:100%;height:220px;object-fit:cover;" onerror="this.style.display='none'">
             ${item.subcategory ? `<div style="position:absolute;top:8px;left:8px;background:${CATEGORY_TITLE_COLORS[category] || 'rgba(0,0,0,0.65)'};color:#fff;padding:4px 11px;border-radius:12px;font-size:0.75rem;font-weight:700;box-shadow:0 1px 4px rgba(0,0,0,0.35);">${subcategoryHe(item.subcategory)}</div>` : ''}
