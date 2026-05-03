@@ -19,7 +19,7 @@ function initApp() {
   renderHome();
   setupNavigation();
   setupSearch();
-  fetch('data/hotel-photos.json?v=1').then(r => r.ok ? r.json() : null).then(j => { if (j) window.HOTEL_PHOTOS = j; }).catch(() => {});
+  fetch('data/hotel-photos.json?v=2').then(r => r.ok ? r.json() : null).then(j => { if (j) { window.HOTEL_PHOTOS = j; if (currentPage === 'home') renderHome(); } }).catch(() => {});
   fetch('data/gallery.json?v=1').then(r => r.ok ? r.json() : null).then(j => { if (j) { window.GALLERY_IMAGES = j; renderHomeGalleryPreview(); } }).catch(() => {});
   // Enrich data with Google Places in background
   setTimeout(() => enrichAllCategories(), 2000);
@@ -697,6 +697,13 @@ const CATEGORY_TITLE_COLORS = {
 };
 const VERIFIED_BADGE = '';
 
+function getCardImage(item, category) {
+  if (category === 'hotels' && window.HOTEL_PHOTOS && window.HOTEL_PHOTOS[item.id]?.photos?.[0]?.name) {
+    return placePhotoUrl(window.HOTEL_PHOTOS[item.id].photos[0].name, 600);
+  }
+  return item.image;
+}
+
 function cardHTML(item, category, mini) {
   const rating = item.googleRating || item.rating;
   const reviews = item.totalReviews;
@@ -713,7 +720,7 @@ function cardHTML(item, category, mini) {
       <div class="card-hover" style="min-width:${w}px;width:${w}px;scroll-snap-align:start;background:#fff;border-radius:6px;overflow:hidden;cursor:pointer;border:1px solid #E5E7EB;box-shadow:0 2px 8px rgba(0,0,0,0.06);position:relative;transition:all 0.3s;" onclick="openDetail('${category}', ${item.id})">
         <button onclick="event.stopPropagation();addToMyTrip('${category}', ${item.id})" title="הוסף לטיול שלי" class="add-trip-btn" style="position:absolute;top:4px;right:6px;background:transparent;color:#fff;border:none;padding:0;cursor:pointer;font-size:1.6rem;font-weight:300;line-height:1;z-index:3;text-shadow:0 2px 6px rgba(0,0,0,0.85),0 0 3px rgba(0,0,0,0.6);">+</button>
         <div style="width:${w}px;height:${w}px;overflow:hidden;position:relative;">
-          <img src="${item.image}" alt="${item.name}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'">
+          <img src="${getCardImage(item, category)}" alt="${item.name}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'">
           ${item.subcategory ? `<div style="position:absolute;top:6px;left:6px;background:${CATEGORY_TITLE_COLORS[category] || 'rgba(0,0,0,0.65)'};color:#fff;padding:${mini ? '2px 7px' : '3px 9px'};border-radius:10px;font-size:${mini ? '0.6rem' : '0.7rem'};font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,0.3);">${subcategoryHe(item.subcategory)}</div>` : ''}
           ${item.nameHe ? `<div style="position:absolute;bottom:8px;right:8px;left:8px;color:#fff;font-weight:800;font-size:${mini ? '0.85rem' : '1.05rem'};text-shadow:0 2px 8px rgba(0,0,0,0.85),0 0 4px rgba(0,0,0,0.7);text-align:right;">${item.nameHe}</div>` : ''}
         </div>
@@ -728,7 +735,7 @@ function cardHTML(item, category, mini) {
   // Default horizontal card for hotels, attractions etc
   return `
     <div class="listing-card" onclick="openDetail('${category}', ${item.id})" style="position:relative;">
-      <img class="card-img" src="${item.image}" alt="${item.name}" onerror="this.style.display='none'">
+      <img class="card-img" src="${getCardImage(item, category)}" alt="${item.name}" onerror="this.style.display='none'">
       <button onclick="event.stopPropagation();addToMyTrip('${category}', ${item.id})" title="הוסף לטיול שלי" class="add-trip-btn" style="position:absolute;top:6px;left:8px;background:transparent;color:#fff;border:none;padding:0;cursor:pointer;font-size:1.9rem;font-weight:300;line-height:1;z-index:3;text-shadow:0 2px 6px rgba(0,0,0,0.85),0 0 3px rgba(0,0,0,0.6);">+</button>
       <div class="card-body">
         <div class="card-title" style="color:#2C5F6E;">${item.name}</div>
