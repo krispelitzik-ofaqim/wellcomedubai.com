@@ -1610,7 +1610,7 @@ function renderMallPage(mallId) {
         <div style="color:#2C5F6E;font-size:0.9rem;line-height:1.6;">${mall.description}</div>
 
         <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;">
-          ${mall.lat ? `<a href="https://www.google.com/maps/search/?api=1&query=${mall.lat},${mall.lng}" target="_blank" style="flex:1;min-width:120px;text-align:center;padding:10px;background:#E76F51;color:#fff;border-radius:6px;text-decoration:none;font-weight:700;font-size:0.85rem;"><i class="fas fa-map-pin"></i> איפה זה?</a>` : ''}
+          ${mall.lat ? `<a onclick="openInFrame('https://www.google.com/maps?q=${mall.lat},${mall.lng}','${mall.name} - מפה')" style="flex:1;min-width:120px;text-align:center;padding:10px;background:#E76F51;color:#fff;border-radius:6px;text-decoration:none;font-weight:700;font-size:0.85rem;cursor:pointer;"><i class="fas fa-map-pin"></i> איפה זה?</a>` : ''}
           ${mall.lat ? `<a href="https://www.google.com/maps/dir/?api=1&destination=${mall.lat},${mall.lng}" target="_blank" style="flex:1;min-width:120px;text-align:center;padding:10px;background:#2A9D8F;color:#fff;border-radius:6px;text-decoration:none;font-weight:700;font-size:0.85rem;"><i class="fas fa-directions"></i> נווט</a>` : ''}
         </div>
 
@@ -2819,13 +2819,14 @@ function moveHotelSlide(dir) {
   slider.dataset.current = String(cur);
 }
 
+function galleryImgUrl(name) { return 'images/gallery/' + encodeURIComponent(name); }
 function renderHomeGalleryPreview() {
   const el = document.getElementById('homeGalleryPreview');
   if (!el) return;
   const imgs = (window.GALLERY_IMAGES || []).slice(0, 12);
-  el.innerHTML = imgs.map(name => `
-    <div onclick="openGalleryImage('${name}')" style="min-width:130px;width:130px;height:130px;scroll-snap-align:start;border-radius:8px;overflow:hidden;cursor:pointer;background:#F5F5F5;flex-shrink:0;box-shadow:0 2px 6px rgba(0,0,0,0.06);">
-      <img src="images/gallery/${name}" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none'">
+  el.innerHTML = imgs.map((name, i) => `
+    <div onclick="openGalleryImage(${i})" style="min-width:130px;width:130px;height:130px;scroll-snap-align:start;border-radius:8px;overflow:hidden;cursor:pointer;background:#F5F5F5;flex-shrink:0;box-shadow:0 2px 6px rgba(0,0,0,0.06);">
+      <img src="${galleryImgUrl(name)}" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none'">
     </div>
   `).join('');
 }
@@ -2844,9 +2845,9 @@ function renderGalleryPage() {
         💎 מבחר תמונות אמיתיות של דובאי — מהמלאי הפרטי שלנו, עם חתימת WellCome Dubai.
       </div>
       <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;">
-        ${images.map(name => `
-          <div style="aspect-ratio:1/1;border-radius:8px;overflow:hidden;cursor:pointer;background:#F5F5F5;" onclick="openGalleryImage('${name}')">
-            <img src="images/gallery/${name}" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none'">
+        ${images.map((name, i) => `
+          <div style="aspect-ratio:1/1;border-radius:8px;overflow:hidden;cursor:pointer;background:#F5F5F5;" onclick="openGalleryImage(${i})">
+            <img src="${galleryImgUrl(name)}" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none'">
           </div>
         `).join('')}
       </div>
@@ -2854,15 +2855,17 @@ function renderGalleryPage() {
   `;
 }
 
-function openGalleryImage(name) {
+function openGalleryImage(idx) {
   const modal = document.getElementById('detailModal');
   if (!modal) return;
   const images = window.GALLERY_IMAGES || [];
-  const idx = images.indexOf(name);
+  if (typeof idx === 'string') idx = images.indexOf(idx);
+  if (idx < 0 || idx >= images.length) return;
+  const name = images[idx];
   modal.innerHTML = `
     <div style="position:fixed;inset:0;background:rgba(0,0,0,0.95);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:1;padding:0;">
       <button onclick="document.getElementById('detailModal').classList.remove('active')" style="position:absolute;top:14px;left:14px;background:rgba(255,255,255,0.2);border:none;color:#fff;width:42px;height:42px;border-radius:50%;cursor:pointer;font-size:1.2rem;font-weight:700;z-index:2;">✕</button>
-      <img id="galleryViewerImg" src="images/gallery/${name}" style="max-width:100%;max-height:88vh;object-fit:contain;display:block;">
+      <img id="galleryViewerImg" src="${galleryImgUrl(name)}" style="max-width:100%;max-height:88vh;object-fit:contain;display:block;">
       <div style="color:#fff;text-align:center;margin-top:14px;font-size:0.78rem;opacity:0.7;">${idx + 1} / ${images.length}</div>
       ${images.length > 1 ? `
         <button onclick="navGallery(-1)" style="position:absolute;top:50%;right:14px;transform:translateY(-50%);background:rgba(255,255,255,0.18);border:none;color:#fff;width:48px;height:48px;border-radius:50%;cursor:pointer;font-size:1.1rem;"><i class="fas fa-chevron-right"></i></button>
@@ -2882,7 +2885,7 @@ function navGallery(dir) {
   let idx = (window._galleryIdx || 0) + dir;
   if (idx < 0) idx = images.length - 1;
   if (idx >= images.length) idx = 0;
-  openGalleryImage(images[idx]);
+  openGalleryImage(idx);
 }
 
 function openDetail(category, id) {
@@ -2933,7 +2936,7 @@ function openDetail(category, id) {
           ${item.googleUrl ? `<a href="${item.googleUrl}" target="_blank" class="modal-btn secondary"><i class="fab fa-google"></i> Google Maps</a>` : ''}
           ${item.webcam ? `<a href="${item.webcam}" target="_blank" class="modal-btn secondary" style="background:#2A9D8F;color:#fff;border:none;"><i class="fas fa-video"></i> מצלמה חיה</a>` : ''}
           ${category !== 'hotels' ? `<a href="${item.website || 'https://www.google.com/search?q=' + encodeURIComponent((item.nameEn || item.name) + ' Dubai' + (category === 'attractions' ? ' tickets opening hours' : ''))}" target="_blank" class="modal-btn secondary"><i class="fas ${category === 'attractions' ? 'fa-ticket-alt' : 'fa-globe'}"></i> ${category === 'attractions' ? 'מחירים ושעות' : 'אתר'}</a>` : ''}
-          ${item.lat ? `<a href="https://www.google.com/maps/search/?api=1&query=${item.lat},${item.lng}" target="_blank" class="modal-btn secondary"><i class="fas fa-map-marker-alt"></i> איפה זה?</a>` : ''}
+          ${item.lat ? `<a onclick="event.stopPropagation();openInFrame('https://www.google.com/maps?q=${item.lat},${item.lng}','${(item.name || '').replace(/'/g,"\\'")} - מפה')" class="modal-btn secondary" style="cursor:pointer;"><i class="fas fa-map-marker-alt"></i> איפה זה?</a>` : ''}
         </div>
       </div>
     </div>
