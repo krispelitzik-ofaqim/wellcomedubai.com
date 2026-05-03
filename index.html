@@ -222,11 +222,14 @@
         </div>
       </div>
 
-      <!-- Gallery preview on home — title + scrollable thumbs (click thumb=full screen, click title=full gallery) -->
-      <div onclick="navigateTo('gallery')" style="margin:18px 0 6px;text-align:center;cursor:pointer;color:#2C5F6E;font-weight:700;font-size:1rem;">
-        הגלרייה שלנו <i class="fas fa-chevron-down" style="color:#E76F51;font-size:0.9rem;display:inline-block;"></i>
+      <!-- Gallery preview — hidden by default, toggle on title click -->
+      <div onclick="toggleGalleryPreview()" style="margin:18px 0 6px;text-align:center;cursor:pointer;color:#2C5F6E;font-weight:700;font-size:1rem;">
+        הגלרייה שלנו <i id="galleryArrow" class="fas fa-chevron-down" style="color:#E76F51;font-size:0.9rem;display:inline-block;transition:transform 0.3s;"></i>
       </div>
-      <div class="cards-scroll" id="homeGalleryPreview" style="padding:6px 16px 24px;"></div>
+      <div id="homeGalleryWrap" style="display:none;">
+        <div class="cards-scroll" id="homeGalleryPreview" style="padding:6px 16px 6px;"></div>
+        <div onclick="navigateTo('gallery')" style="text-align:center;margin:4px 0 24px;cursor:pointer;color:#E76F51;font-weight:600;font-size:0.78rem;">לתצוגה מלאה ←</div>
+      </div>
 
     </div>
 
@@ -312,7 +315,7 @@
 <script src="js/booking.js?v=11"></script>
 <script src="js/services.js?v=11"></script>
 <script src="js/flights-board.js?v=11"></script>
-<script src="js/app.js?v=125"></script>
+<script src="js/app.js?v=126"></script>
 <script>
   // ===== Open in iframe =====
   function openInFrame(url, title) {

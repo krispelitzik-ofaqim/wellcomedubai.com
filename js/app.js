@@ -2827,6 +2827,14 @@ function moveHotelSlide(dir) {
 }
 
 function galleryImgUrl(name) { return 'images/gallery/' + encodeURIComponent(name); }
+function toggleGalleryPreview() {
+  const wrap = document.getElementById('homeGalleryWrap');
+  const arrow = document.getElementById('galleryArrow');
+  if (!wrap) return;
+  const isOpen = wrap.style.display !== 'none';
+  wrap.style.display = isOpen ? 'none' : 'block';
+  if (arrow) arrow.style.transform = isOpen ? 'rotate(0)' : 'rotate(180deg)';
+}
 function openGalleryAt(idx) {
   window._galleryPageIdx = idx || 0;
   navigateTo('gallery');
