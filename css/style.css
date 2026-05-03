@@ -171,9 +171,23 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; heig
 }
 .listing-card:hover, .card-hover:hover { border-color:#E76F51 !important; transform:translateY(-3px); box-shadow:0 0 0 3px #E76F51, 0 6px 20px rgba(231,111,81,0.25) !important; }
 .qt-card:hover, .qt-card:active { transform:translateY(-2px); box-shadow:0 8px 22px rgba(0,0,0,0.18) !important; }
-.add-trip-btn { transition: all 0.25s; overflow: hidden; white-space: nowrap; }
-.add-trip-btn:hover { width: auto !important; padding: 0 14px !important; font-size: 0.78rem !important; font-weight: 700 !important; }
-.add-trip-btn:hover::after { content: " הוסף לטיול שלי"; }
+.add-trip-btn { transition: transform 0.2s; position: relative; }
+.add-trip-btn:hover { transform: scale(1.15); }
+.add-trip-btn:hover::after {
+  content: "הוסף לטיול שלי";
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 4px;
+  background: rgba(0,0,0,0.85);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  pointer-events: none;
+}
 .listing-card .card-img {
   width:100%; height:160px; object-fit:cover;
   background:#E5E7EB;
