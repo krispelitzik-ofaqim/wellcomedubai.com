@@ -670,7 +670,7 @@ async function loadInlineWeatherBanner() {
       <div style="width:38px;height:38px;border-radius:10px;background:rgba(255,255,255,0.18);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.4rem;line-height:1;">${w.icon}</div>
       <div style="position:relative;min-width:0;">
         <div style="color:#fff;font-weight:800;font-size:1rem;line-height:1.2;">${w.temp}°C · ${w.condition}</div>
-        <div style="color:rgba(255,255,255,0.78);font-size:0.74rem;margin-top:3px;">דובאי · מרגיש ${w.feelsLike}°</div>
+        <div style="color:rgba(255,255,255,0.78);font-size:0.74rem;margin-top:3px;">תחזית בדובאי</div>
       </div>
     `;
   } catch(e) {}
