@@ -2481,7 +2481,7 @@ function renderWeatherPage() {
 
     el.innerHTML = `
       <!-- Current -->
-      <div style="background:linear-gradient(135deg,#2C5F6E,#2A9D8F);border-radius:8px;padding:24px;color:#fff;text-align:center;margin-bottom:16px;">
+      <div style="background:linear-gradient(135deg,#2C5F6E,#2A9D8F);padding:24px;color:#fff;text-align:center;margin-bottom:16px;">
         <div style="font-size:0.85rem;opacity:0.8;">דובאי עכשיו</div>
         <div style="font-size:4rem;line-height:1;">${w.icon}</div>
         <div style="font-size:3rem;font-weight:800;">${w.temp}°C</div>
@@ -2495,7 +2495,7 @@ function renderWeatherPage() {
       </div>
 
       <!-- 7 day forecast -->
-      <div style="background:#fff;border-radius:8px;padding:16px;border:1px solid #E5E7EB;margin-bottom:16px;">
+      <div style="background:#fff;padding:16px;border-bottom:1px solid #E5E7EB;margin-bottom:16px;">
         <div style="font-weight:700;color:#2C5F6E;margin-bottom:12px;"><i class="fas fa-calendar-week" style="color:#E9C46A;"></i> תחזית שבועית</div>
         ${w.forecast.map(d => {
           const dayNum = new Date(d.date).getDay();
@@ -2513,7 +2513,7 @@ function renderWeatherPage() {
       </div>
 
       <!-- Live Cams -->
-      <div style="background:#fff;border-radius:8px;padding:16px;border:1px solid #E5E7EB;">
+      <div style="background:#fff;padding:16px;border-top:1px solid #E5E7EB;">
         <div style="font-weight:700;color:#2C5F6E;margin-bottom:12px;">
           <i class="fas fa-video" style="color:#E76F51;"></i> מצלמות חיות
           <span style="background:rgba(255,0,0,0.8);color:#fff;font-size:0.55rem;padding:2px 6px;border-radius:8px;font-weight:700;margin-right:6px;">LIVE</span>
