@@ -2467,7 +2467,7 @@ function renderWeatherPage() {
       <button class="back-btn" onclick="navigateTo('home')"><i class="fas fa-arrow-right"></i></button>
       <h2><i class="fas fa-cloud-sun" style="color:#2A9D8F;margin-left:6px;"></i> מזג אוויר + מצלמות חיות</h2>
     </div>
-    <div style="padding:16px 20px;">
+    <div style="padding:0;">
       <div id="weatherPageContent" style="text-align:center;padding:30px;color:#6B7F8D;"><i class="fas fa-spinner fa-spin" style="color:#2A9D8F;font-size:1.3rem;"></i><br>טוען תחזית...</div>
     </div>
   `;
