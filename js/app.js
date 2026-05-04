@@ -2149,7 +2149,7 @@ function cardGridHTML(item, category) {
         <div class="card-hover" style="background:#fff;border-radius:6px;overflow:hidden;border:1px solid #E5E7EB;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,0.05);position:relative;transition:all 0.3s;" onclick="openDetail('${category}', ${item.id})">
           <button onclick="event.stopPropagation();addToMyTrip('${category}', ${item.id})" title="הוסף לטיול שלי" class="add-trip-btn" style="position:absolute;top:8px;right:10px;background:transparent;color:#fff;border:none;padding:0;cursor:pointer;font-size:2.1rem;font-weight:300;line-height:1;z-index:3;text-shadow:0 2px 8px rgba(0,0,0,0.85),0 0 4px rgba(0,0,0,0.6);">+</button>
           <div style="position:relative;">
-            <img src="${item.image}" alt="${item.name}" style="width:100%;height:220px;object-fit:cover;" onerror="this.style.display='none'">
+            <img src="${getCardImage(item, category)}" alt="${item.name}" style="width:100%;height:220px;object-fit:cover;" onerror="this.style.display='none'">
             ${item.subcategory ? `<div style="position:absolute;top:8px;left:8px;background:${CATEGORY_TITLE_COLORS[category] || 'rgba(0,0,0,0.65)'};color:#fff;padding:4px 11px;border-radius:12px;font-size:0.75rem;font-weight:700;box-shadow:0 1px 4px rgba(0,0,0,0.35);">${subcategoryHe(item.subcategory)}</div>` : ''}
             ${item.nameHe ? `<div style="position:absolute;bottom:10px;right:12px;left:12px;color:#fff;font-weight:800;font-size:1.15rem;text-shadow:0 2px 10px rgba(0,0,0,0.85),0 0 5px rgba(0,0,0,0.7);text-align:right;">${item.nameHe}</div>` : ''}
           </div>
