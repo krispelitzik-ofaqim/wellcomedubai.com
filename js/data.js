@@ -423,7 +423,7 @@ const PRACTICAL_INFO = {
   ]
 };
 
-const DB_VERSION = 173;
+const DB_VERSION = 174;
 function getDB() {
   const ver = localStorage.getItem(DB_KEY + '_ver');
   if (ver && Number(ver) >= DB_VERSION) {
@@ -505,6 +505,7 @@ function getStats() {
     attractions: db.attractions?.length || 0,
     shopping: db.shopping?.length || 0,
     nightlife: db.nightlife?.length || 0,
+    kids: db.kids?.length || 0,
     transport: db.transport?.length || 0,
     casino: db.casino?.length || 0,
     total: Object.values(db).reduce((sum, arr) => sum + arr.length, 0)
