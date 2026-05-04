@@ -2992,7 +2992,10 @@ function openDetail(category, id) {
           ${category === 'hotels' ? `<a href="https://search.hotellook.com/hotels?destination=${encodeURIComponent((item.nameEn || item.name) + ' Dubai')}&adults=2&marker=X5SEJjUA" target="_blank" class="modal-btn primary" style="background:#2A9D8F;"><i class="fas fa-bed"></i> הזמן מלון</a>` : ''}
           ${item.lat ? `<button class="modal-btn primary" onclick="openNavigation(${item.lat},${item.lng})"><i class="fas fa-directions"></i> נווט</button>` : ''}
           ${item.googleUrl ? `<a href="${item.googleUrl}" target="_blank" class="modal-btn secondary"><i class="fab fa-google"></i> Google Maps</a>` : ''}
-          ${category !== 'hotels' ? `<a href="${item.website || 'https://www.google.com/search?q=' + encodeURIComponent((item.nameEn || item.name) + ' Dubai' + (category === 'attractions' ? ' tickets opening hours' : ''))}" target="_blank" class="modal-btn secondary"><i class="fas ${category === 'attractions' ? 'fa-ticket-alt' : 'fa-globe'}"></i> ${category === 'attractions' ? 'מחירים ושעות' : 'אתר'}</a>` : ''}
+          ${category !== 'hotels' ? (category === 'attractions'
+            ? `<a onclick="openInFrame('https://www.google.com/search?igu=1&q=${encodeURIComponent((item.nameEn || item.name) + ' Dubai tickets opening hours')}','${(item.name || '').replace(/'/g,"\\'")} - מחירים ושעות')" class="modal-btn secondary" style="cursor:pointer;"><i class="fas fa-ticket-alt"></i> מחירים ושעות</a>`
+            : `<a href="${item.website || 'https://www.google.com/search?q=' + encodeURIComponent((item.nameEn || item.name) + ' Dubai')}" target="_blank" class="modal-btn secondary"><i class="fas fa-globe"></i> אתר</a>`
+          ) : ''}
           ${item.lat ? `<a onclick="event.stopPropagation();openInFrame('https://www.google.com/maps?q=${item.lat},${item.lng}','${(item.name || '').replace(/'/g,"\\'")} - מפה')" class="modal-btn secondary" style="cursor:pointer;background:#C4922F;color:#fff;border:none;"><i class="fas fa-map-marker-alt"></i> איפה זה?</a>` : ''}
         </div>
       </div>
