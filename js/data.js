@@ -245,7 +245,7 @@ const DEFAULT_DATA = {
     // === JUDAISM ===
     { id:256, name:"בית הכנסת JCC UAE", nameEn:"Jewish Community Center UAE", category:"attractions", subcategory:"judaism", description:"מרכז קהילתי יהודי ובית כנסת אורתודוקסי פעיל בדובאי בהובלת הרב לוי דוכמן. תפילות, בר/בת מצווה, אירועים. מסעדה כשרה במקום.", image:"images/attractions/256.jpg", rating:4.9, price:"חינם", priceRange:"חינם", address:"Villa Centro, Umm Suqeim", lat:25.1500, lng:55.2100, tags:["יהדות","בית כנסת","קהילה"], featured:true },
     { id:258, name:"The View at the Palm", nameEn:"The View at the Palm Jumeirah", category:"attractions", subcategory:"landmark", description:"מרפסת תצפית בקומה 52 (240 מ׳) של מגדל Palm Tower. נוף 360° לפאלם ג'ומיירה, Atlantis וקו הרקיע. כולל תצוגה אינטראקטיבית של תולדות הפאלם.", image:"images/attractions/258.jpg", rating:4.4, price:"$$", priceRange:"AED 100-180", address:"Palm Tower, Palm Jumeirah", lat:25.1153, lng:55.1391, tags:["תצפית","פאלם","ציון דרך"], featured:true },
-    { id:259, name:"Sky Views Dubai", nameEn:"Sky Views Observatory", category:"attractions", subcategory:"landmark", description:"מרפסת תצפית בגובה 219 מ׳ במלון Address Sky View. כוללת מסלול זכוכית בין שני המגדלים, ומגלשה חיצונית מקומה 53. נוף ל-Burj Khalifa.", image:"images/attractions/259.jpg", rating:4.5, price:"$$", priceRange:"AED 100-300", address:"Address Sky View Hotel, Downtown", lat:25.1942, lng:55.2745, tags:["תצפית","זכוכית","מגלשה"], featured:true },
+    { id:259, name:"Sky Views Dubai", nameEn:"Sky Views Observatory", category:"attractions", subcategory:"landmark", description:"מרפסת תצפית בגובה 219 מ׳ במלון Address Sky View. כוללת מסלול זכוכית בין שני המגדלים, ומגלשה חיצונית מקומה 53. נוף ל-Burj Khalifa.", image:"images/attractions/259.jpg", rating:4.5, price:"$$", priceRange:"AED 100-300", address:"Address Sky View Hotel, Downtown", lat:25.1942, lng:55.2745, tags:["תצפית","זכוכית","מגלשה"], website:"https://www.visitdubai.com/en/places-to-visit/sky-views-dubai", featured:true },
     { id:257, name:"בית האברהם", nameEn:"Abrahamic Family House", category:"attractions", subcategory:"judaism", description:"מתחם בין-דתי באבו דאבי הכולל בית כנסת (Moses Ben Maimon), כנסייה ומסגד. נפתח 2023 כסמל לסובלנות. בית הכנסת הראשון שנבנה בארה״ב מ-1958.", image:"images/attractions/257.jpg", rating:4.8, price:"חינם", priceRange:"חינם", address:"Saadiyat Island, Abu Dhabi", lat:24.5304, lng:54.4031, tags:["יהדות","בין-דתי","אבו דאבי"], featured:true },
 
     // === LANDMARK ===
@@ -409,7 +409,7 @@ const PRACTICAL_INFO = {
   ]
 };
 
-const DB_VERSION = 171;
+const DB_VERSION = 172;
 function getDB() {
   const ver = localStorage.getItem(DB_KEY + '_ver');
   if (ver && Number(ver) >= DB_VERSION) {
