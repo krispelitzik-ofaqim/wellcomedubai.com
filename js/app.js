@@ -20,7 +20,7 @@ function initApp() {
   setupNavigation();
   setupSearch();
   fetch('data/hotel-photos.json?v=2').then(r => r.ok ? r.json() : null).then(j => { if (j) { window.HOTEL_PHOTOS = j; if (currentPage === 'home') renderHome(); } }).catch(() => {});
-  fetch('data/gallery.json?v=1').then(r => r.ok ? r.json() : null).then(j => { if (j) { window.GALLERY_IMAGES = j; renderHomeGalleryPreview(); } }).catch(() => {});
+  fetch('data/gallery.json?v=3&t=' + Date.now()).then(r => r.ok ? r.json() : null).then(j => { if (j) { window.GALLERY_IMAGES = j; renderHomeGalleryPreview(); } }).catch(() => {});
   // Enrich data with Google Places in background
   setTimeout(() => enrichAllCategories(), 2000);
 }
@@ -2854,7 +2854,7 @@ async function renderGalleryPage() {
   if (!page) return;
   if (!window.GALLERY_IMAGES) {
     page.innerHTML = '<div style="padding:40px;text-align:center;color:#6B7F8D;"><i class="fas fa-spinner fa-spin"></i> טוען תמונות...</div>';
-    try { const r = await fetch('data/gallery.json?v=2'); if (r.ok) window.GALLERY_IMAGES = await r.json(); } catch {}
+    try { const r = await fetch('data/gallery.json?v=3&t=' + Date.now()); if (r.ok) window.GALLERY_IMAGES = await r.json(); } catch {}
   }
   const images = window.GALLERY_IMAGES || [];
   const cur = window._galleryPageIdx || 0;
