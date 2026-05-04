@@ -22,6 +22,9 @@ function initApp() {
   fetch('data/hotel-photos.json?v=2').then(r => r.ok ? r.json() : null).then(j => { if (j) { window.HOTEL_PHOTOS = j; if (currentPage === 'home') renderHome(); } }).catch(() => {});
   fetch('data/attraction-photos.json?v=1').then(r => r.ok ? r.json() : null).then(j => { if (j) { window.ATTRACTION_PHOTOS = j; if (currentPage === 'home') renderHome(); } }).catch(() => {});
   fetch('data/restaurant-places-photos.json?v=1').then(r => r.ok ? r.json() : null).then(j => { if (j) { window.RESTAURANT_PHOTOS = j; if (currentPage === 'home') renderHome(); } }).catch(() => {});
+  fetch('data/shopping-photos.json?v=1').then(r => r.ok ? r.json() : null).then(j => { if (j) { window.SHOPPING_PHOTOS = j; if (currentPage === 'home') renderHome(); } }).catch(() => {});
+  fetch('data/nightlife-photos.json?v=1').then(r => r.ok ? r.json() : null).then(j => { if (j) { window.NIGHTLIFE_PHOTOS = j; if (currentPage === 'home') renderHome(); } }).catch(() => {});
+  fetch('data/kids-photos.json?v=1').then(r => r.ok ? r.json() : null).then(j => { if (j) { window.KIDS_PHOTOS = j; if (currentPage === 'home') renderHome(); } }).catch(() => {});
   fetch('data/gallery.json?v=3&t=' + Date.now()).then(r => r.ok ? r.json() : null).then(j => { if (j) { window.GALLERY_IMAGES = j; renderHomeGalleryPreview(); } }).catch(() => {});
   // Enrich data with Google Places in background
   setTimeout(() => enrichAllCategories(), 2000);
@@ -698,15 +701,21 @@ const CATEGORY_TITLE_COLORS = {
 };
 const VERIFIED_BADGE = '';
 
+function getCategoryPhotosMap() {
+  return {
+    hotels: window.HOTEL_PHOTOS,
+    attractions: window.ATTRACTION_PHOTOS,
+    restaurants: window.RESTAURANT_PHOTOS,
+    shopping: window.SHOPPING_PHOTOS,
+    nightlife: window.NIGHTLIFE_PHOTOS,
+    kids: window.KIDS_PHOTOS
+  };
+}
+
 function getCardImage(item, category) {
-  if (category === 'hotels' && window.HOTEL_PHOTOS && window.HOTEL_PHOTOS[item.id]?.photos?.[0]?.name) {
-    return placePhotoUrl(window.HOTEL_PHOTOS[item.id].photos[0].name, 600);
-  }
-  if (category === 'attractions' && window.ATTRACTION_PHOTOS && window.ATTRACTION_PHOTOS[item.id]?.photos?.[0]?.name) {
-    return placePhotoUrl(window.ATTRACTION_PHOTOS[item.id].photos[0].name, 600);
-  }
-  if (category === 'restaurants' && window.RESTAURANT_PHOTOS && window.RESTAURANT_PHOTOS[item.id]?.photos?.[0]?.name) {
-    return placePhotoUrl(window.RESTAURANT_PHOTOS[item.id].photos[0].name, 600);
+  const photos = getCategoryPhotosMap()[category];
+  if (photos && photos[item.id]?.photos?.[0]?.name) {
+    return placePhotoUrl(photos[item.id].photos[0].name, 600);
   }
   return item.image;
 }
@@ -2969,8 +2978,7 @@ function openDetail(category, id) {
   modal.innerHTML = `
     <div class="modal-sheet">
       ${(() => {
-        const map = { hotels: window.HOTEL_PHOTOS, attractions: window.ATTRACTION_PHOTOS, restaurants: window.RESTAURANT_PHOTOS };
-        const photos = map[category];
+        const photos = getCategoryPhotosMap()[category];
         return photos && photos[item.id]?.photos?.length ? renderHotelPhotoSlider(item, photos[item.id]) : null;
       })() || `<div style="position:relative;">
         <img class="modal-img" src="${item.image}" alt="${item.name}" onerror="this.style.display='none'">
