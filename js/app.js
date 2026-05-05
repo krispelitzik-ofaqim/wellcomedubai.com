@@ -2871,10 +2871,10 @@ const RE_ARTICLES = [
   { id:'a5', title:'Off-Plan vs נכס מוכן', body:'Off-Plan (פרויקט בבנייה): מחיר נמוך יותר, תוכנית תשלומים נוחה (10-30% במהלך הבנייה, השאר במסירה), פוטנציאל עלייה. סיכון: עיכובים, שינויים בפרויקט. נכס מוכן: כניסה מיידית להשכרה, בלי הפתעות, אבל מחיר גבוה יותר. ישראלים מעדיפים בעיקר Off-Plan ב-3 השנים האחרונות.', icon:'🏗️' }
 ];
 const RE_BROKERS_DEFAULT = [
-  { id:'b1', name:'גלית שמש', company:'Allsopp & Allsopp', langs:['עברית','אנגלית','ערבית'], phone:'+971-50-100-2233', whatsapp:'971501002233', specialty:'Marina, JBR, JLT', email:'galit@allsopp.ae' },
-  { id:'b2', name:'אבי כהן', company:'Better Homes', langs:['עברית','אנגלית'], phone:'+971-55-222-3344', whatsapp:'971552223344', specialty:'Downtown, Business Bay', email:'avi@betterhomes.ae' },
-  { id:'b3', name:'מיכאל רובין', company:'Engel & Völkers', langs:['עברית','אנגלית','רוסית'], phone:'+971-52-333-4455', whatsapp:'971523334455', specialty:'Palm, Emirates Hills, יוקרה', email:'michael@ev-dubai.ae' },
-  { id:'b4', name:'שרה לוי', company:'Driven Properties', langs:['עברית','אנגלית'], phone:'+971-58-444-5566', whatsapp:'971584445566', specialty:'JVC, Damac Hills, השקעות זולות', email:'sarah@drivenproperties.ae' }
+  { id:'b1', name:'גלית שמש', company:'Allsopp & Allsopp', langs:['עברית','אנגלית','ערבית'], phone:'+971-50-100-2233', whatsapp:'971501002233', specialty:'Marina, JBR, JLT', email:'galit@allsopp.ae', years:'8 שנים', verified:true, image:'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&q=80' },
+  { id:'b2', name:'אבי כהן', company:'Better Homes', langs:['עברית','אנגלית'], phone:'+971-55-222-3344', whatsapp:'971552223344', specialty:'Downtown, Business Bay', email:'avi@betterhomes.ae', years:'6 שנים', verified:true, image:'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=200&q=80' },
+  { id:'b3', name:'מיכאל רובין', company:'Engel & Völkers', langs:['עברית','אנגלית','רוסית'], phone:'+971-52-333-4455', whatsapp:'971523334455', specialty:'Palm, Emirates Hills, יוקרה', email:'michael@ev-dubai.ae', years:'12 שנים', verified:true, image:'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&q=80' },
+  { id:'b4', name:'שרה לוי', company:'Driven Properties', langs:['עברית','אנגלית'], phone:'+971-58-444-5566', whatsapp:'971584445566', specialty:'JVC, Damac Hills, השקעות זולות', email:'sarah@drivenproperties.ae', years:'5 שנים', verified:true, image:'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&q=80' }
 ];
 
 function getREListings() {
@@ -2975,14 +2975,52 @@ function renderBrokersFullPage() {
   const page = document.getElementById('page-realestate');
   if (!page) return;
   page.innerHTML = `
-    <div class="page-header">
-      <button class="back-btn" onclick="switchRETab('articles')"><i class="fas fa-arrow-right"></i></button>
-      <h2><i class="fas fa-handshake" style="color:#B85C8E;margin-left:6px;"></i> מתווכים מומלצים</h2>
+    <div class="page-header" style="background:linear-gradient(135deg,#B85C8E 0%,#1A6B8A 100%);color:#fff;border-bottom:none;">
+      <button class="back-btn" onclick="switchRETab('articles')" style="color:#fff !important;"><i class="fas fa-arrow-right"></i></button>
+      <h2 style="color:#fff;"><i class="fas fa-handshake" style="color:#E9C46A;margin-left:6px;"></i> מתווכים מומלצים</h2>
+    </div>
+    <div style="display:flex;gap:8px;padding:12px 14px;background:#FDF6EC;border-bottom:1px solid #F5EFE6;">
+      <button onclick="showBrokerCriteria()" style="flex:1;padding:11px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.82rem;cursor:pointer;background:#fff;border:2px solid #1A6B8A;color:#1A6B8A;">✓ מה נדרש מהמתווך?</button>
+      <button onclick="showBrokerSubmit()" style="flex:1;padding:11px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.82rem;cursor:pointer;background:#B85C8E;border:none;color:#fff;">+ המלץ על מתווך</button>
     </div>
     <div style="padding:14px 16px 80px;">
       ${renderREBrokers()}
     </div>
   `;
+}
+
+function showBrokerCriteria() {
+  const modal = document.getElementById('detailModal');
+  if (!modal) return;
+  modal.innerHTML = `
+    <div style="background:#fff;width:92%;max-width:480px;max-height:88vh;border-radius:14px;overflow-y:auto;padding:0;display:flex;flex-direction:column;">
+      <div style="background:linear-gradient(135deg,#1A6B8A,#2A9D8F);color:#fff;padding:18px 20px;display:flex;justify-content:space-between;align-items:center;">
+        <div style="font-weight:800;font-size:1.05rem;">✓ קריטריונים למתווך מורשה</div>
+        <button onclick="document.getElementById('detailModal').classList.remove('active')" style="background:rgba(255,255,255,0.25);border:none;color:#fff;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1rem;">×</button>
+      </div>
+      <div style="padding:18px 22px;color:#2C5F6E;line-height:2;font-size:0.9rem;">
+        <div style="margin-bottom:6px;">• ניסיון מוכח בנדל"ן בדובאי — מעל שנתיים</div>
+        <div style="margin-bottom:6px;">• רישיון RERA תקף (Real Estate Regulatory Agency)</div>
+        <div style="margin-bottom:6px;">• דובר עברית או רקע בעבודה עם ישראלים</div>
+        <div style="margin-bottom:6px;">• ערוץ תקשורת מוסדר (אתר/לינקדאין/וואטסאפ)</div>
+        <div style="margin-bottom:6px;">• הצגת חוזה מכר/השכרה שביצע</div>
+        <div style="margin-bottom:6px;">• שיחת אימות אישית</div>
+        <div style="margin-bottom:6px;">• 2 ממליצים לפחות</div>
+        <div style="margin-bottom:6px;">• הצגת תעודת זהות וקבלות מסים</div>
+      </div>
+      <button onclick="document.getElementById('detailModal').classList.remove('active')" style="margin:0 22px 22px;background:#1A6B8A;color:#fff;border:none;padding:12px;border-radius:8px;font-family:Heebo;font-weight:800;cursor:pointer;">הבנתי</button>
+    </div>
+  `;
+  modal.classList.add('active');
+  modal.style.alignItems = 'center';
+  modal.style.justifyContent = 'center';
+  modal.onclick = (e) => { if (e.target === modal) modal.classList.remove('active'); };
+}
+
+function showBrokerSubmit() {
+  const wa = '+972-50-284-4867';
+  const text = encodeURIComponent('שלום, אני רוצה להמליץ על מתווך נדל"ן בדובאי. שם המתווך: ');
+  window.open(`https://wa.me/972502844867?text=${text}`, '_blank');
 }
 
 function renderREArticles() {
@@ -3251,24 +3289,31 @@ function submitREListing() {
 }
 
 function renderREBrokers() {
-  return RE_BROKERS_DEFAULT.map(b => `
-    <div style="background:#fff;border:1px solid #E5E7EB;border-right:4px solid #1A6B8A;border-radius:10px;padding:14px;margin-bottom:12px;box-shadow:0 1px 4px rgba(0,0,0,0.05);">
-      <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
-        <div style="width:48px;height:48px;border-radius:50%;background:#1A6B8A;color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:700;flex-shrink:0;">${b.name.split(' ')[0][0]}</div>
+  const accents = ['#1A6B8A','#2A9D8F','#E76F51','#B85C8E','#F4A261','#5B9DC7'];
+  return RE_BROKERS_DEFAULT.map((b, i) => {
+    const c = accents[i % accents.length];
+    return `
+    <div style="background:#fff;border:1.5px solid ${c}30;border-radius:14px;padding:14px;margin-bottom:12px;box-shadow:0 4px 12px rgba(0,0,0,0.05);position:relative;overflow:hidden;">
+      ${b.verified ? `<div style="position:absolute;top:8px;left:8px;background:${c};color:#fff;font-size:0.6rem;font-weight:800;padding:3px 9px;border-radius:10px;letter-spacing:0.5px;">✓ מאומת</div>` : ''}
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+        ${b.image ? `<img src="${b.image}" style="width:64px;height:64px;border-radius:50%;object-fit:cover;border:3px solid ${c};flex-shrink:0;" onerror="this.style.display='none'">` : `<div style="width:64px;height:64px;border-radius:50%;background:${c};color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.4rem;font-weight:800;flex-shrink:0;">${b.name.split(' ')[0][0]}</div>`}
         <div style="flex:1;min-width:0;">
-          <div style="font-weight:800;color:#2C5F6E;font-size:0.95rem;">${b.name}</div>
-          <div style="font-size:0.78rem;color:#6B7F8D;">${b.company}</div>
+          <div style="font-weight:800;color:#2C5F6E;font-size:1rem;">${b.name}</div>
+          <div style="font-size:0.78rem;color:${c};font-weight:700;">${b.company}</div>
+          ${b.years ? `<div style="font-size:0.7rem;color:#6B7F8D;margin-top:2px;">⏱ ${b.years} ניסיון בדובאי</div>` : ''}
         </div>
       </div>
-      <div style="font-size:0.78rem;color:#2C5F6E;margin-bottom:4px;"><strong>התמחות:</strong> ${b.specialty}</div>
-      <div style="font-size:0.78rem;color:#6B7F8D;margin-bottom:10px;">🗣️ ${b.langs.join(' · ')}</div>
+      <div style="background:#FDF6EC;padding:8px 10px;border-radius:8px;margin-bottom:8px;">
+        <div style="font-size:0.75rem;color:#2C5F6E;margin-bottom:3px;"><strong>התמחות:</strong> ${b.specialty}</div>
+        <div style="font-size:0.72rem;color:#6B7F8D;">🗣️ ${b.langs.join(' · ')}</div>
+      </div>
       <div style="display:flex;gap:6px;">
-        <a href="tel:${b.phone}" style="flex:1;padding:8px;background:#2A9D8F;color:#fff;border-radius:6px;text-align:center;text-decoration:none;font-size:0.78rem;font-weight:700;"><i class="fas fa-phone"></i> חייג</a>
-        <a href="https://wa.me/${b.whatsapp}" target="_blank" style="flex:1;padding:8px;background:#25D366;color:#fff;border-radius:6px;text-align:center;text-decoration:none;font-size:0.78rem;font-weight:700;"><i class="fab fa-whatsapp"></i> וואטסאפ</a>
-        <a href="mailto:${b.email}" style="flex:1;padding:8px;background:#1A6B8A;color:#fff;border-radius:6px;text-align:center;text-decoration:none;font-size:0.78rem;font-weight:700;"><i class="fas fa-envelope"></i> אימייל</a>
+        <a href="tel:${b.phone}" style="flex:1;padding:9px;background:#2A9D8F;color:#fff;border-radius:8px;text-align:center;text-decoration:none;font-size:0.78rem;font-weight:700;"><i class="fas fa-phone"></i> חייג</a>
+        <a href="https://wa.me/${b.whatsapp}" target="_blank" style="flex:1;padding:9px;background:#25D366;color:#fff;border-radius:8px;text-align:center;text-decoration:none;font-size:0.78rem;font-weight:700;"><i class="fab fa-whatsapp"></i> וואטסאפ</a>
+        <a href="mailto:${b.email}" style="flex:1;padding:9px;background:#1A6B8A;color:#fff;border-radius:8px;text-align:center;text-decoration:none;font-size:0.78rem;font-weight:700;"><i class="fas fa-envelope"></i> אימייל</a>
       </div>
     </div>
-  `).join('');
+  `;}).join('');
 }
 
 function applyRealEstateVisibility() {
