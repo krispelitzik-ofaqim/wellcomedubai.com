@@ -2897,29 +2897,43 @@ function renderRealEstatePage() {
   if (!page) return;
   const tab = window.RE_TAB || 'articles';
   const topButtons = [
-    { id:'sale',   label:'דירות למכירה',   icon:'🏠', color:'#1A6B8A' },
-    { id:'rent',   label:'דירות להשכרה',   icon:'🔑', color:'#2A9D8F' },
-    { id:'invest', label:'השקעות נדל"ן',   icon:'📈', color:'#E76F51' }
+    { id:'sale',   label:'דירות למכירה',   icon:'🏠', color:'#1A6B8A', sub:'מצא בית חלומות' },
+    { id:'rent',   label:'דירות להשכרה',   icon:'🔑', color:'#2A9D8F', sub:'לטווח קצר וארוך' },
+    { id:'invest', label:'השקעות נדל"ן',   icon:'📈', color:'#E76F51', sub:'תשואות 6-12%' }
   ];
   page.innerHTML = `
-    <div class="page-header">
-      <button class="back-btn" onclick="navigateTo('home')"><i class="fas fa-arrow-right"></i></button>
-      <h2><i class="fas fa-city" style="color:#1A6B8A;margin-left:6px;"></i> פורטל הנדל"ן בדובאי</h2>
+    <div class="page-header" style="background:linear-gradient(135deg,#1A6B8A 0%,#2C5F6E 100%);color:#fff;border-bottom:none;">
+      <button class="back-btn" onclick="navigateTo('home')" style="color:#fff !important;"><i class="fas fa-arrow-right"></i></button>
+      <h2 style="color:#fff;"><i class="fas fa-city" style="color:#E9C46A;margin-left:6px;"></i> פורטל הנדל"ן בדובאי</h2>
     </div>
-    <div style="padding:14px 16px 6px;display:flex;gap:8px;">
-      ${topButtons.map(t => `
-        <button onclick="switchRETab('${t.id}')" style="flex:1;padding:12px 6px;border-radius:10px;font-family:Heebo;font-weight:700;font-size:0.78rem;cursor:pointer;border:2px solid ${tab===t.id?t.color:'#E5E7EB'};background:${tab===t.id?t.color:'#fff'};color:${tab===t.id?'#fff':'#2C5F6E'};display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;">
-          <span style="font-size:1.5rem;line-height:1;">${t.icon}</span>
-          <span style="line-height:1.1;">${t.label}</span>
-        </button>
-      `).join('')}
+    <!-- Hero strip with subtle gradient -->
+    <div style="background:linear-gradient(180deg,#FDF6EC 0%,transparent 100%);padding:18px 16px 10px;">
+      <div style="text-align:center;color:#2C5F6E;font-size:0.85rem;font-weight:600;margin-bottom:14px;line-height:1.5;">
+        מצא, השקע, חיה — <span style="color:#E76F51;">הכל בדובאי</span> 🏙️
+      </div>
+      <div style="display:flex;gap:9px;">
+        ${topButtons.map(t => `
+          <button onclick="switchRETab('${t.id}')" style="flex:1;padding:14px 6px;border-radius:14px;font-family:Heebo;font-weight:800;font-size:0.78rem;cursor:pointer;border:none;background:${tab===t.id?`linear-gradient(135deg,${t.color},${t.color}dd)`:`#fff`};color:${tab===t.id?'#fff':'#2C5F6E'};display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;box-shadow:${tab===t.id?`0 6px 18px ${t.color}55`:`0 2px 6px rgba(0,0,0,0.05)`};border:1px solid ${tab===t.id?'transparent':'#E5E7EB'};transition:all 0.25s;">
+            <span style="font-size:1.6rem;line-height:1;">${t.icon}</span>
+            <span style="line-height:1.15;">${t.label}</span>
+            <span style="font-size:0.62rem;opacity:${tab===t.id?'0.85':'0.6'};font-weight:600;">${t.sub}</span>
+          </button>
+        `).join('')}
+      </div>
     </div>
-    <div style="padding:10px 16px 80px;">
+    <div style="padding:14px 16px 80px;">
       ${tab === 'articles' ? (renderREArticlesWithStats() + renderBrokersBannerBottom())
         : tab === 'invest' ? (renderREInvestments() + renderBrokersBannerBottom())
         : (renderREListings(tab) + renderBrokersBannerBottom())}
     </div>
   `;
+}
+
+function reSectionTitle(emoji, text, color = '#1A6B8A') {
+  return `<div style="display:flex;align-items:center;gap:8px;margin:10px 0 12px;padding-right:4px;">
+    <div style="width:4px;height:20px;background:${color};border-radius:2px;"></div>
+    <span style="font-weight:800;color:#2C5F6E;font-size:1rem;letter-spacing:-0.2px;">${emoji} ${text}</span>
+  </div>`;
 }
 
 function renderREArticlesWithStats() {
@@ -2930,21 +2944,25 @@ function renderREArticlesWithStats() {
     el.innerHTML = renderStatsCarousel(stats);
   }, 50);
   return `
-    <div style="font-weight:700;color:#2C5F6E;font-size:0.95rem;margin-bottom:8px;">📊 מדדים כלכליים — UAE (4 שנים אחרונות)</div>
-    <div id="uaeStatsBoxArticles" style="margin-bottom:18px;"><div style="text-align:center;padding:20px;color:#6B7F8D;font-size:0.78rem;"><i class="fas fa-spinner fa-spin"></i> טוען נתונים...</div></div>
-    <div style="font-weight:700;color:#2C5F6E;font-size:0.95rem;margin-bottom:8px;">📚 מאמרים ומדריכים</div>
+    ${reSectionTitle('📊', 'מדדים כלכליים — UAE (4 שנים אחרונות)', '#1A6B8A')}
+    <div id="uaeStatsBoxArticles" style="margin-bottom:22px;"><div style="text-align:center;padding:20px;color:#6B7F8D;font-size:0.78rem;"><i class="fas fa-spinner fa-spin"></i> טוען נתונים...</div></div>
+    ${reSectionTitle('📚', 'מאמרים ומדריכים', '#5B9DC7')}
     ${renderREArticles()}
   `;
 }
 
 function renderBrokersBannerBottom() {
   return `
-    <div onclick="switchRETab('brokers-full')" style="margin-top:16px;border-radius:14px;cursor:pointer;aspect-ratio:380/120;background-image:linear-gradient(90deg,rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.35) 50%,rgba(0,0,0,0.55) 100%),url('images/wellcomedubai.stamp/lifestyle-business-woman-feel-happy-jumping-air-celebrating-success.jpg');background-size:cover;background-position:center;display:flex;align-items:center;justify-content:space-between;padding:0 18px;box-shadow:0 4px 14px rgba(0,0,0,0.25);overflow:hidden;box-sizing:border-box;">
-      <div style="color:#fff;text-shadow:0 2px 6px rgba(0,0,0,0.85);">
-        <div style="font-weight:800;font-size:1.05rem;line-height:1.15;">🤝 מתווכים מומלצים</div>
-        <div style="font-size:0.74rem;margin-top:4px;opacity:0.95;">דוברי עברית · ניסיון בעבודה עם ישראלים</div>
+    <div onclick="switchRETab('brokers-full')" style="margin-top:22px;border-radius:16px;cursor:pointer;aspect-ratio:380/120;background-image:linear-gradient(90deg,rgba(184,92,142,0.85) 0%,rgba(26,107,138,0.6) 100%),url('images/wellcomedubai.stamp/lifestyle-business-woman-feel-happy-jumping-air-celebrating-success.jpg');background-size:cover;background-position:center;display:flex;align-items:center;justify-content:space-between;padding:0 22px;box-shadow:0 8px 24px rgba(184,92,142,0.3);overflow:hidden;box-sizing:border-box;border:1px solid rgba(255,255,255,0.15);position:relative;">
+      <div style="position:absolute;top:-30px;left:-30px;width:120px;height:120px;background:radial-gradient(circle,rgba(255,255,255,0.18),transparent 70%);border-radius:50%;"></div>
+      <div style="color:#fff;text-shadow:0 2px 8px rgba(0,0,0,0.6);position:relative;">
+        <div style="font-size:0.65rem;text-transform:uppercase;letter-spacing:1.5px;opacity:0.85;font-weight:700;margin-bottom:3px;">PREMIUM SERVICE</div>
+        <div style="font-weight:800;font-size:1.1rem;line-height:1.15;">🤝 מתווכים מומלצים</div>
+        <div style="font-size:0.74rem;margin-top:4px;opacity:0.95;">דוברי עברית · ניסיון עם ישראלים</div>
       </div>
-      <i class="fas fa-chevron-left" style="color:#fff;font-size:1.05rem;text-shadow:0 1px 4px rgba(0,0,0,0.8);"></i>
+      <div style="background:rgba(255,255,255,0.95);width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;">
+        <i class="fas fa-chevron-left" style="color:#B85C8E;font-size:0.85rem;"></i>
+      </div>
     </div>
   `;
 }
@@ -2968,15 +2986,18 @@ function renderBrokersFullPage() {
 }
 
 function renderREArticles() {
-  return RE_ARTICLES.map(a => `
-    <div style="background:#fff;border:1px solid #E5E7EB;border-radius:10px;padding:14px;margin-bottom:12px;box-shadow:0 1px 4px rgba(0,0,0,0.04);">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-        <div style="font-size:1.5rem;">${a.icon}</div>
-        <div style="font-weight:800;color:#1A6B8A;font-size:0.95rem;flex:1;">${a.title}</div>
+  const accents = ['#1A6B8A','#2A9D8F','#E76F51','#F4A261','#B85C8E'];
+  return RE_ARTICLES.map((a, i) => {
+    const c = accents[i % accents.length];
+    return `
+    <div style="background:#fff;border:1px solid #E5E7EB;border-radius:14px;padding:0;margin-bottom:12px;box-shadow:0 2px 10px rgba(0,0,0,0.05);overflow:hidden;">
+      <div style="display:flex;align-items:center;gap:12px;padding:14px 14px 12px;background:linear-gradient(180deg,${c}11 0%,transparent 100%);border-bottom:1px solid #F5EFE6;">
+        <div style="width:42px;height:42px;border-radius:12px;background:${c};display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;color:#fff;">${a.icon}</div>
+        <div style="font-weight:800;color:#2C5F6E;font-size:0.97rem;line-height:1.3;letter-spacing:-0.2px;flex:1;">${a.title}</div>
       </div>
-      <div style="color:#2C5F6E;font-size:0.85rem;line-height:1.7;">${a.body}</div>
+      <div style="padding:13px 16px 16px;color:#2C5F6E;font-size:0.86rem;line-height:1.75;">${a.body}</div>
     </div>
-  `).join('');
+  `;}).join('');
 }
 
 const RE_INVESTMENTS = [
@@ -3035,7 +3056,7 @@ function fmtStat(stat) {
 
 function renderStatsCarousel(stats) {
   return `
-    <div style="display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:6px;-webkit-overflow-scrolling:touch;">
+    <div class="no-scrollbar" style="display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:2px;-webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none;">
       ${stats.map(s => {
         const max = Math.max(...s.history.map(h => Math.abs(h.value || 0))) || 1;
         return `
@@ -3072,24 +3093,38 @@ function renderREInvestments() {
     el.innerHTML = renderStatsCarousel(stats);
   }, 50);
   return `
-    <div style="background:#FDF6EC;border-right:4px solid #E76F51;padding:12px 14px;border-radius:8px;font-size:0.82rem;color:#2C5F6E;line-height:1.6;margin-bottom:14px;">
-      💡 <strong>למה דובאי?</strong> 0% מס הכנסה אישי, 4% מס רכישה חד-פעמי, תשואות 6-12%, ויזת משקיע ב-AED 750K, Golden Visa ב-AED 2M.
+    <div style="background:linear-gradient(135deg,#E76F51,#F4A261);border-radius:14px;padding:16px 18px;color:#fff;margin-bottom:18px;box-shadow:0 6px 18px rgba(231,111,81,0.25);">
+      <div style="font-size:0.65rem;text-transform:uppercase;letter-spacing:1.3px;opacity:0.9;font-weight:700;margin-bottom:4px;">למה דובאי?</div>
+      <div style="font-weight:800;font-size:1rem;margin-bottom:6px;">היעד החם בעולם להשקעות נדל"ן 🔥</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 14px;font-size:0.75rem;font-weight:600;opacity:0.95;line-height:1.5;">
+        <div>✓ 0% מס הכנסה אישי</div>
+        <div>✓ 4% מס רכישה חד-פעמי</div>
+        <div>✓ תשואות 6-12%</div>
+        <div>✓ ויזת משקיע מ-AED 750K</div>
+      </div>
     </div>
-    <div style="font-weight:700;color:#2C5F6E;font-size:0.95rem;margin-bottom:8px;">📊 מדדים כלכליים — UAE (חי, World Bank)</div>
-    <div id="uaeStatsBox" style="margin-bottom:16px;"><div style="text-align:center;padding:20px;color:#6B7F8D;font-size:0.78rem;"><i class="fas fa-spinner fa-spin"></i> טוען נתונים...</div></div>
-    <div style="font-weight:700;color:#2C5F6E;font-size:0.95rem;margin-bottom:8px;">🗺️ אזורים מובילים על המפה</div>
-    <div style="border-radius:10px;overflow:hidden;border:1px solid #E5E7EB;margin-bottom:16px;">
+    ${reSectionTitle('📊', 'מדדים כלכליים — UAE (4 שנים)', '#1A6B8A')}
+    <div id="uaeStatsBox" style="margin-bottom:22px;"><div style="text-align:center;padding:20px;color:#6B7F8D;font-size:0.78rem;"><i class="fas fa-spinner fa-spin"></i> טוען נתונים...</div></div>
+    ${reSectionTitle('🗺️', 'אזורים מובילים — מפה חיה', '#E76F51')}
+    <div style="border-radius:14px;overflow:hidden;border:1px solid #E5E7EB;margin-bottom:18px;box-shadow:0 4px 14px rgba(0,0,0,0.06);">
       <img src="${buildInvestmentMap('600x340')}" alt="מפת אזורי השקעה" style="width:100%;display:block;" onerror="this.style.display='none'">
     </div>
-    <div style="font-weight:700;color:#2C5F6E;font-size:0.95rem;margin-bottom:10px;">פרטי כל אזור</div>
+    ${reSectionTitle('🏙️', 'פרטי כל אזור', '#F4A261')}
     ${RE_INVESTMENTS.map((i, idx) => `
-      <div style="background:#fff;border:1px solid #E5E7EB;border-right:4px solid #E76F51;border-radius:8px;padding:12px;margin-bottom:10px;">
-        <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:6px;">
-          <div style="font-weight:800;color:#2C5F6E;font-size:0.95rem;"><span style="background:#E76F51;color:#fff;border-radius:50%;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;font-size:0.72rem;margin-left:6px;">${idx+1}</span>${i.area}</div>
-          <div style="background:#E76F51;color:#fff;padding:3px 10px;border-radius:10px;font-size:0.7rem;font-weight:700;">תשואה ${i.yield}</div>
+      <div style="background:#fff;border:1px solid #E5E7EB;border-radius:14px;padding:14px 16px;margin-bottom:11px;box-shadow:0 2px 10px rgba(0,0,0,0.04);position:relative;overflow:hidden;">
+        <div style="position:absolute;top:0;right:0;bottom:0;width:5px;background:linear-gradient(180deg,#E76F51,#F4A261);"></div>
+        <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:8px;gap:8px;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="background:linear-gradient(135deg,#E76F51,#F4A261);color:#fff;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:800;box-shadow:0 2px 6px rgba(231,111,81,0.35);">${idx+1}</span>
+            <div style="font-weight:800;color:#2C5F6E;font-size:0.97rem;line-height:1.2;">${i.area}</div>
+          </div>
+          <div style="background:#FDF6EC;color:#E76F51;padding:4px 10px;border-radius:10px;font-size:0.7rem;font-weight:800;border:1px solid #F4A26133;flex-shrink:0;">⚡ ${i.yield}</div>
         </div>
-        <div style="font-size:0.78rem;color:#1A6B8A;margin-bottom:5px;"><strong>כניסה מ:</strong> ${i.entry}</div>
-        <div style="font-size:0.82rem;color:#2C5F6E;line-height:1.5;">${i.highlight}</div>
+        <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:8px;">
+          <div style="font-size:0.7rem;color:#6B7F8D;font-weight:600;">כניסה מ:</div>
+          <div style="font-size:1rem;font-weight:800;color:#1A6B8A;">${i.entry}</div>
+        </div>
+        <div style="font-size:0.83rem;color:#6B7F8D;line-height:1.6;">${i.highlight}</div>
       </div>
     `).join('')}
   `;
