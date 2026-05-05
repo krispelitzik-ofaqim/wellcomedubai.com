@@ -2946,7 +2946,6 @@ function renderREArticlesWithStats() {
   return `
     ${reSectionTitle('📊', 'מדדים כלכליים — UAE (4 שנים אחרונות)', '#1A6B8A')}
     <div id="uaeStatsBoxArticles" style="margin-bottom:22px;"><div style="text-align:center;padding:20px;color:#6B7F8D;font-size:0.78rem;"><i class="fas fa-spinner fa-spin"></i> טוען נתונים...</div></div>
-    ${renderIsraeliBanner()}
     ${reSectionTitle('📚', 'מאמרים ומדריכים', '#5B9DC7')}
     ${renderREArticles()}
   `;
@@ -3093,55 +3092,61 @@ function fmtStat(stat) {
   return latest ? fmtVal(latest.value, stat.unit) : '—';
 }
 
-function renderIsraeliBanner() {
-  const years = Object.entries(ISRAELI_TO_UAE).reverse().slice(0,4);
-  const max = Math.max(...years.map(([,v]) => v));
+const STAT_GRADIENTS = {
+  '#1A6B8A': 'linear-gradient(135deg,#1A6B8A,#2A9D8F)',
+  '#2A9D8F': 'linear-gradient(135deg,#2A9D8F,#5B9DC7)',
+  '#E76F51': 'linear-gradient(135deg,#E76F51,#F4A261)',
+  '#F4A261': 'linear-gradient(135deg,#F4A261,#E9C46A)',
+  '#B85C8E': 'linear-gradient(135deg,#B85C8E,#5B9DC7)'
+};
+
+function renderStatSlide({ icon, label, sublabel, color, rows, valueFormatter }) {
+  const max = Math.max(...rows.map(r => Math.abs(r.value || 0))) || 1;
+  const gradient = STAT_GRADIENTS[color] || `linear-gradient(135deg,${color},${color})`;
   return `
-    <div style="background:linear-gradient(135deg,#B85C8E,#5B9DC7);border-radius:14px;padding:16px 18px;color:#fff;margin-bottom:18px;box-shadow:0 6px 18px rgba(184,92,142,0.25);">
+    <div style="min-width:260px;width:260px;scroll-snap-align:start;background:${gradient};border-radius:14px;padding:16px 18px;color:#fff;flex-shrink:0;box-shadow:0 6px 18px ${color}33;">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
-        <div style="font-size:1.8rem;line-height:1;">🇮🇱</div>
+        <div style="font-size:1.8rem;line-height:1;">${icon}</div>
         <div>
-          <div style="font-size:0.65rem;text-transform:uppercase;letter-spacing:1.3px;opacity:0.9;font-weight:700;">תיירות ישראלית</div>
-          <div style="font-weight:800;font-size:1rem;">ישראלים מבקרים בדובאי</div>
-          <div style="font-size:0.7rem;opacity:0.85;margin-top:1px;">מאז הסכמי אברהם (ספטמבר 2020)</div>
+          <div style="font-size:0.65rem;text-transform:uppercase;letter-spacing:1.3px;opacity:0.9;font-weight:700;">${sublabel || 'מדד כלכלי'}</div>
+          <div style="font-weight:800;font-size:1rem;line-height:1.2;">${label}</div>
         </div>
       </div>
-      ${years.map(([y,v]) => `
+      ${rows.length ? rows.map(r => `
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
-          <div style="width:42px;font-size:0.72rem;font-weight:700;opacity:0.95;">${y}</div>
+          <div style="width:42px;font-size:0.72rem;font-weight:700;opacity:0.95;">${r.year}</div>
           <div style="flex:1;background:rgba(255,255,255,0.18);border-radius:4px;height:14px;overflow:hidden;">
-            <div style="float:right;height:100%;width:${(v/max*100).toFixed(0)}%;background:#fff;border-radius:4px;"></div>
+            <div style="float:right;height:100%;width:${Math.min(100, Math.abs(r.value||0)/max*100).toFixed(0)}%;background:#fff;border-radius:4px;"></div>
           </div>
-          <div style="width:64px;text-align:left;font-weight:800;font-size:0.82rem;direction:ltr;">${(v/1000).toFixed(0)}K</div>
+          <div style="width:72px;text-align:left;font-weight:800;font-size:0.78rem;direction:ltr;">${valueFormatter(r.value)}</div>
         </div>
-      `).join('')}
+      `).join('') : '<div style="opacity:0.85;font-size:0.78rem;text-align:center;padding:14px;">אין נתונים</div>'}
     </div>
   `;
 }
 
 function renderStatsCarousel(stats) {
+  const israeliRows = Object.entries(ISRAELI_TO_UAE).reverse().slice(0,4).map(([y,v]) => ({ year:y, value:v }));
+  const israeliSlide = renderStatSlide({
+    icon: '🇮🇱',
+    label: 'ישראלים בדובאי',
+    sublabel: 'תיירות ישראלית',
+    color: '#B85C8E',
+    rows: israeliRows,
+    valueFormatter: v => (v/1000).toFixed(0) + 'K'
+  });
+  const uaeSlides = stats.map(s => renderStatSlide({
+    icon: s.icon,
+    label: s.label,
+    sublabel: 'איחוד האמירויות',
+    color: s.color,
+    rows: s.history,
+    valueFormatter: v => fmtVal(v, s.unit)
+  })).join('');
   return `
-    <div class="no-scrollbar" style="display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:2px;-webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none;">
-      ${stats.map(s => {
-        const max = Math.max(...s.history.map(h => Math.abs(h.value || 0))) || 1;
-        return `
-        <div style="min-width:240px;width:240px;scroll-snap-align:start;background:#fff;border:1px solid #E5E7EB;border-top:4px solid ${s.color};border-radius:10px;padding:12px;flex-shrink:0;box-shadow:0 1px 4px rgba(0,0,0,0.05);">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
-            <div style="font-size:1.4rem;">${s.icon}</div>
-            <div style="font-weight:800;color:${s.color};font-size:0.92rem;">${s.label}</div>
-          </div>
-          ${s.history.length ? s.history.map((h, idx) => `
-            <div style="display:flex;align-items:center;gap:8px;margin-bottom:7px;">
-              <div style="width:42px;font-size:0.72rem;color:#6B7F8D;font-weight:600;">${h.year}</div>
-              <div style="flex:1;background:#F5EFE6;border-radius:4px;height:14px;position:relative;overflow:hidden;">
-                <div style="position:absolute;top:0;right:0;height:100%;width:${Math.min(100, Math.abs(h.value||0)/max*100)}%;background:${s.color};opacity:${idx===0?1:0.45+(0.15*(3-idx))};"></div>
-              </div>
-              <div style="width:78px;text-align:left;font-weight:700;color:${s.color};font-size:0.78rem;direction:ltr;">${fmtVal(h.value, s.unit)}</div>
-            </div>
-          `).join('') : '<div style="color:#9CA3AF;font-size:0.78rem;text-align:center;padding:14px;">אין נתונים</div>'}
-        </div>
-        `;
-      }).join('')}
+    <div class="no-scrollbar" style="display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:4px;-webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none;">
+      ${israeliSlide}
+      ${uaeSlides}
     </div>
   `;
 }
