@@ -2895,39 +2895,84 @@ function deleteREListing(id) {
 function renderRealEstatePage() {
   const page = document.getElementById('page-realestate');
   if (!page) return;
-  const tab = window.RE_TAB || 'sale';
-  const tabs = [
-    { id:'sale',       label:'דירות למכירה',     icon:'🏠', color:'#1A6B8A' },
-    { id:'rent',       label:'דירות להשכרה',     icon:'🔑', color:'#2A9D8F' },
-    { id:'invest',     label:'השקעות נדל"ן',     icon:'📈', color:'#E76F51' },
-    { id:'projects',   label:'פרויקטים חדשים',   icon:'🏗️', color:'#F4A261' },
-    { id:'brokers',    label:'מתווכים מומלצים',  icon:'🤝', color:'#B85C8E' },
-    { id:'articles',   label:'מאמרים ומדריכים', icon:'📚', color:'#5B9DC7' }
+  const tab = window.RE_TAB || 'articles';
+  const topButtons = [
+    { id:'sale',   label:'דירות למכירה',   icon:'🏠', color:'#1A6B8A' },
+    { id:'rent',   label:'דירות להשכרה',   icon:'🔑', color:'#2A9D8F' },
+    { id:'invest', label:'השקעות נדל"ן',   icon:'📈', color:'#E76F51' }
   ];
   page.innerHTML = `
     <div class="page-header">
       <button class="back-btn" onclick="navigateTo('home')"><i class="fas fa-arrow-right"></i></button>
       <h2><i class="fas fa-city" style="color:#1A6B8A;margin-left:6px;"></i> פורטל הנדל"ן בדובאי</h2>
     </div>
-    <div style="padding:14px 16px 6px;">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-        ${tabs.map(t => `
-          <button onclick="switchRETab('${t.id}')" style="padding:14px 10px;border-radius:10px;font-family:Heebo;font-weight:700;font-size:0.85rem;cursor:pointer;border:2px solid ${tab===t.id?t.color:'#E5E7EB'};background:${tab===t.id?t.color:'#fff'};color:${tab===t.id?'#fff':'#2C5F6E'};display:flex;align-items:center;justify-content:center;gap:6px;text-align:center;">
-            <span style="font-size:1.1rem;">${t.icon}</span> ${t.label}
-          </button>
-        `).join('')}
-      </div>
+    <div style="padding:14px 16px 6px;display:flex;gap:8px;">
+      ${topButtons.map(t => `
+        <button onclick="switchRETab('${t.id}')" style="flex:1;padding:12px 6px;border-radius:10px;font-family:Heebo;font-weight:700;font-size:0.78rem;cursor:pointer;border:2px solid ${tab===t.id?t.color:'#E5E7EB'};background:${tab===t.id?t.color:'#fff'};color:${tab===t.id?'#fff':'#2C5F6E'};display:flex;align-items:center;justify-content:center;gap:5px;">
+          <span style="font-size:1rem;">${t.icon}</span> ${t.label}
+        </button>
+      `).join('')}
     </div>
     <div style="padding:10px 16px 80px;">
-      ${tab === 'articles' ? renderREArticles()
-        : tab === 'brokers' ? renderREBrokers()
-        : tab === 'invest' ? renderREInvestments()
-        : tab === 'projects' ? renderREProjects()
-        : renderREListings(tab)}
+      ${tab === 'articles' ? (renderREArticlesWithStats() + renderBrokersBannerBottom())
+        : tab === 'invest' ? (renderREInvestments() + renderBrokersBannerBottom())
+        : (renderREListings(tab) + renderBrokersBannerBottom())}
     </div>
   `;
 }
-function switchRETab(t) { window.RE_TAB = t; renderRealEstatePage(); }
+
+function renderREArticlesWithStats() {
+  setTimeout(async () => {
+    const el = document.getElementById('uaeStatsBoxArticles');
+    if (!el) return;
+    const stats = await loadUAEStats();
+    el.innerHTML = `
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        ${stats.map(s => `
+          <div style="background:#fff;border:1px solid #E5E7EB;border-right:3px solid ${s.color};border-radius:8px;padding:10px;">
+            <div style="font-size:0.7rem;color:#6B7F8D;margin-bottom:4px;">${s.label}${s.year ? ' · ' + s.year : ''}</div>
+            <div style="font-weight:800;color:${s.color};font-size:1.1rem;">${fmtStat(s)}</div>
+          </div>
+        `).join('')}
+      </div>`;
+  }, 50);
+  return `
+    <div style="font-weight:700;color:#2C5F6E;font-size:0.95rem;margin-bottom:8px;">📊 מדדים כלכליים — UAE (חי, World Bank)</div>
+    <div id="uaeStatsBoxArticles" style="margin-bottom:18px;"><div style="text-align:center;padding:20px;color:#6B7F8D;font-size:0.78rem;"><i class="fas fa-spinner fa-spin"></i> טוען נתונים...</div></div>
+    <div style="font-weight:700;color:#2C5F6E;font-size:0.95rem;margin-bottom:8px;">📚 מאמרים ומדריכים</div>
+    ${renderREArticles()}
+  `;
+}
+
+function renderBrokersBannerBottom() {
+  return `
+    <div onclick="switchRETab('brokers-full')" style="margin-top:16px;border-radius:14px;cursor:pointer;aspect-ratio:380/120;background-image:linear-gradient(90deg,rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.35) 50%,rgba(0,0,0,0.55) 100%),url('images/wellcomedubai.stamp/lifestyle-business-woman-feel-happy-jumping-air-celebrating-success.jpg');background-size:cover;background-position:center;display:flex;align-items:center;justify-content:space-between;padding:0 18px;box-shadow:0 4px 14px rgba(0,0,0,0.25);overflow:hidden;box-sizing:border-box;">
+      <div style="color:#fff;text-shadow:0 2px 6px rgba(0,0,0,0.85);">
+        <div style="font-weight:800;font-size:1.05rem;line-height:1.15;">🤝 מתווכים מומלצים</div>
+        <div style="font-size:0.74rem;margin-top:4px;opacity:0.95;">דוברי עברית · ניסיון בעבודה עם ישראלים</div>
+      </div>
+      <i class="fas fa-chevron-left" style="color:#fff;font-size:1.05rem;text-shadow:0 1px 4px rgba(0,0,0,0.8);"></i>
+    </div>
+  `;
+}
+function switchRETab(t) {
+  if (t === 'brokers-full') { renderBrokersFullPage(); return; }
+  window.RE_TAB = t; renderRealEstatePage();
+}
+
+function renderBrokersFullPage() {
+  const page = document.getElementById('page-realestate');
+  if (!page) return;
+  page.innerHTML = `
+    <div class="page-header">
+      <button class="back-btn" onclick="switchRETab('articles')"><i class="fas fa-arrow-right"></i></button>
+      <h2><i class="fas fa-handshake" style="color:#B85C8E;margin-left:6px;"></i> מתווכים מומלצים</h2>
+    </div>
+    <div style="padding:14px 16px 80px;">
+      ${renderREBrokers()}
+    </div>
+  `;
+}
 
 function renderREArticles() {
   return RE_ARTICLES.map(a => `
@@ -2942,13 +2987,18 @@ function renderREArticles() {
 }
 
 const RE_INVESTMENTS = [
-  { area:'JVC (Jumeirah Village Circle)', entry:'AED 700K', yield:'9-11%', highlight:'כניסה זולה, ביקוש שכירות גבוה, תשתיות חדשות' },
-  { area:'Damac Hills 2', entry:'AED 800K', yield:'10-12%', highlight:'פרויקטים חדשים, כביש סלייק, מחירים עולים' },
-  { area:'Business Bay', entry:'AED 1.5M', yield:'6-8%', highlight:'מודרני, צמוד Downtown, ביקוש משכירים עסקיים' },
-  { area:'Dubai Marina', entry:'AED 1.2M', yield:'7-9%', highlight:'אטרקטיבי לתיירים, נוף לים, אטמוספירה תוססת' },
-  { area:'Palm Jumeirah', entry:'AED 2.5M', yield:'5-7%', highlight:'יוקרתי, עלייה הונית, ביקוש קבוע' },
-  { area:'Dubai Hills', entry:'AED 1.8M', yield:'6-8%', highlight:'משפחות, בתי ספר, קרבה לקניון Hills' }
+  { area:'JVC (Jumeirah Village Circle)', lat:25.0541, lng:55.2050, entry:'AED 700K', yield:'9-11%', highlight:'כניסה זולה, ביקוש שכירות גבוה, תשתיות חדשות' },
+  { area:'Damac Hills 2', lat:25.0241, lng:55.2752, entry:'AED 800K', yield:'10-12%', highlight:'פרויקטים חדשים, כביש סלייק, מחירים עולים' },
+  { area:'Business Bay', lat:25.1830, lng:55.2659, entry:'AED 1.5M', yield:'6-8%', highlight:'מודרני, צמוד Downtown, ביקוש משכירים עסקיים' },
+  { area:'Dubai Marina', lat:25.0820, lng:55.1410, entry:'AED 1.2M', yield:'7-9%', highlight:'אטרקטיבי לתיירים, נוף לים, אטמוספירה תוססת' },
+  { area:'Palm Jumeirah', lat:25.1124, lng:55.1390, entry:'AED 2.5M', yield:'5-7%', highlight:'יוקרתי, עלייה הונית, ביקוש קבוע' },
+  { area:'Dubai Hills', lat:25.1078, lng:55.2480, entry:'AED 1.8M', yield:'6-8%', highlight:'משפחות, בתי ספר, קרבה לקניון Hills' }
 ];
+
+function buildInvestmentMap(size = '600x300') {
+  const markers = RE_INVESTMENTS.map((i,idx) => `markers=color:0xE76F51%7Csize:mid%7Clabel:${idx+1}%7C${i.lat},${i.lng}`).join('&');
+  return `https://maps.googleapis.com/maps/api/staticmap?size=${size}&maptype=roadmap&language=en&${markers}&key=AIzaSyDIqkbn9__0EdYjyCRQv4w-Gi3tHWwSwro`;
+}
 const RE_PROJECTS = [
   { name:'Bugatti Residences by Binghatti', dev:'Binghatti', area:'Business Bay', delivery:'2026', from:'AED 19M', tag:'יוקרה אולטרה' },
   { name:'Damac Lagoons', dev:'Damac', area:'Dubailand', delivery:'2025-2027', from:'AED 1.5M', tag:'משפחות' },
@@ -3007,11 +3057,15 @@ function renderREInvestments() {
     </div>
     <div style="font-weight:700;color:#2C5F6E;font-size:0.95rem;margin-bottom:8px;">📊 מדדים כלכליים — UAE (חי, World Bank)</div>
     <div id="uaeStatsBox" style="margin-bottom:16px;"><div style="text-align:center;padding:20px;color:#6B7F8D;font-size:0.78rem;"><i class="fas fa-spinner fa-spin"></i> טוען נתונים...</div></div>
-    <div style="font-weight:700;color:#2C5F6E;font-size:0.95rem;margin-bottom:10px;">אזורים מובילים להשקעה</div>
-    ${RE_INVESTMENTS.map(i => `
+    <div style="font-weight:700;color:#2C5F6E;font-size:0.95rem;margin-bottom:8px;">🗺️ אזורים מובילים על המפה</div>
+    <div style="border-radius:10px;overflow:hidden;border:1px solid #E5E7EB;margin-bottom:16px;">
+      <img src="${buildInvestmentMap('600x340')}" alt="מפת אזורי השקעה" style="width:100%;display:block;" onerror="this.style.display='none'">
+    </div>
+    <div style="font-weight:700;color:#2C5F6E;font-size:0.95rem;margin-bottom:10px;">פרטי כל אזור</div>
+    ${RE_INVESTMENTS.map((i, idx) => `
       <div style="background:#fff;border:1px solid #E5E7EB;border-right:4px solid #E76F51;border-radius:8px;padding:12px;margin-bottom:10px;">
         <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:6px;">
-          <div style="font-weight:800;color:#2C5F6E;font-size:0.95rem;">${i.area}</div>
+          <div style="font-weight:800;color:#2C5F6E;font-size:0.95rem;"><span style="background:#E76F51;color:#fff;border-radius:50%;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;font-size:0.72rem;margin-left:6px;">${idx+1}</span>${i.area}</div>
           <div style="background:#E76F51;color:#fff;padding:3px 10px;border-radius:10px;font-size:0.7rem;font-weight:700;">תשואה ${i.yield}</div>
         </div>
         <div style="font-size:0.78rem;color:#1A6B8A;margin-bottom:5px;"><strong>כניסה מ:</strong> ${i.entry}</div>
