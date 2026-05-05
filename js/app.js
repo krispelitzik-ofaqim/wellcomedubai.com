@@ -2946,6 +2946,7 @@ function renderREArticlesWithStats() {
   return `
     ${reSectionTitle('📊', 'מדדים כלכליים — UAE (4 שנים אחרונות)', '#1A6B8A')}
     <div id="uaeStatsBoxArticles" style="margin-bottom:22px;"><div style="text-align:center;padding:20px;color:#6B7F8D;font-size:0.78rem;"><i class="fas fa-spinner fa-spin"></i> טוען נתונים...</div></div>
+    ${renderIsraeliBanner()}
     ${reSectionTitle('📚', 'מאמרים ומדריכים', '#5B9DC7')}
     ${renderREArticles()}
   `;
@@ -3092,6 +3093,32 @@ function fmtStat(stat) {
   return latest ? fmtVal(latest.value, stat.unit) : '—';
 }
 
+function renderIsraeliBanner() {
+  const years = Object.entries(ISRAELI_TO_UAE).reverse().slice(0,4);
+  const max = Math.max(...years.map(([,v]) => v));
+  return `
+    <div style="background:linear-gradient(135deg,#B85C8E,#5B9DC7);border-radius:14px;padding:16px 18px;color:#fff;margin-bottom:18px;box-shadow:0 6px 18px rgba(184,92,142,0.25);">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+        <div style="font-size:1.8rem;line-height:1;">🇮🇱</div>
+        <div>
+          <div style="font-size:0.65rem;text-transform:uppercase;letter-spacing:1.3px;opacity:0.9;font-weight:700;">תיירות ישראלית</div>
+          <div style="font-weight:800;font-size:1rem;">ישראלים מבקרים בדובאי</div>
+          <div style="font-size:0.7rem;opacity:0.85;margin-top:1px;">מאז הסכמי אברהם (ספטמבר 2020)</div>
+        </div>
+      </div>
+      ${years.map(([y,v]) => `
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+          <div style="width:42px;font-size:0.72rem;font-weight:700;opacity:0.95;">${y}</div>
+          <div style="flex:1;background:rgba(255,255,255,0.18);border-radius:4px;height:14px;overflow:hidden;">
+            <div style="float:right;height:100%;width:${(v/max*100).toFixed(0)}%;background:#fff;border-radius:4px;"></div>
+          </div>
+          <div style="width:64px;text-align:left;font-weight:800;font-size:0.82rem;direction:ltr;">${(v/1000).toFixed(0)}K</div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
 function renderStatsCarousel(stats) {
   return `
     <div class="no-scrollbar" style="display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:2px;-webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none;">
@@ -3112,15 +3139,6 @@ function renderStatsCarousel(stats) {
               <div style="width:78px;text-align:left;font-weight:700;color:${s.color};font-size:0.78rem;direction:ltr;">${fmtVal(h.value, s.unit)}</div>
             </div>
           `).join('') : '<div style="color:#9CA3AF;font-size:0.78rem;text-align:center;padding:14px;">אין נתונים</div>'}
-          ${s.code === 'ST.INT.ARVL' ? `
-            <div style="margin-top:10px;padding:10px;background:linear-gradient(135deg,#B85C8E15,#1A6B8A10);border-radius:8px;border-right:3px solid #B85C8E;">
-              <div style="font-size:0.7rem;color:#B85C8E;font-weight:800;margin-bottom:6px;">🇮🇱 ישראלים בדובאי (אחרי הסכמי אברהם)</div>
-              ${Object.entries(ISRAELI_TO_UAE).reverse().slice(0,4).map(([y,v]) => `
-                <div style="display:flex;justify-content:space-between;font-size:0.72rem;color:#2C5F6E;margin-bottom:2px;">
-                  <span>${y}</span><span style="font-weight:700;">${(v/1000).toFixed(0)}K</span>
-                </div>`).join('')}
-            </div>
-          ` : ''}
         </div>
         `;
       }).join('')}
