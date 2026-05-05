@@ -3246,30 +3246,147 @@ function renderREListings(filterType) {
         <button onclick="submitREListing(this)" style="width:100%;background:#1A6B8A;color:#fff;border:none;padding:11px;border-radius:6px;font-family:Heebo;font-weight:700;font-size:0.9rem;cursor:pointer;">📤 פרסם מודעה</button>
       </div>
     </div>
-    ${listings.length ? `
-      <div style="font-weight:700;color:#2C5F6E;font-size:0.95rem;margin-bottom:10px;">${listings.length} מודעות ${typeLabel} פעילות</div>
-      ${listings.map(l => `
-        <div style="background:#fff;border:1px solid #E5E7EB;border-right:4px solid #1A6B8A;border-radius:8px;padding:12px;margin-bottom:10px;box-shadow:0 1px 4px rgba(0,0,0,0.05);">
-          ${l.photos && l.photos.length ? `
-            <div style="display:flex;gap:6px;overflow-x:auto;margin-bottom:8px;border-radius:6px;">
-              ${l.photos.map(p => `<img src="${p}" style="width:130px;height:90px;object-fit:cover;border-radius:6px;flex-shrink:0;">`).join('')}
+    ${listings.length ? renderListingsGrid(listings, typeLabel) : '<div style="text-align:center;color:#6B7F8D;padding:24px;font-size:0.85rem;">אין מודעות עדיין — תהיה הראשון לפרסם!</div>'}
+  `;
+}
+
+function renderListingsGrid(listings, typeLabel) {
+  const featured = listings[0];
+  const rest = listings.slice(1);
+  return `
+    <div style="font-weight:700;color:#2C5F6E;font-size:0.95rem;margin-bottom:12px;display:flex;align-items:center;gap:6px;">
+      <span style="background:#E76F51;color:#fff;border-radius:4px;padding:2px 8px;font-size:0.7rem;font-weight:800;">${listings.length}</span>
+      מודעות ${typeLabel} פעילות
+    </div>
+    ${listingFullCard(featured, true)}
+    ${rest.length ? `<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;">${rest.map(l => listingHalfCard(l)).join('')}</div>` : ''}
+  `;
+}
+
+function listingFullCard(l, isFeatured) {
+  const photo = (l.photos && l.photos[0]) || '';
+  const typeColor = l.type === 'sale' ? '#E76F51' : '#2A9D8F';
+  return `
+    <div onclick="openListingModal('${l.id}')" style="background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 6px 20px rgba(0,0,0,0.08);cursor:pointer;border:1px solid #E5E7EB;position:relative;">
+      ${isFeatured ? `<div style="position:absolute;top:12px;right:12px;background:linear-gradient(135deg,#E9C46A,#F4A261);color:#fff;font-size:0.65rem;font-weight:900;padding:4px 10px;border-radius:10px;z-index:2;letter-spacing:0.4px;box-shadow:0 4px 10px rgba(244,162,97,0.4);">⭐ מומלץ</div>` : ''}
+      <div style="position:relative;width:100%;aspect-ratio:16/10;background:#F5F5F5;overflow:hidden;">
+        ${photo ? `<img src="${photo}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none'">` : `<div style="width:100%;height:100%;background:linear-gradient(135deg,#E5E7EB,#F5F5F5);display:flex;align-items:center;justify-content:center;color:#9CA3AF;font-size:2.5rem;">🏙️</div>`}
+        <div style="position:absolute;bottom:0;right:0;left:0;background:linear-gradient(180deg,transparent 0%,rgba(0,0,0,0.7) 100%);padding:30px 14px 14px;">
+          <div style="display:flex;justify-content:space-between;align-items:end;gap:8px;">
+            <div style="flex:1;">
+              <div style="color:#fff;font-weight:800;font-size:1.05rem;line-height:1.25;text-shadow:0 1px 4px rgba(0,0,0,0.6);">${l.title}</div>
+              <div style="color:#F4A261;font-size:0.75rem;font-weight:700;margin-top:3px;">📍 ${l.area}</div>
             </div>
-          ` : ''}
-          <div style="display:flex;justify-content:space-between;align-items:start;gap:8px;margin-bottom:6px;">
-            <div style="font-weight:700;color:#2C5F6E;font-size:0.95rem;flex:1;">${l.title}</div>
-            <span style="background:${l.type === 'sale' ? '#E76F51' : '#2A9D8F'};color:#fff;font-size:0.65rem;padding:2px 8px;border-radius:10px;font-weight:700;">${l.type === 'sale' ? 'למכירה' : 'להשכרה'}</span>
-          </div>
-          <div style="color:#1A6B8A;font-weight:800;font-size:1.1rem;margin-bottom:4px;">AED ${Number(l.price).toLocaleString()}</div>
-          <div style="font-size:0.78rem;color:#6B7F8D;margin-bottom:6px;"><i class="fas fa-map-marker-alt" style="color:#F4A261;"></i> ${l.area}</div>
-          <div style="font-size:0.85rem;color:#2C5F6E;line-height:1.6;margin-bottom:8px;">${l.desc}</div>
-          <div style="display:flex;gap:6px;">
-            <a href="tel:${l.phone}" style="flex:1;padding:8px;background:#2A9D8F;color:#fff;border-radius:6px;text-align:center;text-decoration:none;font-size:0.78rem;font-weight:700;"><i class="fas fa-phone"></i> ${l.phone}</a>
-            <a href="https://wa.me/${l.phone.replace(/\\D/g,'')}" target="_blank" style="flex:1;padding:8px;background:#25D366;color:#fff;border-radius:6px;text-align:center;text-decoration:none;font-size:0.78rem;font-weight:700;"><i class="fab fa-whatsapp"></i> וואטסאפ</a>
+            <div style="background:#fff;color:${typeColor};padding:6px 12px;border-radius:10px;font-weight:900;font-size:0.95rem;white-space:nowrap;box-shadow:0 4px 10px rgba(0,0,0,0.25);">AED ${Number(l.price).toLocaleString()}</div>
           </div>
         </div>
-      `).join('')}
-    ` : '<div style="text-align:center;color:#6B7F8D;padding:24px;font-size:0.85rem;">אין מודעות עדיין — תהיה הראשון לפרסם!</div>'}
+        ${l.photos && l.photos.length > 1 ? `<div style="position:absolute;top:12px;left:12px;background:rgba(0,0,0,0.65);color:#fff;font-size:0.68rem;font-weight:700;padding:4px 9px;border-radius:10px;">📷 ${l.photos.length}</div>` : ''}
+        <span style="position:absolute;top:12px;${isFeatured ? 'left:65px;' : 'left:12px;'}background:${typeColor};color:#fff;font-size:0.65rem;padding:3px 9px;border-radius:10px;font-weight:800;">${l.type === 'sale' ? 'למכירה' : 'להשכרה'}</span>
+      </div>
+      <div style="padding:12px 14px;">
+        ${l.desc ? `<div style="font-size:0.83rem;color:#2C5F6E;line-height:1.55;margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${l.desc}</div>` : ''}
+        <div style="display:flex;gap:6px;">
+          <a onclick="event.stopPropagation()" href="tel:${l.phone}" style="flex:1;padding:9px;background:#2A9D8F;color:#fff;border-radius:8px;text-align:center;text-decoration:none;font-size:0.78rem;font-weight:800;"><i class="fas fa-phone"></i> חייג</a>
+          <a onclick="event.stopPropagation()" href="https://wa.me/${l.phone.replace(/\D/g,'')}" target="_blank" style="flex:1;padding:9px;background:#25D366;color:#fff;border-radius:8px;text-align:center;text-decoration:none;font-size:0.78rem;font-weight:800;"><i class="fab fa-whatsapp"></i> וואטסאפ</a>
+          <button onclick="event.stopPropagation();openListingModal('${l.id}')" style="flex:0;padding:9px 14px;background:#1A6B8A;color:#fff;border:none;border-radius:8px;font-size:0.78rem;font-weight:800;font-family:Heebo;cursor:pointer;">פרטים ›</button>
+        </div>
+      </div>
+    </div>
   `;
+}
+
+function listingHalfCard(l) {
+  const photo = (l.photos && l.photos[0]) || '';
+  const typeColor = l.type === 'sale' ? '#E76F51' : '#2A9D8F';
+  return `
+    <div onclick="openListingModal('${l.id}')" style="background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 3px 10px rgba(0,0,0,0.06);cursor:pointer;border:1px solid #E5E7EB;display:flex;flex-direction:column;">
+      <div style="position:relative;width:100%;aspect-ratio:4/3;background:#F5F5F5;overflow:hidden;">
+        ${photo ? `<img src="${photo}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none'">` : `<div style="width:100%;height:100%;background:linear-gradient(135deg,#E5E7EB,#F5F5F5);display:flex;align-items:center;justify-content:center;color:#9CA3AF;font-size:1.6rem;">🏙️</div>`}
+        ${l.photos && l.photos.length > 1 ? `<div style="position:absolute;top:6px;left:6px;background:rgba(0,0,0,0.65);color:#fff;font-size:0.6rem;font-weight:700;padding:2px 6px;border-radius:8px;">📷 ${l.photos.length}</div>` : ''}
+        <span style="position:absolute;top:6px;right:6px;background:${typeColor};color:#fff;font-size:0.58rem;padding:2px 7px;border-radius:8px;font-weight:800;">${l.type === 'sale' ? 'מכירה' : 'השכרה'}</span>
+      </div>
+      <div style="padding:10px 11px 12px;flex:1;display:flex;flex-direction:column;">
+        <div style="font-weight:800;color:#2C5F6E;font-size:0.82rem;line-height:1.3;margin-bottom:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.1em;">${l.title}</div>
+        <div style="color:${typeColor};font-weight:900;font-size:0.95rem;margin-bottom:3px;">AED ${Number(l.price).toLocaleString()}</div>
+        <div style="font-size:0.7rem;color:#6B7F8D;margin-bottom:8px;">📍 ${l.area}</div>
+        <div style="margin-top:auto;display:flex;gap:4px;">
+          <a onclick="event.stopPropagation()" href="https://wa.me/${l.phone.replace(/\D/g,'')}" target="_blank" style="flex:1;padding:6px;background:#25D366;color:#fff;border-radius:6px;text-align:center;text-decoration:none;font-size:0.7rem;font-weight:800;"><i class="fab fa-whatsapp"></i></a>
+          <a onclick="event.stopPropagation()" href="tel:${l.phone}" style="flex:1;padding:6px;background:#2A9D8F;color:#fff;border-radius:6px;text-align:center;text-decoration:none;font-size:0.7rem;font-weight:800;"><i class="fas fa-phone"></i></a>
+          <button onclick="event.stopPropagation();openListingModal('${l.id}')" style="flex:1;padding:6px;background:#1A6B8A;color:#fff;border:none;border-radius:6px;font-size:0.7rem;font-weight:800;font-family:Heebo;cursor:pointer;">פרטים</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+window._listingModal = { id: null, photoIdx: 0 };
+function openListingModal(id) {
+  const list = getREListings();
+  const l = list.find(x => x.id === id);
+  if (!l) return;
+  window._listingModal = { id, photoIdx: 0, listing: l };
+  renderListingModal();
+}
+function closeListingModal() {
+  const m = document.getElementById('detailModal');
+  if (m) m.classList.remove('active');
+  window._listingModal = { id: null, photoIdx: 0 };
+}
+function listingPhotoNext() {
+  const m = window._listingModal;
+  if (!m.listing) return;
+  const total = (m.listing.photos || []).length;
+  if (total < 2) return;
+  m.photoIdx = (m.photoIdx + 1) % total;
+  renderListingModal();
+}
+function listingPhotoPrev() {
+  const m = window._listingModal;
+  if (!m.listing) return;
+  const total = (m.listing.photos || []).length;
+  if (total < 2) return;
+  m.photoIdx = (m.photoIdx - 1 + total) % total;
+  renderListingModal();
+}
+function renderListingModal() {
+  const modal = document.getElementById('detailModal');
+  if (!modal) return;
+  const { listing: l, photoIdx } = window._listingModal;
+  if (!l) return;
+  const photos = l.photos || [];
+  const photo = photos[photoIdx] || '';
+  const typeColor = l.type === 'sale' ? '#E76F51' : '#2A9D8F';
+  modal.innerHTML = `
+    <div style="background:#fff;width:96%;max-width:500px;max-height:92vh;border-radius:16px;overflow:hidden;display:flex;flex-direction:column;">
+      <div style="position:relative;width:100%;aspect-ratio:16/10;background:#000;">
+        ${photo ? `<img src="${photo}" style="width:100%;height:100%;object-fit:cover;display:block;">` : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:3rem;">🏙️</div>`}
+        ${photos.length > 1 ? `
+          <button onclick="listingPhotoPrev()" style="position:absolute;top:50%;right:8px;transform:translateY(-50%);width:38px;height:38px;border-radius:50%;background:rgba(0,0,0,0.6);color:#fff;border:none;font-size:1.4rem;cursor:pointer;">›</button>
+          <button onclick="listingPhotoNext()" style="position:absolute;top:50%;left:8px;transform:translateY(-50%);width:38px;height:38px;border-radius:50%;background:rgba(0,0,0,0.6);color:#fff;border:none;font-size:1.4rem;cursor:pointer;">‹</button>
+          <div style="position:absolute;bottom:10px;left:0;right:0;display:flex;justify-content:center;gap:5px;">
+            ${photos.map((_, i) => `<span style="width:7px;height:7px;border-radius:50%;background:${i === photoIdx ? '#fff' : 'rgba(255,255,255,0.5)'};"></span>`).join('')}
+          </div>
+          <div style="position:absolute;top:10px;left:10px;background:rgba(0,0,0,0.6);color:#fff;font-size:0.7rem;font-weight:800;padding:4px 10px;border-radius:10px;">📷 ${photoIdx+1}/${photos.length}</div>
+        ` : ''}
+        <button onclick="closeListingModal()" style="position:absolute;top:10px;right:10px;width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,0.7);color:#fff;border:none;font-size:1.1rem;cursor:pointer;font-weight:800;">✕</button>
+        <span style="position:absolute;bottom:10px;right:10px;background:${typeColor};color:#fff;font-size:0.7rem;padding:4px 11px;border-radius:10px;font-weight:800;">${l.type === 'sale' ? 'למכירה' : 'להשכרה'}</span>
+      </div>
+      <div style="padding:18px 20px;overflow-y:auto;flex:1;">
+        <div style="font-weight:900;color:#2C5F6E;font-size:1.15rem;line-height:1.3;margin-bottom:6px;">${l.title}</div>
+        <div style="color:${typeColor};font-weight:900;font-size:1.6rem;margin-bottom:8px;">AED ${Number(l.price).toLocaleString()}</div>
+        <div style="font-size:0.85rem;color:#6B7F8D;margin-bottom:14px;">📍 ${l.area}</div>
+        ${l.desc ? `<div style="background:#FDF6EC;border-right:4px solid #1A6B8A;padding:12px 14px;border-radius:8px;font-size:0.88rem;color:#2C5F6E;line-height:1.7;margin-bottom:16px;">${l.desc}</div>` : ''}
+        <div style="display:flex;gap:8px;">
+          <a href="tel:${l.phone}" style="flex:1;padding:12px;background:#2A9D8F;color:#fff;border-radius:10px;text-align:center;text-decoration:none;font-weight:800;font-size:0.9rem;"><i class="fas fa-phone"></i> ${l.phone}</a>
+          <a href="https://wa.me/${l.phone.replace(/\D/g,'')}" target="_blank" style="flex:1;padding:12px;background:#25D366;color:#fff;border-radius:10px;text-align:center;text-decoration:none;font-weight:800;font-size:0.9rem;"><i class="fab fa-whatsapp"></i> וואטסאפ</a>
+        </div>
+      </div>
+    </div>
+  `;
+  modal.classList.add('active');
+  modal.style.alignItems = 'center';
+  modal.style.justifyContent = 'center';
+  modal.onclick = (e) => { if (e.target === modal) closeListingModal(); };
 }
 
 function toggleREForm() {
