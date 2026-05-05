@@ -2908,8 +2908,9 @@ function renderRealEstatePage() {
     </div>
     <div style="padding:14px 16px 6px;display:flex;gap:8px;">
       ${topButtons.map(t => `
-        <button onclick="switchRETab('${t.id}')" style="flex:1;padding:12px 6px;border-radius:10px;font-family:Heebo;font-weight:700;font-size:0.78rem;cursor:pointer;border:2px solid ${tab===t.id?t.color:'#E5E7EB'};background:${tab===t.id?t.color:'#fff'};color:${tab===t.id?'#fff':'#2C5F6E'};display:flex;align-items:center;justify-content:center;gap:5px;">
-          <span style="font-size:1rem;">${t.icon}</span> ${t.label}
+        <button onclick="switchRETab('${t.id}')" style="flex:1;padding:12px 6px;border-radius:10px;font-family:Heebo;font-weight:700;font-size:0.78rem;cursor:pointer;border:2px solid ${tab===t.id?t.color:'#E5E7EB'};background:${tab===t.id?t.color:'#fff'};color:${tab===t.id?'#fff':'#2C5F6E'};display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;">
+          <span style="font-size:1.5rem;line-height:1;">${t.icon}</span>
+          <span style="line-height:1.1;">${t.label}</span>
         </button>
       `).join('')}
     </div>
@@ -2926,18 +2927,10 @@ function renderREArticlesWithStats() {
     const el = document.getElementById('uaeStatsBoxArticles');
     if (!el) return;
     const stats = await loadUAEStats();
-    el.innerHTML = `
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-        ${stats.map(s => `
-          <div style="background:#fff;border:1px solid #E5E7EB;border-right:3px solid ${s.color};border-radius:8px;padding:10px;">
-            <div style="font-size:0.7rem;color:#6B7F8D;margin-bottom:4px;">${s.label}${s.year ? ' · ' + s.year : ''}</div>
-            <div style="font-weight:800;color:${s.color};font-size:1.1rem;">${fmtStat(s)}</div>
-          </div>
-        `).join('')}
-      </div>`;
+    el.innerHTML = renderStatsCarousel(stats);
   }, 50);
   return `
-    <div style="font-weight:700;color:#2C5F6E;font-size:0.95rem;margin-bottom:8px;">📊 מדדים כלכליים — UAE (חי, World Bank)</div>
+    <div style="font-weight:700;color:#2C5F6E;font-size:0.95rem;margin-bottom:8px;">📊 מדדים כלכליים — UAE (4 שנים אחרונות)</div>
     <div id="uaeStatsBoxArticles" style="margin-bottom:18px;"><div style="text-align:center;padding:20px;color:#6B7F8D;font-size:0.78rem;"><i class="fas fa-spinner fa-spin"></i> טוען נתונים...</div></div>
     <div style="font-weight:700;color:#2C5F6E;font-size:0.95rem;margin-bottom:8px;">📚 מאמרים ומדריכים</div>
     ${renderREArticles()}
@@ -3007,33 +3000,68 @@ const RE_PROJECTS = [
   { name:'Address Residences Zabeel', dev:'Emaar', area:'Zabeel', delivery:'2027', from:'AED 2.3M', tag:'מגדלים תאומים' }
 ];
 
+const ISRAELI_TO_UAE = { '2021':200000, '2022':450000, '2023':600000, '2024':650000, '2025':700000 };
+
 async function loadUAEStats() {
   const indicators = [
-    { code:'NY.GDP.PCAP.CD',  label:'תמ"ג לנפש',     unit:'$',   color:'#1A6B8A' },
-    { code:'NY.GDP.MKTP.KD.ZG', label:'צמיחת תמ"ג',   unit:'%',   color:'#2A9D8F' },
-    { code:'FP.CPI.TOTL.ZG',  label:'אינפלציה',     unit:'%',   color:'#E76F51' },
-    { code:'ST.INT.ARVL',     label:'תיירים שנתיים', unit:'M',   color:'#F4A261' },
-    { code:'FR.INR.LEND',     label:'ריבית בנקים',   unit:'%',   color:'#B85C8E' }
+    { code:'NY.GDP.PCAP.CD',  label:'תמ"ג לנפש',     unit:'$',   color:'#1A6B8A', icon:'💵' },
+    { code:'NY.GDP.MKTP.KD.ZG', label:'צמיחת תמ"ג',   unit:'%',   color:'#2A9D8F', icon:'📈' },
+    { code:'FP.CPI.TOTL.ZG',  label:'אינפלציה',     unit:'%',   color:'#E76F51', icon:'🔥' },
+    { code:'ST.INT.ARVL',     label:'תיירים שנתיים', unit:'M',   color:'#F4A261', icon:'✈️' },
+    { code:'FR.INR.LEND',     label:'ריבית בנקים',   unit:'%',   color:'#B85C8E', icon:'🏦' }
   ];
   const results = await Promise.all(indicators.map(async i => {
     try {
-      const r = await fetch(`https://api.worldbank.org/v2/country/ARE/indicator/${i.code}?format=json&per_page=12`);
+      const r = await fetch(`https://api.worldbank.org/v2/country/ARE/indicator/${i.code}?format=json&per_page=20`);
       const data = await r.json();
-      const list = (data[1] || []).filter(d => d.value != null);
-      const latest = list[0];
-      return { ...i, year: latest?.date, value: latest?.value };
-    } catch { return { ...i, value: null }; }
+      const list = (data[1] || []).filter(d => d.value != null).slice(0, 4);
+      return { ...i, history: list.map(d => ({ year: d.date, value: d.value })) };
+    } catch { return { ...i, history: [] }; }
   }));
   return results;
 }
 
+function fmtVal(v, unit) {
+  if (v == null) return '—';
+  if (unit === '$') return '$' + Math.round(v).toLocaleString();
+  if (unit === 'M') return (v / 1000000).toFixed(1) + 'M';
+  return v.toFixed(1) + '%';
+}
+
 function fmtStat(stat) {
-  if (stat.value == null) return '—';
-  let v = stat.value;
-  if (stat.unit === '$') v = '$' + Math.round(v).toLocaleString();
-  else if (stat.unit === 'M') v = (v / 1000000).toFixed(1) + 'M';
-  else v = v.toFixed(1) + '%';
-  return v;
+  const latest = stat.history?.[0];
+  return latest ? fmtVal(latest.value, stat.unit) : '—';
+}
+
+function renderStatsCarousel(stats) {
+  return `
+    <div style="display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:6px;-webkit-overflow-scrolling:touch;">
+      ${stats.map(s => {
+        const max = Math.max(...s.history.map(h => Math.abs(h.value || 0))) || 1;
+        return `
+        <div style="min-width:240px;width:240px;scroll-snap-align:start;background:#fff;border:1px solid #E5E7EB;border-top:4px solid ${s.color};border-radius:10px;padding:12px;flex-shrink:0;box-shadow:0 1px 4px rgba(0,0,0,0.05);">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+            <div style="font-size:1.4rem;">${s.icon}</div>
+            <div style="font-weight:800;color:${s.color};font-size:0.92rem;">${s.label}</div>
+          </div>
+          ${s.history.length ? s.history.map((h, idx) => {
+            const israeli = (s.code === 'ST.INT.ARVL' && ISRAELI_TO_UAE[h.year]) ? ISRAELI_TO_UAE[h.year] : null;
+            return `
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:${israeli ? '2' : '7'}px;">
+              <div style="width:42px;font-size:0.72rem;color:#6B7F8D;font-weight:600;">${h.year}</div>
+              <div style="flex:1;background:#F5EFE6;border-radius:4px;height:14px;position:relative;overflow:hidden;">
+                <div style="position:absolute;top:0;right:0;height:100%;width:${Math.min(100, Math.abs(h.value||0)/max*100)}%;background:${s.color};opacity:${idx===0?1:0.45+(0.15*(3-idx))};"></div>
+              </div>
+              <div style="width:78px;text-align:left;font-weight:700;color:${s.color};font-size:0.78rem;direction:ltr;">${fmtVal(h.value, s.unit)}</div>
+            </div>
+            ${israeli ? `<div style="margin-right:50px;margin-bottom:7px;font-size:0.66rem;color:#B85C8E;">🇮🇱 מישראל: ${(israeli/1000).toFixed(0)}K</div>` : ''}
+            `;
+          }).join('') : '<div style="color:#9CA3AF;font-size:0.78rem;text-align:center;padding:14px;">אין נתונים</div>'}
+        </div>
+        `;
+      }).join('')}
+    </div>
+  `;
 }
 
 function renderREInvestments() {
@@ -3041,15 +3069,7 @@ function renderREInvestments() {
     const el = document.getElementById('uaeStatsBox');
     if (!el) return;
     const stats = await loadUAEStats();
-    el.innerHTML = `
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-        ${stats.map(s => `
-          <div style="background:#fff;border:1px solid #E5E7EB;border-right:3px solid ${s.color};border-radius:8px;padding:10px;">
-            <div style="font-size:0.7rem;color:#6B7F8D;margin-bottom:4px;">${s.label}${s.year ? ' · ' + s.year : ''}</div>
-            <div style="font-weight:800;color:${s.color};font-size:1.1rem;">${fmtStat(s)}</div>
-          </div>
-        `).join('')}
-      </div>`;
+    el.innerHTML = renderStatsCarousel(stats);
   }, 50);
   return `
     <div style="background:#FDF6EC;border-right:4px solid #E76F51;padding:12px 14px;border-radius:8px;font-size:0.82rem;color:#2C5F6E;line-height:1.6;margin-bottom:14px;">
