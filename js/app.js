@@ -3002,7 +3002,7 @@ function renderREBrokers() {
 function applyRealEstateVisibility() {
   const hidden = localStorage.getItem('realestate_hidden') === '1';
   const el = document.getElementById('realestateBlockHome');
-  if (el) el.style.display = hidden ? 'none' : 'flex';
+  if (el) el.style.display = hidden ? 'none' : '';
 }
 
 function renderHomeGalleryPreview() {
