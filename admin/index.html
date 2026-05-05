@@ -11,6 +11,11 @@
   <link rel="stylesheet" href="../css/style.css">
   <style>
     body { font-family:'Heebo',Arial,sans-serif; background:#FDF6EC; color:#2C5F6E; direction:rtl; margin:0; }
+    @keyframes pulseBadge {
+      0% { box-shadow: 0 0 0 0 rgba(231,111,81,0.85); }
+      70% { box-shadow: 0 0 0 12px rgba(231,111,81,0); }
+      100% { box-shadow: 0 0 0 0 rgba(231,111,81,0); }
+    }
   </style>
 </head>
 <body>
@@ -82,7 +87,7 @@
     <div style="border-top:1px solid rgba(212,168,67,0.1);margin:12px 0;"></div>
     <button class="admin-nav-item" data-section="listings" onclick="showSection('listings')" style="position:relative;">
       <i class="fas fa-clipboard-check"></i> מודעות נדל"ן
-      <span id="navListingsBadge" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);background:#E76F51;color:#fff;font-size:0.65rem;padding:2px 7px;border-radius:10px;font-weight:800;display:none;"></span>
+      <span id="navListingsBadge" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);background:#E76F51;color:#fff;font-size:0.75rem;padding:3px 9px;border-radius:12px;font-weight:900;display:none;box-shadow:0 0 0 0 rgba(231,111,81,0.7);animation:pulseBadge 1.6s infinite;min-width:14px;text-align:center;">0</span>
     </button>
     <div style="border-top:1px solid rgba(212,168,67,0.1);margin:12px 0;"></div>
     <button class="admin-nav-item" data-section="files" onclick="showSection('files')">
@@ -148,8 +153,9 @@
         <i class="fas fa-dice"></i> בידור ומשחקים
       </button>
       <div style="border-top:1px solid rgba(212,168,67,0.1);margin:8px 0;"></div>
-      <button class="admin-nav-item mobile-nav" data-section="listings" onclick="showSection('listings');toggleMobileMenu();" style="display:flex;width:100%;padding:14px 20px;font-size:0.95rem;">
+      <button class="admin-nav-item mobile-nav" data-section="listings" onclick="showSection('listings');toggleMobileMenu();" style="display:flex;width:100%;padding:14px 20px;font-size:0.95rem;position:relative;">
         <i class="fas fa-clipboard-check"></i> מודעות נדל"ן
+        <span id="navListingsBadgeMobile" style="position:absolute;left:18px;top:50%;transform:translateY(-50%);background:#E76F51;color:#fff;font-size:0.78rem;padding:3px 9px;border-radius:12px;font-weight:900;display:none;box-shadow:0 0 0 0 rgba(231,111,81,0.7);animation:pulseBadge 1.6s infinite;min-width:14px;text-align:center;">0</span>
       </button>
       <div style="border-top:1px solid rgba(212,168,67,0.1);margin:8px 0;"></div>
       <button class="admin-nav-item mobile-nav" data-section="files" onclick="showSection('files');toggleMobileMenu();" style="display:flex;width:100%;padding:14px 20px;font-size:0.95rem;">
@@ -354,20 +360,33 @@
     `;
   }
 
-  setInterval(async () => {
+  async function refreshListingsBadge() {
     if (!getListingsToken()) return;
     try {
       const r = await fetch(`${LISTINGS_API}/api/admin/listings?token=${encodeURIComponent(getListingsToken())}&_t=${Date.now()}`);
       if (!r.ok) return;
       const d = await r.json();
       const pending = (d.listings || []).filter(l => l.status === 'pending').length;
-      const badge = document.getElementById('navListingsBadge');
-      if (badge) {
-        badge.style.display = pending ? 'inline-block' : 'none';
-        badge.textContent = pending;
+      const prev = parseInt(localStorage.getItem('listings_pending_count') || '0', 10);
+      ['navListingsBadge','navListingsBadgeMobile'].forEach(id => {
+        const b = document.getElementById(id);
+        if (b) {
+          b.style.display = pending ? 'inline-block' : 'none';
+          b.textContent = pending;
+        }
+      });
+      if (pending > prev) {
+        try { document.title = `(${pending}) ניהול — מודעה חדשה`; } catch {}
+      } else if (!pending) {
+        document.title = 'ניהול';
+      } else {
+        document.title = `(${pending}) ניהול`;
       }
+      localStorage.setItem('listings_pending_count', String(pending));
     } catch {}
-  }, 60000);
+  }
+  refreshListingsBadge();
+  setInterval(refreshListingsBadge, 15000);
 
   function renderPreviewSection(device) {
     device = device || sessionStorage.getItem('preview_device') || 'iphone';
