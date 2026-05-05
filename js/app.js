@@ -2957,11 +2957,56 @@ const RE_PROJECTS = [
   { name:'Address Residences Zabeel', dev:'Emaar', area:'Zabeel', delivery:'2027', from:'AED 2.3M', tag:'מגדלים תאומים' }
 ];
 
+async function loadUAEStats() {
+  const indicators = [
+    { code:'NY.GDP.PCAP.CD',  label:'תמ"ג לנפש',     unit:'$',   color:'#1A6B8A' },
+    { code:'NY.GDP.MKTP.KD.ZG', label:'צמיחת תמ"ג',   unit:'%',   color:'#2A9D8F' },
+    { code:'FP.CPI.TOTL.ZG',  label:'אינפלציה',     unit:'%',   color:'#E76F51' },
+    { code:'ST.INT.ARVL',     label:'תיירים שנתיים', unit:'M',   color:'#F4A261' },
+    { code:'FR.INR.LEND',     label:'ריבית בנקים',   unit:'%',   color:'#B85C8E' }
+  ];
+  const results = await Promise.all(indicators.map(async i => {
+    try {
+      const r = await fetch(`https://api.worldbank.org/v2/country/ARE/indicator/${i.code}?format=json&per_page=12`);
+      const data = await r.json();
+      const list = (data[1] || []).filter(d => d.value != null);
+      const latest = list[0];
+      return { ...i, year: latest?.date, value: latest?.value };
+    } catch { return { ...i, value: null }; }
+  }));
+  return results;
+}
+
+function fmtStat(stat) {
+  if (stat.value == null) return '—';
+  let v = stat.value;
+  if (stat.unit === '$') v = '$' + Math.round(v).toLocaleString();
+  else if (stat.unit === 'M') v = (v / 1000000).toFixed(1) + 'M';
+  else v = v.toFixed(1) + '%';
+  return v;
+}
+
 function renderREInvestments() {
+  setTimeout(async () => {
+    const el = document.getElementById('uaeStatsBox');
+    if (!el) return;
+    const stats = await loadUAEStats();
+    el.innerHTML = `
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        ${stats.map(s => `
+          <div style="background:#fff;border:1px solid #E5E7EB;border-right:3px solid ${s.color};border-radius:8px;padding:10px;">
+            <div style="font-size:0.7rem;color:#6B7F8D;margin-bottom:4px;">${s.label}${s.year ? ' · ' + s.year : ''}</div>
+            <div style="font-weight:800;color:${s.color};font-size:1.1rem;">${fmtStat(s)}</div>
+          </div>
+        `).join('')}
+      </div>`;
+  }, 50);
   return `
     <div style="background:#FDF6EC;border-right:4px solid #E76F51;padding:12px 14px;border-radius:8px;font-size:0.82rem;color:#2C5F6E;line-height:1.6;margin-bottom:14px;">
       💡 <strong>למה דובאי?</strong> 0% מס הכנסה אישי, 4% מס רכישה חד-פעמי, תשואות 6-12%, ויזת משקיע ב-AED 750K, Golden Visa ב-AED 2M.
     </div>
+    <div style="font-weight:700;color:#2C5F6E;font-size:0.95rem;margin-bottom:8px;">📊 מדדים כלכליים — UAE (חי, World Bank)</div>
+    <div id="uaeStatsBox" style="margin-bottom:16px;"><div style="text-align:center;padding:20px;color:#6B7F8D;font-size:0.78rem;"><i class="fas fa-spinner fa-spin"></i> טוען נתונים...</div></div>
     <div style="font-weight:700;color:#2C5F6E;font-size:0.95rem;margin-bottom:10px;">אזורים מובילים להשקעה</div>
     ${RE_INVESTMENTS.map(i => `
       <div style="background:#fff;border:1px solid #E5E7EB;border-right:4px solid #E76F51;border-radius:8px;padding:12px;margin-bottom:10px;">
