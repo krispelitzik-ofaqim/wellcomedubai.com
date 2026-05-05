@@ -92,6 +92,7 @@ function navigateTo(page, subcategory) {
     case 'near': renderNearMePage(); break;
     case 'mytrip': renderMyTripPage(); break;
     case 'gallery': renderGalleryPage(); break;
+    case 'realestate': renderRealEstatePage(); break;
   }
 }
 
@@ -663,6 +664,7 @@ function renderHome() {
   loadInlineWeatherBanner();
   loadCurrencyWidget();
   renderHomeGalleryPreview();
+  applyRealEstateVisibility();
 }
 
 async function loadInlineWeatherBanner() {
@@ -2860,6 +2862,149 @@ function openGalleryAt(idx) {
   window._galleryPageIdx = idx || 0;
   navigateTo('gallery');
 }
+// ===== REAL ESTATE PORTAL =====
+const RE_ARTICLES = [
+  { id:'a1', title:'איך קונים דירה בדובאי כישראלי?', body:'דובאי פתוחה לזרים בכל פרויקטי Freehold. תהליך הרכישה: בחירת נכס → חוזה הזמנה (Reservation, ~10%) → SPA (חוזה רכישה, 10%) → תשלום לפי שלבים → רישום ב-DLD (Dubai Land Department, ~4% מס). זמן לרישום: 30-90 יום. דרושים: דרכון בתוקף 6+ חודשים, אישור הכנסה, ולעיתים פתיחת חשבון בנק מקומי.', icon:'🔑' },
+  { id:'a2', title:'איזה אזורים פופולריים להשקעה?', body:'Dubai Marina (תשואה ~7-9%, ביקוש שוכרים גבוה), Downtown (יוקרה, ~5-7%), JVC (כניסה זולה, ~9-11%), Business Bay (מודרני, ~6-8%), Damac Hills 2 (חדש וצומח, ~10-12%), Palm Jumeirah (יוקרתי, ~5-7% + עלייה הונית). המחירים מ-AED 700K (סטודיו ב-JVC) ועד מיליונים ב-Palm.', icon:'📍' },
+  { id:'a3', title:'מסים, עלויות ותשואות', body:'אין מס הכנסה אישי על שכר דירה. מס רכישה: 4% (DLD) + עמלות סוכן (2%) + שכ"ט עו"ד (~1%) + רישום (~AED 4,000). תחזוקה: ~AED 15-25 למ"ר/שנה. אחוז שכירות מגג: 8-10% תשואה ברוטו במיקומים ממוצעים. מינימום השקעה: AED 750K לקבלת ויזת משקיע ל-2 שנים, AED 2M ל-Golden Visa (10 שנים).', icon:'📊' },
+  { id:'a4', title:'מימון: משכנתא לזרים', body:'בנקים בדובאי מציעים משכנתא לזרים — עד 50-60% מערך הנכס לעיתים. ריבית: ~4-5.5% (משתנה/קבועה). דרישות: דרכון, אישור הכנסה $5K+/חודש, היסטוריית אשראי. בנקים מובילים: Emirates NBD, ADCB, Mashreq, FAB. תקופה: 25 שנה מקסימום (עד גיל 65-70). הון עצמי מינימלי: 20-50% לפי גיל ונכס.', icon:'💰' },
+  { id:'a5', title:'Off-Plan vs נכס מוכן', body:'Off-Plan (פרויקט בבנייה): מחיר נמוך יותר, תוכנית תשלומים נוחה (10-30% במהלך הבנייה, השאר במסירה), פוטנציאל עלייה. סיכון: עיכובים, שינויים בפרויקט. נכס מוכן: כניסה מיידית להשכרה, בלי הפתעות, אבל מחיר גבוה יותר. ישראלים מעדיפים בעיקר Off-Plan ב-3 השנים האחרונות.', icon:'🏗️' }
+];
+const RE_BROKERS_DEFAULT = [
+  { id:'b1', name:'גלית שמש', company:'Allsopp & Allsopp', langs:['עברית','אנגלית','ערבית'], phone:'+971-50-100-2233', whatsapp:'971501002233', specialty:'Marina, JBR, JLT', email:'galit@allsopp.ae' },
+  { id:'b2', name:'אבי כהן', company:'Better Homes', langs:['עברית','אנגלית'], phone:'+971-55-222-3344', whatsapp:'971552223344', specialty:'Downtown, Business Bay', email:'avi@betterhomes.ae' },
+  { id:'b3', name:'מיכאל רובין', company:'Engel & Völkers', langs:['עברית','אנגלית','רוסית'], phone:'+971-52-333-4455', whatsapp:'971523334455', specialty:'Palm, Emirates Hills, יוקרה', email:'michael@ev-dubai.ae' },
+  { id:'b4', name:'שרה לוי', company:'Driven Properties', langs:['עברית','אנגלית'], phone:'+971-58-444-5566', whatsapp:'971584445566', specialty:'JVC, Damac Hills, השקעות זולות', email:'sarah@drivenproperties.ae' }
+];
+
+function getREListings() {
+  try { return JSON.parse(localStorage.getItem('re_listings') || '[]'); } catch { return []; }
+}
+function saveREListing(l) {
+  const list = getREListings();
+  list.unshift(l);
+  localStorage.setItem('re_listings', JSON.stringify(list));
+}
+function deleteREListing(id) {
+  if (!confirm('למחוק מודעה זו?')) return;
+  const list = getREListings().filter(l => l.id !== id);
+  localStorage.setItem('re_listings', JSON.stringify(list));
+  renderRealEstatePage();
+}
+
+function renderRealEstatePage() {
+  const page = document.getElementById('page-realestate');
+  if (!page) return;
+  const tab = window.RE_TAB || 'articles';
+  page.innerHTML = `
+    <div class="page-header">
+      <button class="back-btn" onclick="navigateTo('home')"><i class="fas fa-arrow-right"></i></button>
+      <h2><i class="fas fa-city" style="color:#1A6B8A;margin-left:6px;"></i> פורטל הנדל"ן בדובאי</h2>
+    </div>
+    <div style="display:flex;gap:6px;padding:10px 16px 0;">
+      <button onclick="switchRETab('articles')" style="flex:1;padding:9px 4px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.78rem;cursor:pointer;border:1px solid ${tab==='articles'?'#1A6B8A':'#E5E7EB'};background:${tab==='articles'?'#1A6B8A':'#fff'};color:${tab==='articles'?'#fff':'#6B7F8D'};">📚 מאמרים</button>
+      <button onclick="switchRETab('listings')" style="flex:1;padding:9px 4px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.78rem;cursor:pointer;border:1px solid ${tab==='listings'?'#1A6B8A':'#E5E7EB'};background:${tab==='listings'?'#1A6B8A':'#fff'};color:${tab==='listings'?'#fff':'#6B7F8D'};">🏠 לוח מודעות</button>
+      <button onclick="switchRETab('brokers')" style="flex:1;padding:9px 4px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.78rem;cursor:pointer;border:1px solid ${tab==='brokers'?'#1A6B8A':'#E5E7EB'};background:${tab==='brokers'?'#1A6B8A':'#fff'};color:${tab==='brokers'?'#fff':'#6B7F8D'};">🤝 מתווכים</button>
+    </div>
+    <div style="padding:14px 16px 80px;">
+      ${tab === 'articles' ? renderREArticles() : tab === 'listings' ? renderREListings() : renderREBrokers()}
+    </div>
+  `;
+}
+function switchRETab(t) { window.RE_TAB = t; renderRealEstatePage(); }
+
+function renderREArticles() {
+  return RE_ARTICLES.map(a => `
+    <div style="background:#fff;border:1px solid #E5E7EB;border-radius:10px;padding:14px;margin-bottom:12px;box-shadow:0 1px 4px rgba(0,0,0,0.04);">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+        <div style="font-size:1.5rem;">${a.icon}</div>
+        <div style="font-weight:800;color:#1A6B8A;font-size:0.95rem;flex:1;">${a.title}</div>
+      </div>
+      <div style="color:#2C5F6E;font-size:0.85rem;line-height:1.7;">${a.body}</div>
+    </div>
+  `).join('');
+}
+
+function renderREListings() {
+  const listings = getREListings();
+  return `
+    <div style="background:#FDF6EC;border-radius:10px;padding:14px;margin-bottom:14px;">
+      <div style="font-weight:700;color:#2C5F6E;font-size:0.92rem;margin-bottom:10px;">📤 פרסם מודעה חדשה</div>
+      <input id="reTitle" placeholder="כותרת (לדוגמה: 2 חדרים Marina, נוף לים)" style="width:100%;padding:9px;border:1px solid #E5E7EB;border-radius:6px;font-family:Heebo;font-size:0.85rem;margin-bottom:8px;box-sizing:border-box;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+        <select id="reType" style="padding:9px;border:1px solid #E5E7EB;border-radius:6px;font-family:Heebo;font-size:0.85rem;background:#fff;">
+          <option value="sale">למכירה</option>
+          <option value="rent">להשכרה</option>
+        </select>
+        <input id="rePrice" placeholder="מחיר (AED)" style="padding:9px;border:1px solid #E5E7EB;border-radius:6px;font-family:Heebo;font-size:0.85rem;box-sizing:border-box;">
+      </div>
+      <input id="reArea" placeholder="אזור (Marina, Downtown, Palm...)" style="width:100%;padding:9px;border:1px solid #E5E7EB;border-radius:6px;font-family:Heebo;font-size:0.85rem;margin-bottom:8px;box-sizing:border-box;">
+      <textarea id="reDesc" placeholder="תיאור הנכס" rows="3" style="width:100%;padding:9px;border:1px solid #E5E7EB;border-radius:6px;font-family:Heebo;font-size:0.85rem;margin-bottom:8px;box-sizing:border-box;resize:vertical;"></textarea>
+      <input id="rePhone" placeholder="טלפון ליצירת קשר" style="width:100%;padding:9px;border:1px solid #E5E7EB;border-radius:6px;font-family:Heebo;font-size:0.85rem;margin-bottom:10px;box-sizing:border-box;">
+      <button onclick="submitREListing()" style="width:100%;background:#1A6B8A;color:#fff;border:none;padding:11px;border-radius:6px;font-family:Heebo;font-weight:700;font-size:0.9rem;cursor:pointer;">📤 פרסם מודעה</button>
+    </div>
+    ${listings.length ? `
+      <div style="font-weight:700;color:#2C5F6E;font-size:0.95rem;margin-bottom:10px;">${listings.length} מודעות פעילות</div>
+      ${listings.map(l => `
+        <div style="background:#fff;border:1px solid #E5E7EB;border-right:4px solid #1A6B8A;border-radius:8px;padding:12px;margin-bottom:10px;box-shadow:0 1px 4px rgba(0,0,0,0.05);">
+          <div style="display:flex;justify-content:space-between;align-items:start;gap:8px;margin-bottom:6px;">
+            <div style="font-weight:700;color:#2C5F6E;font-size:0.95rem;flex:1;">${l.title}</div>
+            <span style="background:${l.type === 'sale' ? '#E76F51' : '#2A9D8F'};color:#fff;font-size:0.65rem;padding:2px 8px;border-radius:10px;font-weight:700;">${l.type === 'sale' ? 'למכירה' : 'להשכרה'}</span>
+          </div>
+          <div style="color:#1A6B8A;font-weight:800;font-size:1.1rem;margin-bottom:4px;">AED ${Number(l.price).toLocaleString()}</div>
+          <div style="font-size:0.78rem;color:#6B7F8D;margin-bottom:6px;"><i class="fas fa-map-marker-alt" style="color:#F4A261;"></i> ${l.area}</div>
+          <div style="font-size:0.85rem;color:#2C5F6E;line-height:1.6;margin-bottom:8px;">${l.desc}</div>
+          <div style="display:flex;gap:6px;">
+            <a href="tel:${l.phone}" style="flex:1;padding:8px;background:#2A9D8F;color:#fff;border-radius:6px;text-align:center;text-decoration:none;font-size:0.78rem;font-weight:700;"><i class="fas fa-phone"></i> ${l.phone}</a>
+            <a href="https://wa.me/${l.phone.replace(/\\D/g,'')}" target="_blank" style="flex:1;padding:8px;background:#25D366;color:#fff;border-radius:6px;text-align:center;text-decoration:none;font-size:0.78rem;font-weight:700;"><i class="fab fa-whatsapp"></i> וואטסאפ</a>
+            <button onclick="deleteREListing('${l.id}')" style="background:#fff;border:1px solid #E5E7EB;color:#E76F51;padding:8px 10px;border-radius:6px;cursor:pointer;font-size:0.78rem;"><i class="fas fa-trash"></i></button>
+          </div>
+        </div>
+      `).join('')}
+    ` : '<div style="text-align:center;color:#6B7F8D;padding:24px;font-size:0.85rem;">אין מודעות עדיין — תהיה הראשון לפרסם!</div>'}
+  `;
+}
+
+function submitREListing() {
+  const title = document.getElementById('reTitle').value.trim();
+  const type = document.getElementById('reType').value;
+  const price = document.getElementById('rePrice').value.trim();
+  const area = document.getElementById('reArea').value.trim();
+  const desc = document.getElementById('reDesc').value.trim();
+  const phone = document.getElementById('rePhone').value.trim();
+  if (!title || !price || !area || !phone) { alert('נא למלא: כותרת, מחיר, אזור וטלפון'); return; }
+  saveREListing({ id: 'l_' + Date.now(), title, type, price, area, desc, phone, createdAt: new Date().toISOString() });
+  showTripToast('✓ המודעה פורסמה');
+  renderRealEstatePage();
+}
+
+function renderREBrokers() {
+  return RE_BROKERS_DEFAULT.map(b => `
+    <div style="background:#fff;border:1px solid #E5E7EB;border-right:4px solid #1A6B8A;border-radius:10px;padding:14px;margin-bottom:12px;box-shadow:0 1px 4px rgba(0,0,0,0.05);">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
+        <div style="width:48px;height:48px;border-radius:50%;background:#1A6B8A;color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:700;flex-shrink:0;">${b.name.split(' ')[0][0]}</div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-weight:800;color:#2C5F6E;font-size:0.95rem;">${b.name}</div>
+          <div style="font-size:0.78rem;color:#6B7F8D;">${b.company}</div>
+        </div>
+      </div>
+      <div style="font-size:0.78rem;color:#2C5F6E;margin-bottom:4px;"><strong>התמחות:</strong> ${b.specialty}</div>
+      <div style="font-size:0.78rem;color:#6B7F8D;margin-bottom:10px;">🗣️ ${b.langs.join(' · ')}</div>
+      <div style="display:flex;gap:6px;">
+        <a href="tel:${b.phone}" style="flex:1;padding:8px;background:#2A9D8F;color:#fff;border-radius:6px;text-align:center;text-decoration:none;font-size:0.78rem;font-weight:700;"><i class="fas fa-phone"></i> חייג</a>
+        <a href="https://wa.me/${b.whatsapp}" target="_blank" style="flex:1;padding:8px;background:#25D366;color:#fff;border-radius:6px;text-align:center;text-decoration:none;font-size:0.78rem;font-weight:700;"><i class="fab fa-whatsapp"></i> וואטסאפ</a>
+        <a href="mailto:${b.email}" style="flex:1;padding:8px;background:#1A6B8A;color:#fff;border-radius:6px;text-align:center;text-decoration:none;font-size:0.78rem;font-weight:700;"><i class="fas fa-envelope"></i> אימייל</a>
+      </div>
+    </div>
+  `).join('');
+}
+
+function applyRealEstateVisibility() {
+  const hidden = localStorage.getItem('realestate_hidden') === '1';
+  const el = document.getElementById('realestateBlockHome');
+  if (el) el.style.display = hidden ? 'none' : 'flex';
+}
+
 function renderHomeGalleryPreview() {
   const el = document.getElementById('homeGalleryPreview');
   if (!el) return;
