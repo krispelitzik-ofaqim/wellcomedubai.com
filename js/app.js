@@ -3065,19 +3065,24 @@ function renderStatsCarousel(stats) {
             <div style="font-size:1.4rem;">${s.icon}</div>
             <div style="font-weight:800;color:${s.color};font-size:0.92rem;">${s.label}</div>
           </div>
-          ${s.history.length ? s.history.map((h, idx) => {
-            const israeli = (s.code === 'ST.INT.ARVL' && ISRAELI_TO_UAE[h.year]) ? ISRAELI_TO_UAE[h.year] : null;
-            return `
-            <div style="display:flex;align-items:center;gap:8px;margin-bottom:${israeli ? '2' : '7'}px;">
+          ${s.history.length ? s.history.map((h, idx) => `
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:7px;">
               <div style="width:42px;font-size:0.72rem;color:#6B7F8D;font-weight:600;">${h.year}</div>
               <div style="flex:1;background:#F5EFE6;border-radius:4px;height:14px;position:relative;overflow:hidden;">
                 <div style="position:absolute;top:0;right:0;height:100%;width:${Math.min(100, Math.abs(h.value||0)/max*100)}%;background:${s.color};opacity:${idx===0?1:0.45+(0.15*(3-idx))};"></div>
               </div>
               <div style="width:78px;text-align:left;font-weight:700;color:${s.color};font-size:0.78rem;direction:ltr;">${fmtVal(h.value, s.unit)}</div>
             </div>
-            ${israeli ? `<div style="margin-right:50px;margin-bottom:7px;font-size:0.66rem;color:#B85C8E;">🇮🇱 מישראל: ${(israeli/1000).toFixed(0)}K</div>` : ''}
-            `;
-          }).join('') : '<div style="color:#9CA3AF;font-size:0.78rem;text-align:center;padding:14px;">אין נתונים</div>'}
+          `).join('') : '<div style="color:#9CA3AF;font-size:0.78rem;text-align:center;padding:14px;">אין נתונים</div>'}
+          ${s.code === 'ST.INT.ARVL' ? `
+            <div style="margin-top:10px;padding:10px;background:linear-gradient(135deg,#B85C8E15,#1A6B8A10);border-radius:8px;border-right:3px solid #B85C8E;">
+              <div style="font-size:0.7rem;color:#B85C8E;font-weight:800;margin-bottom:6px;">🇮🇱 ישראלים בדובאי (אחרי הסכמי אברהם)</div>
+              ${Object.entries(ISRAELI_TO_UAE).reverse().slice(0,4).map(([y,v]) => `
+                <div style="display:flex;justify-content:space-between;font-size:0.72rem;color:#2C5F6E;margin-bottom:2px;">
+                  <span>${y}</span><span style="font-weight:700;">${(v/1000).toFixed(0)}K</span>
+                </div>`).join('')}
+            </div>
+          ` : ''}
         </div>
         `;
       }).join('')}
