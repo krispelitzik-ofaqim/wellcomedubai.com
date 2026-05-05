@@ -2883,7 +2883,13 @@ function getREListings() {
 function saveREListing(l) {
   const list = getREListings();
   list.unshift(l);
-  localStorage.setItem('re_listings', JSON.stringify(list));
+  try {
+    localStorage.setItem('re_listings', JSON.stringify(list));
+    return true;
+  } catch (e) {
+    alert('שטח האחסון מלא — נסה למחוק מודעה קיימת או להעלות פחות תמונות');
+    return false;
+  }
 }
 function deleteREListing(id) {
   if (!confirm('למחוק מודעה זו?')) return;
@@ -3278,23 +3284,42 @@ function toggleREForm() {
 }
 
 window._rePhotos = [];
+function compressImageFile(file, maxSize = 900, quality = 0.7) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const img = new Image();
+      img.onload = () => {
+        let { width, height } = img;
+        if (width > height && width > maxSize) { height = Math.round(height * maxSize / width); width = maxSize; }
+        else if (height > maxSize) { width = Math.round(width * maxSize / height); height = maxSize; }
+        const canvas = document.createElement('canvas');
+        canvas.width = width; canvas.height = height;
+        canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.onerror = reject;
+      img.src = reader.result;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
 async function previewREPhotos(input) {
   const files = Array.from(input.files || []).slice(0, 8);
   window._rePhotos = [];
   const previewBox = document.getElementById('rePhotosPreview');
-  previewBox.innerHTML = '';
+  previewBox.innerHTML = `<div style="color:#6B7F8D;font-size:0.78rem;">⏳ מעבד תמונות…</div>`;
+  const out = [];
   for (const f of files) {
-    const reader = new FileReader();
-    await new Promise(res => {
-      reader.onload = () => {
-        const dataUrl = reader.result;
-        window._rePhotos.push(dataUrl);
-        previewBox.insertAdjacentHTML('beforeend', `<img src="${dataUrl}" style="width:60px;height:60px;object-fit:cover;border-radius:4px;border:1px solid #E5E7EB;">`);
-        res();
-      };
-      reader.readAsDataURL(f);
-    });
+    try {
+      const compressed = await compressImageFile(f);
+      out.push(compressed);
+    } catch (e) { console.error('photo compress failed', e); }
   }
+  window._rePhotos = out;
+  previewBox.innerHTML = out.map(d => `<img src="${d}" style="width:60px;height:60px;object-fit:cover;border-radius:4px;border:1px solid #E5E7EB;">`).join('');
 }
 
 function submitREListing() {
@@ -3305,10 +3330,11 @@ function submitREListing() {
   const desc = document.getElementById('reDesc').value.trim();
   const phone = document.getElementById('rePhone').value.trim();
   if (!title || !price || !area || !phone) { alert('נא למלא: כותרת, מחיר, אזור וטלפון'); return; }
-  saveREListing({ id: 'l_' + Date.now(), title, type, price, area, desc, phone, photos: window._rePhotos.slice(0, 8), createdAt: new Date().toISOString() });
+  const ok = saveREListing({ id: 'l_' + Date.now(), title, type, price, area, desc, phone, photos: window._rePhotos.slice(0, 8), createdAt: new Date().toISOString() });
+  if (!ok) return;
   window._rePhotos = [];
   showTripToast('✓ המודעה פורסמה');
-  renderRealEstatePage();
+  switchRETab('listings');
 }
 
 function renderREBrokers() {
