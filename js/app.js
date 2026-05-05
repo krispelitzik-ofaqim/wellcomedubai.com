@@ -2895,19 +2895,35 @@ function deleteREListing(id) {
 function renderRealEstatePage() {
   const page = document.getElementById('page-realestate');
   if (!page) return;
-  const tab = window.RE_TAB || 'articles';
+  const tab = window.RE_TAB || 'sale';
+  const tabs = [
+    { id:'sale',       label:'דירות למכירה',     icon:'🏠', color:'#1A6B8A' },
+    { id:'rent',       label:'דירות להשכרה',     icon:'🔑', color:'#2A9D8F' },
+    { id:'invest',     label:'השקעות נדל"ן',     icon:'📈', color:'#E76F51' },
+    { id:'projects',   label:'פרויקטים חדשים',   icon:'🏗️', color:'#F4A261' },
+    { id:'brokers',    label:'מתווכים מומלצים',  icon:'🤝', color:'#B85C8E' },
+    { id:'articles',   label:'מאמרים ומדריכים', icon:'📚', color:'#5B9DC7' }
+  ];
   page.innerHTML = `
     <div class="page-header">
       <button class="back-btn" onclick="navigateTo('home')"><i class="fas fa-arrow-right"></i></button>
       <h2><i class="fas fa-city" style="color:#1A6B8A;margin-left:6px;"></i> פורטל הנדל"ן בדובאי</h2>
     </div>
-    <div style="display:flex;gap:6px;padding:10px 16px 0;">
-      <button onclick="switchRETab('articles')" style="flex:1;padding:9px 4px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.78rem;cursor:pointer;border:1px solid ${tab==='articles'?'#1A6B8A':'#E5E7EB'};background:${tab==='articles'?'#1A6B8A':'#fff'};color:${tab==='articles'?'#fff':'#6B7F8D'};">📚 מאמרים</button>
-      <button onclick="switchRETab('listings')" style="flex:1;padding:9px 4px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.78rem;cursor:pointer;border:1px solid ${tab==='listings'?'#1A6B8A':'#E5E7EB'};background:${tab==='listings'?'#1A6B8A':'#fff'};color:${tab==='listings'?'#fff':'#6B7F8D'};">🏠 לוח מודעות</button>
-      <button onclick="switchRETab('brokers')" style="flex:1;padding:9px 4px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.78rem;cursor:pointer;border:1px solid ${tab==='brokers'?'#1A6B8A':'#E5E7EB'};background:${tab==='brokers'?'#1A6B8A':'#fff'};color:${tab==='brokers'?'#fff':'#6B7F8D'};">🤝 מתווכים</button>
+    <div style="padding:14px 16px 6px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        ${tabs.map(t => `
+          <button onclick="switchRETab('${t.id}')" style="padding:14px 10px;border-radius:10px;font-family:Heebo;font-weight:700;font-size:0.85rem;cursor:pointer;border:2px solid ${tab===t.id?t.color:'#E5E7EB'};background:${tab===t.id?t.color:'#fff'};color:${tab===t.id?'#fff':'#2C5F6E'};display:flex;align-items:center;justify-content:center;gap:6px;text-align:center;">
+            <span style="font-size:1.1rem;">${t.icon}</span> ${t.label}
+          </button>
+        `).join('')}
+      </div>
     </div>
-    <div style="padding:14px 16px 80px;">
-      ${tab === 'articles' ? renderREArticles() : tab === 'listings' ? renderREListings() : renderREBrokers()}
+    <div style="padding:10px 16px 80px;">
+      ${tab === 'articles' ? renderREArticles()
+        : tab === 'brokers' ? renderREBrokers()
+        : tab === 'invest' ? renderREInvestments()
+        : tab === 'projects' ? renderREProjects()
+        : renderREListings(tab)}
     </div>
   `;
 }
@@ -2925,16 +2941,70 @@ function renderREArticles() {
   `).join('');
 }
 
-function renderREListings() {
-  const listings = getREListings();
+const RE_INVESTMENTS = [
+  { area:'JVC (Jumeirah Village Circle)', entry:'AED 700K', yield:'9-11%', highlight:'כניסה זולה, ביקוש שכירות גבוה, תשתיות חדשות' },
+  { area:'Damac Hills 2', entry:'AED 800K', yield:'10-12%', highlight:'פרויקטים חדשים, כביש סלייק, מחירים עולים' },
+  { area:'Business Bay', entry:'AED 1.5M', yield:'6-8%', highlight:'מודרני, צמוד Downtown, ביקוש משכירים עסקיים' },
+  { area:'Dubai Marina', entry:'AED 1.2M', yield:'7-9%', highlight:'אטרקטיבי לתיירים, נוף לים, אטמוספירה תוססת' },
+  { area:'Palm Jumeirah', entry:'AED 2.5M', yield:'5-7%', highlight:'יוקרתי, עלייה הונית, ביקוש קבוע' },
+  { area:'Dubai Hills', entry:'AED 1.8M', yield:'6-8%', highlight:'משפחות, בתי ספר, קרבה לקניון Hills' }
+];
+const RE_PROJECTS = [
+  { name:'Bugatti Residences by Binghatti', dev:'Binghatti', area:'Business Bay', delivery:'2026', from:'AED 19M', tag:'יוקרה אולטרה' },
+  { name:'Damac Lagoons', dev:'Damac', area:'Dubailand', delivery:'2025-2027', from:'AED 1.5M', tag:'משפחות' },
+  { name:'Emaar Beachfront', dev:'Emaar', area:'Dubai Harbour', delivery:'2025', from:'AED 1.8M', tag:'חוף פרטי' },
+  { name:'Sobha Hartland II', dev:'Sobha', area:'MBR City', delivery:'2026', from:'AED 1.7M', tag:'גן ירוק' },
+  { name:'Address Residences Zabeel', dev:'Emaar', area:'Zabeel', delivery:'2027', from:'AED 2.3M', tag:'מגדלים תאומים' }
+];
+
+function renderREInvestments() {
+  return `
+    <div style="background:#FDF6EC;border-right:4px solid #E76F51;padding:12px 14px;border-radius:8px;font-size:0.82rem;color:#2C5F6E;line-height:1.6;margin-bottom:14px;">
+      💡 <strong>למה דובאי?</strong> 0% מס הכנסה אישי, 4% מס רכישה חד-פעמי, תשואות 6-12%, ויזת משקיע ב-AED 750K, Golden Visa ב-AED 2M.
+    </div>
+    <div style="font-weight:700;color:#2C5F6E;font-size:0.95rem;margin-bottom:10px;">אזורים מובילים להשקעה</div>
+    ${RE_INVESTMENTS.map(i => `
+      <div style="background:#fff;border:1px solid #E5E7EB;border-right:4px solid #E76F51;border-radius:8px;padding:12px;margin-bottom:10px;">
+        <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:6px;">
+          <div style="font-weight:800;color:#2C5F6E;font-size:0.95rem;">${i.area}</div>
+          <div style="background:#E76F51;color:#fff;padding:3px 10px;border-radius:10px;font-size:0.7rem;font-weight:700;">תשואה ${i.yield}</div>
+        </div>
+        <div style="font-size:0.78rem;color:#1A6B8A;margin-bottom:5px;"><strong>כניסה מ:</strong> ${i.entry}</div>
+        <div style="font-size:0.82rem;color:#2C5F6E;line-height:1.5;">${i.highlight}</div>
+      </div>
+    `).join('')}
+  `;
+}
+
+function renderREProjects() {
+  return `
+    <div style="font-weight:700;color:#2C5F6E;font-size:0.95rem;margin-bottom:10px;">פרויקטים חדשים בולטים</div>
+    ${RE_PROJECTS.map(p => `
+      <div style="background:#fff;border:1px solid #E5E7EB;border-right:4px solid #F4A261;border-radius:8px;padding:12px;margin-bottom:10px;">
+        <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:6px;gap:8px;">
+          <div style="font-weight:800;color:#2C5F6E;font-size:0.95rem;flex:1;">${p.name}</div>
+          <span style="background:#F4A261;color:#fff;padding:2px 8px;border-radius:10px;font-size:0.65rem;font-weight:700;flex-shrink:0;">${p.tag}</span>
+        </div>
+        <div style="font-size:0.78rem;color:#6B7F8D;margin-bottom:4px;">🏢 ${p.dev} · 📍 ${p.area}</div>
+        <div style="font-size:0.78rem;color:#6B7F8D;margin-bottom:6px;">📅 מסירה ${p.delivery}</div>
+        <div style="color:#E76F51;font-weight:800;font-size:1rem;">החל מ-${p.from}</div>
+      </div>
+    `).join('')}
+  `;
+}
+
+function renderREListings(filterType) {
+  const all = getREListings();
+  const listings = filterType ? all.filter(l => l.type === filterType) : all;
+  const typeLabel = filterType === 'sale' ? 'למכירה' : filterType === 'rent' ? 'להשכרה' : '';
   return `
     <div style="background:#FDF6EC;border-radius:10px;padding:14px;margin-bottom:14px;">
-      <div style="font-weight:700;color:#2C5F6E;font-size:0.92rem;margin-bottom:10px;">📤 פרסם מודעה חדשה</div>
+      <div style="font-weight:700;color:#2C5F6E;font-size:0.92rem;margin-bottom:10px;">📤 פרסם מודעה ${typeLabel ? '— ' + typeLabel : ''}</div>
       <input id="reTitle" placeholder="כותרת (לדוגמה: 2 חדרים Marina, נוף לים)" style="width:100%;padding:9px;border:1px solid #E5E7EB;border-radius:6px;font-family:Heebo;font-size:0.85rem;margin-bottom:8px;box-sizing:border-box;">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
         <select id="reType" style="padding:9px;border:1px solid #E5E7EB;border-radius:6px;font-family:Heebo;font-size:0.85rem;background:#fff;">
-          <option value="sale">למכירה</option>
-          <option value="rent">להשכרה</option>
+          <option value="sale" ${filterType === 'sale' ? 'selected' : ''}>למכירה</option>
+          <option value="rent" ${filterType === 'rent' ? 'selected' : ''}>להשכרה</option>
         </select>
         <input id="rePrice" placeholder="מחיר (AED)" style="padding:9px;border:1px solid #E5E7EB;border-radius:6px;font-family:Heebo;font-size:0.85rem;box-sizing:border-box;">
       </div>
@@ -2944,7 +3014,7 @@ function renderREListings() {
       <button onclick="submitREListing()" style="width:100%;background:#1A6B8A;color:#fff;border:none;padding:11px;border-radius:6px;font-family:Heebo;font-weight:700;font-size:0.9rem;cursor:pointer;">📤 פרסם מודעה</button>
     </div>
     ${listings.length ? `
-      <div style="font-weight:700;color:#2C5F6E;font-size:0.95rem;margin-bottom:10px;">${listings.length} מודעות פעילות</div>
+      <div style="font-weight:700;color:#2C5F6E;font-size:0.95rem;margin-bottom:10px;">${listings.length} מודעות ${typeLabel} פעילות</div>
       ${listings.map(l => `
         <div style="background:#fff;border:1px solid #E5E7EB;border-right:4px solid #1A6B8A;border-radius:8px;padding:12px;margin-bottom:10px;box-shadow:0 1px 4px rgba(0,0,0,0.05);">
           <div style="display:flex;justify-content:space-between;align-items:start;gap:8px;margin-bottom:6px;">
