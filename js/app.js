@@ -2930,9 +2930,9 @@ function renderRealEstatePage() {
 }
 
 function reSectionTitle(emoji, text, color = '#1A6B8A') {
-  return `<div style="display:flex;align-items:center;gap:8px;margin:10px 0 12px;padding-right:4px;">
-    <div style="width:4px;height:20px;background:${color};border-radius:2px;"></div>
-    <span style="font-weight:800;color:#2C5F6E;font-size:1rem;letter-spacing:-0.2px;">${emoji} ${text}</span>
+  return `<div style="display:flex;align-items:center;gap:10px;margin:18px 0 14px;padding:10px 14px;background:linear-gradient(90deg,${color}15,transparent);border-right:5px solid ${color};border-radius:8px;">
+    <span style="font-size:1.3rem;line-height:1;">${emoji}</span>
+    <span style="font-weight:900;color:${color};font-size:1.15rem;letter-spacing:-0.4px;">${text}</span>
   </div>`;
 }
 
