@@ -3117,25 +3117,38 @@ function renderREListings(filterType) {
   const listings = filterType ? all.filter(l => l.type === filterType) : all;
   const typeLabel = filterType === 'sale' ? 'למכירה' : filterType === 'rent' ? 'להשכרה' : '';
   return `
-    <div style="background:#FDF6EC;border-radius:10px;padding:14px;margin-bottom:14px;">
-      <div style="font-weight:700;color:#2C5F6E;font-size:0.92rem;margin-bottom:10px;">📤 פרסם מודעה ${typeLabel ? '— ' + typeLabel : ''}</div>
-      <input id="reTitle" placeholder="כותרת (לדוגמה: 2 חדרים Marina, נוף לים)" style="width:100%;padding:9px;border:1px solid #E5E7EB;border-radius:6px;font-family:Heebo;font-size:0.85rem;margin-bottom:8px;box-sizing:border-box;">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
-        <select id="reType" style="padding:9px;border:1px solid #E5E7EB;border-radius:6px;font-family:Heebo;font-size:0.85rem;background:#fff;">
-          <option value="sale" ${filterType === 'sale' ? 'selected' : ''}>למכירה</option>
-          <option value="rent" ${filterType === 'rent' ? 'selected' : ''}>להשכרה</option>
-        </select>
-        <input id="rePrice" placeholder="מחיר (AED)" style="padding:9px;border:1px solid #E5E7EB;border-radius:6px;font-family:Heebo;font-size:0.85rem;box-sizing:border-box;">
+    <div style="margin-bottom:14px;">
+      <a onclick="toggleREForm()" style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;background:#1A6B8A;color:#fff;padding:11px 14px;border-radius:8px;font-weight:700;font-size:0.9rem;">
+        <span>📤 פרסם מודעה חדשה ${typeLabel ? '— ' + typeLabel : ''}</span>
+        <i id="reFormArrow" class="fas fa-chevron-down" style="transition:transform 0.3s;"></i>
+      </a>
+      <div id="reFormBox" style="display:none;background:#FDF6EC;border-radius:0 0 10px 10px;padding:14px;margin-top:-2px;">
+        <input id="reTitle" placeholder="כותרת (לדוגמה: 2 חדרים Marina, נוף לים)" style="width:100%;padding:9px;border:1px solid #E5E7EB;border-radius:6px;font-family:Heebo;font-size:0.85rem;margin-bottom:8px;box-sizing:border-box;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+          <select id="reType" style="padding:9px;border:1px solid #E5E7EB;border-radius:6px;font-family:Heebo;font-size:0.85rem;background:#fff;">
+            <option value="sale" ${filterType === 'sale' ? 'selected' : ''}>למכירה</option>
+            <option value="rent" ${filterType === 'rent' ? 'selected' : ''}>להשכרה</option>
+          </select>
+          <input id="rePrice" placeholder="מחיר (AED)" style="padding:9px;border:1px solid #E5E7EB;border-radius:6px;font-family:Heebo;font-size:0.85rem;box-sizing:border-box;">
+        </div>
+        <input id="reArea" placeholder="אזור (Marina, Downtown, Palm...)" style="width:100%;padding:9px;border:1px solid #E5E7EB;border-radius:6px;font-family:Heebo;font-size:0.85rem;margin-bottom:8px;box-sizing:border-box;">
+        <textarea id="reDesc" placeholder="תיאור הנכס" rows="3" style="width:100%;padding:9px;border:1px solid #E5E7EB;border-radius:6px;font-family:Heebo;font-size:0.85rem;margin-bottom:8px;box-sizing:border-box;resize:vertical;"></textarea>
+        <input id="rePhone" placeholder="טלפון ליצירת קשר" style="width:100%;padding:9px;border:1px solid #E5E7EB;border-radius:6px;font-family:Heebo;font-size:0.85rem;margin-bottom:8px;box-sizing:border-box;">
+        <label style="display:block;font-size:0.78rem;color:#2C5F6E;font-weight:600;margin-bottom:4px;">תמונות (עד 8)</label>
+        <input id="rePhotos" type="file" accept="image/*" multiple onchange="previewREPhotos(this)" style="width:100%;font-family:Heebo;font-size:0.78rem;margin-bottom:8px;">
+        <div id="rePhotosPreview" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;"></div>
+        <button onclick="submitREListing()" style="width:100%;background:#1A6B8A;color:#fff;border:none;padding:11px;border-radius:6px;font-family:Heebo;font-weight:700;font-size:0.9rem;cursor:pointer;">📤 פרסם מודעה</button>
       </div>
-      <input id="reArea" placeholder="אזור (Marina, Downtown, Palm...)" style="width:100%;padding:9px;border:1px solid #E5E7EB;border-radius:6px;font-family:Heebo;font-size:0.85rem;margin-bottom:8px;box-sizing:border-box;">
-      <textarea id="reDesc" placeholder="תיאור הנכס" rows="3" style="width:100%;padding:9px;border:1px solid #E5E7EB;border-radius:6px;font-family:Heebo;font-size:0.85rem;margin-bottom:8px;box-sizing:border-box;resize:vertical;"></textarea>
-      <input id="rePhone" placeholder="טלפון ליצירת קשר" style="width:100%;padding:9px;border:1px solid #E5E7EB;border-radius:6px;font-family:Heebo;font-size:0.85rem;margin-bottom:10px;box-sizing:border-box;">
-      <button onclick="submitREListing()" style="width:100%;background:#1A6B8A;color:#fff;border:none;padding:11px;border-radius:6px;font-family:Heebo;font-weight:700;font-size:0.9rem;cursor:pointer;">📤 פרסם מודעה</button>
     </div>
     ${listings.length ? `
       <div style="font-weight:700;color:#2C5F6E;font-size:0.95rem;margin-bottom:10px;">${listings.length} מודעות ${typeLabel} פעילות</div>
       ${listings.map(l => `
         <div style="background:#fff;border:1px solid #E5E7EB;border-right:4px solid #1A6B8A;border-radius:8px;padding:12px;margin-bottom:10px;box-shadow:0 1px 4px rgba(0,0,0,0.05);">
+          ${l.photos && l.photos.length ? `
+            <div style="display:flex;gap:6px;overflow-x:auto;margin-bottom:8px;border-radius:6px;">
+              ${l.photos.map(p => `<img src="${p}" style="width:130px;height:90px;object-fit:cover;border-radius:6px;flex-shrink:0;">`).join('')}
+            </div>
+          ` : ''}
           <div style="display:flex;justify-content:space-between;align-items:start;gap:8px;margin-bottom:6px;">
             <div style="font-weight:700;color:#2C5F6E;font-size:0.95rem;flex:1;">${l.title}</div>
             <span style="background:${l.type === 'sale' ? '#E76F51' : '#2A9D8F'};color:#fff;font-size:0.65rem;padding:2px 8px;border-radius:10px;font-weight:700;">${l.type === 'sale' ? 'למכירה' : 'להשכרה'}</span>
@@ -3154,6 +3167,35 @@ function renderREListings(filterType) {
   `;
 }
 
+function toggleREForm() {
+  const box = document.getElementById('reFormBox');
+  const arrow = document.getElementById('reFormArrow');
+  if (!box) return;
+  const open = box.style.display !== 'none';
+  box.style.display = open ? 'none' : 'block';
+  if (arrow) arrow.style.transform = open ? 'rotate(0)' : 'rotate(180deg)';
+}
+
+window._rePhotos = [];
+async function previewREPhotos(input) {
+  const files = Array.from(input.files || []).slice(0, 8);
+  window._rePhotos = [];
+  const previewBox = document.getElementById('rePhotosPreview');
+  previewBox.innerHTML = '';
+  for (const f of files) {
+    const reader = new FileReader();
+    await new Promise(res => {
+      reader.onload = () => {
+        const dataUrl = reader.result;
+        window._rePhotos.push(dataUrl);
+        previewBox.insertAdjacentHTML('beforeend', `<img src="${dataUrl}" style="width:60px;height:60px;object-fit:cover;border-radius:4px;border:1px solid #E5E7EB;">`);
+        res();
+      };
+      reader.readAsDataURL(f);
+    });
+  }
+}
+
 function submitREListing() {
   const title = document.getElementById('reTitle').value.trim();
   const type = document.getElementById('reType').value;
@@ -3162,7 +3204,8 @@ function submitREListing() {
   const desc = document.getElementById('reDesc').value.trim();
   const phone = document.getElementById('rePhone').value.trim();
   if (!title || !price || !area || !phone) { alert('נא למלא: כותרת, מחיר, אזור וטלפון'); return; }
-  saveREListing({ id: 'l_' + Date.now(), title, type, price, area, desc, phone, createdAt: new Date().toISOString() });
+  saveREListing({ id: 'l_' + Date.now(), title, type, price, area, desc, phone, photos: window._rePhotos.slice(0, 8), createdAt: new Date().toISOString() });
+  window._rePhotos = [];
   showTripToast('✓ המודעה פורסמה');
   renderRealEstatePage();
 }
