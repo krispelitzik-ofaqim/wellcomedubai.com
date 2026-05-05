@@ -2877,25 +2877,21 @@ const RE_BROKERS_DEFAULT = [
   { id:'b4', name:'שרה לוי', company:'Driven Properties', langs:['עברית','אנגלית'], phone:'+971-58-444-5566', whatsapp:'971584445566', specialty:'JVC, Damac Hills, השקעות זולות', email:'sarah@drivenproperties.ae', years:'5 שנים', verified:true, image:'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&q=80' }
 ];
 
-function getREListings() {
-  try { return JSON.parse(localStorage.getItem('re_listings') || '[]'); } catch { return []; }
-}
-function saveREListing(l) {
-  const list = getREListings();
-  list.unshift(l);
+const RE_API = 'https://wellcomedubaicom-production.up.railway.app';
+window.RE_PUBLIC_LISTINGS = [];
+
+function getREListings() { return window.RE_PUBLIC_LISTINGS || []; }
+
+async function loadREListings() {
   try {
-    localStorage.setItem('re_listings', JSON.stringify(list));
-    return true;
-  } catch (e) {
-    alert('שטח האחסון מלא — נסה למחוק מודעה קיימת או להעלות פחות תמונות');
-    return false;
-  }
-}
-function deleteREListing(id) {
-  if (!confirm('למחוק מודעה זו?')) return;
-  const list = getREListings().filter(l => l.id !== id);
-  localStorage.setItem('re_listings', JSON.stringify(list));
-  renderRealEstatePage();
+    const r = await fetch(`${RE_API}/api/listings?_t=${Date.now()}`);
+    const d = await r.json();
+    window.RE_PUBLIC_LISTINGS = (d.listings || []).map(l => ({
+      ...l,
+      photos: (l.photos || []).map(p => p.startsWith('http') ? p : `${RE_API}${p}`)
+    }));
+    return window.RE_PUBLIC_LISTINGS;
+  } catch (e) { console.error('load listings failed', e); return []; }
 }
 
 function renderRealEstatePage() {
@@ -2975,6 +2971,9 @@ function renderBrokersBannerBottom() {
 function switchRETab(t) {
   if (t === 'brokers-full') { renderBrokersFullPage(); return; }
   window.RE_TAB = t; renderRealEstatePage();
+  if (t === 'sale' || t === 'rent') {
+    loadREListings().then(() => renderRealEstatePage());
+  }
 }
 
 function renderBrokersFullPage() {
@@ -3244,7 +3243,7 @@ function renderREListings(filterType) {
         <label style="display:block;font-size:0.78rem;color:#2C5F6E;font-weight:600;margin-bottom:4px;">תמונות (עד 8)</label>
         <input id="rePhotos" type="file" accept="image/*" multiple onchange="previewREPhotos(this)" style="width:100%;font-family:Heebo;font-size:0.78rem;margin-bottom:8px;">
         <div id="rePhotosPreview" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;"></div>
-        <button onclick="submitREListing()" style="width:100%;background:#1A6B8A;color:#fff;border:none;padding:11px;border-radius:6px;font-family:Heebo;font-weight:700;font-size:0.9rem;cursor:pointer;">📤 פרסם מודעה</button>
+        <button onclick="submitREListing(this)" style="width:100%;background:#1A6B8A;color:#fff;border:none;padding:11px;border-radius:6px;font-family:Heebo;font-weight:700;font-size:0.9rem;cursor:pointer;">📤 פרסם מודעה</button>
       </div>
     </div>
     ${listings.length ? `
@@ -3266,7 +3265,6 @@ function renderREListings(filterType) {
           <div style="display:flex;gap:6px;">
             <a href="tel:${l.phone}" style="flex:1;padding:8px;background:#2A9D8F;color:#fff;border-radius:6px;text-align:center;text-decoration:none;font-size:0.78rem;font-weight:700;"><i class="fas fa-phone"></i> ${l.phone}</a>
             <a href="https://wa.me/${l.phone.replace(/\\D/g,'')}" target="_blank" style="flex:1;padding:8px;background:#25D366;color:#fff;border-radius:6px;text-align:center;text-decoration:none;font-size:0.78rem;font-weight:700;"><i class="fab fa-whatsapp"></i> וואטסאפ</a>
-            <button onclick="deleteREListing('${l.id}')" style="background:#fff;border:1px solid #E5E7EB;color:#E76F51;padding:8px 10px;border-radius:6px;cursor:pointer;font-size:0.78rem;"><i class="fas fa-trash"></i></button>
           </div>
         </div>
       `).join('')}
@@ -3284,7 +3282,7 @@ function toggleREForm() {
 }
 
 window._rePhotos = [];
-function compressImageFile(file, maxSize = 900, quality = 0.7) {
+function compressImageFile(file, maxSize = 1200, quality = 0.78) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => {
@@ -3296,7 +3294,10 @@ function compressImageFile(file, maxSize = 900, quality = 0.7) {
         const canvas = document.createElement('canvas');
         canvas.width = width; canvas.height = height;
         canvas.getContext('2d').drawImage(img, 0, 0, width, height);
-        resolve(canvas.toDataURL('image/jpeg', quality));
+        canvas.toBlob(blob => {
+          if (!blob) return reject(new Error('blob fail'));
+          resolve({ blob, preview: canvas.toDataURL('image/jpeg', 0.5) });
+        }, 'image/jpeg', quality);
       };
       img.onerror = reject;
       img.src = reader.result;
@@ -3313,16 +3314,14 @@ async function previewREPhotos(input) {
   previewBox.innerHTML = `<div style="color:#6B7F8D;font-size:0.78rem;">⏳ מעבד תמונות…</div>`;
   const out = [];
   for (const f of files) {
-    try {
-      const compressed = await compressImageFile(f);
-      out.push(compressed);
-    } catch (e) { console.error('photo compress failed', e); }
+    try { out.push(await compressImageFile(f)); }
+    catch (e) { console.error('photo compress failed', e); }
   }
   window._rePhotos = out;
-  previewBox.innerHTML = out.map(d => `<img src="${d}" style="width:60px;height:60px;object-fit:cover;border-radius:4px;border:1px solid #E5E7EB;">`).join('');
+  previewBox.innerHTML = out.map(d => `<img src="${d.preview}" style="width:60px;height:60px;object-fit:cover;border-radius:4px;border:1px solid #E5E7EB;">`).join('');
 }
 
-function submitREListing() {
+async function submitREListing(btn) {
   const title = document.getElementById('reTitle').value.trim();
   const type = document.getElementById('reType').value;
   const price = document.getElementById('rePrice').value.trim();
@@ -3330,11 +3329,33 @@ function submitREListing() {
   const desc = document.getElementById('reDesc').value.trim();
   const phone = document.getElementById('rePhone').value.trim();
   if (!title || !price || !area || !phone) { alert('נא למלא: כותרת, מחיר, אזור וטלפון'); return; }
-  const ok = saveREListing({ id: 'l_' + Date.now(), title, type, price, area, desc, phone, photos: window._rePhotos.slice(0, 8), createdAt: new Date().toISOString() });
-  if (!ok) return;
-  window._rePhotos = [];
-  showTripToast('✓ המודעה פורסמה');
-  switchRETab('listings');
+  if (btn) { btn.disabled = true; btn.textContent = '⏳ שולח...'; }
+  try {
+    const fd = new FormData();
+    fd.append('title', title);
+    fd.append('type', type);
+    fd.append('price', price);
+    fd.append('area', area);
+    fd.append('desc', desc);
+    fd.append('phone', phone);
+    (window._rePhotos || []).slice(0, 8).forEach((p, i) => {
+      fd.append('photos', p.blob, `photo_${i}.jpg`);
+    });
+    const r = await fetch(`${RE_API}/api/listings`, { method: 'POST', body: fd });
+    if (!r.ok) throw new Error('upload failed');
+    window._rePhotos = [];
+    alert('✓ המודעה נשלחה לאישור — תופיע באתר לאחר אישור המנהל');
+    document.getElementById('reTitle').value = '';
+    document.getElementById('rePrice').value = '';
+    document.getElementById('reArea').value = '';
+    document.getElementById('reDesc').value = '';
+    document.getElementById('rePhone').value = '';
+    document.getElementById('rePhotosPreview').innerHTML = '';
+    toggleREForm();
+  } catch (e) {
+    alert('שגיאה בשליחה — נסה שוב');
+    if (btn) { btn.disabled = false; btn.textContent = '📤 פרסם מודעה'; }
+  }
 }
 
 function renderREBrokers() {

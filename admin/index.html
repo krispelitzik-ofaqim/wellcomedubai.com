@@ -80,6 +80,11 @@
       <i class="fas fa-dice"></i> בידור ומשחקים
     </button>
     <div style="border-top:1px solid rgba(212,168,67,0.1);margin:12px 0;"></div>
+    <button class="admin-nav-item" data-section="listings" onclick="showSection('listings')" style="position:relative;">
+      <i class="fas fa-clipboard-check"></i> מודעות נדל"ן
+      <span id="navListingsBadge" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);background:#E76F51;color:#fff;font-size:0.65rem;padding:2px 7px;border-radius:10px;font-weight:800;display:none;"></span>
+    </button>
+    <div style="border-top:1px solid rgba(212,168,67,0.1);margin:12px 0;"></div>
     <button class="admin-nav-item" data-section="files" onclick="showSection('files')">
       <i class="fas fa-folder-open"></i> קבצים
     </button>
@@ -141,6 +146,10 @@
       </button>
       <button class="admin-nav-item mobile-nav" data-section="casino" onclick="showSection('casino');toggleMobileMenu();" style="display:flex;width:100%;padding:14px 20px;font-size:0.95rem;">
         <i class="fas fa-dice"></i> בידור ומשחקים
+      </button>
+      <div style="border-top:1px solid rgba(212,168,67,0.1);margin:8px 0;"></div>
+      <button class="admin-nav-item mobile-nav" data-section="listings" onclick="showSection('listings');toggleMobileMenu();" style="display:flex;width:100%;padding:14px 20px;font-size:0.95rem;">
+        <i class="fas fa-clipboard-check"></i> מודעות נדל"ן
       </button>
       <div style="border-top:1px solid rgba(212,168,67,0.1);margin:8px 0;"></div>
       <button class="admin-nav-item mobile-nav" data-section="files" onclick="showSection('files');toggleMobileMenu();" style="display:flex;width:100%;padding:14px 20px;font-size:0.95rem;">
@@ -240,10 +249,125 @@
       renderFilesSection();
     } else if (section === 'recordings') {
       renderRecordingsSection();
+    } else if (section === 'listings') {
+      renderListingsSection();
     } else {
       renderCategorySection(section);
     }
   }
+
+  // ===== LISTINGS APPROVAL SECTION =====
+  const LISTINGS_API = 'https://wellcomedubaicom-production.up.railway.app';
+  function getListingsToken() { return localStorage.getItem('admin_listings_token') || ''; }
+  function setListingsToken(t) { localStorage.setItem('admin_listings_token', t); }
+
+  async function loadAllListings() {
+    const token = getListingsToken();
+    if (!token) return null;
+    try {
+      const r = await fetch(`${LISTINGS_API}/api/admin/listings?token=${encodeURIComponent(token)}&_t=${Date.now()}`);
+      if (r.status === 401) return 'unauthorized';
+      const d = await r.json();
+      return d.listings || [];
+    } catch (e) { console.error(e); return 'error'; }
+  }
+
+  async function approveListing(id) {
+    await fetch(`${LISTINGS_API}/api/admin/listings/${id}/approve?token=${encodeURIComponent(getListingsToken())}`, { method: 'POST' });
+    renderListingsSection();
+  }
+  async function rejectListing(id) {
+    await fetch(`${LISTINGS_API}/api/admin/listings/${id}/reject?token=${encodeURIComponent(getListingsToken())}`, { method: 'POST' });
+    renderListingsSection();
+  }
+  async function deleteListingAdmin(id) {
+    if (!confirm('למחוק לצמיתות?')) return;
+    await fetch(`${LISTINGS_API}/api/admin/listings/${id}?token=${encodeURIComponent(getListingsToken())}`, { method: 'DELETE' });
+    renderListingsSection();
+  }
+
+  async function renderListingsSection() {
+    const content = document.getElementById('adminContent');
+    const token = getListingsToken();
+    if (!token) {
+      content.innerHTML = `
+        <div class="admin-header"><h2>מודעות נדל"ן</h2></div>
+        <div class="stat-card" style="padding:24px;max-width:480px;">
+          <div style="color:var(--white);font-weight:700;margin-bottom:10px;">נדרש טוקן אדמין</div>
+          <div style="color:var(--gray);font-size:0.85rem;margin-bottom:14px;">הזן את הסיסמה ש-Railway מכיר (ADMIN_TOKEN)</div>
+          <input id="listingsTokenInput" type="password" placeholder="ADMIN_TOKEN" style="width:100%;padding:11px;border-radius:6px;border:1px solid #333;background:#1a1a1a;color:#fff;font-family:Heebo;margin-bottom:10px;box-sizing:border-box;">
+          <button class="admin-add-btn" onclick="setListingsToken(document.getElementById('listingsTokenInput').value);renderListingsSection();" style="width:100%;">שמור והמשך</button>
+        </div>
+      `;
+      return;
+    }
+    content.innerHTML = `<div class="admin-header"><h2>מודעות נדל"ן</h2></div><div style="color:var(--gray);padding:14px;">טוען...</div>`;
+    const listings = await loadAllListings();
+    if (listings === 'unauthorized') {
+      localStorage.removeItem('admin_listings_token');
+      renderListingsSection();
+      return;
+    }
+    if (listings === 'error') {
+      content.innerHTML = `<div class="admin-header"><h2>מודעות נדל"ן</h2></div><div style="color:#E76F51;padding:14px;">שגיאה בטעינה</div>`;
+      return;
+    }
+    const pending = listings.filter(l => l.status === 'pending');
+    const approved = listings.filter(l => l.status === 'approved');
+    const rejected = listings.filter(l => l.status === 'rejected');
+    const badge = document.getElementById('navListingsBadge');
+    if (badge) {
+      badge.style.display = pending.length ? 'inline-block' : 'none';
+      badge.textContent = pending.length;
+    }
+    const card = (l, showActions) => `
+      <div class="stat-card" style="padding:16px;margin-bottom:12px;">
+        <div style="display:flex;justify-content:space-between;align-items:start;gap:10px;margin-bottom:8px;">
+          <div style="flex:1;">
+            <div style="font-weight:800;color:var(--white);font-size:1rem;">${l.title}</div>
+            <div style="color:var(--gold);font-weight:800;font-size:1.05rem;margin-top:3px;">AED ${Number(l.price).toLocaleString()}</div>
+            <div style="color:var(--gray);font-size:0.78rem;margin-top:2px;">📍 ${l.area} · ${l.type === 'sale' ? 'למכירה' : 'להשכרה'} · 📞 ${l.phone}</div>
+          </div>
+          <span style="background:${l.status === 'pending' ? '#F4A261' : l.status === 'approved' ? '#2A9D8F' : '#E76F51'};color:#fff;padding:4px 10px;border-radius:10px;font-size:0.7rem;font-weight:800;">${l.status === 'pending' ? '⏱ ממתין' : l.status === 'approved' ? '✓ מאושר' : '✗ נדחה'}</span>
+        </div>
+        ${l.desc ? `<div style="color:#ccc;font-size:0.82rem;line-height:1.5;margin-bottom:8px;">${l.desc}</div>` : ''}
+        ${l.photos && l.photos.length ? `<div style="display:flex;gap:6px;overflow-x:auto;margin-bottom:10px;">${l.photos.map(p => `<img src="${LISTINGS_API}${p}" style="width:80px;height:80px;object-fit:cover;border-radius:6px;flex-shrink:0;">`).join('')}</div>` : ''}
+        ${showActions ? `
+          <div style="display:flex;gap:6px;">
+            ${l.status !== 'approved' ? `<button class="admin-add-btn" onclick="approveListing('${l.id}')" style="background:#2A9D8F;flex:1;">✓ אשר</button>` : ''}
+            ${l.status !== 'rejected' ? `<button class="admin-add-btn" onclick="rejectListing('${l.id}')" style="background:#F4A261;flex:1;">✗ דחה</button>` : ''}
+            <button class="admin-add-btn" onclick="deleteListingAdmin('${l.id}')" style="background:#E76F51;flex:0;padding:0 14px;"><i class="fas fa-trash"></i></button>
+          </div>
+        ` : ''}
+      </div>
+    `;
+    content.innerHTML = `
+      <div class="admin-header">
+        <h2>מודעות נדל"ן (${listings.length})</h2>
+        <button class="admin-add-btn" onclick="renderListingsSection()"><i class="fas fa-sync"></i> רענן</button>
+      </div>
+      <h3 style="color:var(--white);margin:18px 0 10px;">⏱ ממתינות לאישור (${pending.length})</h3>
+      ${pending.length ? pending.map(l => card(l, true)).join('') : '<div style="color:var(--gray);padding:14px;">אין מודעות ממתינות</div>'}
+      <h3 style="color:var(--white);margin:24px 0 10px;">✓ מאושרות (${approved.length})</h3>
+      ${approved.length ? approved.map(l => card(l, true)).join('') : '<div style="color:var(--gray);padding:14px;">אין מודעות מאושרות</div>'}
+      ${rejected.length ? `<h3 style="color:var(--white);margin:24px 0 10px;">✗ נדחות (${rejected.length})</h3>${rejected.map(l => card(l, true)).join('')}` : ''}
+    `;
+  }
+
+  setInterval(async () => {
+    if (!getListingsToken()) return;
+    try {
+      const r = await fetch(`${LISTINGS_API}/api/admin/listings?token=${encodeURIComponent(getListingsToken())}&_t=${Date.now()}`);
+      if (!r.ok) return;
+      const d = await r.json();
+      const pending = (d.listings || []).filter(l => l.status === 'pending').length;
+      const badge = document.getElementById('navListingsBadge');
+      if (badge) {
+        badge.style.display = pending ? 'inline-block' : 'none';
+        badge.textContent = pending;
+      }
+    } catch {}
+  }, 60000);
 
   function renderPreviewSection(device) {
     device = device || sessionStorage.getItem('preview_device') || 'iphone';
