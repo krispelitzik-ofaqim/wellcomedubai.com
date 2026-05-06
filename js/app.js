@@ -3184,12 +3184,6 @@ function renderStatsCarousel(stats) {
 }
 
 function renderREInvestments() {
-  setTimeout(async () => {
-    const el = document.getElementById('uaeStatsBox');
-    if (!el) return;
-    const stats = await loadUAEStats();
-    el.innerHTML = renderStatsCarousel(stats);
-  }, 50);
   return `
     <div style="background:linear-gradient(135deg,#E76F51,#F4A261);border-radius:14px;padding:16px 18px;color:#fff;margin-bottom:18px;box-shadow:0 6px 18px rgba(231,111,81,0.25);">
       <div style="font-size:0.65rem;text-transform:uppercase;letter-spacing:1.3px;opacity:0.9;font-weight:700;margin-bottom:4px;">למה דובאי?</div>
@@ -3201,8 +3195,6 @@ function renderREInvestments() {
         <div>✓ ויזת משקיע מ-AED 750K</div>
       </div>
     </div>
-    ${reSectionTitle('📊', 'מדדים כלכליים — UAE (4 שנים)', '#1A6B8A')}
-    <div id="uaeStatsBox" style="margin-bottom:22px;"><div style="text-align:center;padding:20px;color:#6B7F8D;font-size:0.78rem;"><i class="fas fa-spinner fa-spin"></i> טוען נתונים...</div></div>
     ${reSectionTitle('🗺️', 'אזורים מובילים — מפה חיה', '#E76F51')}
     <div style="border-radius:14px;overflow:hidden;border:1px solid #E5E7EB;margin-bottom:18px;box-shadow:0 4px 14px rgba(0,0,0,0.06);">
       ${renderLiveInvestmentMap()}
