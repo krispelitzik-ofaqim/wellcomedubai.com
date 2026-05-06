@@ -323,10 +323,10 @@
 <script src="js/booking.js?v=11"></script>
 <script src="js/services.js?v=11"></script>
 <script src="js/flights-board.js?v=11"></script>
-<script src="js/app.js?v=203"></script>
+<script src="js/app.js?v=204"></script>
 <script>
 (function autoVersionCheck() {
-  var CURRENT = 203;
+  var CURRENT = 204;
   setTimeout(function(){
     fetch('/index.html?_=' + Date.now(), { cache: 'no-store' })
       .then(function(r){ return r.text(); })
@@ -392,6 +392,85 @@
     }, 10000);
   })();
 
+  function renderCustomAudioPlayer(src, real) {
+    const id = 'aud_' + Math.random().toString(36).slice(2, 9);
+    const opacity = real ? '1' : '0.55';
+    return `
+      <div style="padding:14px 20px 10px;">
+        ${real ? `<audio id="${id}" src="${src}" preload="metadata" style="display:none;"></audio>` : ''}
+        <div style="display:flex;align-items:center;gap:10px;opacity:${opacity};">
+          <button onclick="${real ? `togglePlayer('${id}')` : ''}" id="${id}_btn" style="width:44px;height:44px;border-radius:50%;background:#E76F51;color:#fff;border:none;font-size:1.1rem;cursor:${real?'pointer':'default'};display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 6px rgba(231,111,81,0.35);">▶</button>
+          <div style="flex:1;display:flex;flex-direction:column;gap:5px;">
+            <div onclick="${real ? `seekPlayer('${id}', event)` : ''}" id="${id}_track" style="height:5px;background:rgba(0,0,0,0.1);border-radius:3px;cursor:${real?'pointer':'default'};position:relative;">
+              <div id="${id}_fill" style="position:absolute;top:0;left:0;width:${real?'0':'30'}%;height:100%;background:#E76F51;border-radius:3px;"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:0.65rem;color:#6B7F8D;font-weight:600;">
+              <span id="${id}_time">${real ? '0:00' : '0:00'}</span>
+              <span id="${id}_dur">${real ? '0:00' : '—'}</span>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:center;gap:6px;margin-top:8px;">
+          ${[1, 1.5, 2].map(s => `<button onclick="${real ? `setSpeed('${id}', ${s}, this)` : ''}" data-speed="${s}" style="background:#1A1A1A;color:#fff;border:none;padding:4px 12px;border-radius:14px;font-family:Heebo;font-size:0.7rem;font-weight:700;cursor:${real?'pointer':'default'};opacity:${s===1?'1':'0.6'};">x${s}</button>`).join('')}
+        </div>
+        ${!real ? `<div style="text-align:center;color:#6B7F8D;font-size:0.68rem;margin-top:6px;">⏺ הקלטה תבוא בקרוב</div>` : ''}
+      </div>
+    `;
+  }
+
+  function fmtTime(s) {
+    if (!isFinite(s)) return '0:00';
+    const m = Math.floor(s / 60), sec = Math.floor(s % 60);
+    return `${m}:${sec.toString().padStart(2,'0')}`;
+  }
+
+  function togglePlayer(id) {
+    const a = document.getElementById(id);
+    const btn = document.getElementById(id + '_btn');
+    if (!a) return;
+    if (a.paused) {
+      a.play();
+      btn.textContent = '❚❚';
+      a.ontimeupdate = () => {
+        const pct = (a.currentTime / a.duration) * 100;
+        const fill = document.getElementById(id + '_fill');
+        const time = document.getElementById(id + '_time');
+        if (fill) fill.style.width = pct + '%';
+        if (time) time.textContent = fmtTime(a.currentTime);
+      };
+      a.onloadedmetadata = () => {
+        const dur = document.getElementById(id + '_dur');
+        if (dur) dur.textContent = fmtTime(a.duration);
+      };
+      if (a.duration) {
+        const dur = document.getElementById(id + '_dur');
+        if (dur) dur.textContent = fmtTime(a.duration);
+      }
+      a.onended = () => { btn.textContent = '▶'; };
+    } else {
+      a.pause();
+      btn.textContent = '▶';
+    }
+  }
+
+  function seekPlayer(id, e) {
+    const a = document.getElementById(id);
+    const t = document.getElementById(id + '_track');
+    if (!a || !t || !a.duration) return;
+    const r = t.getBoundingClientRect();
+    const pct = (e.clientX - r.left) / r.width;
+    a.currentTime = pct * a.duration;
+  }
+
+  function setSpeed(id, sp, btn) {
+    const a = document.getElementById(id);
+    if (a) a.playbackRate = sp;
+    if (btn && btn.parentElement) {
+      btn.parentElement.querySelectorAll('button').forEach(b => b.style.opacity = '0.6');
+      btn.style.opacity = '1';
+    }
+  }
+
   let _learnData = null;
   let _audioByDest = null;
   async function openLearn(id) {
@@ -423,7 +502,7 @@
           <button onclick="closeFrame()" style="background:rgba(255,255,255,0.25);border:none;color:#fff;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1rem;">×</button>
         </div>
         ${item.video ? `<div style="width:100%;aspect-ratio:16/9;flex-shrink:0;background:#000;"><iframe src="https://www.youtube.com/embed/${item.video}?rel=0" style="width:100%;height:100%;border:0;display:block;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>` : (item.image ? `<div style="width:100%;height:180px;overflow:hidden;flex-shrink:0;"><img src="${item.image}" alt="${item.title}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.parentElement.style.display='none'"></div>` : '')}
-        ${item.audio ? `<div style="padding:12px 20px;border-bottom:1px solid #E5E7EB;background:#FDF6EC;"><audio controls src="${item.audio}" style="width:100%;"></audio></div>` : `<div style="padding:12px 20px;border-bottom:1px solid #E5E7EB;background:#FDF6EC;"><div style="display:flex;align-items:center;gap:8px;background:#fff;padding:8px 12px;border-radius:24px;border:1px solid #E5E7EB;opacity:0.65;"><div style="width:32px;height:32px;border-radius:50%;background:#E76F51;color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.9rem;">▶</div><div style="flex:1;height:4px;background:#E5E7EB;border-radius:2px;position:relative;"><div style="position:absolute;top:0;left:0;width:30%;height:100%;background:#E76F51;border-radius:2px;"></div></div><span style="font-size:0.7rem;color:#6B7F8D;font-weight:600;">דמו</span></div><div style="text-align:center;color:#6B7F8D;font-size:0.7rem;margin-top:6px;">⏺ הקלטה תבוא בקרוב</div></div>`}
+        ${item.audio ? renderCustomAudioPlayer(item.audio, true) : renderCustomAudioPlayer('', false)}
         <div style="padding:20px;overflow-y:auto;color:#2C5F6E;line-height:1.8;font-size:0.95rem;white-space:pre-line;">${item.text}</div>
       </div>
     `;
