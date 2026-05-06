@@ -2358,7 +2358,6 @@ function renderTopProductsForIsraelis() {
         <div style="font-weight:800;font-size:1rem;margin-bottom:4px;">🛍️ הכי מבוקש על ידי ישראלים</div>
         <div style="font-size:0.78rem;opacity:0.95;line-height:1.5;">החנויות והשווקים המומלצים ביותר לזהב, בשמים, תמרים ואלקטרוניקה — בדירוג גולשים.</div>
       </div>
-      ${renderTopProductsMap()}
       ${sections}
     </div>
   `;
@@ -2553,13 +2552,19 @@ function renderListPage(category, title, filters, activeFilter) {
   setTimeout(() => {
     clearMap();
     const mapEl = document.getElementById('listMap');
+    let pins = filtered.map(i => ({ ...i, category }));
+    // For 'הכי מבוקש' filter — use the curated products list
+    if (category === 'shopping' && active === 'הכי מבוקש') {
+      pins = TOP_ISRAELI_PRODUCTS.flatMap(g => g.items.filter(it => it.lat && it.lng).map(it => ({
+        name: it.name, lat: it.lat, lng: it.lng, image: it.image, address: '', category: 'shopping'
+      })));
+    }
     if (mapEl && mapEl.offsetHeight > 0) {
-      buildMap('listMap', 11, filtered.map(i => ({ ...i, category })));
+      buildMap('listMap', 11, pins);
     } else {
-      // Retry after more time
       setTimeout(() => {
         clearMap();
-        buildMap('listMap', 11, filtered.map(i => ({ ...i, category })));
+        buildMap('listMap', 11, pins);
       }, 500);
     }
   }, 300);
