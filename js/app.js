@@ -19,6 +19,7 @@ function initApp() {
   renderHome();
   setupNavigation();
   setupSearch();
+  setupHashRouting();
   fetch('data/hotel-photos.json?v=2').then(r => r.ok ? r.json() : null).then(j => { if (j) { window.HOTEL_PHOTOS = j; if (currentPage === 'home') renderHome(); } }).catch(() => {});
   fetch('data/attraction-photos.json?v=1').then(r => r.ok ? r.json() : null).then(j => { if (j) { window.ATTRACTION_PHOTOS = j; if (currentPage === 'home') renderHome(); } }).catch(() => {});
   fetch('data/restaurant-places-photos.json?v=1').then(r => r.ok ? r.json() : null).then(j => { if (j) { window.RESTAURANT_PHOTOS = j; if (currentPage === 'home') renderHome(); } }).catch(() => {});
@@ -39,6 +40,21 @@ async function enrichAllCategories() {
   }
 }
 
+// ===== HASH ROUTING =====
+function setupHashRouting() {
+  const handle = () => {
+    const hash = (location.hash || '').replace(/^#/, '');
+    if (!hash) return;
+    const [page, sub] = hash.split('/');
+    if (page && page !== currentPage) {
+      navigateTo(page, sub ? decodeURIComponent(sub) : undefined, { skipHash: true });
+    }
+  };
+  window.addEventListener('hashchange', handle);
+  window.addEventListener('popstate', handle);
+  if (location.hash && location.hash !== '#home') handle();
+}
+
 // ===== NAVIGATION =====
 function setupNavigation() {
   document.querySelectorAll('.nav-item').forEach(btn => {
@@ -46,8 +62,14 @@ function setupNavigation() {
   });
 }
 
-function navigateTo(page, subcategory) {
+function navigateTo(page, subcategory, opts) {
   currentPage = page;
+  if (!opts || !opts.skipHash) {
+    const hash = subcategory ? `#${page}/${encodeURIComponent(subcategory)}` : `#${page}`;
+    if (location.hash !== hash) {
+      try { history.pushState({ page, subcategory }, '', hash); } catch (e) { location.hash = hash; }
+    }
+  }
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
 
