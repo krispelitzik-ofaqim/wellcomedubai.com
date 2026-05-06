@@ -68,7 +68,7 @@ function navigateTo(page, subcategory) {
   switch(page) {
     case 'home': renderHome(); break;
     case 'hotels': renderListPage('hotels', 'מלונות', ['הכל','7 כוכבים','5 כוכבים','4-5 כוכבים','3-4 כוכבים','תקציבי'], subcategory); break;
-    case 'restaurants': renderListPage('restaurants', 'מסעדות', ['הכל','יוקרתי מאוד','יוקרתי','עממי','ישראלי','לבנוני','טורקי','אוכל רחוב'], subcategory); break;
+    case 'restaurants': renderListPage('restaurants', 'מסעדות', ['הכל','יוקרתי מאוד','יוקרתי','עממי','ישראלי','לבנוני','טורקי','אוכל רחוב','משלוחים'], subcategory); break;
     case 'attractions': renderListPage('attractions', 'אטרקציות', ['הכל','חובה לביקור','מוזיאון','אומנות','אקסטרים','חוף','פארק מים','פארק שעשועים','סיור','גן חיות','ספארי מדבר','יהדות'], subcategory); break;
     case 'shopping': renderListPage('shopping', 'קניונים ושווקים', ['הכל','קניון','שוק','אלכוהול'], subcategory); break;
     case 'nightlife': renderListPage('nightlife', 'בילויים', ['הכל','מועדון','בר גג','ביץ׳ קלאב','בידור','מופע'], subcategory); break;
@@ -2191,6 +2191,44 @@ function cardGridHTML(item, category) {
         </div>`;
 }
 
+const FOOD_DELIVERY_APPS = [
+  { name:'Talabat',     desc:'הפופולרי ביותר באמירויות',          color:'#FF5A00', logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Talabat_logo.svg/2560px-Talabat_logo.svg.png',          ios:'https://apps.apple.com/app/id470760692',                                  android:'https://play.google.com/store/apps/details?id=com.talabat',                  web:'https://www.talabat.com/uae' },
+  { name:'Deliveroo',   desc:'מסעדות יוקרה ופופולריות',           color:'#00CCBC', logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Deliveroo_logo.svg/1280px-Deliveroo_logo.svg.png',           ios:'https://apps.apple.com/app/id1006016824',                                 android:'https://play.google.com/store/apps/details?id=com.deliveroo.orderapp',       web:'https://deliveroo.ae' },
+  { name:'Careem Food', desc:'מבית Careem (ריידס + משלוחים)',     color:'#3DCD83', logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Careem_2024.svg/2560px-Careem_2024.svg.png',                ios:'https://apps.apple.com/app/id592978487',                                  android:'https://play.google.com/store/apps/details?id=com.careem.acma',              web:'https://www.careem.com' },
+  { name:'Smiles',      desc:'הנחות גדולות, של Etisalat',         color:'#0033A0', logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Etisalat_logo.svg/1280px-Etisalat_logo.svg.png',              ios:'https://apps.apple.com/app/id1186902537',                                 android:'https://play.google.com/store/apps/details?id=com.emirates.ecpay.smilesuae', web:'https://www.smilesuae.ae' },
+  { name:'Noon Food',   desc:'של חנות הענק noon',                 color:'#FEEE00', logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Noon_logo.svg/1280px-Noon_logo.svg.png',                       ios:'https://apps.apple.com/app/noon-shopping/id1188152083',                   android:'https://play.google.com/store/apps/details?id=com.noon.consumer',            web:'https://food.noon.com' },
+];
+
+function renderFoodDeliveryApps() {
+  const items = FOOD_DELIVERY_APPS.map(a => `
+    <div style="display:flex;align-items:stretch;gap:0;background:#fff;border-radius:12px;overflow:hidden;margin-bottom:10px;box-shadow:0 2px 8px rgba(0,0,0,0.06);border:1px solid #E5E7EB;border-right:5px solid ${a.color};">
+      <div style="width:90px;flex-shrink:0;background:${a.color}15;display:flex;align-items:center;justify-content:center;padding:8px;">
+        <img src="${a.logo}" alt="${a.name}" style="max-width:100%;max-height:50px;object-fit:contain;" onerror="this.parentElement.innerHTML='<div style=&quot;font-weight:900;color:${a.color};font-size:1rem;&quot;>${a.name}</div>';">
+      </div>
+      <div style="flex:1;padding:10px 12px;display:flex;flex-direction:column;justify-content:space-between;">
+        <div>
+          <div style="font-weight:800;color:#2C5F6E;font-size:0.95rem;margin-bottom:2px;">${a.name}</div>
+          <div style="font-size:0.78rem;color:#6B7F8D;line-height:1.4;">${a.desc}</div>
+        </div>
+        <div style="display:flex;gap:5px;margin-top:8px;">
+          <a href="${a.ios}" target="_blank" style="flex:1;text-align:center;padding:6px;background:#000;color:#fff;border-radius:5px;text-decoration:none;font-size:0.7rem;font-weight:700;">📱 iOS</a>
+          <a href="${a.android}" target="_blank" style="flex:1;text-align:center;padding:6px;background:#3DDC84;color:#fff;border-radius:5px;text-decoration:none;font-size:0.7rem;font-weight:700;">🤖 Android</a>
+          <a href="${a.web}" target="_blank" style="flex:1;text-align:center;padding:6px;background:#1A6B8A;color:#fff;border-radius:5px;text-decoration:none;font-size:0.7rem;font-weight:700;">🌐 אתר</a>
+        </div>
+      </div>
+    </div>
+  `).join('');
+  return `
+    <div style="padding:0 16px 20px;">
+      <div style="background:linear-gradient(135deg,#2A9D8F,#264653);color:#fff;border-radius:12px;padding:14px;margin-bottom:14px;">
+        <div style="font-weight:800;font-size:1rem;margin-bottom:4px;">🛵 משלוחי אוכל למלון</div>
+        <div style="font-size:0.78rem;opacity:0.95;line-height:1.5;">5 אפליקציות מובילות בדובאי שמביאות לך אוכל ישר למלון. הורד את האפליקציה ופשוט הקלד את שם המלון ומספר חדר.</div>
+      </div>
+      ${items}
+    </div>
+  `;
+}
+
 function renderListPage(category, title, filters, activeFilter) {
   const page = document.getElementById('page-list');
   const items = getAllItems(category);
@@ -2220,6 +2258,9 @@ function renderListPage(category, title, filters, activeFilter) {
     }).join('');
   } else {
     contentHTML = `<div style="display:grid;grid-template-columns:1fr;gap:10px;padding:0 16px 20px;">${filtered.map(item => cardGridHTML(item, category)).join('')}</div>`;
+  }
+  if (category === 'restaurants' && active === 'משלוחים') {
+    contentHTML = renderFoodDeliveryApps();
   }
   if (category === 'transport' && active === 'מטרו') {
     contentHTML = `
