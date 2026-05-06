@@ -70,7 +70,7 @@ function navigateTo(page, subcategory) {
     case 'hotels': renderListPage('hotels', 'מלונות', ['הכל','7 כוכבים','5 כוכבים','4-5 כוכבים','3-4 כוכבים','תקציבי'], subcategory); break;
     case 'restaurants': renderListPage('restaurants', 'מסעדות', ['הכל','יוקרתי מאוד','יוקרתי','עממי','ישראלי','לבנוני','טורקי','אוכל רחוב','משלוחים'], subcategory); break;
     case 'attractions': renderListPage('attractions', 'אטרקציות', ['הכל','חובה לביקור','מוזיאון','אומנות','אקסטרים','חוף','פארק מים','פארק שעשועים','סיור','גן חיות','ספארי מדבר','יהדות'], subcategory); break;
-    case 'shopping': renderListPage('shopping', 'קניונים ושווקים', ['הכל','קניון','שוק','אלכוהול'], subcategory); break;
+    case 'shopping': renderListPage('shopping', 'קניונים ושווקים', ['הכל','הכי מבוקש','קניון','שוק','אלכוהול'], subcategory); break;
     case 'nightlife': renderListPage('nightlife', 'בילויים', ['הכל','מועדון','בר גג','ביץ׳ קלאב','בידור','מופע'], subcategory); break;
     case 'kids': renderListPage('kids', 'ילדים ומשפחות', ['הכל','פארק שעשועים','פארק מים','אקווריום','מתחם ילדים','שלג'], subcategory); break;
     case 'transport': renderListPage('transport', 'תחבורה', ['הכל','מטרו','מונית','סירה','אפליקציה','אוטובוס','השכרת רכב'], subcategory); break;
@@ -2229,6 +2229,68 @@ function renderFoodDeliveryApps() {
   `;
 }
 
+const TOP_ISRAELI_PRODUCTS = [
+  { cat:'זהב ותכשיטים', emoji:'💍', color:'#E9C46A', items:[
+    { name:'Gold Souk (Deira)', desc:'שוק הזהב המסורתי — מאות חנויות, מחירי שוק עולמיים', rating:'⭐ 4.8', map:'https://maps.google.com/?q=Gold+Souk+Deira+Dubai' },
+    { name:'Damas', desc:'רשת תכשיטים מובילה, סניפים בכל קניון', rating:'⭐ 4.6', web:'https://www.damasjewellery.com' },
+    { name:'Joyalukkas', desc:'תכשיטי זהב הודיים — אטרקטיבי לקלאסי', rating:'⭐ 4.7', web:'https://www.joyalukkas.in' },
+    { name:'Malabar Gold', desc:'בחירה רחבה במחירים תחרותיים', rating:'⭐ 4.5', web:'https://www.malabargoldanddiamonds.com' },
+  ]},
+  { cat:'בשמים ועוד', emoji:'🌹', color:'#B85C8E', items:[
+    { name:'Perfume Souk (Deira)', desc:'בשמי oud מסורתיים, ערבוב מותאם אישית', rating:'⭐ 4.7', map:'https://maps.google.com/?q=Perfume+Souk+Deira+Dubai' },
+    { name:'Ajmal Perfumes', desc:'מותג עיראקי-אמירותי, oud איכותי', rating:'⭐ 4.7', web:'https://www.ajmalperfume.com' },
+    { name:'Arabian Oud', desc:'הגדול במזה"ת, סניפים בכל קניון', rating:'⭐ 4.6', web:'https://www.arabianoud.com' },
+    { name:'Rasasi', desc:'מבצעים מצוינים, איכות גבוהה', rating:'⭐ 4.5', web:'https://www.rasasi.com' },
+  ]},
+  { cat:'תמרים וממתקים', emoji:'🌴', color:'#A0522D', items:[
+    { name:'Bateel', desc:'תמרים מובחרים באריזות מתנה — מתנה אהובה', rating:'⭐ 4.8', web:'https://www.bateel.com' },
+    { name:'Patchi', desc:'שוקולד וממתקים פרימיום', rating:'⭐ 4.7', web:'https://www.patchi.com' },
+    { name:'Al Aseel', desc:'תמרים וממתקים ערביים מסורתיים', rating:'⭐ 4.6', map:'https://maps.google.com/?q=Al+Aseel+Sweets+Dubai' },
+    { name:'Date Souk', desc:'שוק התמרים בדיירה — מבצעים מקומיים', rating:'⭐ 4.5', map:'https://maps.google.com/?q=Date+Souk+Dubai' },
+  ]},
+  { cat:'אלקטרוניקה', emoji:'📱', color:'#1A6B8A', items:[
+    { name:'Sharaf DG', desc:'הרשת המובילה — מכשירים, אביזרים ומבצעים', rating:'⭐ 4.7', web:'https://uae.sharafdg.com' },
+    { name:'Jumbo Electronics', desc:'מבחר רחב, שירות אמין', rating:'⭐ 4.6', web:'https://www.jumbo.ae' },
+    { name:'Lulu Electronics', desc:'מחירים תחרותיים בקניונים', rating:'⭐ 4.4', web:'https://www.luluhypermarket.com' },
+    { name:'Dubai Mall — Electronics Floor', desc:'Apple, Samsung, Sony — חנויות רשמיות', rating:'⭐ 4.8', map:'https://maps.google.com/?q=Dubai+Mall' },
+  ]},
+];
+
+function renderTopProductsForIsraelis() {
+  const sections = TOP_ISRAELI_PRODUCTS.map(g => `
+    <div style="margin-bottom:18px;">
+      <div style="display:flex;align-items:center;gap:10px;margin:10px 0 8px;padding:10px 14px;background:linear-gradient(90deg,${g.color}25,transparent);border-right:5px solid ${g.color};border-radius:8px;">
+        <span style="font-size:1.4rem;">${g.emoji}</span>
+        <span style="font-weight:900;color:${g.color};font-size:1.05rem;">${g.cat}</span>
+      </div>
+      ${g.items.map(it => `
+        <div style="display:flex;align-items:stretch;background:#fff;border-radius:10px;overflow:hidden;margin-bottom:8px;border:1px solid #E5E7EB;border-right:4px solid ${g.color};box-shadow:0 1px 4px rgba(0,0,0,0.04);">
+          <div style="flex:1;padding:10px 12px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;">
+              <div style="font-weight:800;color:#2C5F6E;font-size:0.92rem;">${it.name}</div>
+              <span style="background:#FFF8E7;color:#92400e;padding:2px 7px;border-radius:8px;font-size:0.7rem;font-weight:700;">${it.rating}</span>
+            </div>
+            <div style="font-size:0.78rem;color:#6B7F8D;line-height:1.45;margin-bottom:6px;">${it.desc}</div>
+            <div style="display:flex;gap:5px;">
+              ${it.web ? `<a href="${it.web}" target="_blank" style="flex:1;text-align:center;padding:5px;background:#1A6B8A;color:#fff;border-radius:5px;text-decoration:none;font-size:0.7rem;font-weight:700;">🌐 אתר</a>` : ''}
+              ${it.map ? `<a href="${it.map}" target="_blank" style="flex:1;text-align:center;padding:5px;background:#E76F51;color:#fff;border-radius:5px;text-decoration:none;font-size:0.7rem;font-weight:700;">📍 מפה</a>` : ''}
+            </div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `).join('');
+  return `
+    <div style="padding:0 16px 20px;">
+      <div style="background:linear-gradient(135deg,#E9C46A,#F4A261);color:#fff;border-radius:12px;padding:14px;margin-bottom:14px;">
+        <div style="font-weight:800;font-size:1rem;margin-bottom:4px;">🛍️ הכי מבוקש על ידי ישראלים</div>
+        <div style="font-size:0.78rem;opacity:0.95;line-height:1.5;">החנויות והשווקים המומלצים ביותר לזהב, בשמים, תמרים ואלקטרוניקה — בדירוג גולשים.</div>
+      </div>
+      ${sections}
+    </div>
+  `;
+}
+
 function renderListPage(category, title, filters, activeFilter) {
   const page = document.getElementById('page-list');
   const items = getAllItems(category);
@@ -2261,6 +2323,9 @@ function renderListPage(category, title, filters, activeFilter) {
   }
   if (category === 'restaurants' && active === 'משלוחים') {
     contentHTML = renderFoodDeliveryApps();
+  }
+  if (category === 'shopping' && active === 'הכי מבוקש') {
+    contentHTML = renderTopProductsForIsraelis();
   }
   if (category === 'transport' && active === 'מטרו') {
     contentHTML = `
