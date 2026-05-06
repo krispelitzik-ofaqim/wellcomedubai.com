@@ -2329,10 +2329,20 @@ function renderTopProductsMap() {
 
 function renderTopProductsForIsraelis() {
   const sections = TOP_ISRAELI_PRODUCTS.map(g => `
-    <div style="margin-bottom:18px;">
-      <div style="display:flex;align-items:center;gap:10px;margin:10px 0 8px;padding:10px 14px;background:linear-gradient(90deg,${g.color}25,transparent);border-right:5px solid ${g.color};border-radius:8px;">
-        <span style="font-size:1.4rem;">${g.emoji}</span>
-        <span style="font-weight:900;color:${g.color};font-size:1.05rem;">${g.cat}</span>
+    <div style="margin-bottom:22px;">
+      <div style="position:relative;display:flex;align-items:center;gap:14px;margin:18px 0 12px;padding:18px 18px;background:linear-gradient(135deg,${g.color},${g.color}dd);border-radius:14px;box-shadow:0 6px 18px ${g.color}55;overflow:hidden;">
+        <div style="position:absolute;top:-30px;left:-30px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,0.12);"></div>
+        <div style="position:absolute;bottom:-40px;right:-40px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,0.08);"></div>
+        <div style="background:rgba(255,255,255,0.25);width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(6px);border:1.5px solid rgba(255,255,255,0.35);position:relative;z-index:1;">
+          <span style="font-size:2rem;line-height:1;">${g.emoji}</span>
+        </div>
+        <div style="flex:1;position:relative;z-index:1;">
+          <div style="color:rgba(255,255,255,0.85);font-size:0.7rem;font-weight:700;letter-spacing:1.5px;margin-bottom:3px;">CATEGORY ${TOP_ISRAELI_PRODUCTS.indexOf(g)+1}</div>
+          <div style="color:#fff;font-weight:900;font-size:1.25rem;letter-spacing:-0.3px;text-shadow:0 1px 3px rgba(0,0,0,0.2);">${g.cat}</div>
+        </div>
+        <div style="background:#fff;color:${g.color};padding:5px 11px;border-radius:14px;font-weight:900;font-size:0.78rem;position:relative;z-index:1;box-shadow:0 2px 6px rgba(0,0,0,0.15);">
+          ${g.items.length} מקומות
+        </div>
       </div>
       ${g.items.map(it => `
         <div style="display:flex;align-items:stretch;background:#fff;border-radius:10px;overflow:hidden;margin-bottom:8px;border:1px solid #E5E7EB;border-right:4px solid ${g.color};box-shadow:0 1px 4px rgba(0,0,0,0.04);">
