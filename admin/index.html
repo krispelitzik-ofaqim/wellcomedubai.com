@@ -273,16 +273,19 @@
   async function uploadAudioFile(input) {
     const file = input.files && input.files[0];
     if (!file) return;
+    const dest = document.getElementById('audioDest').value;
+    if (!dest) { alert('בחר יעד תחילה'); input.value = ''; return; }
     const status = document.getElementById('audioUpStatus');
     status.textContent = '⏳ מעלה...';
     status.style.color = '#6B7F8D';
     try {
       const fd = new FormData();
       fd.append('file', file);
+      fd.append('dest', dest);
       const r = await fetch(`${RE_API}/api/audio`, { method: 'POST', body: fd });
       const j = await r.json();
       if (!j.success) throw new Error(j.error || 'failed');
-      status.textContent = '✓ הועלה: ' + j.filename;
+      status.textContent = '✓ הועלה ל"' + dest + '": ' + j.filename;
       status.style.color = '#2A9D8F';
       input.value = '';
       refreshAudioFiles();
@@ -301,6 +304,7 @@
       if (!files.length) { el.innerHTML = ''; return; }
       el.innerHTML = files.map(f => `
         <div style="display:flex;align-items:center;gap:8px;background:#fff;padding:10px;border-radius:6px;margin-bottom:6px;border:1px solid #E5E7EB;">
+          ${f.dest ? `<span style="background:#1A6B8A;color:#fff;font-size:0.7rem;font-weight:800;padding:3px 8px;border-radius:6px;">${f.dest}</span>` : ''}
           <span style="flex:1;font-size:0.85rem;color:#2C5F6E;font-weight:600;">${f.name}</span>
           <audio controls src="${RE_API}${f.url}" style="height:34px;"></audio>
           <button onclick="deleteAudioFile('${f.name}')" style="background:#E76F51;color:#fff;border:none;padding:6px 10px;border-radius:6px;cursor:pointer;font-family:Heebo;">🗑</button>
@@ -665,9 +669,33 @@
         <h2><i class="fas fa-microphone"></i> הקלטות</h2>
         <button onclick="newRecording()" style="background:#E76F51;color:#fff;border:none;padding:9px 18px;border-radius:8px;font-family:Heebo;font-weight:700;cursor:pointer;"><i class="fas fa-plus"></i> הקלטה חדשה</button>
       </div>
-      <div style="background:#fff;padding:12px;border-radius:8px;margin-bottom:14px;border:1px solid #E5E7EB;">
-        <input type="file" id="audioUpInput" accept="audio/*" onchange="uploadAudioFile(this)" style="font-family:Heebo;">
-        <div id="audioUpStatus" style="margin-top:8px;font-size:0.85rem;"></div>
+      <div style="background:#fff;padding:12px;border-radius:8px;margin-bottom:14px;border:1px solid #E5E7EB;display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+        <select id="audioDest" style="padding:8px;border:1px solid #E5E7EB;border-radius:6px;font-family:Heebo;font-size:0.85rem;background:#fff;">
+          <option value="">בחר יעד —</option>
+          <optgroup label="להכיר את דובאי">
+            <option value="welcome">ברוכים הבאים</option>
+            <option value="tips">טיפים</option>
+            <option value="history">היסטוריה</option>
+            <option value="israelis">ישראלים בדובאי</option>
+            <option value="economy">כלכלה</option>
+            <option value="vocabulary">אוצר מילים</option>
+            <option value="tourism">תיירות</option>
+            <option value="promo">פרסום</option>
+          </optgroup>
+          <optgroup label="קטגוריות">
+            <option value="hotels">מלונות</option>
+            <option value="attractions">אטרקציות</option>
+            <option value="restaurants">מסעדות</option>
+            <option value="realestate">נדל"ן</option>
+            <option value="weather">מזג אוויר</option>
+            <option value="shopping">קניות</option>
+            <option value="nightlife">בילויים</option>
+            <option value="kids">ילדים ומשפחות</option>
+            <option value="itineraries">מסלולים מוכנים</option>
+          </optgroup>
+        </select>
+        <input type="file" id="audioUpInput" accept="audio/*" onchange="uploadAudioFile(this)" style="font-family:Heebo;flex:1;min-width:200px;">
+        <div id="audioUpStatus" style="width:100%;margin-top:8px;font-size:0.85rem;"></div>
       </div>
       <div id="audioFilesList" style="margin-bottom:14px;"></div>
       <div id="recStatus" style="margin-bottom:10px;"></div>

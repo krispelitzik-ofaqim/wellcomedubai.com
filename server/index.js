@@ -69,15 +69,23 @@ const audioUpload = multer({ storage: audioStorage, limits: { fileSize: 50 * 102
 
 app.post('/api/audio', audioUpload.single('file'), (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'no file' });
-  res.json({ success: true, filename: req.file.filename, url: `/uploads/audio/${req.file.filename}` });
+  const dest = String(req.body.dest || '').trim();
+  try {
+    const db = readDB();
+    db.audioMeta = db.audioMeta || {};
+    db.audioMeta[req.file.filename] = { dest, uploadedAt: new Date().toISOString() };
+    writeDB(db);
+  } catch {}
+  res.json({ success: true, filename: req.file.filename, url: `/uploads/audio/${req.file.filename}`, dest });
 });
 
 app.get('/api/audio', (_req, res) => {
   try {
     const dir = path.join(UPLOADS_DIR, 'audio');
     if (!fs.existsSync(dir)) return res.json({ files: [] });
+    const meta = (readDB().audioMeta) || {};
     const files = fs.readdirSync(dir).filter(f => /\.(mp3|wav|m4a|aac)$/i.test(f));
-    res.json({ files: files.map(f => ({ name: f, url: `/uploads/audio/${f}` })) });
+    res.json({ files: files.map(f => ({ name: f, url: `/uploads/audio/${f}`, dest: (meta[f] && meta[f].dest) || '' })) });
   } catch { res.json({ files: [] }); }
 });
 
