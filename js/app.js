@@ -15,6 +15,25 @@ function hasGoogle() {
   return typeof google !== 'undefined' && google.maps && !window._googleMapsBlocked;
 }
 
+// iOS detection — open Apple Maps natively on iPhone/iPad
+function isIOS() {
+  return /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+}
+function navUrl(lat, lng, label) {
+  const ll = `${lat},${lng}`;
+  const q = label ? `&q=${encodeURIComponent(label)}` : '';
+  if (isIOS()) {
+    return `https://maps.apple.com/?daddr=${ll}${q}&dirflg=d`;
+  }
+  return `https://www.google.com/maps/dir/?api=1&destination=${ll}&travelmode=driving`;
+}
+function placeUrl(query) {
+  if (isIOS()) {
+    return `https://maps.apple.com/?q=${encodeURIComponent(query)}`;
+  }
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+}
+
 function initApp() {
   renderHome();
   setupNavigation();
@@ -1658,7 +1677,7 @@ function renderMallPage(mallId) {
 
         <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;">
           ${mall.lat ? `<a onclick="openInFrame('https://www.google.com/maps?q=${mall.lat},${mall.lng}','${mall.name} - מפה')" style="flex:1;min-width:120px;text-align:center;padding:10px;background:#E76F51;color:#fff;border-radius:6px;text-decoration:none;font-weight:700;font-size:0.85rem;cursor:pointer;"><i class="fas fa-map-pin"></i> איפה זה?</a>` : ''}
-          ${mall.lat ? `<a href="https://www.google.com/maps/dir/?api=1&destination=${mall.lat},${mall.lng}" target="_blank" style="flex:1;min-width:120px;text-align:center;padding:10px;background:#2A9D8F;color:#fff;border-radius:6px;text-decoration:none;font-weight:700;font-size:0.85rem;"><i class="fas fa-directions"></i> נווט</a>` : ''}
+          ${mall.lat ? `<a href="${navUrl(mall.lat, mall.lng, mall.name || '')}" target="_blank" style="flex:1;min-width:120px;text-align:center;padding:10px;background:#2A9D8F;color:#fff;border-radius:6px;text-decoration:none;font-weight:700;font-size:0.85rem;"><i class="fas fa-directions"></i> נווט</a>` : ''}
         </div>
 
         ${info.highlights ? `
@@ -2113,7 +2132,7 @@ function buildGoogleMap(el, zoom, items) {
             <b style="color:${color};">${item.name}</b><br>
             <span style="color:#666;font-size:12px;">${item.address||''}</span><br>
             ${item.rating ? `⭐ ${item.rating} ` : ''}${item.category !== 'transport' ? (item.price||'') : ''}<br>
-            <a href="https://www.google.com/maps/dir/?api=1&destination=${item.lat},${item.lng}" target="_blank" style="color:${color};font-weight:600;">🧭 נווט</a>
+            <a href="${navUrl(item.lat, item.lng, item.name || '')}" target="_blank" style="color:${color};font-weight:600;">🧭 נווט</a>
             &nbsp;|&nbsp;
             <a href="#" onclick="openDetail('${item.category}',${item.id});return false;" style="color:#3B82F6;">📋 פרטים</a>
           </div>
@@ -2151,7 +2170,7 @@ function buildLeafletMap(el, zoom, items) {
       .bindPopup(`<div style="direction:rtl;font-family:Heebo,sans-serif;">
         <b>${item.name}</b><br>${item.address||''}<br>
         ${item.rating ? '⭐ '+item.rating : ''} ${item.category !== 'transport' ? (item.price||'') : ''}<br>
-        <a href="https://www.google.com/maps/dir/?api=1&destination=${item.lat},${item.lng}" target="_blank" style="color:#E76F51;font-weight:600;">🧭 נווט בגוגל</a>
+        <a href="${navUrl(item.lat, item.lng, item.name || '')}" target="_blank" style="color:#E76F51;font-weight:600;">🧭 נווט בגוגל</a>
       </div>`);
   });
 }
@@ -2201,7 +2220,7 @@ function cardGridHTML(item, category) {
             ${item.isOpen === true ? '<div style="color:#2A9D8F;font-size:0.6rem;font-weight:600;margin-top:3px;">● פתוח</div>' : ''}
             <div style="display:flex;gap:6px;margin-top:6px;">
               ${item.lat ? `<a onclick="event.stopPropagation();openInFrame('https://www.google.com/maps?q=${item.lat},${item.lng}','${item.name.replace(/'/g,"\\'")} - מפה')" style="flex:1;padding:5px;border-radius:4px;border:none;background:#C4922F;color:#fff;font-size:0.65rem;text-align:center;text-decoration:none;font-family:Heebo;cursor:pointer;"><i class="fas fa-map-pin"></i> איפה זה</a>` : ''}
-              ${item.lat ? `<a onclick="event.stopPropagation();openInFrame('https://www.google.com/maps/dir/?api=1&destination=${item.lat},${item.lng}&travelmode=driving','${item.name.replace(/'/g,"\\'")} - ניווט')" style="flex:1;padding:5px;border-radius:4px;border:none;background:#E76F51;color:#fff;font-size:0.65rem;text-align:center;text-decoration:none;font-family:Heebo;cursor:pointer;"><i class="fas fa-directions"></i> נווט</a>` : ''}
+              ${item.lat ? `<a onclick="event.stopPropagation();openInFrame('${navUrl(item.lat, item.lng, item.name || '')}&travelmode=driving','${item.name.replace(/'/g,"\\'")} - ניווט')" style="flex:1;padding:5px;border-radius:4px;border:none;background:#E76F51;color:#fff;font-size:0.65rem;text-align:center;text-decoration:none;font-family:Heebo;cursor:pointer;"><i class="fas fa-directions"></i> נווט</a>` : ''}
               ${category === 'hotels'
                 ? `<a href="https://search.hotellook.com/hotels?destination=${encodeURIComponent((item.nameEn || item.name) + ' Dubai')}&adults=2&marker=X5SEJjUA" target="_blank" onclick="event.stopPropagation()" style="flex:1;padding:5px;border-radius:4px;border:none;background:#2A9D8F;color:#fff;font-size:0.65rem;text-align:center;text-decoration:none;font-family:Heebo;font-weight:700;"><i class="fas fa-bed"></i> הזמן מלון</a>`
                 : category === 'attractions'
