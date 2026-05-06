@@ -90,6 +90,9 @@
       <span id="navListingsBadge" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);background:#E76F51;color:#fff;font-size:0.75rem;padding:3px 9px;border-radius:12px;font-weight:900;display:none;box-shadow:0 0 0 0 rgba(231,111,81,0.7);animation:pulseBadge 1.6s infinite;min-width:14px;text-align:center;">0</span>
     </button>
     <div style="border-top:1px solid rgba(212,168,67,0.1);margin:12px 0;"></div>
+    <button class="admin-nav-item" data-section="essential" onclick="showSection('essential')">
+      <i class="fas fa-info-circle"></i> מידע חיוני על דובאי
+    </button>
     <button class="admin-nav-item" data-section="files" onclick="showSection('files')">
       <i class="fas fa-folder-open"></i> קבצים
     </button>
@@ -158,6 +161,9 @@
         <span id="navListingsBadgeMobile" style="position:absolute;left:18px;top:50%;transform:translateY(-50%);background:#E76F51;color:#fff;font-size:0.78rem;padding:3px 9px;border-radius:12px;font-weight:900;display:none;box-shadow:0 0 0 0 rgba(231,111,81,0.7);animation:pulseBadge 1.6s infinite;min-width:14px;text-align:center;">0</span>
       </button>
       <div style="border-top:1px solid rgba(212,168,67,0.1);margin:8px 0;"></div>
+      <button class="admin-nav-item mobile-nav" data-section="essential" onclick="showSection('essential');toggleMobileMenu();" style="display:flex;width:100%;padding:14px 20px;font-size:0.95rem;">
+        <i class="fas fa-info-circle"></i> מידע חיוני על דובאי
+      </button>
       <button class="admin-nav-item mobile-nav" data-section="files" onclick="showSection('files');toggleMobileMenu();" style="display:flex;width:100%;padding:14px 20px;font-size:0.95rem;">
         <i class="fas fa-folder-open"></i> קבצים
       </button>
@@ -255,11 +261,71 @@
       renderFilesSection();
     } else if (section === 'recordings') {
       renderRecordingsSection();
+    } else if (section === 'essential') {
+      renderEssentialSection();
     } else if (section === 'listings') {
       renderListingsSection();
     } else {
       renderCategorySection(section);
     }
+  }
+
+  // ===== ESSENTIAL DUBAI INFO =====
+  function renderEssentialSection() {
+    const content = document.getElementById('adminContent');
+    content.innerHTML = `
+      <div class="admin-header">
+        <h2>ℹ️ מידע חיוני על דובאי</h2>
+        <button class="admin-add-btn" onclick="addEssentialItem()"><i class="fas fa-plus"></i> הוסף פריט</button>
+      </div>
+      <div id="essentialList" style="margin-top:14px;"></div>
+    `;
+    renderEssentialList();
+  }
+  function getEssential() {
+    try { return JSON.parse(localStorage.getItem('essential_info') || '[]'); } catch { return []; }
+  }
+  function saveEssential(arr) {
+    localStorage.setItem('essential_info', JSON.stringify(arr));
+    renderEssentialList();
+  }
+  function renderEssentialList() {
+    const el = document.getElementById('essentialList');
+    if (!el) return;
+    const items = getEssential();
+    if (items.length === 0) {
+      el.innerHTML = `<div style="color:var(--gray);padding:18px;text-align:center;">אין פריטים. לחץ "+" להוסיף.</div>`;
+      return;
+    }
+    el.innerHTML = items.map((it, i) => `
+      <div class="stat-card" style="padding:14px;margin-bottom:10px;">
+        <div style="display:flex;justify-content:space-between;align-items:start;gap:10px;margin-bottom:6px;">
+          <div style="font-size:1.6rem;">${it.icon || 'ℹ️'}</div>
+          <input type="text" value="${(it.title||'').replace(/"/g,'&quot;')}" oninput="updateEssential(${i},'title',this.value)" placeholder="כותרת" style="flex:1;padding:8px;background:#1a1a1a;color:#fff;border:1px solid #333;border-radius:6px;font-family:Heebo;font-weight:700;">
+          <button class="action-btn delete" onclick="deleteEssential(${i})"><i class="fas fa-trash"></i></button>
+        </div>
+        <textarea oninput="updateEssential(${i},'body',this.value)" placeholder="תוכן (תיאור, טיפים, מספרי חירום וכו')" rows="3" style="width:100%;padding:8px;background:#1a1a1a;color:#fff;border:1px solid #333;border-radius:6px;font-family:Heebo;font-size:0.85rem;resize:vertical;box-sizing:border-box;">${it.body||''}</textarea>
+        <div style="display:flex;gap:8px;margin-top:6px;">
+          <input type="text" value="${(it.icon||'').replace(/"/g,'&quot;')}" oninput="updateEssential(${i},'icon',this.value)" placeholder="אימוג'י" maxlength="2" style="width:60px;padding:8px;background:#1a1a1a;color:#fff;border:1px solid #333;border-radius:6px;font-family:Heebo;text-align:center;">
+          <input type="text" value="${(it.link||'').replace(/"/g,'&quot;')}" oninput="updateEssential(${i},'link',this.value)" placeholder="קישור (אופציונלי)" style="flex:1;padding:8px;background:#1a1a1a;color:#fff;border:1px solid #333;border-radius:6px;font-family:Heebo;font-size:0.85rem;">
+        </div>
+      </div>
+    `).join('');
+  }
+  function addEssentialItem() {
+    const items = getEssential();
+    items.push({ id: 'e_' + Date.now(), icon: 'ℹ️', title: '', body: '', link: '' });
+    saveEssential(items);
+  }
+  function updateEssential(idx, field, value) {
+    const items = getEssential();
+    if (items[idx]) { items[idx][field] = value; localStorage.setItem('essential_info', JSON.stringify(items)); }
+  }
+  function deleteEssential(idx) {
+    if (!confirm('למחוק פריט?')) return;
+    const items = getEssential();
+    items.splice(idx, 1);
+    saveEssential(items);
   }
 
   // ===== LISTINGS APPROVAL SECTION =====
