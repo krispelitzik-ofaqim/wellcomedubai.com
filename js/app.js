@@ -2333,7 +2333,7 @@ function renderTopProductsForIsraelis() {
       </div>
       ${g.items.map(it => `
         <div style="display:flex;align-items:stretch;background:#fff;border-radius:10px;overflow:hidden;margin-bottom:8px;border:1px solid #E5E7EB;border-right:4px solid ${g.color};box-shadow:0 1px 4px rgba(0,0,0,0.04);">
-          ${it.image ? `<img src="${it.image}" style="width:90px;height:auto;object-fit:cover;flex-shrink:0;" onerror="this.style.display='none'">` : ''}
+          ${it.image ? `<img src="${it.image}" style="width:100px;height:100px;object-fit:cover;flex-shrink:0;" onerror="this.style.display='none'">` : ''}
           <div style="flex:1;padding:10px 12px;">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;">
               <div style="font-weight:800;color:#2C5F6E;font-size:0.92rem;">${it.name}</div>
@@ -2355,6 +2355,7 @@ function renderTopProductsForIsraelis() {
         <div style="font-weight:800;font-size:1rem;margin-bottom:4px;">🛍️ הכי מבוקש על ידי ישראלים</div>
         <div style="font-size:0.78rem;opacity:0.95;line-height:1.5;">החנויות והשווקים המומלצים ביותר לזהב, בשמים, תמרים ואלקטרוניקה — בדירוג גולשים.</div>
       </div>
+      ${renderTopProductsMap()}
       ${sections}
     </div>
   `;
