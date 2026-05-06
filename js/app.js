@@ -2275,7 +2275,7 @@ const TOP_ISRAELI_PRODUCTS = [
     { name:'Gold Souk (Deira)', desc:'שוק הזהב המסורתי — מאות חנויות, מחירי שוק עולמיים', rating:'⭐ 4.8', lat:25.2697, lng:55.2967, image:'https://images.unsplash.com/photo-1611652022419-a9419f74343d?w=400&q=80', map:'https://maps.google.com/?q=Gold+Souk+Deira+Dubai' },
     { name:'Damas — Dubai Mall', desc:'רשת תכשיטים מובילה, סניפים בכל קניון', rating:'⭐ 4.6', lat:25.1972, lng:55.2796, image:'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=400&q=80', web:'https://www.damasjewellery.com' },
     { name:'Joyalukkas — Gold Souk', desc:'תכשיטי זהב הודיים — אטרקטיבי לקלאסי', rating:'⭐ 4.7', lat:25.2701, lng:55.2972, image:'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400&q=80', web:'https://www.joyalukkas.in' },
-    { name:'Malabar Gold — Karama', desc:'בחירה רחבה במחירים תחרותיים', rating:'⭐ 4.5', lat:25.2497, lng:55.3083, image:'https://images.unsplash.com/photo-1535632066274-50c97a418ed7?w=400&q=80', web:'https://www.malabargoldanddiamonds.com' },
+    { name:'Malabar Gold — Karama', desc:'בחירה רחבה במחירים תחרותיים', rating:'⭐ 4.5', lat:25.2497, lng:55.3083, image:'https://logo.clearbit.com/malabargoldanddiamonds.com', web:'https://www.malabargoldanddiamonds.com' },
   ]},
   { cat:'בשמים ועוד', emoji:'🌹', color:'#B85C8E', items:[
     { name:'Perfume Souk (Deira)', desc:'בשמי oud מסורתיים, ערבוב מותאם אישית', rating:'⭐ 4.7', lat:25.2683, lng:55.2999, image:'https://images.unsplash.com/photo-1541643600914-78b084683601?w=400&q=80', map:'https://maps.google.com/?q=Perfume+Souk+Deira+Dubai' },
