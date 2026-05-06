@@ -2272,13 +2272,13 @@ function renderFoodDeliveryApps() {
 
 const TOP_ISRAELI_PRODUCTS = [
   { cat:'זהב ותכשיטים', emoji:'💍', color:'#E9C46A', items:[
-    { name:'Gold Souk (Deira)', desc:'שוק הזהב המסורתי — מאות חנויות, מחירי שוק עולמיים', rating:'⭐ 4.8', lat:25.2697, lng:55.2967, image:'https://images.unsplash.com/photo-1611652022419-a9419f74343d?w=400&q=80', web:'https://visitdubai.com/en/places-to-visit/gold-souk', map:'https://maps.google.com/?q=Gold+Souk+Deira+Dubai' },
+    { name:'Gold Souk (Deira)', desc:'שוק הזהב המסורתי — מאות חנויות, מחירי שוק עולמיים', rating:'⭐ 4.8', lat:25.2697, lng:55.2967, image:'https://images.unsplash.com/photo-1611652022419-a9419f74343d?w=400&q=80', web:'https://www.visitdubai.com/en/places-to-visit/gold-souk', map:'https://maps.google.com/?q=Gold+Souk+Deira+Dubai' },
     { name:'Damas — Dubai Mall', desc:'רשת תכשיטים מובילה, סניפים בכל קניון', rating:'⭐ 4.6', lat:25.1972, lng:55.2796, image:'https://logo.clearbit.com/damasjewellery.com', web:'https://www.damasjewellery.com', map:'https://maps.google.com/?q=Damas+Jewellery+Dubai+Mall' },
     { name:'Joyalukkas — Gold Souk', desc:'תכשיטי זהב הודיים — אטרקטיבי לקלאסי', rating:'⭐ 4.7', lat:25.2701, lng:55.2972, image:'https://logo.clearbit.com/joyalukkas.com', web:'https://www.joyalukkas.in', map:'https://maps.google.com/?q=Joyalukkas+Dubai' },
     { name:'Malabar Gold — Karama', desc:'בחירה רחבה במחירים תחרותיים', rating:'⭐ 4.5', lat:25.2497, lng:55.3083, image:'https://logo.clearbit.com/malabargoldanddiamonds.com', web:'https://www.malabargoldanddiamonds.com', map:'https://maps.google.com/?q=Malabar+Gold+Karama+Dubai' },
   ]},
   { cat:'בשמים ועוד', emoji:'🌹', color:'#B85C8E', items:[
-    { name:'Perfume Souk (Deira)', desc:'בשמי oud מסורתיים, ערבוב מותאם אישית', rating:'⭐ 4.7', lat:25.2683, lng:55.2999, image:'https://images.unsplash.com/photo-1541643600914-78b084683601?w=400&q=80', web:'https://visitdubai.com/en/places-to-visit/perfume-souk', map:'https://maps.google.com/?q=Perfume+Souk+Deira+Dubai' },
+    { name:'Perfume Souk (Deira)', desc:'בשמי oud מסורתיים, ערבוב מותאם אישית', rating:'⭐ 4.7', lat:25.2683, lng:55.2999, image:'https://images.unsplash.com/photo-1541643600914-78b084683601?w=400&q=80', web:'https://www.visitdubai.com/en/places-to-visit/perfume-souk', map:'https://maps.google.com/?q=Perfume+Souk+Deira+Dubai' },
     { name:'Ajmal — Mall of Emirates', desc:'מותג עיראקי-אמירותי, oud איכותי', rating:'⭐ 4.7', lat:25.1182, lng:55.2010, image:'https://logo.clearbit.com/ajmalperfume.com', web:'https://www.ajmalperfume.com', map:'https://maps.google.com/?q=Ajmal+Perfumes+Mall+Emirates' },
     { name:'Arabian Oud — Dubai Mall', desc:'הגדול במזה"ת, סניפים בכל קניון', rating:'⭐ 4.6', lat:25.1976, lng:55.2799, image:'https://logo.clearbit.com/arabianoud.com', web:'https://www.arabianoud.com', map:'https://maps.google.com/?q=Arabian+Oud+Dubai+Mall' },
     { name:'Rasasi — City Centre Deira', desc:'מבצעים מצוינים, איכות גבוהה', rating:'⭐ 4.5', lat:25.2521, lng:55.3308, image:'https://logo.clearbit.com/rasasi.com', web:'https://www.rasasi.com', map:'https://maps.google.com/?q=Rasasi+City+Centre+Deira' },
@@ -2286,8 +2286,8 @@ const TOP_ISRAELI_PRODUCTS = [
   { cat:'תמרים וממתקים', emoji:'🌴', color:'#A0522D', items:[
     { name:'Bateel — Dubai Mall', desc:'תמרים מובחרים באריזות מתנה — מתנה אהובה', rating:'⭐ 4.8', lat:25.1973, lng:55.2796, image:'https://logo.clearbit.com/bateel.com', web:'https://www.bateel.com', map:'https://maps.google.com/?q=Bateel+Dubai+Mall' },
     { name:'Patchi — BurJuman Mall', desc:'שוקולד וממתקים פרימיום', rating:'⭐ 4.7', lat:25.2553, lng:55.3025, image:'https://logo.clearbit.com/patchi.com', web:'https://www.patchi.com', map:'https://maps.google.com/?q=Patchi+BurJuman+Dubai' },
-    { name:'Al Aseel Sweets', desc:'תמרים וממתקים ערביים מסורתיים', rating:'⭐ 4.6', lat:25.2300, lng:55.3219, image:'https://images.unsplash.com/photo-1610915127867-0d6e4d1ea3df?w=400&q=80', web:'https://www.alaseelsweets.com', map:'https://maps.google.com/?q=Al+Aseel+Sweets+Dubai' },
-    { name:'Date Souk (Deira)', desc:'שוק התמרים בדיירה — מבצעים מקומיים', rating:'⭐ 4.5', lat:25.2740, lng:55.3036, image:'https://images.unsplash.com/photo-1597305877032-0668b3c6413a?w=400&q=80', web:'https://visitdubai.com/en/places-to-visit/spice-souk', map:'https://maps.google.com/?q=Date+Souk+Dubai' },
+    { name:'Al Aseel Sweets', desc:'תמרים וממתקים ערביים מסורתיים', rating:'⭐ 4.6', lat:25.2300, lng:55.3219, image:'https://logo.clearbit.com/alaseelrestaurants.com', web:'https://www.alaseelrestaurants.com', map:'https://maps.google.com/?q=Al+Aseel+Sweets+Dubai' },
+    { name:'Date Souk (Deira)', desc:'שוק התמרים בדיירה — מבצעים מקומיים', rating:'⭐ 4.5', lat:25.2740, lng:55.3036, image:'https://images.unsplash.com/photo-1605522561063-3aa6a8d2bb1f?w=400&q=80', web:'https://www.visitdubai.com/en/places-to-visit/deira-spice-souk', map:'https://maps.google.com/?q=Date+Souk+Dubai' },
   ]},
   { cat:'אלקטרוניקה', emoji:'📱', color:'#1A6B8A', items:[
     { name:'Sharaf DG — Mall of Emirates', desc:'הרשת המובילה — מכשירים, אביזרים ומבצעים', rating:'⭐ 4.7', lat:25.1180, lng:55.2008, image:'https://logo.clearbit.com/sharafdg.com', web:'https://uae.sharafdg.com', map:'https://maps.google.com/?q=Sharaf+DG+Mall+of+Emirates' },
