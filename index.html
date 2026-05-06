@@ -323,10 +323,10 @@
 <script src="js/booking.js?v=11"></script>
 <script src="js/services.js?v=11"></script>
 <script src="js/flights-board.js?v=11"></script>
-<script src="js/app.js?v=204"></script>
+<script src="js/app.js?v=205"></script>
 <script>
 (function autoVersionCheck() {
-  var CURRENT = 204;
+  var CURRENT = 205;
   setTimeout(function(){
     fetch('/index.html?_=' + Date.now(), { cache: 'no-store' })
       .then(function(r){ return r.text(); })
@@ -429,6 +429,7 @@
     const btn = document.getElementById(id + '_btn');
     if (!a) return;
     if (a.paused) {
+      if (a.duration && a.currentTime >= a.duration - 0.2) a.currentTime = 0;
       a.play();
       btn.textContent = '❚❚';
       a.ontimeupdate = () => {
