@@ -323,10 +323,10 @@
 <script src="js/booking.js?v=11"></script>
 <script src="js/services.js?v=11"></script>
 <script src="js/flights-board.js?v=11"></script>
-<script src="js/app.js?v=187"></script>
+<script src="js/app.js?v=188"></script>
 <script>
 (function autoVersionCheck() {
-  var CURRENT = 187;
+  var CURRENT = 188;
   setTimeout(function(){
     fetch('/index.html?_=' + Date.now(), { cache: 'no-store' })
       .then(function(r){ return r.text(); })
@@ -393,6 +393,7 @@
   })();
 
   let _learnData = null;
+  let _audioByDest = null;
   async function openLearn(id) {
     if (!_learnData) {
       try {
@@ -400,8 +401,17 @@
         _learnData = await r.json();
       } catch(e) { alert('שגיאה בטעינה'); return; }
     }
+    if (!_audioByDest) {
+      try {
+        const r = await fetch('https://wellcomedubaicom-production.up.railway.app/api/audio?_t=' + Date.now());
+        const j = await r.json();
+        _audioByDest = {};
+        (j.files || []).forEach(f => { if (f.dest) _audioByDest[f.dest] = 'https://wellcomedubaicom-production.up.railway.app' + f.url; });
+      } catch { _audioByDest = {}; }
+    }
     const item = _learnData[id];
     if (!item) return;
+    if (_audioByDest[id]) item.audio = _audioByDest[id];
     const modal = document.getElementById('detailModal');
     modal.innerHTML = `
       <div style="background:#fff;width:92%;max-width:520px;max-height:88vh;border-radius:14px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 10px 40px rgba(0,0,0,0.3);">
