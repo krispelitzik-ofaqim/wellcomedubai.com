@@ -2328,20 +2328,27 @@ function renderTopProductsMap() {
 }
 
 function renderTopProductsForIsraelis() {
+  const BANNER_BG = {
+    'זהב ותכשיטים': 'https://images.unsplash.com/photo-1611652022419-a9419f74343d?w=1200&q=80',
+    'בשמים ועוד': 'https://images.unsplash.com/photo-1541643600914-78b084683601?w=1200&q=80',
+    'תמרים וממתקים': 'https://images.unsplash.com/photo-1601379760883-1bb497d806dd?w=1200&q=80',
+    'אלקטרוניקה': 'https://images.unsplash.com/photo-1556656793-08538906a9f8?w=1200&q=80',
+  };
   const sections = TOP_ISRAELI_PRODUCTS.map(g => `
-    <div style="margin-bottom:22px;">
-      <div style="position:relative;display:flex;align-items:center;gap:14px;margin:18px 0 12px;padding:18px 18px;background:linear-gradient(135deg,${g.color},${g.color}dd);border-radius:14px;box-shadow:0 6px 18px ${g.color}55;overflow:hidden;">
-        <div style="position:absolute;top:-30px;left:-30px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,0.12);"></div>
-        <div style="position:absolute;bottom:-40px;right:-40px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,0.08);"></div>
-        <div style="background:rgba(255,255,255,0.25);width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(6px);border:1.5px solid rgba(255,255,255,0.35);position:relative;z-index:1;">
-          <span style="font-size:2rem;line-height:1;">${g.emoji}</span>
+    <div style="margin-bottom:24px;">
+      <div style="position:relative;height:130px;margin:18px 0 14px;border-radius:18px;overflow:hidden;background-image:linear-gradient(110deg,${g.color}EE 0%,${g.color}AA 50%,transparent 100%),url('${BANNER_BG[g.cat] || ''}');background-size:cover;background-position:center;box-shadow:0 8px 22px ${g.color}66;">
+        <div style="position:absolute;top:14px;right:18px;display:flex;align-items:center;gap:12px;">
+          <div style="background:rgba(255,255,255,0.95);width:62px;height:62px;border-radius:18px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,0,0,0.25);">
+            <span style="font-size:2.2rem;line-height:1;">${g.emoji}</span>
+          </div>
+          <div>
+            <div style="color:rgba(255,255,255,0.95);font-size:0.7rem;font-weight:800;letter-spacing:2px;text-shadow:0 1px 4px rgba(0,0,0,0.5);margin-bottom:2px;">★ הכי מבוקש</div>
+            <div style="color:#fff;font-weight:900;font-size:1.5rem;letter-spacing:-0.3px;text-shadow:0 2px 6px rgba(0,0,0,0.5);">${g.cat}</div>
+          </div>
         </div>
-        <div style="flex:1;position:relative;z-index:1;">
-          <div style="color:rgba(255,255,255,0.85);font-size:0.7rem;font-weight:700;letter-spacing:1.5px;margin-bottom:3px;">CATEGORY ${TOP_ISRAELI_PRODUCTS.indexOf(g)+1}</div>
-          <div style="color:#fff;font-weight:900;font-size:1.25rem;letter-spacing:-0.3px;text-shadow:0 1px 3px rgba(0,0,0,0.2);">${g.cat}</div>
-        </div>
-        <div style="background:#fff;color:${g.color};padding:5px 11px;border-radius:14px;font-weight:900;font-size:0.78rem;position:relative;z-index:1;box-shadow:0 2px 6px rgba(0,0,0,0.15);">
-          ${g.items.length} מקומות
+        <div style="position:absolute;bottom:14px;right:18px;display:flex;gap:6px;align-items:center;">
+          <span style="background:#fff;color:${g.color};padding:5px 12px;border-radius:14px;font-weight:900;font-size:0.78rem;box-shadow:0 3px 8px rgba(0,0,0,0.2);">${g.items.length} מקומות מובילים</span>
+          <span style="background:rgba(255,255,255,0.25);color:#fff;padding:5px 11px;border-radius:14px;font-weight:700;font-size:0.72rem;backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,0.3);">⭐ דירוג גולשים</span>
         </div>
       </div>
       ${g.items.map(it => `
