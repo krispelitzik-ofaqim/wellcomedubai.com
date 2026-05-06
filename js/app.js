@@ -3265,6 +3265,10 @@ function renderREListings(filterType) {
         <input id="rePhotos" type="file" accept="image/*" multiple onchange="previewREPhotos(this)" style="width:100%;font-family:Heebo;font-size:0.78rem;margin-bottom:8px;">
         <div id="rePhotosPreview" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;"></div>
 
+        <label style="display:block;font-size:0.78rem;color:#2C5F6E;font-weight:600;margin-bottom:4px;">סרטון (עד 3 דקות, אופציונלי)</label>
+        <input id="reVideo" type="file" accept="video/*" onchange="previewREVideo(this)" style="width:100%;font-family:Heebo;font-size:0.78rem;margin-bottom:8px;">
+        <div id="reVideoPreview" style="margin-bottom:10px;"></div>
+
         <label style="display:block;font-size:0.78rem;color:#2C5F6E;font-weight:600;margin-bottom:4px;">גודל מודעה (חינם)</label>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px;">
           <label style="display:flex;align-items:center;gap:6px;padding:8px;border:2px solid #E5E7EB;border-radius:6px;cursor:pointer;font-size:0.78rem;background:#fff;">
@@ -3283,7 +3287,7 @@ function renderREListings(filterType) {
           <label style="display:flex;align-items:center;justify-content:center;padding:8px;border:2px solid #F4A261;border-radius:6px;cursor:pointer;font-size:0.75rem;background:#FFF8E7;">
             <input type="radio" name="reHighlight" value="emphasized" style="margin-left:4px;"> מודגש
           </label>
-          <label style="display:flex;align-items:center;justify-content:center;padding:8px;border:2px solid #1A6B8A;border-radius:6px;cursor:pointer;font-size:0.75rem;background:#1A6B8A;color:#fff;">
+          <label style="display:flex;align-items:center;justify-content:center;padding:8px;border:2px solid #1E3A8A;border-radius:6px;cursor:pointer;font-size:0.75rem;background:#0A1F3D;color:#fff;">
             <input type="radio" name="reHighlight" value="negative" style="margin-left:4px;"> נגטיב
           </label>
         </div>
@@ -3312,8 +3316,8 @@ function listingFullCard(l, isFeatured) {
   const typeColor = l.type === 'sale' ? '#E76F51' : '#2A9D8F';
   const imgHeight = l.size === 'large' ? 300 : 150;
   const highlight = l.highlight || 'none';
-  const cardBg = highlight === 'negative' ? '#1A2A36' : highlight === 'emphasized' ? '#FFF8E7' : '#fff';
-  const cardBorder = highlight === 'negative' ? '2px solid #1A6B8A' : highlight === 'emphasized' ? '3px solid #F4A261' : '1px solid #E5E7EB';
+  const cardBg = highlight === 'negative' ? '#0A1F3D' : highlight === 'emphasized' ? '#FFF8E7' : '#fff';
+  const cardBorder = highlight === 'negative' ? '2px solid #1E3A8A' : highlight === 'emphasized' ? '3px solid #F4A261' : '1px solid #E5E7EB';
   const titleColor = highlight === 'negative' ? '#fff' : '#2C5F6E';
   const descColor = highlight === 'negative' ? '#cbd5e1' : '#2C5F6E';
   return `
@@ -3449,6 +3453,30 @@ function toggleREForm() {
 }
 
 window._rePhotos = [];
+window._reVideo = null;
+
+function previewREVideo(input) {
+  const file = input.files && input.files[0];
+  const box = document.getElementById('reVideoPreview');
+  if (!file) { window._reVideo = null; box.innerHTML = ''; return; }
+  if (file.size > 80 * 1024 * 1024) {
+    alert('הסרטון גדול מ-80MB. נסה דחיסה.');
+    input.value = ''; window._reVideo = null; box.innerHTML = ''; return;
+  }
+  const v = document.createElement('video');
+  v.preload = 'metadata';
+  v.onloadedmetadata = () => {
+    if (v.duration > 181) {
+      alert('הסרטון מוגבל ל-3 דקות');
+      input.value = ''; window._reVideo = null; box.innerHTML = ''; return;
+    }
+    window._reVideo = file;
+    box.innerHTML = `<div style="font-size:0.78rem;color:#2A9D8F;font-weight:600;">🎥 ${file.name} · ${Math.round(v.duration)} שניות · ${(file.size/1024/1024).toFixed(1)}MB</div>`;
+  };
+  v.onerror = () => { alert('שגיאה בטעינת סרטון'); input.value = ''; };
+  v.src = URL.createObjectURL(file);
+}
+
 function compressImageFile(file, maxSize = 1200, quality = 0.78) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -3512,6 +3540,9 @@ async function submitREListing(btn) {
     (window._rePhotos || []).slice(0, 8).forEach((p, i) => {
       fd.append('photos', p.blob, `photo_${i}.jpg`);
     });
+    if (window._reVideo) {
+      fd.append('video', window._reVideo, window._reVideo.name);
+    }
     const r = await fetch(`${RE_API}/api/listings`, { method: 'POST', body: fd });
     if (!r.ok) throw new Error('upload failed');
     window._rePhotos = [];

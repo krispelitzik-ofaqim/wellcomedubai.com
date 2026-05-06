@@ -46,9 +46,9 @@ const storage = multer.diskStorage({
 });
 const upload = multer({
   storage,
-  limits: { fileSize: 8 * 1024 * 1024 },
+  limits: { fileSize: 100 * 1024 * 1024 },
   fileFilter: (_req, file, cb) => {
-    cb(null, /\.(jpe?g|png|webp|gif)$/i.test(file.originalname));
+    cb(null, /\.(jpe?g|png|webp|gif|mp4|mov|webm|m4v)$/i.test(file.originalname));
   }
 });
 
@@ -60,14 +60,16 @@ app.get('/api/listings', (_req, res) => {
   res.json({ listings: approved });
 });
 
-app.post('/api/listings', upload.array('photos', 8), (req, res) => {
+app.post('/api/listings', upload.fields([{ name: 'photos', maxCount: 8 }, { name: 'video', maxCount: 1 }]), (req, res) => {
   try {
     const { title, type, price, area, desc, phone, size, highlight } = req.body;
     if (!title || !price || !area || !phone) return res.status(400).json({ error: 'missing fields' });
-    const photos = (req.files || []).map(f => `/uploads/${f.filename}`);
+    const files = req.files || {};
+    const photos = (files.photos || []).map(f => `/uploads/${f.filename}`);
+    const video = files.video && files.video[0] ? `/uploads/${files.video[0].filename}` : '';
     const listing = {
       id: 'l_' + Date.now() + '_' + Math.round(Math.random() * 1000),
-      title, type: type || 'sale', price, area, desc: desc || '', phone, photos,
+      title, type: type || 'sale', price, area, desc: desc || '', phone, photos, video,
       size: size === 'large' ? 'large' : 'small',
       highlight: ['none','emphasized','negative'].includes(highlight) ? highlight : 'none',
       status: 'pending',
