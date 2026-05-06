@@ -43,8 +43,6 @@
     </div>
     <div class="header-actions">
       <button class="header-btn" onclick="toggleSearch()" title="חיפוש"><i class="fas fa-search"></i></button>
-      <button class="header-btn" onclick="showMobilePopup()" title="פתח בנייד"><i class="fas fa-mobile-alt"></i></button>
-      <a href="admin/index.html" class="header-btn" title="לוח ניהול"><i class="fas fa-cog"></i></a>
     </div>
   </header>
 
@@ -325,10 +323,10 @@
 <script src="js/booking.js?v=11"></script>
 <script src="js/services.js?v=11"></script>
 <script src="js/flights-board.js?v=11"></script>
-<script src="js/app.js?v=183"></script>
+<script src="js/app.js?v=184"></script>
 <script>
 (function autoVersionCheck() {
-  var CURRENT = 183;
+  var CURRENT = 184;
   setTimeout(function(){
     fetch('/index.html?_=' + Date.now(), { cache: 'no-store' })
       .then(function(r){ return r.text(); })
