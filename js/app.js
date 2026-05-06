@@ -2184,7 +2184,7 @@ function cardGridHTML(item, category) {
                 ? `<a href="https://search.hotellook.com/hotels?destination=${encodeURIComponent((item.nameEn || item.name) + ' Dubai')}&adults=2&marker=X5SEJjUA" target="_blank" onclick="event.stopPropagation()" style="flex:1;padding:5px;border-radius:4px;border:none;background:#2A9D8F;color:#fff;font-size:0.65rem;text-align:center;text-decoration:none;font-family:Heebo;font-weight:700;"><i class="fas fa-bed"></i> הזמן מלון</a>`
                 : category === 'attractions'
                   ? `<a onclick="event.stopPropagation();openInFrame('https://www.google.com/search?igu=1&q=${encodeURIComponent((item.nameEn || item.name) + ' Dubai tickets opening hours')}','${item.name.replace(/'/g,"\\'")} - מחירים ושעות')" style="flex:1;padding:5px;border-radius:4px;border:none;background:#2A9D8F;color:#fff;font-size:0.65rem;text-align:center;text-decoration:none;font-family:Heebo;cursor:pointer;font-weight:700;"><i class="fas fa-ticket-alt"></i> מחירים</a>`
-                  : `<a href="https://www.google.com/search?q=${encodeURIComponent((item.nameEn || item.name) + ' Dubai menu hours')}" target="_blank" onclick="event.stopPropagation()" style="flex:1;padding:5px;border-radius:4px;border:none;background:#2A9D8F;color:#fff;font-size:0.65rem;text-align:center;text-decoration:none;font-family:Heebo;"><i class="fas fa-info-circle"></i> תפריט</a>`
+                  : `<button onclick="event.stopPropagation();openMenuIframe('${encodeURIComponent((item.nameEn || item.name) + ' Dubai menu hours')}', '${(item.name || '').replace(/'/g, '\\\'')}')" style="flex:1;padding:5px;border-radius:4px;border:none;background:#2A9D8F;color:#fff;font-size:0.65rem;text-align:center;cursor:pointer;font-family:Heebo;"><i class="fas fa-info-circle"></i> תפריט</button>`
               }
             </div>
           </div>
@@ -2992,6 +2992,26 @@ function renderBrokersFullPage() {
       ${renderREBrokers()}
     </div>
   `;
+}
+
+function openMenuIframe(query, title) {
+  const modal = document.getElementById('detailModal');
+  if (!modal) return;
+  const url = 'https://www.google.com/search?igu=1&q=' + query;
+  modal.innerHTML = `
+    <div style="background:#fff;width:96%;max-width:600px;height:88vh;border-radius:14px;overflow:hidden;display:flex;flex-direction:column;">
+      <div style="background:#2A9D8F;color:#fff;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;">
+        <button onclick="document.getElementById('detailModal').classList.remove('active')" style="background:rgba(255,255,255,0.25);border:none;color:#fff;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1rem;font-family:Heebo;">×</button>
+        <div style="font-weight:800;font-size:0.95rem;">📋 ${title}</div>
+      </div>
+      <iframe src="${url}" style="flex:1;width:100%;border:none;background:#fff;" referrerpolicy="no-referrer"></iframe>
+      <div style="padding:8px 14px;background:#f5f5f5;font-size:0.7rem;color:#6B7F8D;text-align:center;">חיפוש בגוגל · ${decodeURIComponent(query)}</div>
+    </div>
+  `;
+  modal.classList.add('active');
+  modal.style.alignItems = 'center';
+  modal.style.justifyContent = 'center';
+  modal.onclick = (e) => { if (e.target === modal) modal.classList.remove('active'); };
 }
 
 function showBrokerCriteria() {
