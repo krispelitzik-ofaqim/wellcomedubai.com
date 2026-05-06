@@ -2272,28 +2272,28 @@ function renderFoodDeliveryApps() {
 
 const TOP_ISRAELI_PRODUCTS = [
   { cat:'זהב ותכשיטים', emoji:'💍', color:'#E9C46A', items:[
-    { name:'Gold Souk (Deira)', desc:'שוק הזהב המסורתי — מאות חנויות, מחירי שוק עולמיים', rating:'⭐ 4.8', lat:25.2697, lng:55.2967, map:'https://maps.google.com/?q=Gold+Souk+Deira+Dubai' },
-    { name:'Damas — Dubai Mall', desc:'רשת תכשיטים מובילה, סניפים בכל קניון', rating:'⭐ 4.6', lat:25.1972, lng:55.2796, web:'https://www.damasjewellery.com' },
-    { name:'Joyalukkas — Gold Souk', desc:'תכשיטי זהב הודיים — אטרקטיבי לקלאסי', rating:'⭐ 4.7', lat:25.2701, lng:55.2972, web:'https://www.joyalukkas.in' },
-    { name:'Malabar Gold — Karama', desc:'בחירה רחבה במחירים תחרותיים', rating:'⭐ 4.5', lat:25.2497, lng:55.3083, web:'https://www.malabargoldanddiamonds.com' },
+    { name:'Gold Souk (Deira)', desc:'שוק הזהב המסורתי — מאות חנויות, מחירי שוק עולמיים', rating:'⭐ 4.8', lat:25.2697, lng:55.2967, image:'https://images.unsplash.com/photo-1611652022419-a9419f74343d?w=400&q=80', map:'https://maps.google.com/?q=Gold+Souk+Deira+Dubai' },
+    { name:'Damas — Dubai Mall', desc:'רשת תכשיטים מובילה, סניפים בכל קניון', rating:'⭐ 4.6', lat:25.1972, lng:55.2796, image:'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=400&q=80', web:'https://www.damasjewellery.com' },
+    { name:'Joyalukkas — Gold Souk', desc:'תכשיטי זהב הודיים — אטרקטיבי לקלאסי', rating:'⭐ 4.7', lat:25.2701, lng:55.2972, image:'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400&q=80', web:'https://www.joyalukkas.in' },
+    { name:'Malabar Gold — Karama', desc:'בחירה רחבה במחירים תחרותיים', rating:'⭐ 4.5', lat:25.2497, lng:55.3083, image:'https://images.unsplash.com/photo-1535632066274-50c97a418ed7?w=400&q=80', web:'https://www.malabargoldanddiamonds.com' },
   ]},
   { cat:'בשמים ועוד', emoji:'🌹', color:'#B85C8E', items:[
-    { name:'Perfume Souk (Deira)', desc:'בשמי oud מסורתיים, ערבוב מותאם אישית', rating:'⭐ 4.7', lat:25.2683, lng:55.2999, map:'https://maps.google.com/?q=Perfume+Souk+Deira+Dubai' },
-    { name:'Ajmal — Mall of Emirates', desc:'מותג עיראקי-אמירותי, oud איכותי', rating:'⭐ 4.7', lat:25.1182, lng:55.2010, web:'https://www.ajmalperfume.com' },
-    { name:'Arabian Oud — Dubai Mall', desc:'הגדול במזה"ת, סניפים בכל קניון', rating:'⭐ 4.6', lat:25.1976, lng:55.2799, web:'https://www.arabianoud.com' },
-    { name:'Rasasi — City Centre Deira', desc:'מבצעים מצוינים, איכות גבוהה', rating:'⭐ 4.5', lat:25.2521, lng:55.3308, web:'https://www.rasasi.com' },
+    { name:'Perfume Souk (Deira)', desc:'בשמי oud מסורתיים, ערבוב מותאם אישית', rating:'⭐ 4.7', lat:25.2683, lng:55.2999, image:'https://images.unsplash.com/photo-1541643600914-78b084683601?w=400&q=80', map:'https://maps.google.com/?q=Perfume+Souk+Deira+Dubai' },
+    { name:'Ajmal — Mall of Emirates', desc:'מותג עיראקי-אמירותי, oud איכותי', rating:'⭐ 4.7', lat:25.1182, lng:55.2010, image:'https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=400&q=80', web:'https://www.ajmalperfume.com' },
+    { name:'Arabian Oud — Dubai Mall', desc:'הגדול במזה"ת, סניפים בכל קניון', rating:'⭐ 4.6', lat:25.1976, lng:55.2799, image:'https://images.unsplash.com/photo-1615634260167-c8cdede054de?w=400&q=80', web:'https://www.arabianoud.com' },
+    { name:'Rasasi — City Centre Deira', desc:'מבצעים מצוינים, איכות גבוהה', rating:'⭐ 4.5', lat:25.2521, lng:55.3308, image:'https://images.unsplash.com/photo-1622445275576-721325763afe?w=400&q=80', web:'https://www.rasasi.com' },
   ]},
   { cat:'תמרים וממתקים', emoji:'🌴', color:'#A0522D', items:[
-    { name:'Bateel — Dubai Mall', desc:'תמרים מובחרים באריזות מתנה — מתנה אהובה', rating:'⭐ 4.8', lat:25.1973, lng:55.2796, web:'https://www.bateel.com' },
-    { name:'Patchi — BurJuman Mall', desc:'שוקולד וממתקים פרימיום', rating:'⭐ 4.7', lat:25.2553, lng:55.3025, web:'https://www.patchi.com' },
-    { name:'Al Aseel Sweets', desc:'תמרים וממתקים ערביים מסורתיים', rating:'⭐ 4.6', lat:25.2300, lng:55.3219, map:'https://maps.google.com/?q=Al+Aseel+Sweets+Dubai' },
-    { name:'Date Souk (Deira)', desc:'שוק התמרים בדיירה — מבצעים מקומיים', rating:'⭐ 4.5', lat:25.2740, lng:55.3036, map:'https://maps.google.com/?q=Date+Souk+Dubai' },
+    { name:'Bateel — Dubai Mall', desc:'תמרים מובחרים באריזות מתנה — מתנה אהובה', rating:'⭐ 4.8', lat:25.1973, lng:55.2796, image:'https://images.unsplash.com/photo-1601379760883-1bb497d806dd?w=400&q=80', web:'https://www.bateel.com' },
+    { name:'Patchi — BurJuman Mall', desc:'שוקולד וממתקים פרימיום', rating:'⭐ 4.7', lat:25.2553, lng:55.3025, image:'https://images.unsplash.com/photo-1551529834-525807d6b4f3?w=400&q=80', web:'https://www.patchi.com' },
+    { name:'Al Aseel Sweets', desc:'תמרים וממתקים ערביים מסורתיים', rating:'⭐ 4.6', lat:25.2300, lng:55.3219, image:'https://images.unsplash.com/photo-1610915127867-0d6e4d1ea3df?w=400&q=80', map:'https://maps.google.com/?q=Al+Aseel+Sweets+Dubai' },
+    { name:'Date Souk (Deira)', desc:'שוק התמרים בדיירה — מבצעים מקומיים', rating:'⭐ 4.5', lat:25.2740, lng:55.3036, image:'https://images.unsplash.com/photo-1597305877032-0668b3c6413a?w=400&q=80', map:'https://maps.google.com/?q=Date+Souk+Dubai' },
   ]},
   { cat:'אלקטרוניקה', emoji:'📱', color:'#1A6B8A', items:[
-    { name:'Sharaf DG — Mall of Emirates', desc:'הרשת המובילה — מכשירים, אביזרים ומבצעים', rating:'⭐ 4.7', lat:25.1180, lng:55.2008, web:'https://uae.sharafdg.com' },
-    { name:'Jumbo — Dubai Mall', desc:'מבחר רחב, שירות אמין', rating:'⭐ 4.6', lat:25.1972, lng:55.2796, web:'https://www.jumbo.ae' },
-    { name:'Lulu Electronics — Karama', desc:'מחירים תחרותיים בקניונים', rating:'⭐ 4.4', lat:25.2510, lng:55.3115, web:'https://www.luluhypermarket.com' },
-    { name:'Dubai Mall — Electronics Floor', desc:'Apple, Samsung, Sony — חנויות רשמיות', rating:'⭐ 4.8', lat:25.1972, lng:55.2796, map:'https://maps.google.com/?q=Dubai+Mall' },
+    { name:'Sharaf DG — Mall of Emirates', desc:'הרשת המובילה — מכשירים, אביזרים ומבצעים', rating:'⭐ 4.7', lat:25.1180, lng:55.2008, image:'https://images.unsplash.com/photo-1556656793-08538906a9f8?w=400&q=80', web:'https://uae.sharafdg.com' },
+    { name:'Jumbo — Dubai Mall', desc:'מבחר רחב, שירות אמין', rating:'⭐ 4.6', lat:25.1972, lng:55.2796, image:'https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=400&q=80', web:'https://www.jumbo.ae' },
+    { name:'Lulu Electronics — Karama', desc:'מחירים תחרותיים בקניונים', rating:'⭐ 4.4', lat:25.2510, lng:55.3115, image:'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=400&q=80', web:'https://www.luluhypermarket.com' },
+    { name:'Dubai Mall — Electronics Floor', desc:'Apple, Samsung, Sony — חנויות רשמיות', rating:'⭐ 4.8', lat:25.1972, lng:55.2796, image:'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=400&q=80', map:'https://maps.google.com/?q=Dubai+Mall' },
   ]},
 ];
 
@@ -2333,6 +2333,7 @@ function renderTopProductsForIsraelis() {
       </div>
       ${g.items.map(it => `
         <div style="display:flex;align-items:stretch;background:#fff;border-radius:10px;overflow:hidden;margin-bottom:8px;border:1px solid #E5E7EB;border-right:4px solid ${g.color};box-shadow:0 1px 4px rgba(0,0,0,0.04);">
+          ${it.image ? `<img src="${it.image}" style="width:90px;height:auto;object-fit:cover;flex-shrink:0;" onerror="this.style.display='none'">` : ''}
           <div style="flex:1;padding:10px 12px;">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;">
               <div style="font-weight:800;color:#2C5F6E;font-size:0.92rem;">${it.name}</div>
@@ -2354,7 +2355,6 @@ function renderTopProductsForIsraelis() {
         <div style="font-weight:800;font-size:1rem;margin-bottom:4px;">🛍️ הכי מבוקש על ידי ישראלים</div>
         <div style="font-size:0.78rem;opacity:0.95;line-height:1.5;">החנויות והשווקים המומלצים ביותר לזהב, בשמים, תמרים ואלקטרוניקה — בדירוג גולשים.</div>
       </div>
-      ${renderTopProductsMap()}
       ${sections}
     </div>
   `;
