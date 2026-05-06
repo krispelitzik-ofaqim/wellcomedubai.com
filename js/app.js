@@ -2363,7 +2363,7 @@ function renderTopProductsForIsraelis() {
             <div style="display:flex;gap:5px;">
               ${it.web ? `<button onclick="openInFrame('${it.web}','${it.name.replace(/'/g,"\\'")}')" style="flex:1;text-align:center;padding:5px;background:#1A6B8A;color:#fff;border-radius:5px;border:none;font-size:0.7rem;font-weight:700;cursor:pointer;font-family:Heebo;">🌐 אתר</button>` : ''}
               ${it.map ? `<button onclick="openInFrame('${it.map}','${it.name.replace(/'/g,"\\'")} - מפה')" style="flex:1;text-align:center;padding:5px;background:#E76F51;color:#fff;border-radius:5px;border:none;font-size:0.7rem;font-weight:700;cursor:pointer;font-family:Heebo;">📍 מפה</button>` : ''}
-              ${it.video ? `<button onclick="openInFrame('https://www.youtube.com/embed/${it.video}?rel=0','${it.name.replace(/'/g,"\\'")} - סרטון')" style="flex:1;text-align:center;padding:5px;background:#dc2626;color:#fff;border-radius:5px;border:none;font-size:0.7rem;font-weight:700;cursor:pointer;font-family:Heebo;">🎬 סרטון</button>` : ''}
+              <button onclick="openInFrame('https://www.youtube.com/embed?listType=search&list=${encodeURIComponent(it.name + ' Dubai')}','${it.name.replace(/'/g,"\\'")} - סרטונים')" style="flex:1;text-align:center;padding:5px;background:#dc2626;color:#fff;border-radius:5px;border:none;font-size:0.7rem;font-weight:700;cursor:pointer;font-family:Heebo;">🎬 סרטון</button>
             </div>
           </div>
         </div>
