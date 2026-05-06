@@ -62,12 +62,14 @@ app.get('/api/listings', (_req, res) => {
 
 app.post('/api/listings', upload.array('photos', 8), (req, res) => {
   try {
-    const { title, type, price, area, desc, phone } = req.body;
+    const { title, type, price, area, desc, phone, size, highlight } = req.body;
     if (!title || !price || !area || !phone) return res.status(400).json({ error: 'missing fields' });
     const photos = (req.files || []).map(f => `/uploads/${f.filename}`);
     const listing = {
       id: 'l_' + Date.now() + '_' + Math.round(Math.random() * 1000),
       title, type: type || 'sale', price, area, desc: desc || '', phone, photos,
+      size: size === 'large' ? 'large' : 'small',
+      highlight: ['none','emphasized','negative'].includes(highlight) ? highlight : 'none',
       status: 'pending',
       createdAt: new Date().toISOString()
     };

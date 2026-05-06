@@ -3264,6 +3264,30 @@ function renderREListings(filterType) {
         <label style="display:block;font-size:0.78rem;color:#2C5F6E;font-weight:600;margin-bottom:4px;">תמונות (עד 8)</label>
         <input id="rePhotos" type="file" accept="image/*" multiple onchange="previewREPhotos(this)" style="width:100%;font-family:Heebo;font-size:0.78rem;margin-bottom:8px;">
         <div id="rePhotosPreview" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;"></div>
+
+        <label style="display:block;font-size:0.78rem;color:#2C5F6E;font-weight:600;margin-bottom:4px;">גודל מודעה (חינם)</label>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px;">
+          <label style="display:flex;align-items:center;gap:6px;padding:8px;border:2px solid #E5E7EB;border-radius:6px;cursor:pointer;font-size:0.78rem;background:#fff;">
+            <input type="radio" name="reSize" value="small" checked> 📏 קטנה (150px)
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;padding:8px;border:2px solid #E5E7EB;border-radius:6px;cursor:pointer;font-size:0.78rem;background:#fff;">
+            <input type="radio" name="reSize" value="large"> 📐 גדולה (300px)
+          </label>
+        </div>
+
+        <label style="display:block;font-size:0.78rem;color:#2C5F6E;font-weight:600;margin-bottom:4px;">סגנון הדגשה (חינם)</label>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:12px;">
+          <label style="display:flex;align-items:center;justify-content:center;padding:8px;border:2px solid #E5E7EB;border-radius:6px;cursor:pointer;font-size:0.75rem;background:#fff;">
+            <input type="radio" name="reHighlight" value="none" checked style="margin-left:4px;"> רגיל
+          </label>
+          <label style="display:flex;align-items:center;justify-content:center;padding:8px;border:2px solid #F4A261;border-radius:6px;cursor:pointer;font-size:0.75rem;background:#FFF8E7;">
+            <input type="radio" name="reHighlight" value="emphasized" style="margin-left:4px;"> מודגש
+          </label>
+          <label style="display:flex;align-items:center;justify-content:center;padding:8px;border:2px solid #1A6B8A;border-radius:6px;cursor:pointer;font-size:0.75rem;background:#1A6B8A;color:#fff;">
+            <input type="radio" name="reHighlight" value="negative" style="margin-left:4px;"> נגטיב
+          </label>
+        </div>
+
         <button onclick="submitREListing(this)" style="width:100%;background:#1A6B8A;color:#fff;border:none;padding:11px;border-radius:6px;font-family:Heebo;font-weight:700;font-size:0.9rem;cursor:pointer;">📤 פרסם מודעה</button>
       </div>
     </div>
@@ -3272,25 +3296,30 @@ function renderREListings(filterType) {
 }
 
 function renderListingsGrid(listings, typeLabel) {
-  const featured = listings[0];
-  const rest = listings.slice(1);
   return `
     <div style="font-weight:700;color:#2C5F6E;font-size:0.95rem;margin-bottom:12px;display:flex;align-items:center;gap:6px;">
       <span style="background:#E76F51;color:#fff;border-radius:4px;padding:2px 8px;font-size:0.7rem;font-weight:800;">${listings.length}</span>
       מודעות ${typeLabel} פעילות
     </div>
-    ${listingFullCard(featured, true)}
-    ${rest.length ? `<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;">${rest.map(l => listingHalfCard(l)).join('')}</div>` : ''}
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      ${listings.map((l, i) => listingFullCard(l, i === 0)).join('')}
+    </div>
   `;
 }
 
 function listingFullCard(l, isFeatured) {
   const photo = (l.photos && l.photos[0]) || '';
   const typeColor = l.type === 'sale' ? '#E76F51' : '#2A9D8F';
+  const imgHeight = l.size === 'large' ? 300 : 150;
+  const highlight = l.highlight || 'none';
+  const cardBg = highlight === 'negative' ? '#1A2A36' : highlight === 'emphasized' ? '#FFF8E7' : '#fff';
+  const cardBorder = highlight === 'negative' ? '2px solid #1A6B8A' : highlight === 'emphasized' ? '3px solid #F4A261' : '1px solid #E5E7EB';
+  const titleColor = highlight === 'negative' ? '#fff' : '#2C5F6E';
+  const descColor = highlight === 'negative' ? '#cbd5e1' : '#2C5F6E';
   return `
-    <div onclick="openListingModal('${l.id}')" style="background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 6px 20px rgba(0,0,0,0.08);cursor:pointer;border:1px solid #E5E7EB;position:relative;">
+    <div onclick="openListingModal('${l.id}')" style="background:${cardBg};border-radius:16px;overflow:hidden;box-shadow:0 6px 20px rgba(0,0,0,0.08);cursor:pointer;border:${cardBorder};position:relative;">
       ${isFeatured ? `<div style="position:absolute;top:12px;right:12px;background:linear-gradient(135deg,#E9C46A,#F4A261);color:#fff;font-size:0.65rem;font-weight:900;padding:4px 10px;border-radius:10px;z-index:2;letter-spacing:0.4px;box-shadow:0 4px 10px rgba(244,162,97,0.4);">⭐ מומלץ</div>` : ''}
-      <div style="position:relative;width:100%;aspect-ratio:16/10;background:#F5F5F5;overflow:hidden;">
+      <div style="position:relative;width:100%;height:${imgHeight}px;background:#F5F5F5;overflow:hidden;">
         ${photo ? `<img src="${photo}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none'">` : `<div style="width:100%;height:100%;background:linear-gradient(135deg,#E5E7EB,#F5F5F5);display:flex;align-items:center;justify-content:center;color:#9CA3AF;font-size:2.5rem;">🏙️</div>`}
         <div style="position:absolute;bottom:0;right:0;left:0;background:linear-gradient(180deg,transparent 0%,rgba(0,0,0,0.7) 100%);padding:30px 14px 14px;">
           <div style="display:flex;justify-content:space-between;align-items:end;gap:8px;">
@@ -3305,7 +3334,7 @@ function listingFullCard(l, isFeatured) {
         <span style="position:absolute;top:12px;${isFeatured ? 'left:65px;' : 'left:12px;'}background:${typeColor};color:#fff;font-size:0.65rem;padding:3px 9px;border-radius:10px;font-weight:800;">${l.type === 'sale' ? 'למכירה' : 'להשכרה'}</span>
       </div>
       <div style="padding:12px 14px;">
-        ${l.desc ? `<div style="font-size:0.83rem;color:#2C5F6E;line-height:1.55;margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${l.desc}</div>` : ''}
+        ${l.desc ? `<div style="font-size:0.83rem;color:${descColor};line-height:1.55;margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${l.desc}</div>` : ''}
         <div style="display:flex;gap:6px;">
           <a onclick="event.stopPropagation()" href="tel:${l.phone}" style="flex:1;padding:9px;background:#2A9D8F;color:#fff;border-radius:8px;text-align:center;text-decoration:none;font-size:0.78rem;font-weight:800;"><i class="fas fa-phone"></i> חייג</a>
           <a onclick="event.stopPropagation()" href="https://wa.me/${l.phone.replace(/\D/g,'')}" target="_blank" style="flex:1;padding:9px;background:#25D366;color:#fff;border-radius:8px;text-align:center;text-decoration:none;font-size:0.78rem;font-weight:800;"><i class="fab fa-whatsapp"></i> וואטסאפ</a>
@@ -3476,6 +3505,10 @@ async function submitREListing(btn) {
     fd.append('area', area);
     fd.append('desc', desc);
     fd.append('phone', phone);
+    const sizeRadio = document.querySelector('input[name="reSize"]:checked');
+    const highlightRadio = document.querySelector('input[name="reHighlight"]:checked');
+    fd.append('size', sizeRadio ? sizeRadio.value : 'small');
+    fd.append('highlight', highlightRadio ? highlightRadio.value : 'none');
     (window._rePhotos || []).slice(0, 8).forEach((p, i) => {
       fd.append('photos', p.blob, `photo_${i}.jpg`);
     });
