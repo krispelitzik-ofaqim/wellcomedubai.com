@@ -2899,9 +2899,9 @@ function renderRealEstatePage() {
   if (!page) return;
   const tab = window.RE_TAB || 'articles';
   const topButtons = [
-    { id:'sale',   label:'דירות למכירה',   icon:'🏠', color:'#1A6B8A', sub:'מצא בית חלומות' },
-    { id:'rent',   label:'דירות להשכרה',   icon:'🔑', color:'#2A9D8F', sub:'לטווח קצר וארוך' },
-    { id:'invest', label:'השקעות נדל"ן',   icon:'📈', color:'#E76F51', sub:'תשואות 6-12%' }
+    { id:'sale',     label:'דירות למכירה',   icon:'🏠', color:'#1A6B8A', sub:'מצא בית חלומות' },
+    { id:'rent',     label:'דירות להשכרה',   icon:'🔑', color:'#2A9D8F', sub:'לטווח קצר וארוך' },
+    { id:'invest',   label:'פורטל הנדל"ן',   icon:'📊', color:'#E76F51', sub:'מאמרים, גרפים והשקעות' }
   ];
   page.innerHTML = `
     <div class="page-header" style="background:linear-gradient(135deg,#1A6B8A 0%,#2C5F6E 100%);color:#fff;border-bottom:none;">
