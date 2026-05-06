@@ -2897,7 +2897,7 @@ async function loadREListings() {
 function renderRealEstatePage() {
   const page = document.getElementById('page-realestate');
   if (!page) return;
-  const tab = window.RE_TAB || 'articles';
+  const tab = window.RE_TAB || 'invest';
   const topButtons = [
     { id:'sale',     label:'דירות למכירה',   icon:'🏠', color:'#1A6B8A', sub:'מצא בית חלומות' },
     { id:'rent',     label:'דירות להשכרה',   icon:'🔑', color:'#2A9D8F', sub:'לטווח קצר וארוך' },
