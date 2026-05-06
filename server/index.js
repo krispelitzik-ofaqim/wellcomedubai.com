@@ -67,13 +67,30 @@ const audioStorage = multer.diskStorage({
 });
 const audioUpload = multer({ storage: audioStorage, limits: { fileSize: 50 * 1024 * 1024 } });
 
+// Auto-recover audio files from db.audioMeta (where we store base64)
+try {
+  const dir = path.join(UPLOADS_DIR, 'audio');
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+  const meta = (JSON.parse(fs.readFileSync(DB_PATH, 'utf-8')).audioMeta) || {};
+  for (const [filename, m] of Object.entries(meta)) {
+    if (m && m.data) {
+      const fp = path.join(dir, filename);
+      if (!fs.existsSync(fp)) {
+        try { fs.writeFileSync(fp, Buffer.from(m.data, 'base64')); } catch {}
+      }
+    }
+  }
+} catch {}
+
 app.post('/api/audio', audioUpload.single('file'), (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'no file' });
   const dest = String(req.body.dest || '').trim();
   try {
+    const fp = path.join(UPLOADS_DIR, 'audio', req.file.filename);
+    const data = fs.readFileSync(fp).toString('base64');
     const db = readDB();
     db.audioMeta = db.audioMeta || {};
-    db.audioMeta[req.file.filename] = { dest, uploadedAt: new Date().toISOString() };
+    db.audioMeta[req.file.filename] = { dest, uploadedAt: new Date().toISOString(), data };
     writeDB(db);
   } catch {}
   res.json({ success: true, filename: req.file.filename, url: `/uploads/audio/${req.file.filename}`, dest });
@@ -81,10 +98,8 @@ app.post('/api/audio', audioUpload.single('file'), (req, res) => {
 
 app.get('/api/audio', (_req, res) => {
   try {
-    const dir = path.join(UPLOADS_DIR, 'audio');
-    if (!fs.existsSync(dir)) return res.json({ files: [] });
     const meta = (readDB().audioMeta) || {};
-    const files = fs.readdirSync(dir).filter(f => /\.(mp3|wav|m4a|aac)$/i.test(f));
+    const files = Object.keys(meta).filter(f => /\.(mp3|wav|m4a|aac)$/i.test(f));
     res.json({ files: files.map(f => ({ name: f, url: `/uploads/audio/${f}`, dest: (meta[f] && meta[f].dest) || '' })) });
   } catch { res.json({ files: [] }); }
 });
@@ -94,6 +109,8 @@ app.delete('/api/audio/:name', (req, res) => {
     const filename = path.basename(decodeURIComponent(req.params.name));
     const fp = path.join(UPLOADS_DIR, 'audio', filename);
     if (fs.existsSync(fp)) fs.unlinkSync(fp);
+    const db = readDB();
+    if (db.audioMeta && db.audioMeta[filename]) { delete db.audioMeta[filename]; writeDB(db); }
     res.json({ success: true });
   } catch { res.status(500).json({ error: 'delete failed' }); }
 });
