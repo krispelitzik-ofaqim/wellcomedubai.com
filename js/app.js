@@ -3068,7 +3068,16 @@ function renderLiveInvestmentMap() {
       attribution: '© OpenStreetMap', maxZoom: 19
     }).addTo(map);
     RE_INVESTMENTS.forEach((inv, idx) => {
-      const html = '<strong>' + (idx+1) + '. ' + inv.area + '</strong><br/>כניסה: ' + inv.entry + '<br/>תשואה: ' + inv.yield;
+      const html =
+        '<div style="direction:rtl;text-align:right;font-family:Heebo;min-width:200px;">' +
+          '<div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;">' +
+            '<span style="background:linear-gradient(135deg,#E76F51,#F4A261);color:#fff;border-radius:50%;width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:800;">' + (idx+1) + '</span>' +
+            '<strong style="color:#2C5F6E;font-size:0.95rem;">' + inv.area + '</strong>' +
+          '</div>' +
+          '<div style="font-size:0.8rem;color:#6B7F8D;margin-bottom:3px;">כניסה: <strong style="color:#1A6B8A;">' + inv.entry + '</strong></div>' +
+          '<div style="font-size:0.8rem;color:#6B7F8D;margin-bottom:6px;">תשואה: <strong style="color:#E76F51;">⚡ ' + inv.yield + '</strong></div>' +
+          '<div style="font-size:0.78rem;color:#2C5F6E;line-height:1.5;">' + inv.highlight + '</div>' +
+        '</div>';
       window.L.marker([inv.lat, inv.lng]).addTo(map).bindPopup(html);
     });
   }, 100);
@@ -3198,7 +3207,8 @@ function renderREInvestments() {
     <div style="border-radius:14px;overflow:hidden;border:1px solid #E5E7EB;margin-bottom:18px;box-shadow:0 4px 14px rgba(0,0,0,0.06);">
       ${renderLiveInvestmentMap()}
     </div>
-    ${reSectionTitle('🏙️', 'פרטי כל אזור', '#F4A261')}
+    ${reSectionTitle('🏙️', 'אזורי השקעה — לחץ על סמן במפה לפרטים', '#F4A261')}
+    <div style="display:none;">
     ${RE_INVESTMENTS.map((i, idx) => `
       <div style="background:#fff;border:1px solid #E5E7EB;border-radius:14px;padding:14px 16px;margin-bottom:11px;box-shadow:0 2px 10px rgba(0,0,0,0.04);position:relative;overflow:hidden;">
         <div style="position:absolute;top:0;right:0;bottom:0;width:5px;background:linear-gradient(180deg,#E76F51,#F4A261);"></div>
@@ -3216,6 +3226,7 @@ function renderREInvestments() {
         <div style="font-size:0.83rem;color:#6B7F8D;line-height:1.6;">${i.highlight}</div>
       </div>
     `).join('')}
+    </div>
   `;
 }
 
