@@ -2341,8 +2341,8 @@ function renderTopProductsForIsraelis() {
             </div>
             <div style="font-size:0.78rem;color:#6B7F8D;line-height:1.45;margin-bottom:6px;">${it.desc}</div>
             <div style="display:flex;gap:5px;">
-              ${it.web ? `<a href="${it.web}" target="_blank" style="flex:1;text-align:center;padding:5px;background:#1A6B8A;color:#fff;border-radius:5px;text-decoration:none;font-size:0.7rem;font-weight:700;">🌐 אתר</a>` : ''}
-              ${it.map ? `<a href="${it.map}" target="_blank" style="flex:1;text-align:center;padding:5px;background:#E76F51;color:#fff;border-radius:5px;text-decoration:none;font-size:0.7rem;font-weight:700;">📍 מפה</a>` : ''}
+              ${it.web ? `<button onclick="openInFrame('${it.web}','${it.name.replace(/'/g,"\\'")}')" style="flex:1;text-align:center;padding:5px;background:#1A6B8A;color:#fff;border-radius:5px;border:none;font-size:0.7rem;font-weight:700;cursor:pointer;font-family:Heebo;">🌐 אתר</button>` : ''}
+              ${it.map ? `<button onclick="openInFrame('${it.map}','${it.name.replace(/'/g,"\\'")} - מפה')" style="flex:1;text-align:center;padding:5px;background:#E76F51;color:#fff;border-radius:5px;border:none;font-size:0.7rem;font-weight:700;cursor:pointer;font-family:Heebo;">📍 מפה</button>` : ''}
             </div>
           </div>
         </div>
