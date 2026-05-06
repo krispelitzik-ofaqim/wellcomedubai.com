@@ -2298,10 +2298,13 @@ const TOP_ISRAELI_PRODUCTS = [
 ];
 
 function renderTopProductsMap() {
-  const mapId = 'topProductsMap_' + Date.now();
+  const mapId = 'topProductsMap';
   setTimeout(() => {
-    if (!window.L || !document.getElementById(mapId)) return;
-    if (window._topProdMap) { try { window._topProdMap.remove(); } catch (e) {} }
+    const container = document.getElementById(mapId);
+    if (!window.L || !container) return;
+    // Remove any stray duplicate maps with same id (defensive)
+    document.querySelectorAll('#' + mapId).forEach((el, idx) => { if (idx > 0) el.remove(); });
+    if (window._topProdMap) { try { window._topProdMap.remove(); } catch (e) {} container.innerHTML = ''; }
     const map = window.L.map(mapId).setView([25.2050, 55.2700], 11);
     window._topProdMap = map;
     window.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap', maxZoom: 19 }).addTo(map);
