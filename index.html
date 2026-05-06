@@ -325,7 +325,24 @@
 <script src="js/booking.js?v=11"></script>
 <script src="js/services.js?v=11"></script>
 <script src="js/flights-board.js?v=11"></script>
-<script src="js/app.js?v=173"></script>
+<script src="js/app.js?v=174"></script>
+<script>
+(function autoVersionCheck() {
+  var CURRENT = 174;
+  setTimeout(function(){
+    fetch('/index.html?_=' + Date.now(), { cache: 'no-store' })
+      .then(function(r){ return r.text(); })
+      .then(function(html){
+        var m = html.match(/app\.js\?v=(\d+)/);
+        if (m && parseInt(m[1],10) > CURRENT) {
+          console.log('[auto-update] new version', m[1], '— reloading');
+          location.reload();
+        }
+      })
+      .catch(function(){});
+  }, 1500);
+})();
+</script>
 <script>
   // ===== Open in iframe =====
   function openInFrame(url, title) {
