@@ -2925,7 +2925,7 @@ function renderRealEstatePage() {
     </div>
     <div style="padding:14px 16px 80px;">
       ${tab === 'articles' ? (renderREArticlesWithStats() + renderBrokersBannerBottom())
-        : tab === 'invest' ? (renderREInvestments() + renderBrokersBannerBottom())
+        : tab === 'invest' ? (renderREArticlesWithStats() + renderREInvestments() + renderBrokersBannerBottom())
         : (renderREListings(tab) + renderBrokersBannerBottom())}
     </div>
   `;
@@ -3056,6 +3056,24 @@ function buildInvestmentMap(size = '600x300') {
   const markers = RE_INVESTMENTS.map((i,idx) => `markers=color:0xE76F51%7Csize:mid%7Clabel:${idx+1}%7C${i.lat},${i.lng}`).join('&');
   return `https://maps.googleapis.com/maps/api/staticmap?size=${size}&maptype=roadmap&language=en&${markers}&key=AIzaSyDIqkbn9__0EdYjyCRQv4w-Gi3tHWwSwro`;
 }
+
+function renderLiveInvestmentMap() {
+  const mapId = 'liveInvMap_' + Date.now();
+  setTimeout(() => {
+    if (!window.L || !document.getElementById(mapId)) return;
+    if (window._liveInvMap) { try { window._liveInvMap.remove(); } catch (e) {} }
+    const map = window.L.map(mapId).setView([25.10, 55.20], 11);
+    window._liveInvMap = map;
+    window.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap', maxZoom: 19
+    }).addTo(map);
+    RE_INVESTMENTS.forEach((inv, idx) => {
+      const html = '<strong>' + (idx+1) + '. ' + inv.area + '</strong><br/>כניסה: ' + inv.entry + '<br/>תשואה: ' + inv.yield;
+      window.L.marker([inv.lat, inv.lng]).addTo(map).bindPopup(html);
+    });
+  }, 100);
+  return `<div id="${mapId}" style="width:100%;height:340px;border-radius:14px;overflow:hidden;"></div>`;
+}
 const RE_PROJECTS = [
   { name:'Bugatti Residences by Binghatti', dev:'Binghatti', area:'Business Bay', delivery:'2026', from:'AED 19M', tag:'יוקרה אולטרה' },
   { name:'Damac Lagoons', dev:'Damac', area:'Dubailand', delivery:'2025-2027', from:'AED 1.5M', tag:'משפחות' },
@@ -3178,7 +3196,7 @@ function renderREInvestments() {
     <div id="uaeStatsBox" style="margin-bottom:22px;"><div style="text-align:center;padding:20px;color:#6B7F8D;font-size:0.78rem;"><i class="fas fa-spinner fa-spin"></i> טוען נתונים...</div></div>
     ${reSectionTitle('🗺️', 'אזורים מובילים — מפה חיה', '#E76F51')}
     <div style="border-radius:14px;overflow:hidden;border:1px solid #E5E7EB;margin-bottom:18px;box-shadow:0 4px 14px rgba(0,0,0,0.06);">
-      <img src="${buildInvestmentMap('600x340')}" alt="מפת אזורי השקעה" style="width:100%;display:block;" onerror="this.style.display='none'">
+      ${renderLiveInvestmentMap()}
     </div>
     ${reSectionTitle('🏙️', 'פרטי כל אזור', '#F4A261')}
     ${RE_INVESTMENTS.map((i, idx) => `
