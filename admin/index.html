@@ -270,6 +270,52 @@
     }
   }
 
+  async function uploadAudioFile(input) {
+    const file = input.files && input.files[0];
+    if (!file) return;
+    const status = document.getElementById('audioUpStatus');
+    status.textContent = '⏳ מעלה...';
+    status.style.color = '#6B7F8D';
+    try {
+      const fd = new FormData();
+      fd.append('file', file);
+      const r = await fetch(`${RE_API}/api/audio`, { method: 'POST', body: fd });
+      const j = await r.json();
+      if (!j.success) throw new Error(j.error || 'failed');
+      status.textContent = '✓ הועלה: ' + j.filename;
+      status.style.color = '#2A9D8F';
+      input.value = '';
+      refreshAudioFiles();
+    } catch (e) {
+      status.textContent = 'שגיאה';
+      status.style.color = '#E76F51';
+    }
+  }
+  async function refreshAudioFiles() {
+    const el = document.getElementById('audioFilesList');
+    if (!el) return;
+    try {
+      const r = await fetch(`${RE_API}/api/audio?_t=` + Date.now());
+      const j = await r.json();
+      const files = j.files || [];
+      if (!files.length) { el.innerHTML = ''; return; }
+      el.innerHTML = files.map(f => `
+        <div style="display:flex;align-items:center;gap:8px;background:#fff;padding:10px;border-radius:6px;margin-bottom:6px;border:1px solid #E5E7EB;">
+          <span style="flex:1;font-size:0.85rem;color:#2C5F6E;font-weight:600;">${f.name}</span>
+          <audio controls src="${RE_API}${f.url}" style="height:34px;"></audio>
+          <button onclick="deleteAudioFile('${f.name}')" style="background:#E76F51;color:#fff;border:none;padding:6px 10px;border-radius:6px;cursor:pointer;font-family:Heebo;">🗑</button>
+        </div>
+      `).join('');
+    } catch { el.innerHTML = ''; }
+  }
+  async function deleteAudioFile(name) {
+    if (!confirm('למחוק ' + name + '?')) return;
+    try {
+      await fetch(`${RE_API}/api/audio/${encodeURIComponent(name)}`, { method: 'DELETE' });
+      refreshAudioFiles();
+    } catch {}
+  }
+
   // ===== ESSENTIAL DUBAI INFO =====
   function renderEssentialSection() {
     const content = document.getElementById('adminContent');
@@ -611,6 +657,7 @@
   let _recAudioFiles = [];
   const REC_LS_KEY = 'rec_drafts';
 
+  const RE_API = 'https://wellcomedubaicom-production.up.railway.app';
   async function renderRecordingsSection() {
     const content = document.getElementById('adminContent');
     content.innerHTML = `
@@ -618,12 +665,15 @@
         <h2><i class="fas fa-microphone"></i> הקלטות</h2>
         <button onclick="newRecording()" style="background:#E76F51;color:#fff;border:none;padding:9px 18px;border-radius:8px;font-family:Heebo;font-weight:700;cursor:pointer;"><i class="fas fa-plus"></i> הקלטה חדשה</button>
       </div>
-      <div style="background:#FDF6EC;border-right:4px solid #E76F51;padding:12px 16px;border-radius:6px;margin-bottom:14px;font-size:0.85rem;color:#2C5F6E;line-height:1.7;">
-        <b>זרימת עבודה:</b> כתוב כאן טקסט להקלטה → הקלט/ייצר MP3 → העלה לקבצים → קשר את הקובץ להקלטה כאן.
+      <div style="background:#fff;padding:12px;border-radius:8px;margin-bottom:14px;border:1px solid #E5E7EB;">
+        <input type="file" id="audioUpInput" accept="audio/*" onchange="uploadAudioFile(this)" style="font-family:Heebo;">
+        <div id="audioUpStatus" style="margin-top:8px;font-size:0.85rem;"></div>
       </div>
+      <div id="audioFilesList" style="margin-bottom:14px;"></div>
       <div id="recStatus" style="margin-bottom:10px;"></div>
       <div id="recList">טוען...</div>
     `;
+    refreshAudioFiles();
     try {
       const r = await fetch('recordings/scripts.json?t=' + Date.now());
       const fileScripts = r.ok ? await r.json() : [];

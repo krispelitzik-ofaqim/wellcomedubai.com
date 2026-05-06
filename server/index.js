@@ -54,6 +54,42 @@ const upload = multer({
 
 app.get('/api/health', (_req, res) => res.json({ ok: true, time: Date.now() }));
 
+const audioStorage = multer.diskStorage({
+  destination: (_req, _file, cb) => {
+    const dir = path.join(UPLOADS_DIR, 'audio');
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    cb(null, dir);
+  },
+  filename: (_req, file, cb) => {
+    const safe = file.originalname.replace(/[^\w֐-׿.-]+/g, '_');
+    cb(null, safe);
+  }
+});
+const audioUpload = multer({ storage: audioStorage, limits: { fileSize: 50 * 1024 * 1024 } });
+
+app.post('/api/audio', audioUpload.single('file'), (req, res) => {
+  if (!req.file) return res.status(400).json({ error: 'no file' });
+  res.json({ success: true, filename: req.file.filename, url: `/uploads/audio/${req.file.filename}` });
+});
+
+app.get('/api/audio', (_req, res) => {
+  try {
+    const dir = path.join(UPLOADS_DIR, 'audio');
+    if (!fs.existsSync(dir)) return res.json({ files: [] });
+    const files = fs.readdirSync(dir).filter(f => /\.(mp3|wav|m4a|aac)$/i.test(f));
+    res.json({ files: files.map(f => ({ name: f, url: `/uploads/audio/${f}` })) });
+  } catch { res.json({ files: [] }); }
+});
+
+app.delete('/api/audio/:name', (req, res) => {
+  try {
+    const filename = path.basename(decodeURIComponent(req.params.name));
+    const fp = path.join(UPLOADS_DIR, 'audio', filename);
+    if (fs.existsSync(fp)) fs.unlinkSync(fp);
+    res.json({ success: true });
+  } catch { res.status(500).json({ error: 'delete failed' }); }
+});
+
 app.get('/api/listings', (_req, res) => {
   const db = readDB();
   const approved = (db.listings || []).filter(l => l.status === 'approved').sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''));
