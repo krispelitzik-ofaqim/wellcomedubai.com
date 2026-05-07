@@ -16,7 +16,7 @@
   <link rel="apple-touch-icon" href="images/icon-new.jpg">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
-  <link rel="stylesheet" href="css/style.css?v=102">
+  <link rel="stylesheet" href="css/style.css?v=103">
   <script>
     // Apply saved theme immediately before render
     const savedCSS = localStorage.getItem('dubai_theme_css');
@@ -55,6 +55,7 @@
       </div>
       <button onclick="toggleSearch()" style="background:none;border:none;color:#6B7F8D;font-size:1.1rem;cursor:pointer;padding:8px;"><i class="fas fa-times"></i></button>
     </div>
+    <div id="searchResults" style="display:none;margin-top:8px;max-height:60vh;overflow-y:auto;"></div>
   </div>
 
   <!-- Main Content -->
@@ -98,9 +99,6 @@
           </div>
         </div>
       </div>
-
-      <!-- Search Results (hidden until search opens) -->
-      <div id="searchResults" style="display:none;margin:0 20px 8px;"></div>
 
       <!-- Top Hotels -->
       <h2 style="padding:20px 20px 10px;font-size:1.5rem;font-weight:800;color:#2C5F6E;display:flex;align-items:center;justify-content:space-between;margin:0 20px;">
