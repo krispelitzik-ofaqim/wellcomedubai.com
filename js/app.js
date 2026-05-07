@@ -271,7 +271,7 @@ function renderMyTripPage() {
     <div style="display:flex;gap:6px;padding:10px 16px 0;">
       <button onclick="switchItinView('day');navigateTo('itineraries')" style="flex:1;padding:9px 4px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.78rem;cursor:pointer;border:1px solid #E5E7EB;background:#fff;color:#6B7F8D;">📅 מסלולי יום</button>
       <button onclick="switchItinView('star');navigateTo('itineraries')" style="flex:1;padding:9px 4px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.78rem;cursor:pointer;border:1px solid #E5E7EB;background:#fff;color:#6B7F8D;">⭐ טיולי כוכב</button>
-      <button style="flex:1;padding:9px 4px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.78rem;cursor:pointer;border:1px solid #E76F51;background:#E76F51;color:#fff;box-shadow:0 2px 6px rgba(231,111,81,0.4);">❤️ הטיול שלי</button>
+      <button style="flex:1;padding:9px 4px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.78rem;cursor:pointer;border:2px solid #E76F51;background:#FFF5F2;color:#E76F51;">❤️ הטיול שלי</button>
     </div>
     <div style="background:#F5E6CB;border-right:3px solid #E76F51;padding:10px 14px;margin:12px 16px 0;border-radius:6px;font-size:0.82rem;color:#2C5F6E;line-height:1.5;">
       💡 הוסף לכאן אלמנטים לתכנון הטיול שלך על ידי לחיצה על <strong>+</strong> בכל קטגוריה באפליקציה.
@@ -993,9 +993,9 @@ async function renderItinerariesPage() {
       <h2><i class="fas fa-route" style="color:#E9C46A;margin-left:6px;"></i> מסלולים מוכנים</h2>
     </div>
     <div style="display:flex;gap:6px;padding:10px 16px 0;">
-      <button onclick="switchItinView('day')" style="flex:1;padding:9px 4px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.78rem;cursor:pointer;border:1px solid ${view==='day'?'#E9C46A':'#E5E7EB'};background:${view==='day'?'#E9C46A':'#fff'};color:${view==='day'?'#2C5F6E':'#6B7F8D'};">📅 מסלולי יום</button>
-      <button onclick="switchItinView('star')" style="flex:1;padding:9px 4px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.78rem;cursor:pointer;border:1px solid ${view==='star'?'#E9C46A':'#E5E7EB'};background:${view==='star'?'#E9C46A':'#fff'};color:${view==='star'?'#2C5F6E':'#6B7F8D'};">⭐ טיולי כוכב</button>
-      <button onclick="navigateTo('mytrip')" style="flex:1;padding:9px 4px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.78rem;cursor:pointer;border:1px solid #E76F51;background:#E76F51;color:#fff;">❤️ הטיול שלי</button>
+      <button onclick="switchItinView('day')" style="flex:1;padding:9px 4px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.78rem;cursor:pointer;border:${view==='day'?'2px solid #E76F51':'1px solid #E5E7EB'};background:${view==='day'?'#FFF5F2':'#fff'};color:${view==='day'?'#E76F51':'#6B7F8D'};">📅 מסלולי יום</button>
+      <button onclick="switchItinView('star')" style="flex:1;padding:9px 4px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.78rem;cursor:pointer;border:${view==='star'?'2px solid #E76F51':'1px solid #E5E7EB'};background:${view==='star'?'#FFF5F2':'#fff'};color:${view==='star'?'#E76F51':'#6B7F8D'};">⭐ טיולי כוכב</button>
+      <button onclick="navigateTo('mytrip')" style="flex:1;padding:9px 4px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.78rem;cursor:pointer;border:1px solid #E5E7EB;background:#fff;color:#6B7F8D;">❤️ הטיול שלי</button>
     </div>
     <div style="padding:12px 16px 80px;">
       ${view === 'day' ? `
