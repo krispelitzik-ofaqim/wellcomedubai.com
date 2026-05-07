@@ -40,11 +40,11 @@ function initApp() {
   setupSearch();
   setupHashRouting();
   fetch('data/hotel-photos.json?v=3').then(r => r.ok ? r.json() : null).then(j => { if (j) { window.HOTEL_PHOTOS = j; if (currentPage === 'home') renderHome(); } }).catch(() => {});
-  fetch('data/attraction-photos.json?v=1').then(r => r.ok ? r.json() : null).then(j => { if (j) { window.ATTRACTION_PHOTOS = j; if (currentPage === 'home') renderHome(); } }).catch(() => {});
-  fetch('data/restaurant-places-photos.json?v=1').then(r => r.ok ? r.json() : null).then(j => { if (j) { window.RESTAURANT_PHOTOS = j; if (currentPage === 'home') renderHome(); } }).catch(() => {});
-  fetch('data/shopping-photos.json?v=1').then(r => r.ok ? r.json() : null).then(j => { if (j) { window.SHOPPING_PHOTOS = j; if (currentPage === 'home') renderHome(); } }).catch(() => {});
-  fetch('data/nightlife-photos.json?v=1').then(r => r.ok ? r.json() : null).then(j => { if (j) { window.NIGHTLIFE_PHOTOS = j; if (currentPage === 'home') renderHome(); } }).catch(() => {});
-  fetch('data/kids-photos.json?v=1').then(r => r.ok ? r.json() : null).then(j => { if (j) { window.KIDS_PHOTOS = j; if (currentPage === 'home') renderHome(); } }).catch(() => {});
+  fetch('data/attraction-photos.json?v=2').then(r => r.ok ? r.json() : null).then(j => { if (j) { window.ATTRACTION_PHOTOS = j; if (currentPage === 'home') renderHome(); } }).catch(() => {});
+  fetch('data/restaurant-places-photos.json?v=2').then(r => r.ok ? r.json() : null).then(j => { if (j) { window.RESTAURANT_PHOTOS = j; if (currentPage === 'home') renderHome(); } }).catch(() => {});
+  fetch('data/shopping-photos.json?v=2').then(r => r.ok ? r.json() : null).then(j => { if (j) { window.SHOPPING_PHOTOS = j; if (currentPage === 'home') renderHome(); } }).catch(() => {});
+  fetch('data/nightlife-photos.json?v=2').then(r => r.ok ? r.json() : null).then(j => { if (j) { window.NIGHTLIFE_PHOTOS = j; if (currentPage === 'home') renderHome(); } }).catch(() => {});
+  fetch('data/kids-photos.json?v=2').then(r => r.ok ? r.json() : null).then(j => { if (j) { window.KIDS_PHOTOS = j; if (currentPage === 'home') renderHome(); } }).catch(() => {});
   fetch('data/gallery.json?v=3&t=' + Date.now()).then(r => r.ok ? r.json() : null).then(j => { if (j) { window.GALLERY_IMAGES = j; renderHomeGalleryPreview(); } }).catch(() => {});
   // Enrich data with Google Places in background
   setTimeout(() => enrichAllCategories(), 2000);
@@ -762,7 +762,6 @@ function getCategoryPhotosMap() {
 }
 
 function getCardImage(item, category) {
-  if (item.image) return item.image;
   const photos = getCategoryPhotosMap()[category];
   if (photos && photos[item.id]?.photos?.[0]?.name) {
     return placePhotoUrl(photos[item.id].photos[0].name, 600);
