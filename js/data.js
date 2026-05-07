@@ -387,7 +387,7 @@ const DEFAULT_DATA = {
     { id:606, name:"פולו דובאי", nameEn:"Dubai Polo Club", category:"casino", subcategory:"sport", description:"מועדון הפולו של דובאי. משחקים, אירועי VIP וברנץ' ביום שישי.", image:"images/hotels/hotel_5.jpeg", rating:4.3, price:"$$", priceRange:"₪100-500", address:"Arabian Ranches", lat:25.0600, lng:55.2800, tags:["ספורט","פולו","VIP"], featured:false },
     { id:607, name:"גולף - Emirates GC", nameEn:"Emirates Golf Club", category:"casino", subcategory:"sport", description:"מועדון הגולף המפורסם של דובאי עם מסלול 18 גומות ומועדון VIP.", image:"images/hotels/hotel_6.jpeg", rating:4.5, price:"$$$", priceRange:"₪500-1,500", address:"Emirates Hills", lat:25.0950, lng:55.1600, tags:["ספורט","גולף","מועדון"], featured:false },
     { id:608, name:"קרטינג - Dubai Autodrome", nameEn:"Dubai Autodrome", category:"casino", subcategory:"sport", description:"מסלול מרוצים ומתחם קרטינג מקצועי. חוויית אדרנלין לכל הגילאים.", image:"images/nightlife/night_3.jpeg", rating:4.4, price:"$$", priceRange:"₪150-400", address:"Motor City", lat:25.0500, lng:55.2200, tags:["ספורט","קרטינג","אדרנלין"], featured:false },
-  ]
+  ],
 
   abudhabi: [
     { id:240, name:"מוזיאון זאיד הלאומי", nameEn:"Zayed National Museum", category:"abudhabi", subcategory:"museum", description:"חדש 2025 — מוזיאון מרכזי באבו דאבי המנציח את שייח׳ זאיד מייסד האמירויות. חלק מ-Saadiyat Cultural District (לצד הלובר ו-Guggenheim החדש).", image:"images/attractions/240.jpg", rating:4.7, price:"$$", priceRange:"₪80-150", address:"Saadiyat Cultural District, Abu Dhabi", lat:24.5354, lng:54.3982, tags:["מוזיאון","אבו דאבי","חדש"], featured:true },
