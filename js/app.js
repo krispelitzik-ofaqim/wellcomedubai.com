@@ -2476,6 +2476,7 @@ function renderListPage(category, title, filters, activeFilter) {
     <div class="page-header">
       <button class="back-btn" onclick="navigateTo('home')"><i class="fas fa-arrow-right"></i></button>
       <h2>${title}</h2>
+      ${category !== 'abudhabi' ? `<button onclick="navigateTo('abudhabi')" style="margin-right:auto;background:#B85C8E;color:#fff;border:none;padding:6px 12px;border-radius:8px;cursor:pointer;font-family:Heebo;font-size:0.78rem;font-weight:700;display:flex;align-items:center;gap:4px;box-shadow:0 2px 6px rgba(184,92,142,0.3);">🏛 אבו דאבי</button>` : ''}
     </div>
     <div class="filter-tabs">
       ${filters.map(f => {
