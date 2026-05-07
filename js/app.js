@@ -268,7 +268,12 @@ function renderMyTripPage() {
       <button class="back-btn" onclick="navigateTo('home')"><i class="fas fa-arrow-right"></i></button>
       <h2><i class="fas fa-suitcase-rolling" style="color:#E76F51;margin-left:6px;"></i> הטיול שלי</h2>
     </div>
-    <div style="background:#F5E6CB;border-right:3px solid #E76F51;padding:10px 14px;margin:0 16px;border-radius:6px;font-size:0.82rem;color:#2C5F6E;line-height:1.5;">
+    <div style="display:flex;gap:6px;padding:10px 16px 0;">
+      <button onclick="switchItinView('day');navigateTo('itineraries')" style="flex:1;padding:9px 4px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.78rem;cursor:pointer;border:1px solid #E5E7EB;background:#fff;color:#6B7F8D;">📅 מסלולי יום</button>
+      <button onclick="switchItinView('star');navigateTo('itineraries')" style="flex:1;padding:9px 4px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.78rem;cursor:pointer;border:1px solid #E5E7EB;background:#fff;color:#6B7F8D;">⭐ טיולי כוכב</button>
+      <button style="flex:1;padding:9px 4px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.78rem;cursor:pointer;border:1px solid #E76F51;background:#E76F51;color:#fff;box-shadow:0 2px 6px rgba(231,111,81,0.4);">❤️ הטיול שלי</button>
+    </div>
+    <div style="background:#F5E6CB;border-right:3px solid #E76F51;padding:10px 14px;margin:12px 16px 0;border-radius:6px;font-size:0.82rem;color:#2C5F6E;line-height:1.5;">
       💡 הוסף לכאן אלמנטים לתכנון הטיול שלך על ידי לחיצה על <strong>+</strong> בכל קטגוריה באפליקציה.
     </div>
     <div style="padding:12px 16px 80px;">
