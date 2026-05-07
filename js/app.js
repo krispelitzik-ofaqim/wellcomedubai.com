@@ -96,7 +96,7 @@ function navigateTo(page, subcategory, opts) {
   if (pageEl) { pageEl.classList.add('active'); pageEl.classList.add('fade-in'); }
 
   // List pages use page-list
-  if (['hotels','restaurants','attractions','shopping','nightlife','transport','casino','kids'].includes(page)) {
+  if (['hotels','restaurants','attractions','shopping','nightlife','transport','casino','kids','abudhabi'].includes(page)) {
     document.getElementById('page-list').classList.add('active');
     document.getElementById('page-home')?.classList.remove('active');
   }
@@ -116,6 +116,7 @@ function navigateTo(page, subcategory, opts) {
     case 'kids': renderListPage('kids', 'ילדים ומשפחות', ['הכל','פארק שעשועים','פארק מים','אקווריום','מתחם ילדים','שלג'], subcategory); break;
     case 'transport': renderListPage('transport', 'תחבורה', ['הכל','מטרו','מונית','סירה','אפליקציה','אוטובוס','השכרת רכב'], subcategory); break;
     case 'casino': renderListPage('casino', 'בידור ומשחקים', ['הכל','קזינו','מרוצים','ספורט'], subcategory); break;
+    case 'abudhabi': renderListPage('abudhabi', 'אבו דאבי', ['הכל','מוזיאון','דת','פארק שעשועים','פארק מים','ספורט'], subcategory); break;
     case 'map': renderMapPage(); break;
     case 'flights': renderFlightsPage(); break;
     case 'livecams': renderLiveCamsPage(); break;
@@ -588,7 +589,7 @@ function closeNearMe() {
 function searchAll(query) {
   const q = query.toLowerCase();
   const db = getDB();
-  const cats = ['hotels','restaurants','attractions','shopping','nightlife','transport','casino','kids'];
+  const cats = ['hotels','restaurants','attractions','shopping','nightlife','transport','casino','kids','abudhabi'];
   const results = [];
   cats.forEach(cat => {
     (db[cat] || []).forEach(item => {
@@ -745,7 +746,7 @@ function subcategoryHe(sub) { return SUBCAT_HE[sub] || sub; }
 const CATEGORY_TITLE_COLORS = {
   hotels:'#E9C46A', attractions:'#2A9D8F', restaurants:'#F4A261',
   shopping:'#F4A261', nightlife:'#B85C8E', kids:'#E76F51',
-  transport:'#2A9D8F', casino:'#E9C46A'
+  transport:'#2A9D8F', casino:'#E9C46A', abudhabi:'#B85C8E'
 };
 const VERIFIED_BADGE = '';
 
