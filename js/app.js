@@ -2476,7 +2476,6 @@ function renderListPage(category, title, filters, activeFilter) {
     <div class="page-header">
       <button class="back-btn" onclick="navigateTo('home')"><i class="fas fa-arrow-right"></i></button>
       <h2>${title}</h2>
-      ${category !== 'abudhabi' ? `<button onclick="navigateTo('abudhabi')" style="margin-right:auto;background:#B85C8E;color:#fff;border:none;padding:6px 12px;border-radius:8px;cursor:pointer;font-family:Heebo;font-size:0.78rem;font-weight:700;display:flex;align-items:center;gap:4px;box-shadow:0 2px 6px rgba(184,92,142,0.3);">🏛 אבו דאבי</button>` : ''}
     </div>
     <div class="filter-tabs">
       ${filters.map(f => {
@@ -2484,6 +2483,7 @@ function renderListPage(category, title, filters, activeFilter) {
         const showCount = count > 1;
         return `<button class="filter-tab ${f === active ? 'active' : ''}" onclick="navigateTo('${category}','${f.replace(/'/g, "\\'")}')">${f}${showCount ? ` <span style="opacity:0.7;font-size:0.75rem;">(${count})</span>` : ''}</button>`;
       }).join('')}
+      ${category !== 'abudhabi' ? `<button class="filter-tab" onclick="navigateTo('abudhabi')" style="background:#B85C8E;color:#fff;border-color:#B85C8E;font-weight:700;">🏛 אבו דאבי</button>` : ''}
     </div>
     ${category === 'transport' && active === 'מטרו' ? `<div style="padding:0 16px 8px;display:flex;flex-direction:column;gap:8px;">
       <select onchange="jumpToMetroStation('red', this.value)" style="width:100%;padding:10px;border-radius:8px;border:2px solid #D32F2F;background:#fff;font-family:Heebo;color:#D32F2F;font-size:0.9rem;font-weight:600;cursor:pointer;">
