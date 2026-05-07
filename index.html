@@ -345,7 +345,13 @@
 <script src="js/app.js?v=208"></script>
 <script>
 (function autoVersionCheck() {
-  var CURRENT = 206;
+  var scripts = document.getElementsByTagName('script');
+  var CURRENT = 0;
+  for (var i = 0; i < scripts.length; i++) {
+    var m = (scripts[i].src || '').match(/app\.js\?v=(\d+)/);
+    if (m) { CURRENT = parseInt(m[1], 10); break; }
+  }
+  if (!CURRENT) return;
   setTimeout(function(){
     fetch('/index.html?_=' + Date.now(), { cache: 'no-store' })
       .then(function(r){ return r.text(); })
