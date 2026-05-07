@@ -116,7 +116,7 @@ function navigateTo(page, subcategory, opts) {
     case 'kids': renderListPage('kids', 'ילדים ומשפחות', ['הכל','פארק שעשועים','פארק מים','אקווריום','מתחם ילדים','שלג'], subcategory); break;
     case 'transport': renderListPage('transport', 'תחבורה', ['הכל','מטרו','מונית','סירה','אפליקציה','אוטובוס','השכרת רכב'], subcategory); break;
     case 'casino': renderListPage('casino', 'בידור ומשחקים', ['הכל','קזינו','מרוצים','ספורט'], subcategory); break;
-    case 'abudhabi': renderListPage('abudhabi', 'אבו דאבי', ['הכל','מוזיאון','דת','פארק שעשועים','פארק מים','ספורט'], subcategory); break;
+    case 'abudhabi': renderListPage('abudhabi', 'אבו דאבי', ['הכל','חובה לביקור','מוזיאון','דת','פארק שעשועים','פארק מים','קניון','שוק','ספורט'], subcategory); break;
     case 'map': renderMapPage(); break;
     case 'flights': renderFlightsPage(); break;
     case 'livecams': renderLiveCamsPage(); break;
