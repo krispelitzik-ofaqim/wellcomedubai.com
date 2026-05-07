@@ -731,6 +731,11 @@
 
   function renderRecordingsList() {
     const list = document.getElementById('recList');
+    _recScripts = (_recScripts || []).filter(s => s && !s._deleted && s.id != null && String(s.id) !== 'undefined' && (s.title || s.text || s.audio));
+    try {
+      const cleaned = JSON.parse(localStorage.getItem(REC_LS_KEY) || '[]').filter(d => d && d.id != null && String(d.id) !== 'undefined' && !d._deleted);
+      localStorage.setItem(REC_LS_KEY, JSON.stringify(cleaned));
+    } catch {}
     if (!_recScripts.length) {
       list.innerHTML = `<div style="text-align:center;color:#6B7F8D;padding:30px;background:#fff;border-radius:8px;">אין הקלטות עדיין. לחץ "+ הקלטה חדשה" להתחיל.</div>`;
       return;
