@@ -756,6 +756,7 @@ function getCategoryPhotosMap() {
 }
 
 function getCardImage(item, category) {
+  if (item.image) return item.image;
   const photos = getCategoryPhotosMap()[category];
   if (photos && photos[item.id]?.photos?.[0]?.name) {
     return placePhotoUrl(photos[item.id].photos[0].name, 600);
