@@ -162,10 +162,10 @@ async function loadCurrencyWidget() {
         <i class="fas fa-exchange-alt" style="color:#E9C46A;"></i> מחשבון המרת מטבע
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;font-size:0.75rem;">
-        <div style="background:#FDF6EC;border-radius:6px;padding:8px;text-align:center;"><b style="color:#E76F51;">1 ₪</b> = ${r.AED?.toFixed(3)} AED</div>
-        <div style="background:#FDF6EC;border-radius:6px;padding:8px;text-align:center;"><b style="color:#2A9D8F;">1 AED</b> = ${(1/r.AED).toFixed(3)} ₪</div>
-        <div style="background:#FDF6EC;border-radius:6px;padding:8px;text-align:center;"><b style="color:#5B9DC7;">1 $</b> = ${(r.AED/r.USD).toFixed(3)} AED</div>
-        <div style="background:#FDF6EC;border-radius:6px;padding:8px;text-align:center;"><b style="color:#B85C8E;">1 €</b> = ${(r.AED/r.EUR).toFixed(3)} AED</div>
+        <div style="background:#F5E6CB;border-radius:6px;padding:8px;text-align:center;"><b style="color:#E76F51;">1 ₪</b> = ${r.AED?.toFixed(3)} AED</div>
+        <div style="background:#F5E6CB;border-radius:6px;padding:8px;text-align:center;"><b style="color:#2A9D8F;">1 AED</b> = ${(1/r.AED).toFixed(3)} ₪</div>
+        <div style="background:#F5E6CB;border-radius:6px;padding:8px;text-align:center;"><b style="color:#5B9DC7;">1 $</b> = ${(r.AED/r.USD).toFixed(3)} AED</div>
+        <div style="background:#F5E6CB;border-radius:6px;padding:8px;text-align:center;"><b style="color:#B85C8E;">1 €</b> = ${(r.AED/r.EUR).toFixed(3)} AED</div>
       </div>
       <!-- Calculator -->
       <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
@@ -293,7 +293,7 @@ async function doFlightSearch() {
     const outbound = f.legs[0];
     const inbound = f.legs[1];
     return `
-      <div style="background:#FDF6EC;border-radius:6px;padding:12px;margin-bottom:8px;border:1px solid #F5EFE6;${f.deepLink ? 'cursor:pointer;' : ''}" ${f.deepLink ? `onclick="window.open('${f.deepLink}','_blank')"` : ''}>
+      <div style="background:#F5E6CB;border-radius:6px;padding:12px;margin-bottom:8px;border:1px solid #F5EFE6;${f.deepLink ? 'cursor:pointer;' : ''}" ${f.deepLink ? `onclick="window.open('${f.deepLink}','_blank')"` : ''}>
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
           <span style="font-size:1.1rem;font-weight:700;color:#E76F51;">${f.price || f.priceRaw + ' ₪'}</span>
           ${outbound?.stops === 0 ? '<span style="background:#2A9D8F;color:#fff;font-size:0.65rem;padding:2px 8px;border-radius:10px;">ישיר</span>' : `<span style="color:#6B7F8D;font-size:0.7rem;">${outbound?.stops} עצירות</span>`}

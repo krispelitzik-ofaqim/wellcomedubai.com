@@ -3,11 +3,11 @@
 :root {
   --gold: #E76F51;
   --gold-light: #F4A261;
-  --dark-blue: #FDF6EC;
+  --dark-blue: #F5E6CB;
   --navy: #FFFFFF;
   --navy-light: #F5EFE6;
   --white: #2C5F6E;
-  --gray-light: #FDF6EC;
+  --gray-light: #F5E6CB;
   --gray: #6B7F8D;
   --text: #2C5F6E;
   --card-bg: #FFFFFF;
@@ -307,7 +307,7 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; heig
 }
 .modal-btn.primary { background:var(--gold); color:#FFFFFF; }
 .modal-btn.primary:hover { background:var(--gold-light); }
-.modal-btn.secondary { background:#FDF6EC; color:#2C5F6E; border:1px solid #E5E7EB; }
+.modal-btn.secondary { background:#F5E6CB; color:#2C5F6E; border:1px solid #E5E7EB; }
 .modal-close {
   position:fixed; top:12px; left:12px;
   width:40px; height:40px; border-radius:50%;
@@ -462,7 +462,7 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; heig
 
 /* Scrollbar */
 ::-webkit-scrollbar { width:4px; }
-::-webkit-scrollbar-track { background:#FDF6EC; }
+::-webkit-scrollbar-track { background:#F5E6CB; }
 ::-webkit-scrollbar-thumb { background:#CBD5E0; border-radius:4px; }
 
 /* Animations */

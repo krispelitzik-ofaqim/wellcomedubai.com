@@ -191,7 +191,7 @@ function reviewsHTML(item) {
         <i class="fab fa-google" style="color:#E76F51;"></i> ביקורות מגוגל
       </div>
       ${reviews.map(r => `
-        <div style="background:#FDF6EC;border-radius:8px;padding:10px;margin-bottom:6px;font-size:0.8rem;">
+        <div style="background:#F5E6CB;border-radius:8px;padding:10px;margin-bottom:6px;font-size:0.8rem;">
           <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
             <span style="font-weight:600;color:#2C5F6E;">${r.author}</span>
             <span style="color:#E9C46A;">${'★'.repeat(r.rating)}</span>

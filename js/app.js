@@ -268,7 +268,7 @@ function renderMyTripPage() {
       <button class="back-btn" onclick="navigateTo('home')"><i class="fas fa-arrow-right"></i></button>
       <h2><i class="fas fa-suitcase-rolling" style="color:#E76F51;margin-left:6px;"></i> הטיול שלי</h2>
     </div>
-    <div style="background:#FDF6EC;border-right:3px solid #E76F51;padding:10px 14px;margin:0 16px;border-radius:6px;font-size:0.82rem;color:#2C5F6E;line-height:1.5;">
+    <div style="background:#F5E6CB;border-right:3px solid #E76F51;padding:10px 14px;margin:0 16px;border-radius:6px;font-size:0.82rem;color:#2C5F6E;line-height:1.5;">
       💡 הוסף לכאן אלמנטים לתכנון הטיול שלך על ידי לחיצה על <strong>+</strong> בכל קטגוריה באפליקציה.
     </div>
     <div style="padding:12px 16px 80px;">
@@ -289,7 +289,7 @@ function renderMyTripPage() {
         </div>
       </div>
       ${!trip.items.length ? `
-        <div style="background:#FDF6EC;border-radius:10px;padding:30px 20px;text-align:center;color:#6B7F8D;">
+        <div style="background:#F5E6CB;border-radius:10px;padding:30px 20px;text-align:center;color:#6B7F8D;">
           <i class="fas fa-suitcase-rolling" style="font-size:2.5rem;color:#E9C46A;margin-bottom:12px;"></i>
           <div style="font-size:0.95rem;font-weight:700;color:#2C5F6E;margin-bottom:8px;">הטיול ריק</div>
           <div style="font-size:0.8rem;line-height:1.6;">לחצו על + בכרטיסים (מלון/מסעדה/אטרקציה) כדי להוסיף לטיול. הפריטים שתבחרו יסומנו בלב ❤️ כאן.</div>
@@ -342,7 +342,7 @@ function itinRestaurantsToggleHTML(idx) {
   const id = `irt_${idx}`;
   const isOn = !!window.ITIN_RESTAURANTS_ON[idx];
   return `
-    <div style="display:flex;align-items:center;justify-content:space-between;background:#FDF6EC;border-top:1px solid #F5EFE6;border-bottom:1px solid #F5EFE6;padding:8px 14px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;background:#F5E6CB;border-top:1px solid #F5EFE6;border-bottom:1px solid #F5EFE6;padding:8px 14px;">
       <div style="display:flex;align-items:center;gap:8px;min-width:0;">
         <i class="fas fa-utensils" style="color:#E76F51;font-size:0.95rem;"></i>
         <span style="color:#2C5F6E;font-weight:700;font-size:0.82rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">הפעל חיפוש מסעדות קרובות אליי במהלך הסיור</span>
@@ -993,12 +993,12 @@ async function renderItinerariesPage() {
     </div>
     <div style="padding:12px 16px 80px;">
       ${view === 'day' ? `
-        <div style="background:#FDF6EC;border-right:3px solid #E9C46A;padding:10px 14px;border-radius:6px;font-size:0.85rem;color:#2C5F6E;margin-bottom:14px;">
+        <div style="background:#F5E6CB;border-right:3px solid #E9C46A;padding:10px 14px;border-radius:6px;font-size:0.85rem;color:#2C5F6E;margin-bottom:14px;">
           💡 גררו את התחנות (אייקון ⋮⋮) לסדר אישי שלכם. לחיצה על "פתח ניווט" תפתח Google Maps.
         </div>
         <div id="itineraries-list">${ITINERARY_STATES.map((it, idx) => renderItineraryCard(it, idx)).join('')}</div>
       ` : `
-        <div style="background:#FDF6EC;border-right:3px solid #E9C46A;padding:10px 14px;border-radius:6px;font-size:0.85rem;color:#2C5F6E;margin-bottom:14px;">
+        <div style="background:#F5E6CB;border-right:3px solid #E9C46A;padding:10px 14px;border-radius:6px;font-size:0.85rem;color:#2C5F6E;margin-bottom:14px;">
           💡 כל כוכב = נקודת מרכז עם אטרקציות מסביב. בחרו אזור — תכננו את היום בלי לזוז רחוק.
         </div>
         <div>${STAR_HUBS.map((h, i) => renderStarHub(h, i)).join('')}</div>
@@ -1110,7 +1110,7 @@ function renderStarHubInner(h, idx) {
           <i class="fas fa-expand-arrows-alt"></i> הגדל
         </div>
       </div>
-      <div style="padding:12px 14px;color:#2C5F6E;font-size:0.85rem;line-height:1.6;background:#FDF6EC;border-bottom:1px solid #F5EFE6;">${h.desc}</div>
+      <div style="padding:12px 14px;color:#2C5F6E;font-size:0.85rem;line-height:1.6;background:#F5E6CB;border-bottom:1px solid #F5EFE6;">${h.desc}</div>
       <div style="padding:6px 14px 10px;">
         <div style="font-size:0.72rem;color:#6B7F8D;padding:4px 0 6px;">💡 גררו את הזרועות (⋮⋮) לסדר אישי</div>
         ${h.spokes.map((s, i) => `
@@ -1125,7 +1125,7 @@ function renderStarHubInner(h, idx) {
       ${(() => {
         const saved = parseInt(localStorage.getItem(`star-rating-${idx}`) || '0');
         return `
-        <div style="background:#FDF6EC;padding:14px 16px;text-align:center;border-top:1px solid #F5EFE6;">
+        <div style="background:#F5E6CB;padding:14px 16px;text-align:center;border-top:1px solid #F5EFE6;">
           <div style="font-size:0.9rem;color:#2C5F6E;font-weight:700;margin-bottom:8px;">איך היה הכוכב?</div>
           <div style="display:flex;gap:8px;justify-content:center;">
             ${[1,2,3,4,5].map(n => `<i class="fas fa-star" onclick="rateStarHub(${idx}, ${n})" style="font-size:1.6rem;color:${n <= saved ? '#E9C46A' : '#E5E7EB'};cursor:pointer;transition:color 0.2s;"></i>`).join('')}
@@ -1287,7 +1287,7 @@ function ITINERARY_TEMPLATE(it, idx, navUrl) {
                       <div style="font-size:0.7rem;color:#6B7F8D;margin-bottom:6px;font-weight:600;">ספקים מהמאגר שלנו:</div>
                       <div style="display:flex;flex-direction:column;gap:6px;">
                         ${related.map(r => `
-                          <div onclick="event.stopPropagation();openDetail('${r.category}', ${r.id})" style="display:flex;gap:10px;padding:8px;background:#FDF6EC;border-radius:6px;cursor:pointer;align-items:center;">
+                          <div onclick="event.stopPropagation();openDetail('${r.category}', ${r.id})" style="display:flex;gap:10px;padding:8px;background:#F5E6CB;border-radius:6px;cursor:pointer;align-items:center;">
                             <img src="${r.image}" style="width:48px;height:48px;object-fit:cover;border-radius:4px;" onerror="this.style.display='none'">
                             <div style="flex:1;">
                               <div style="font-weight:600;color:#2C5F6E;font-size:0.85rem;">${r.name}</div>
@@ -1310,7 +1310,7 @@ function ITINERARY_TEMPLATE(it, idx, navUrl) {
           ${(() => {
             const saved = parseInt(localStorage.getItem(`itin-rating-${idx}`) || '0');
             return `
-            <div style="background:#FDF6EC;padding:14px 16px;text-align:center;border-top:1px solid #F5EFE6;">
+            <div style="background:#F5E6CB;padding:14px 16px;text-align:center;border-top:1px solid #F5EFE6;">
               <div style="font-size:0.9rem;color:#2C5F6E;font-weight:700;margin-bottom:8px;">איך היה הסיור?</div>
               <div id="rating-${idx}" style="display:flex;gap:8px;justify-content:center;">
                 ${[1,2,3,4,5].map(n => `<i class="fas fa-star" data-star="${n}" onclick="rateItinerary(${idx}, ${n})" style="font-size:1.6rem;color:${n <= saved ? '#E9C46A' : '#E5E7EB'};cursor:pointer;transition:color 0.2s;"></i>`).join('')}
@@ -1415,7 +1415,7 @@ function renderAlbumSection(idx) {
       </div>
       <div id="album-${idx}" style="max-height:0;overflow:hidden;transition:max-height 0.5s;">
         <div style="padding:0 16px 16px;">
-          <div style="background:#FDF6EC;padding:12px;border-radius:8px;margin-bottom:10px;">
+          <div style="background:#F5E6CB;padding:12px;border-radius:8px;margin-bottom:10px;">
             <input type="text" id="album-${idx}-name" placeholder="שם" style="width:100%;padding:8px;border-radius:6px;border:1px solid #E5E7EB;font-family:Heebo;font-size:0.85rem;margin-bottom:6px;">
             <input type="text" id="album-${idx}-city" placeholder="עיר" style="width:100%;padding:8px;border-radius:6px;border:1px solid #E5E7EB;font-family:Heebo;font-size:0.85rem;margin-bottom:6px;">
             <input type="file" id="album-${idx}-files" accept="image/*" multiple style="width:100%;padding:6px;border-radius:6px;border:1px solid #E5E7EB;font-family:Heebo;font-size:0.8rem;margin-bottom:8px;">
@@ -1670,8 +1670,8 @@ function renderMallPage(mallId) {
             </div>`;
         })()}
         <div style="display:flex;gap:8px;margin:10px 0;flex-wrap:wrap;font-size:0.8rem;">
-          ${info.hours ? `<span style="background:#FDF6EC;padding:4px 10px;border-radius:6px;color:#2C5F6E;"><i class="fas fa-clock" style="color:#E9C46A;"></i> ${info.hours}</span>` : ''}
-          ${info.phone ? `<a href="tel:${info.phone}" style="background:#FDF6EC;padding:4px 10px;border-radius:6px;color:#2C5F6E;text-decoration:none;"><i class="fas fa-phone" style="color:#2A9D8F;"></i> ${info.phone}</a>` : ''}
+          ${info.hours ? `<span style="background:#F5E6CB;padding:4px 10px;border-radius:6px;color:#2C5F6E;"><i class="fas fa-clock" style="color:#E9C46A;"></i> ${info.hours}</span>` : ''}
+          ${info.phone ? `<a href="tel:${info.phone}" style="background:#F5E6CB;padding:4px 10px;border-radius:6px;color:#2C5F6E;text-decoration:none;"><i class="fas fa-phone" style="color:#2A9D8F;"></i> ${info.phone}</a>` : ''}
         </div>
         <div style="color:#2C5F6E;font-size:0.9rem;line-height:1.6;">${mall.description}</div>
 
@@ -1681,7 +1681,7 @@ function renderMallPage(mallId) {
         </div>
 
         ${info.highlights ? `
-          <div style="margin-top:18px;background:#FDF6EC;border-right:3px solid #E9C46A;padding:10px 14px;border-radius:6px;">
+          <div style="margin-top:18px;background:#F5E6CB;border-right:3px solid #E9C46A;padding:10px 14px;border-radius:6px;">
             <div style="font-weight:700;color:#2C5F6E;margin-bottom:6px;font-size:0.9rem;">⭐ אטרקציות בולטות</div>
             <ul style="margin:0;padding-right:18px;color:#2C5F6E;font-size:0.85rem;line-height:1.6;">
               ${info.highlights.map(h => `<li>${h}</li>`).join('')}
@@ -1802,7 +1802,7 @@ function renderContactForm() {
         </div>
       </form>
     </div>
-    <div style="background:#FDF6EC;border-radius:10px;padding:14px;font-size:0.82rem;color:#2C5F6E;text-align:center;">
+    <div style="background:#F5E6CB;border-radius:10px;padding:14px;font-size:0.82rem;color:#2C5F6E;text-align:center;">
       או צור קשר ישיר:<br>
       <a href="mailto:krispelitzik@gmail.com" style="color:#E76F51;font-weight:700;text-decoration:none;">krispelitzik@gmail.com</a>
     </div>
@@ -2500,7 +2500,7 @@ function renderListPage(category, title, filters, activeFilter) {
     ${category === 'transport' && active === 'מטרו' ? `
       <div style="margin:0 16px 12px;border-radius:8px;overflow:hidden;border:1px solid #E5E7EB;cursor:pointer;background:#fff;" onclick="openInFrame('https://dubaimetrorail.com/dubai-metro-map/','מפת מטרו דובאי')">
         <img src="images/transport/metro-map.png" alt="מפת מטרו דובאי" style="width:100%;height:auto;display:block;">
-        <div style="padding:8px;text-align:center;color:#2C5F6E;font-size:0.85rem;font-weight:600;background:#FDF6EC;"><i class="fas fa-external-link-alt"></i> לחץ למפה אינטראקטיבית — DubaiMetroRail.com</div>
+        <div style="padding:8px;text-align:center;color:#2C5F6E;font-size:0.85rem;font-weight:600;background:#F5E6CB;"><i class="fas fa-external-link-alt"></i> לחץ למפה אינטראקטיבית — DubaiMetroRail.com</div>
       </div>
       <div style="padding:0 16px 12px;">
         <button onclick="navigateToNearestMetro()" style="width:100%;padding:12px;background:linear-gradient(135deg,#E76F51,#D32F2F);color:#fff;border:none;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.95rem;cursor:pointer;box-shadow:0 2px 8px rgba(231,111,81,0.3);">
@@ -2746,15 +2746,15 @@ function renderWeatherPage() {
           <span style="background:rgba(255,0,0,0.8);color:#fff;font-size:0.55rem;padding:2px 6px;border-radius:8px;font-weight:700;margin-right:6px;">LIVE</span>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
-          <a href="https://www.webcamtaxi.com/en/united-arab-emirates/dubai/burj-khalifa-lake-dubai.html" target="_blank" style="text-decoration:none;text-align:center;padding:12px 8px;background:#FDF6EC;border-radius:6px;">
+          <a href="https://www.webcamtaxi.com/en/united-arab-emirates/dubai/burj-khalifa-lake-dubai.html" target="_blank" style="text-decoration:none;text-align:center;padding:12px 8px;background:#F5E6CB;border-radius:6px;">
             <i class="fas fa-building" style="font-size:1.2rem;color:#E76F51;"></i>
             <div style="font-size:0.7rem;color:#2C5F6E;font-weight:600;margin-top:4px;">ברג' חליפה</div>
           </a>
-          <a href="https://www.skylinewebcams.com/en/webcam/united-arab-emirates/dubai/dubai/dubai-marina.html" target="_blank" style="text-decoration:none;text-align:center;padding:12px 8px;background:#FDF6EC;border-radius:6px;">
+          <a href="https://www.skylinewebcams.com/en/webcam/united-arab-emirates/dubai/dubai/dubai-marina.html" target="_blank" style="text-decoration:none;text-align:center;padding:12px 8px;background:#F5E6CB;border-radius:6px;">
             <i class="fas fa-ship" style="font-size:1.2rem;color:#2A9D8F;"></i>
             <div style="font-size:0.7rem;color:#2C5F6E;font-weight:600;margin-top:4px;">מרינה</div>
           </a>
-          <a href="https://www.skylinewebcams.com/en/webcam/united-arab-emirates/dubai/dubai.html" target="_blank" style="text-decoration:none;text-align:center;padding:12px 8px;background:#FDF6EC;border-radius:6px;">
+          <a href="https://www.skylinewebcams.com/en/webcam/united-arab-emirates/dubai/dubai.html" target="_blank" style="text-decoration:none;text-align:center;padding:12px 8px;background:#F5E6CB;border-radius:6px;">
             <i class="fas fa-umbrella-beach" style="font-size:1.2rem;color:#F4A261;"></i>
             <div style="font-size:0.7rem;color:#2C5F6E;font-weight:600;margin-top:4px;">חוף</div>
           </a>
@@ -2805,7 +2805,7 @@ function renderLiveCamsPage() {
         </a>
       `).join('')}
 
-      <div style="margin-top:8px;background:#FDF6EC;border-radius:6px;padding:10px;border-right:3px solid #E9C46A;">
+      <div style="margin-top:8px;background:#F5E6CB;border-radius:6px;padding:10px;border-right:3px solid #E9C46A;">
         <div style="font-size:0.75rem;color:#2C5F6E;">
           <i class="fas fa-info-circle" style="color:#E9C46A;"></i>
           דובאי UTC+4 | שעה לפני ישראל בחורף, אותו זמן בקיץ
@@ -3112,7 +3112,7 @@ function renderRealEstatePage() {
       <h2 style="color:#fff;"><i class="fas fa-city" style="color:#E9C46A;margin-left:6px;"></i> פורטל הנדל"ן בדובאי</h2>
     </div>
     <!-- Hero strip with subtle gradient -->
-    <div style="background:linear-gradient(180deg,#FDF6EC 0%,transparent 100%);padding:18px 16px 10px;">
+    <div style="background:linear-gradient(180deg,#F5E6CB 0%,transparent 100%);padding:18px 16px 10px;">
       <div style="text-align:center;color:#2C5F6E;font-size:0.85rem;font-weight:600;margin-bottom:14px;line-height:1.5;">
         מצא, השקע, חיה — <span style="color:#E76F51;">הכל בדובאי</span> 🏙️
       </div>
@@ -3187,7 +3187,7 @@ function renderBrokersFullPage() {
       <button class="back-btn" onclick="switchRETab('articles')" style="color:#fff !important;"><i class="fas fa-arrow-right"></i></button>
       <h2 style="color:#fff;"><i class="fas fa-handshake" style="color:#E9C46A;margin-left:6px;"></i> מתווכים מומלצים</h2>
     </div>
-    <div style="display:flex;gap:8px;padding:12px 14px;background:#FDF6EC;border-bottom:1px solid #F5EFE6;">
+    <div style="display:flex;gap:8px;padding:12px 14px;background:#F5E6CB;border-bottom:1px solid #F5EFE6;">
       <button onclick="showBrokerCriteria()" style="flex:1;padding:11px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.82rem;cursor:pointer;background:#fff;border:2px solid #1A6B8A;color:#1A6B8A;">✓ מה נדרש מהמתווך?</button>
       <button onclick="showBrokerSubmit()" style="flex:1;padding:11px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.82rem;cursor:pointer;background:#B85C8E;border:none;color:#fff;">+ המלץ על מתווך</button>
     </div>
@@ -3432,7 +3432,7 @@ function renderREInvestments() {
             <span style="background:linear-gradient(135deg,#E76F51,#F4A261);color:#fff;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:800;box-shadow:0 2px 6px rgba(231,111,81,0.35);">${idx+1}</span>
             <div style="font-weight:800;color:#2C5F6E;font-size:0.97rem;line-height:1.2;">${i.area}</div>
           </div>
-          <div style="background:#FDF6EC;color:#E76F51;padding:4px 10px;border-radius:10px;font-size:0.7rem;font-weight:800;border:1px solid #F4A26133;flex-shrink:0;">⚡ ${i.yield}</div>
+          <div style="background:#F5E6CB;color:#E76F51;padding:4px 10px;border-radius:10px;font-size:0.7rem;font-weight:800;border:1px solid #F4A26133;flex-shrink:0;">⚡ ${i.yield}</div>
         </div>
         <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:8px;">
           <div style="font-size:0.7rem;color:#6B7F8D;font-weight:600;">כניסה מ:</div>
@@ -3472,7 +3472,7 @@ function renderREListings(filterType) {
         <span>📤 פרסם מודעה חדשה ${typeLabel ? '— ' + typeLabel : ''}</span>
         <i id="reFormArrow" class="fas fa-chevron-down" style="transition:transform 0.3s;"></i>
       </a>
-      <div id="reFormBox" style="display:none;background:#FDF6EC;border-radius:0 0 10px 10px;padding:14px;margin-top:-2px;">
+      <div id="reFormBox" style="display:none;background:#F5E6CB;border-radius:0 0 10px 10px;padding:14px;margin-top:-2px;">
         <input id="reTitle" placeholder="כותרת (לדוגמה: 2 חדרים Marina, נוף לים)" style="width:100%;padding:9px;border:1px solid #E5E7EB;border-radius:6px;font-family:Heebo;font-size:0.85rem;margin-bottom:8px;box-sizing:border-box;">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
           <select id="reType" style="padding:9px;border:1px solid #E5E7EB;border-radius:6px;font-family:Heebo;font-size:0.85rem;background:#fff;">
@@ -3652,7 +3652,7 @@ function renderListingModal() {
         <div style="font-weight:900;color:#2C5F6E;font-size:1.15rem;line-height:1.3;margin-bottom:6px;">${l.title}</div>
         <div style="color:${typeColor};font-weight:900;font-size:1.6rem;margin-bottom:8px;">AED ${Number(l.price).toLocaleString()}</div>
         <div style="font-size:0.85rem;color:#6B7F8D;margin-bottom:14px;">📍 ${l.area}</div>
-        ${l.desc ? `<div style="background:#FDF6EC;border-right:4px solid #1A6B8A;padding:12px 14px;border-radius:8px;font-size:0.88rem;color:#2C5F6E;line-height:1.7;margin-bottom:16px;">${l.desc}</div>` : ''}
+        ${l.desc ? `<div style="background:#F5E6CB;border-right:4px solid #1A6B8A;padding:12px 14px;border-radius:8px;font-size:0.88rem;color:#2C5F6E;line-height:1.7;margin-bottom:16px;">${l.desc}</div>` : ''}
         <div style="display:flex;gap:8px;">
           <a href="tel:${l.phone}" style="flex:1;padding:12px;background:#2A9D8F;color:#fff;border-radius:10px;text-align:center;text-decoration:none;font-weight:800;font-size:0.9rem;"><i class="fas fa-phone"></i> ${l.phone}</a>
           <a href="https://wa.me/${l.phone.replace(/\D/g,'')}" target="_blank" style="flex:1;padding:12px;background:#25D366;color:#fff;border-radius:10px;text-align:center;text-decoration:none;font-weight:800;font-size:0.9rem;"><i class="fab fa-whatsapp"></i> וואטסאפ</a>
@@ -3798,7 +3798,7 @@ function renderREBrokers() {
           ${b.years ? `<div style="font-size:0.7rem;color:#6B7F8D;margin-top:2px;">⏱ ${b.years} ניסיון בדובאי</div>` : ''}
         </div>
       </div>
-      <div style="background:#FDF6EC;padding:8px 10px;border-radius:8px;margin-bottom:8px;">
+      <div style="background:#F5E6CB;padding:8px 10px;border-radius:8px;margin-bottom:8px;">
         <div style="font-size:0.75rem;color:#2C5F6E;margin-bottom:3px;"><strong>התמחות:</strong> ${b.specialty}</div>
         <div style="font-size:0.72rem;color:#6B7F8D;">🗣️ ${b.langs.join(' · ')}</div>
       </div>

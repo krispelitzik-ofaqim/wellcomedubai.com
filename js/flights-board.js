@@ -240,22 +240,22 @@ function openFlightDetail(flight, airline, city, cityCode, scheduled, actual, te
       <!-- Details -->
       <div style="padding:20px;">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
-          <div style="background:#FDF6EC;border-radius:8px;padding:12px;text-align:center;">
+          <div style="background:#F5E6CB;border-radius:8px;padding:12px;text-align:center;">
             <div style="font-size:0.7rem;color:#6B7F8D;">שעה מתוכננת</div>
             <div style="font-size:1.3rem;font-weight:700;color:#2C5F6E;direction:ltr;">${scheduled || '-'}</div>
           </div>
-          <div style="background:#FDF6EC;border-radius:8px;padding:12px;text-align:center;">
+          <div style="background:#F5E6CB;border-radius:8px;padding:12px;text-align:center;">
             <div style="font-size:0.7rem;color:#6B7F8D;">שעה בפועל</div>
             <div style="font-size:1.3rem;font-weight:700;color:${actual && actual !== scheduled ? '#E76F51' : '#2A9D8F'};direction:ltr;">${actual || scheduled || '-'}</div>
           </div>
         </div>
 
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
-          <div style="background:#FDF6EC;border-radius:8px;padding:12px;text-align:center;">
+          <div style="background:#F5E6CB;border-radius:8px;padding:12px;text-align:center;">
             <div style="font-size:0.7rem;color:#6B7F8D;">טרמינל</div>
             <div style="font-size:1.1rem;font-weight:700;color:#2C5F6E;">${terminal || '-'}</div>
           </div>
-          <div style="background:#FDF6EC;border-radius:8px;padding:12px;text-align:center;">
+          <div style="background:#F5E6CB;border-radius:8px;padding:12px;text-align:center;">
             <div style="font-size:0.7rem;color:#6B7F8D;">סטטוס</div>
             <div style="font-size:0.9rem;font-weight:700;color:${statusColor(status)};">${statusHebrew(status)}</div>
           </div>
