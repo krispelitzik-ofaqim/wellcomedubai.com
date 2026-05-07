@@ -2167,7 +2167,8 @@ function buildLeafletMap(el, zoom, items) {
     });
     L.marker([item.lat, item.lng], { icon })
       .addTo(map)
-      .bindPopup(`<div style="direction:rtl;font-family:Heebo,sans-serif;">
+      .bindPopup(`<div style="direction:rtl;font-family:Heebo,sans-serif;min-width:180px;">
+        ${item.image ? `<img src="${item.image}" alt="${item.name}" style="width:100%;height:110px;object-fit:cover;border-radius:6px;margin-bottom:6px;display:block;" onerror="this.style.display='none'">` : ''}
         <b>${item.name}</b><br>${item.address||''}<br>
         ${item.rating ? '⭐ '+item.rating : ''} ${item.category !== 'transport' ? (item.price||'') : ''}<br>
         <a href="${navUrl(item.lat, item.lng, item.name || '')}" target="_blank" style="color:#E76F51;font-weight:600;">🧭 נווט בגוגל</a>
