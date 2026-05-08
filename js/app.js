@@ -3249,18 +3249,24 @@ async function loadBizNews() {
   }
 }
 
+const NEWS_FALLBACK_IMAGES = [
+  'images/Yizhak/dubai-skyline-evening.jpg',
+  'images/Yizhak/futuristic-dubai-landscape.jpg',
+  'images/Yizhak/dubai-uae-skyline-with-world-famous-buildings.jpg',
+  'images/Yizhak/economy-dubai-skyline-charts.jpg',
+  'images/Yizhak/aerial-view-dubai-city-from-top-tower.jpg',
+  'images/Yizhak/dubai-marina-skyline-yacht-harbor-architecture-travel-night-twilight-united-arab-emirates.jpg',
+  'images/wellcomedubai.stamp/skyscrapers-looking-up-sky-modern-metropolis-modern-city.jpg',
+  'images/Yizhak/economy-uae-currency.jpg'
+];
 async function fetchOgImagesForCards(container, items) {
   for (let i = 0; i < items.length; i++) {
     const it = items[i];
     const card = container.querySelector(`a[data-news-i="${i}"]`);
     if (!card) continue;
     const img = card.querySelector('img');
-    if (it.enclosure?.link || it.thumbnail) continue;
-    try {
-      const r = await fetch('https://wellcomedubaicom-production.up.railway.app/api/og-image?url=' + encodeURIComponent(it.link));
-      const j = await r.json();
-      if (j.success && j.image && img) img.src = j.image;
-    } catch {}
+    if (!img || it.enclosure?.link || it.thumbnail) continue;
+    img.src = NEWS_FALLBACK_IMAGES[i % NEWS_FALLBACK_IMAGES.length];
   }
 }
 
