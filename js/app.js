@@ -3731,13 +3731,9 @@ function listingFullCard(l, isFeatured) {
         ${l.photos && l.photos.length > 1 ? `<div style="position:absolute;top:12px;left:12px;background:rgba(0,0,0,0.65);color:#fff;font-size:0.68rem;font-weight:700;padding:4px 9px;border-radius:10px;">📷 ${l.photos.length}</div>` : ''}
         <span style="position:absolute;top:12px;${isFeatured ? 'left:65px;' : 'left:12px;'}background:${typeColor};color:#fff;font-size:0.65rem;padding:3px 9px;border-radius:10px;font-weight:800;">${l.type === 'sale' ? 'למכירה' : 'להשכרה'}</span>
       </div>
-      <div style="padding:12px 14px;">
-        ${l.desc ? `<div style="font-size:0.83rem;color:${descColor};line-height:1.55;margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${l.desc}</div>` : ''}
-        <div style="display:flex;gap:6px;">
-          <a onclick="event.stopPropagation()" href="tel:${l.phone}" style="flex:1;padding:9px;background:#2A9D8F;color:#fff;border-radius:8px;text-align:center;text-decoration:none;font-size:0.78rem;font-weight:800;"><i class="fas fa-phone"></i> חייג</a>
-          <a onclick="event.stopPropagation()" href="https://wa.me/${l.phone.replace(/\D/g,'')}" target="_blank" style="flex:1;padding:9px;background:#25D366;color:#fff;border-radius:8px;text-align:center;text-decoration:none;font-size:0.78rem;font-weight:800;"><i class="fab fa-whatsapp"></i> וואטסאפ</a>
-          <button onclick="event.stopPropagation();openListingModal('${l.id}')" style="flex:0;padding:9px 14px;background:#1A6B8A;color:#fff;border:none;border-radius:8px;font-size:0.78rem;font-weight:800;font-family:Heebo;cursor:pointer;">פרטים ›</button>
-        </div>
+      <div style="padding:14px 16px;">
+        ${l.desc ? `<div style="font-size:0.95rem;color:${descColor};line-height:1.6;margin-bottom:12px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;">${l.desc}</div>` : ''}
+        <button onclick="event.stopPropagation();openListingModal('${l.id}')" style="width:100%;padding:11px;background:#1A6B8A;color:#fff;border:none;border-radius:8px;font-size:0.9rem;font-weight:800;font-family:Heebo;cursor:pointer;">לפרטים נוספים ›</button>
       </div>
     </div>
   `;
@@ -3824,10 +3820,7 @@ function renderListingModal() {
         <div style="color:${typeColor};font-weight:900;font-size:1.6rem;margin-bottom:8px;">AED ${Number(l.price).toLocaleString()}</div>
         <div style="font-size:0.85rem;color:#6B7F8D;margin-bottom:14px;">📍 ${l.area}</div>
         ${l.desc ? `<div style="background:#F5E6CB;border-right:4px solid #1A6B8A;padding:12px 14px;border-radius:8px;font-size:0.88rem;color:#2C5F6E;line-height:1.7;margin-bottom:16px;">${l.desc}</div>` : ''}
-        <div style="display:flex;gap:8px;">
-          <a href="tel:${l.phone}" style="flex:1;padding:12px;background:#2A9D8F;color:#fff;border-radius:10px;text-align:center;text-decoration:none;font-weight:800;font-size:0.9rem;"><i class="fas fa-phone"></i> ${l.phone}</a>
-          <a href="https://wa.me/${l.phone.replace(/\D/g,'')}" target="_blank" style="flex:1;padding:12px;background:#25D366;color:#fff;border-radius:10px;text-align:center;text-decoration:none;font-weight:800;font-size:0.9rem;"><i class="fab fa-whatsapp"></i> וואטסאפ</a>
-        </div>
+        <a href="https://wa.me/${l.phone.replace(/\D/g,'')}" target="_blank" style="display:block;padding:14px;background:#25D366;color:#fff;border-radius:10px;text-align:center;text-decoration:none;font-weight:800;font-size:1rem;"><i class="fab fa-whatsapp"></i> שלח הודעה בוואטסאפ</a>
       </div>
     </div>
   `;
