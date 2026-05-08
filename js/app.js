@@ -2524,7 +2524,7 @@ function renderListPage(category, title, filters, activeFilter) {
     </div>` : ''}
     ${category === 'transport' && active === 'מטרו' ? `
       <div style="margin:0 16px 12px;border-radius:8px;overflow:hidden;border:1px solid #E5E7EB;cursor:pointer;background:#fff;" onclick="openInFrame('https://dubaimetrorail.com/dubai-metro-map/','מפת מטרו דובאי')">
-        <img src="images/transport/metro-map.png" alt="מפת מטרו דובאי" style="width:100%;height:auto;display:block;">
+        <img src="images/transport/metro-map.jpg" alt="מפת מטרו דובאי" style="width:100%;height:auto;display:block;">
         <div style="padding:8px;text-align:center;color:#2C5F6E;font-size:0.85rem;font-weight:600;background:#F5E6CB;"><i class="fas fa-external-link-alt"></i> לחץ למפה אינטראקטיבית — DubaiMetroRail.com</div>
       </div>
       <div style="padding:0 16px 12px;">
