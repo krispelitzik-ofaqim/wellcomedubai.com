@@ -554,14 +554,12 @@
         _learnData = await r.json();
       } catch(e) { alert('שגיאה בטעינה'); return; }
     }
-    if (!_audioByDest) {
-      try {
-        const r = await fetch('https://wellcomedubaicom-production.up.railway.app/api/audio?_t=' + Date.now());
-        const j = await r.json();
-        _audioByDest = {};
-        (j.files || []).forEach(f => { if (f.dest) _audioByDest[f.dest] = 'https://wellcomedubaicom-production.up.railway.app' + f.url; });
-      } catch { _audioByDest = {}; }
-    }
+    try {
+      const r = await fetch('https://wellcomedubaicom-production.up.railway.app/api/audio?_t=' + Date.now());
+      const j = await r.json();
+      _audioByDest = {};
+      (j.files || []).forEach(f => { if (f.dest) _audioByDest[f.dest] = 'https://wellcomedubaicom-production.up.railway.app' + f.url; });
+    } catch { _audioByDest = _audioByDest || {}; }
     const item = _learnData[id];
     if (!item) return;
     if (_audioByDest[id]) item.audio = _audioByDest[id];
