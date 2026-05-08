@@ -3129,7 +3129,8 @@ function renderRealEstatePage() {
   const topButtons = [
     { id:'sale',     label:'דירות למכירה',   icon:'🏠', color:'#1A6B8A', sub:'מצא בית חלומות' },
     { id:'rent',     label:'דירות להשכרה',   icon:'🔑', color:'#2A9D8F', sub:'לטווח קצר וארוך' },
-    { id:'invest',   label:'פורטל הנדל"ן',   icon:'📊', color:'#E76F51', sub:'מאמרים, גרפים והשקעות' }
+    { id:'invest',   label:'פורטל הנדל"ן',   icon:'📊', color:'#E76F51', sub:'מאמרים, גרפים והשקעות' },
+    { id:'business', label:'פורטל העסקים',   icon:'💼', color:'#B8923A', sub:'מטבעות, זהב, סחורות', nav:'business' }
   ];
   page.innerHTML = `
     <div class="page-header" style="background:linear-gradient(135deg,#1A6B8A 0%,#2C5F6E 100%);color:#fff;border-bottom:none;">
@@ -3143,19 +3144,12 @@ function renderRealEstatePage() {
       </div>
       <div style="display:flex;gap:9px;">
         ${topButtons.map(t => `
-          <button onclick="switchRETab('${t.id}')" style="flex:1;padding:14px 6px;border-radius:14px;font-family:Heebo;font-weight:800;font-size:0.78rem;cursor:pointer;border:none;background:${tab===t.id?`linear-gradient(135deg,${t.color},${t.color}dd)`:`#fff`};color:${tab===t.id?'#fff':'#2C5F6E'};display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;box-shadow:${tab===t.id?`0 6px 18px ${t.color}55`:`0 2px 6px rgba(0,0,0,0.05)`};border:1px solid ${tab===t.id?'transparent':'#E5E7EB'};transition:all 0.25s;">
+          <button onclick="${t.nav ? `navigateTo('${t.nav}')` : `switchRETab('${t.id}')`}" style="flex:1;padding:14px 6px;border-radius:14px;font-family:Heebo;font-weight:800;font-size:0.78rem;cursor:pointer;border:none;background:${tab===t.id?`linear-gradient(135deg,${t.color},${t.color}dd)`:`#fff`};color:${tab===t.id?'#fff':'#2C5F6E'};display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;box-shadow:${tab===t.id?`0 6px 18px ${t.color}55`:`0 2px 6px rgba(0,0,0,0.05)`};border:1px solid ${tab===t.id?'transparent':'#E5E7EB'};transition:all 0.25s;">
             <span style="font-size:1.6rem;line-height:1;">${t.icon}</span>
             <span style="line-height:1.15;">${t.label}</span>
             <span style="font-size:0.62rem;opacity:${tab===t.id?'0.85':'0.6'};font-weight:600;">${t.sub}</span>
           </button>
         `).join('')}
-      </div>
-      <div style="margin-top:12px;">
-        <button onclick="navigateTo('business')" style="width:100%;padding:14px 16px;border-radius:12px;border:none;background:linear-gradient(135deg,#B8923A,#F4A261);color:#2C5F6E;font-family:Heebo;font-weight:800;font-size:0.92rem;cursor:pointer;box-shadow:0 4px 14px rgba(233,196,106,0.4);display:flex;align-items:center;justify-content:center;gap:8px;">
-          <span style="font-size:1.3rem;">💼</span>
-          <span>פורטל העסקים — בורסות, מניות וזהב</span>
-          <span style="font-size:1rem;">←</span>
-        </button>
       </div>
     </div>
     <div style="padding:14px 16px 80px;">
@@ -3174,8 +3168,8 @@ function renderBusinessPortal() {
       <button class="back-btn" onclick="navigateTo('realestate')" style="color:#fff !important;"><i class="fas fa-arrow-right"></i></button>
       <h2 style="color:#fff;"><i class="fas fa-chart-line" style="color:#B8923A;margin-left:6px;"></i> פורטל העסקים</h2>
     </div>
-    <div style="background:#fff;padding:0;border-bottom:1px solid #E5E7EB;">
-      <iframe scrolling="no" allowtransparency="true" frameborder="0" style="width:100%;height:92px;border:0;display:block;" src="https://s.tradingview.com/embed-widget/ticker-tape/?locale=en#%7B%22symbols%22%3A%5B%7B%22description%22%3A%22USD%2FAED%22%2C%22proName%22%3A%22FX_IDC%3AUSDAED%22%7D%2C%7B%22description%22%3A%22EUR%2FAED%22%2C%22proName%22%3A%22FX_IDC%3AEURAED%22%7D%2C%7B%22description%22%3A%22GBP%2FAED%22%2C%22proName%22%3A%22FX_IDC%3AGBPAED%22%7D%2C%7B%22description%22%3A%22AED%2FILS%22%2C%22proName%22%3A%22FX_IDC%3AAEDILS%22%7D%2C%7B%22description%22%3A%22USD%2FILS%22%2C%22proName%22%3A%22FX_IDC%3AUSDILS%22%7D%5D%2C%22isTransparent%22%3Afalse%2C%22showSymbolLogo%22%3Atrue%2C%22colorTheme%22%3A%22light%22%2C%22displayMode%22%3A%22regular%22%7D"></iframe>
+    <div style="background:#fff;padding:0;border-bottom:1px solid #E5E7EB;height:92px;overflow:hidden;">
+      <iframe scrolling="no" allowtransparency="true" frameborder="0" style="width:200%;height:92px;border:0;display:block;transform:scale(2);transform-origin:top right;" src="https://s.tradingview.com/embed-widget/ticker-tape/?locale=en#%7B%22symbols%22%3A%5B%7B%22description%22%3A%22USD%2FAED%22%2C%22proName%22%3A%22FX_IDC%3AUSDAED%22%7D%2C%7B%22description%22%3A%22EUR%2FAED%22%2C%22proName%22%3A%22FX_IDC%3AEURAED%22%7D%2C%7B%22description%22%3A%22GBP%2FAED%22%2C%22proName%22%3A%22FX_IDC%3AGBPAED%22%7D%2C%7B%22description%22%3A%22AED%2FILS%22%2C%22proName%22%3A%22FX_IDC%3AAEDILS%22%7D%2C%7B%22description%22%3A%22USD%2FILS%22%2C%22proName%22%3A%22FX_IDC%3AUSDILS%22%7D%5D%2C%22isTransparent%22%3Afalse%2C%22showSymbolLogo%22%3Atrue%2C%22colorTheme%22%3A%22light%22%2C%22displayMode%22%3A%22regular%22%7D"></iframe>
     </div>
     <div style="padding:18px 16px 80px;background:#FAF6EE;">
       <div style="background:#fff;border-radius:12px;padding:14px 16px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
@@ -3184,8 +3178,18 @@ function renderBusinessPortal() {
       </div>
 
       <div style="background:#fff;border-radius:12px;padding:14px 14px 10px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
-        <div style="font-weight:700;color:#1A6B8A;font-size:0.95rem;margin-bottom:8px;">🪙 DGCX — זהב, כסף ונפט</div>
-        <iframe scrolling="no" allowtransparency="true" frameborder="0" style="width:100%;height:380px;border:0;" src="https://www.tradingview-widget.com/embed-widget/symbol-overview/?locale=en#%7B%22symbols%22%3A%5B%5B%22OANDA%3AXAUUSD%7C1Y%22%5D%2C%5B%22OANDA%3AXAGUSD%7C1Y%22%5D%2C%5B%22TVC%3AUSOIL%7C1Y%22%5D%5D%2C%22chartOnly%22%3Afalse%2C%22width%22%3A%22100%25%22%2C%22height%22%3A380%2C%22colorTheme%22%3A%22light%22%7D"></iframe>
+        <div style="font-weight:700;color:#1A6B8A;font-size:0.95rem;margin-bottom:8px;">🥇 זהב (XAU/USD)</div>
+        <iframe scrolling="no" allowtransparency="true" frameborder="0" style="width:100%;height:300px;border:0;" src="https://www.tradingview-widget.com/embed-widget/symbol-overview/?locale=en#%7B%22symbols%22%3A%5B%5B%22OANDA%3AXAUUSD%7C1Y%22%5D%5D%2C%22chartOnly%22%3Afalse%2C%22width%22%3A%22100%25%22%2C%22height%22%3A300%2C%22colorTheme%22%3A%22light%22%7D"></iframe>
+      </div>
+
+      <div style="background:#fff;border-radius:12px;padding:14px 14px 10px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+        <div style="font-weight:700;color:#1A6B8A;font-size:0.95rem;margin-bottom:8px;">🥈 כסף (XAG/USD)</div>
+        <iframe scrolling="no" allowtransparency="true" frameborder="0" style="width:100%;height:300px;border:0;" src="https://www.tradingview-widget.com/embed-widget/symbol-overview/?locale=en#%7B%22symbols%22%3A%5B%5B%22OANDA%3AXAGUSD%7C1Y%22%5D%5D%2C%22chartOnly%22%3Afalse%2C%22width%22%3A%22100%25%22%2C%22height%22%3A300%2C%22colorTheme%22%3A%22light%22%7D"></iframe>
+      </div>
+
+      <div style="background:#fff;border-radius:12px;padding:14px 14px 10px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+        <div style="font-weight:700;color:#1A6B8A;font-size:0.95rem;margin-bottom:8px;">🛢️ נפט (US Oil)</div>
+        <iframe scrolling="no" allowtransparency="true" frameborder="0" style="width:100%;height:300px;border:0;" src="https://www.tradingview-widget.com/embed-widget/symbol-overview/?locale=en#%7B%22symbols%22%3A%5B%5B%22TVC%3AUSOIL%7C1Y%22%5D%5D%2C%22chartOnly%22%3Afalse%2C%22width%22%3A%22100%25%22%2C%22height%22%3A300%2C%22colorTheme%22%3A%22light%22%7D"></iframe>
       </div>
 
       <div style="background:linear-gradient(135deg,#B8923A20,#F4A26120);border:1px solid #B8923A;border-radius:12px;padding:14px 16px;font-size:0.8rem;color:#7B5E1F;line-height:1.6;">
