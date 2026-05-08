@@ -270,6 +270,9 @@ const DEFAULT_DATA = {
     { id:233, name:"OceanAir Desert Safari", nameEn:"OceanAir Desert Safari", category:"attractions", subcategory:"desert-safari", description:"חבילת ערב פופולרית — דיונה בשינג, גמלים, חינה, ארוחה ומופע ריקודים.", image:"images/attractions/233.jpg", rating:4.6, price:"$$", priceRange:"₪200-500 לאדם", address:"Lehbab Desert", lat:24.8500, lng:55.5350, tags:["ספארי מדבר","ערב","מופעים"], featured:false },
     { id:234, name:"Big Red Desert Adventure", nameEn:"Big Red Desert Adventure", category:"attractions", subcategory:"desert-safari", description:"דיונות גבוהות עם רכב 4x4 ואופנועי שטח לחובבי אקסטרים.", image:"images/attractions/234.jpg", rating:4.6, price:"$$$", priceRange:"₪450-900 לאדם", address:"Big Red Dunes", lat:24.8230, lng:55.6700, tags:["ספארי מדבר","אקסטרים","אופנועים"], featured:false },
     { id:235, name:"Desert Safari Sunrise", nameEn:"Desert Safari Sunrise", category:"attractions", subcategory:"desert-safari", description:"חוויית זריחה במדבר — בלון פורח, ארוחת בוקר ושייט בגמל.", image:"images/attractions/235.jpg", rating:4.8, price:"$$$$", priceRange:"₪900-1,800 לאדם", address:"Margham Desert", lat:24.9000, lng:55.5800, tags:["ספארי מדבר","בלון","זריחה"], featured:true },
+    { id:280, name:"Dinner in the Sky", nameEn:"Dinner in the Sky Dubai", category:"attractions", subcategory:"extreme", description:"ארוחה ייחודית תלויה בגובה 50 מטרים מעל הקרקע — שולחן ל-22 סועדים, נוף 360 מעלות, שף בחי.", image:"https://images.pexels.com/photos/1388944/pexels-photo-1388944.jpeg", rating:4.6, price:"$$$$$", priceRange:"AED 600-900 לאדם", address:"Skydive Dubai, Marina", lat:25.0921, lng:55.1399, tags:["אקסטרים","ייחודי","חוויה"], website:"https://dinnerinthesky.ae", featured:true },
+    { id:281, name:"La Perle by Dragone", nameEn:"La Perle by Dragone", category:"attractions", subcategory:"show", description:"מופע אקרובטי קבוע — 65 דקות של מים, אש וטכנולוגיה. תיאטרון מותאם של 1,300 מקומות בלבד.", image:"https://images.pexels.com/photos/3137890/pexels-photo-3137890.jpeg", rating:4.8, price:"$$$$", priceRange:"AED 280-1,000", address:"Al Habtoor City", lat:25.1865, lng:55.2625, tags:["מופע","אקרובטיקה","תיאטרון"], website:"https://laperle.com", featured:true },
+    { id:282, name:"Museum of Illusions", nameEn:"Museum of Illusions Dubai", category:"attractions", subcategory:"museum", description:"מוזיאון אינטראקטיבי עם 80+ אשליות אופטיות, חדר אנטי-גרביטציה ומנהרת ורטיגו. כיף לכל המשפחה.", image:"https://images.pexels.com/photos/2272854/pexels-photo-2272854.jpeg", rating:4.5, price:"$$", priceRange:"AED 95", address:"Al Seef", lat:25.2629, lng:55.3036, tags:["מוזיאון","אשליות","משפחות"], website:"https://museumofillusions.ae", featured:false },
   ],
   shopping: [
     { id:301, name:"Dubai Mall", nameEn:"Dubai Mall", nameHe:"קניון דובאי", category:"shopping", subcategory:"mall", description:"הקניון הגדול בעולם! מעל 1,200 חנויות, אקוריום, החלקה על קרח.", image:"images/shopping/301.jpg", rating:4.8, price:"$-$$$$$", priceRange:"כל טווח מחירים", address:"Downtown Dubai", lat:25.1985, lng:55.2796, tags:["קניון","יוקרה","משפחות"], featured:true },
@@ -431,7 +434,7 @@ const PRACTICAL_INFO = {
   ]
 };
 
-const DB_VERSION = 179;
+const DB_VERSION = 180;
 function getDB() {
   const ver = localStorage.getItem(DB_KEY + '_ver');
   if (ver && Number(ver) >= DB_VERSION) {
