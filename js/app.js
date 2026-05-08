@@ -2587,9 +2587,8 @@ function renderListPage(category, title, filters, activeFilter) {
 
         </div>
       </div>
-    ` : ''}
+    ` : `<div class="map-container"><div id="listMap" style="width:100%;height:100%;"></div></div>${nearMeToggleHTML()}`}
     ${contentHTML}
-    ${(category === 'transport' && active === 'מטרו') || active === 'הכל' ? '' : `<div style="padding:0 16px 12px;margin-top:18px;"><div style="font-size:0.85rem;color:#2C5F6E;font-weight:700;margin-bottom:8px;text-align:right;">📍 מפה — ${active}</div><div class="map-container" style="border-radius:12px;overflow:hidden;border:1px solid #E5E7EB;"><div id="listMap" style="width:100%;height:300px;"></div></div>${nearMeToggleHTML()}</div>`}
     ${items.length > 10 ? `<button onclick="window.scrollTo({top:0,behavior:'smooth'})" style="position:fixed;bottom:80px;left:16px;background:#E76F51;color:#fff;border:none;width:46px;height:46px;border-radius:50%;font-size:1.1rem;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,0.25);z-index:50;display:flex;align-items:center;justify-content:center;" title="חזור לראש"><i class="fas fa-arrow-up"></i></button>` : ''}
   `;
 
