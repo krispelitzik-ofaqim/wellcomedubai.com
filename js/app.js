@@ -2495,7 +2495,7 @@ function renderListPage(category, title, filters, activeFilter) {
       <h2>${title}</h2>
     </div>
     <div class="filter-tabs">
-      ${filters.map(f => {
+      ${[...filters.filter(f => f !== 'הכל'), ...(filters.includes('הכל') ? ['הכל'] : [])].map(f => {
         const count = f === 'הכל' ? items.length : items.filter(i => i.subcategory === SUBCAT_MAP[f]).length;
         const showCount = count > 1;
         return `<button class="filter-tab ${f === active ? 'active' : ''}" onclick="navigateTo('${category}','${f.replace(/'/g, "\\'")}')">${f}${showCount ? ` <span style="opacity:0.7;font-size:0.75rem;">(${count})</span>` : ''}</button>`;
