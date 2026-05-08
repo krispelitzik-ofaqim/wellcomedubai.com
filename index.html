@@ -236,21 +236,19 @@
       })();
       (function dynamicWeather(){
         function applyState(code, hour, temp){
-          const bg=document.getElementById('weatherDynamicBg');
-          const icon=document.getElementById('weatherDynamicIcon');
-          const lbl=document.getElementById('weatherDynamicLabel');
-          const tEl=document.getElementById('weatherDynamicTemp');
+          var bg=document.getElementById('weatherDynamicBg');
+          var icon=document.getElementById('weatherDynamicIcon');
+          var lbl=document.getElementById('weatherDynamicLabel');
+          var tEl=document.getElementById('weatherDynamicTemp');
           if(!bg||!icon) return;
-          let grad,cls,label;
-          // Weather priority over time
+          var grad='linear-gradient(180deg,#FFB347,#FFCC70)', cls='fa-sun', label='בהיר';
           if(code>=71&&code<=77){grad='linear-gradient(180deg,#E0F0FF,#FFFFFF)';cls='fa-snowflake';label='שלג';}
-          else if(code>=61&&code<=67||code>=80&&code<=86){grad='linear-gradient(180deg,#5A7A8E,#7E97A9)';cls='fa-cloud-showers-heavy';label='גשם';}
+          else if((code>=61&&code<=67)||(code>=80&&code<=86)){grad='linear-gradient(180deg,#5A7A8E,#7E97A9)';cls='fa-cloud-showers-heavy';label='גשם';}
           else if(code>=51&&code<=57){grad='linear-gradient(180deg,#8BAEC4,#B0C7D8)';cls='fa-cloud-rain';label='טפטוף';}
           else if(code>=45&&code<=48){grad='linear-gradient(180deg,#B8C8D2,#E0E5E8)';cls='fa-smog';label='ערפל';}
           else if(code>=2&&code<=3){grad='linear-gradient(180deg,#7DA0BD,#B6CFE0)';cls='fa-cloud';label='מעונן';}
           else if(code===1){grad='linear-gradient(180deg,#FFC04D,#FFE189)';cls='fa-cloud-sun';label='מעונן חלקית';}
           else {
-            // Clear sky — vary by time
             if(hour<6||hour>=20){grad='linear-gradient(180deg,#0D1B3D,#2C3E6B)';cls='fa-moon';label='לילה צלול';}
             else if(hour<10){grad='linear-gradient(180deg,#FF9E6B,#FFCC80)';cls='fa-sun';label='בוקר';}
             else if(hour<16){grad='linear-gradient(180deg,#FFB347,#FFCC70)';cls='fa-sun';label='בהיר';}
@@ -258,20 +256,20 @@
           }
           bg.style.background=grad;
           icon.className='fas '+cls;
-          if(tEl&&temp!==null) tEl.textContent=Math.round(temp)+'°';
+          if(tEl) tEl.textContent=(temp!==null&&temp!==undefined)?Math.round(temp)+'°':'';
           if(lbl) lbl.textContent=label+' · דובאי';
         }
-        async function load(){
-          try{
-            const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude=25.2048&longitude=55.2708&current=temperature_2m,weather_code&timezone=auto');
-            const j=await r.json();
-            const code=j.current?.weather_code??0;
-            const temp=j.current?.temperature_2m??null;
-            const hour=new Date().getHours();
-            applyState(code,hour,temp);
-          }catch{
-            applyState(0,new Date().getHours(),null);
-          }
+        // Show default immediately
+        applyState(0,new Date().getHours(),null);
+        // Then fetch real data
+        function load(){
+          var url='https://api.open-meteo.com/v1/forecast?latitude=25.2048&longitude=55.2708&current=temperature_2m,weather_code&timezone=auto';
+          fetch(url).then(function(r){return r.json();}).then(function(j){
+            var c=j&&j.current||{};
+            var code=(typeof c.weather_code==='number')?c.weather_code:0;
+            var temp=(typeof c.temperature_2m==='number')?c.temperature_2m:null;
+            applyState(code,new Date().getHours(),temp);
+          }).catch(function(){});
         }
         load();
         setInterval(load,15*60*1000);
