@@ -3225,7 +3225,7 @@ async function loadBizNews() {
   const container = document.getElementById('bizNewsSlider');
   if (!container) return;
   try {
-    const rss = 'https://news.google.com/rss/search?q=Dubai+business+economy&hl=en&gl=AE&ceid=AE:en';
+    const rss = 'https://news.google.com/rss/search?q=' + encodeURIComponent('דובאי עסקים כלכלה') + '&hl=he&gl=IL&ceid=IL:he';
     const apiUrl = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(rss);
     const r = await fetch(apiUrl);
     const j = await r.json();
@@ -3277,7 +3277,7 @@ async function loadRENews() {
   const container = document.getElementById('reNewsSlider');
   if (!container) return;
   try {
-    const rss = 'https://news.google.com/rss/search?q=Dubai+real+estate+property&hl=en&gl=AE&ceid=AE:en';
+    const rss = 'https://news.google.com/rss/search?q=' + encodeURIComponent('דובאי נדלן') + '&hl=he&gl=IL&ceid=IL:he';
     const apiUrl = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(rss);
     const r = await fetch(apiUrl);
     const j = await r.json();
