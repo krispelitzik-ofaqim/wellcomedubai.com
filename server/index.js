@@ -171,6 +171,19 @@ app.post('/api/admin/listings/:id/reject', requireAdmin, (req, res) => {
   res.json({ ok: true });
 });
 
+// Owner deletes own listing by matching phone
+app.delete('/api/listings/:id', (req, res) => {
+  const phone = String(req.query.phone || '').replace(/\D/g, '');
+  if (!phone) return res.status(400).json({ error: 'phone required' });
+  const db = readDB();
+  const item = (db.listings || []).find(l => l.id === req.params.id);
+  if (!item) return res.status(404).json({ error: 'not found' });
+  if (String(item.phone || '').replace(/\D/g, '') !== phone) return res.status(403).json({ error: 'phone mismatch' });
+  db.listings = (db.listings || []).filter(l => l.id !== req.params.id);
+  writeDB(db);
+  res.json({ ok: true });
+});
+
 app.delete('/api/admin/listings/:id', requireAdmin, (req, res) => {
   const db = readDB();
   db.listings = (db.listings || []).filter(l => l.id !== req.params.id);

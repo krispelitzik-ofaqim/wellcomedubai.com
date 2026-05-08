@@ -3705,6 +3705,31 @@ function renderListingsGrid(listings, typeLabel) {
   `;
 }
 
+function isOwnListing(id) {
+  try { return (JSON.parse(localStorage.getItem('my_re_listings') || '[]')).includes(id); } catch { return false; }
+}
+function markOwnListing(id) {
+  try {
+    const arr = JSON.parse(localStorage.getItem('my_re_listings') || '[]');
+    if (!arr.includes(id)) arr.push(id);
+    localStorage.setItem('my_re_listings', JSON.stringify(arr));
+  } catch {}
+}
+async function deleteOwnListing(id) {
+  const phone = prompt('הזן את הטלפון איתו פרסמת את המודעה לאישור:');
+  if (!phone) return;
+  try {
+    const r = await fetch(`${RE_API}/api/listings/${id}?phone=${encodeURIComponent(phone)}`, { method: 'DELETE' });
+    if (!r.ok) { alert('המחיקה נכשלה — בדוק שהטלפון תואם'); return; }
+    try {
+      const arr = (JSON.parse(localStorage.getItem('my_re_listings') || '[]')).filter(x => x !== id);
+      localStorage.setItem('my_re_listings', JSON.stringify(arr));
+    } catch {}
+    alert('✓ המודעה נמחקה');
+    location.reload();
+  } catch { alert('שגיאת רשת'); }
+}
+
 function listingFullCard(l, isFeatured) {
   const photo = (l.photos && l.photos[0]) || '';
   const typeColor = l.type === 'sale' ? '#E76F51' : '#2A9D8F';
@@ -3820,7 +3845,8 @@ function renderListingModal() {
         <div style="color:${typeColor};font-weight:900;font-size:1.6rem;margin-bottom:8px;">AED ${Number(l.price).toLocaleString()}</div>
         <div style="font-size:0.85rem;color:#6B7F8D;margin-bottom:14px;">📍 ${l.area}</div>
         ${l.desc ? `<div style="background:#F5E6CB;border-right:4px solid #1A6B8A;padding:12px 14px;border-radius:8px;font-size:0.88rem;color:#2C5F6E;line-height:1.7;margin-bottom:16px;">${l.desc}</div>` : ''}
-        <a href="https://wa.me/${l.phone.replace(/\D/g,'')}" target="_blank" style="display:block;padding:14px;background:#25D366;color:#fff;border-radius:10px;text-align:center;text-decoration:none;font-weight:800;font-size:1rem;"><i class="fab fa-whatsapp"></i> שלח הודעה בוואטסאפ</a>
+        <a href="https://wa.me/${l.phone.replace(/\D/g,'')}" target="_blank" style="display:block;padding:14px;background:#25D366;color:#fff;border-radius:10px;text-align:center;text-decoration:none;font-weight:800;font-size:1rem;margin-bottom:10px;"><i class="fab fa-whatsapp"></i> שלח הודעה בוואטסאפ</a>
+        ${isOwnListing(l.id) ? `<button onclick="deleteOwnListing('${l.id}')" style="width:100%;padding:9px;background:transparent;color:#E76F51;border:1px solid #E76F51;border-radius:8px;font-family:Heebo;font-size:0.78rem;font-weight:600;cursor:pointer;">🗑 מחק את המודעה שלי</button>` : ''}
       </div>
     </div>
   `;
@@ -3932,6 +3958,8 @@ async function submitREListing(btn) {
     }
     const r = await fetch(`${RE_API}/api/listings`, { method: 'POST', body: fd });
     if (!r.ok) throw new Error('upload failed');
+    const j = await r.json();
+    if (j.listing && j.listing.id) markOwnListing(j.listing.id);
     window._rePhotos = [];
     alert('✓ המודעה נשלחה לאישור — תופיע באתר לאחר אישור המנהל');
     document.getElementById('reTitle').value = '';
