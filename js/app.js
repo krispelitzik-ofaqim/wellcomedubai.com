@@ -3230,7 +3230,7 @@ async function loadBizNews() {
       const img = it.enclosure?.link || it.thumbnail || '';
       const date = it.pubDate ? new Date(it.pubDate).toLocaleDateString('he-IL') : '';
       const title = (it.title || '').slice(0, 80);
-      return `<a href="${it.link}" target="_blank" rel="noopener" data-news-i="${i}" data-news-link="${encodeURIComponent(it.link)}" style="flex-shrink:0;width:240px;scroll-snap-align:start;background:#fff;border:1px solid #E5E7EB;border-radius:10px;overflow:hidden;text-decoration:none;display:block;">
+      return `<a onclick="openNewsInFrame('${encodeURIComponent(it.link)}','${(it.title || '').replace(/'/g,"\\'").slice(0,80)}')" data-news-i="${i}" style="flex-shrink:0;width:240px;scroll-snap-align:start;background:#fff;border:1px solid #E5E7EB;border-radius:10px;overflow:hidden;text-decoration:none;display:block;cursor:pointer;">
         <img src="${img || 'images/Yizhak/economy-dubai-skyline-charts.jpg'}" onerror="this.src='images/Yizhak/economy-dubai-skyline-charts.jpg'" style="width:100%;height:130px;object-fit:cover;display:block;">
         <div style="padding:8px 10px;">
           <div style="color:#2C5F6E;font-weight:700;font-size:0.78rem;line-height:1.3;margin-bottom:4px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;">${title}</div>
@@ -3242,6 +3242,18 @@ async function loadBizNews() {
   } catch (e) {
     container.innerHTML = '<div style="padding:20px;color:#6B7F8D;text-align:center;width:100%;">שגיאה בטעינה</div>';
   }
+}
+
+async function openNewsInFrame(encodedUrl, title) {
+  const url = decodeURIComponent(encodedUrl);
+  let target = url;
+  try {
+    const r = await fetch('https://wellcomedubaicom-production.up.railway.app/api/resolve-url?url=' + encodeURIComponent(url));
+    const j = await r.json();
+    if (j.success && j.url && !j.url.includes('news.google.com')) target = j.url;
+  } catch {}
+  if (typeof openInFrame === 'function') openInFrame(target, title);
+  else window.open(target, '_blank');
 }
 
 const NEWS_FALLBACK_IMAGES = [
@@ -3304,7 +3316,7 @@ async function loadRENews() {
       const img = it.enclosure?.link || it.thumbnail || '';
       const date = it.pubDate ? new Date(it.pubDate).toLocaleDateString('he-IL') : '';
       const title = (it.title || '').slice(0, 80);
-      return `<a href="${it.link}" target="_blank" rel="noopener" data-news-i="${i}" style="flex-shrink:0;width:240px;scroll-snap-align:start;background:#fff;border:1px solid #E5E7EB;border-radius:10px;overflow:hidden;text-decoration:none;display:block;">
+      return `<a onclick="openNewsInFrame('${encodeURIComponent(it.link)}','${(it.title || '').replace(/'/g,"\\'").slice(0,80)}')" data-news-i="${i}" style="flex-shrink:0;width:240px;scroll-snap-align:start;background:#fff;border:1px solid #E5E7EB;border-radius:10px;overflow:hidden;text-decoration:none;display:block;cursor:pointer;">
         <img src="${img || 'images/wellcomedubai.stamp/skyscrapers-looking-up-sky-modern-metropolis-modern-city.jpg'}" onerror="this.src='images/wellcomedubai.stamp/skyscrapers-looking-up-sky-modern-metropolis-modern-city.jpg'" style="width:100%;height:130px;object-fit:cover;display:block;">
         <div style="padding:8px 10px;">
           <div style="color:#2C5F6E;font-weight:700;font-size:0.78rem;line-height:1.3;margin-bottom:4px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;">${title}</div>

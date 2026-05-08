@@ -191,6 +191,16 @@ app.delete('/api/admin/listings/:id', requireAdmin, (req, res) => {
   res.json({ ok: true });
 });
 
+// ─── Resolve Google News URL to original article ─────────────
+app.get('/api/resolve-url', async (req, res) => {
+  const url = String(req.query.url || '');
+  if (!url || !/^https?:\/\//i.test(url)) return res.status(400).json({ success: false, error: 'invalid url' });
+  try {
+    const resolved = await resolveGoogleNews(url);
+    res.json({ success: true, url: resolved });
+  } catch { res.json({ success: false, url }); }
+});
+
 // ─── OG image scraper (cache 24h, follows Google News redirects) ─────────────
 const ogCache = new Map();
 async function resolveGoogleNews(url) {
