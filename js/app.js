@@ -328,6 +328,22 @@ function renderMyTripPage() {
 }
 
 // ===== NEAR ME =====
+function toggleMapExpand() {
+  const c = document.getElementById('mapContainer');
+  const b = document.getElementById('mapExpandBtn');
+  if (!c) return;
+  const expanded = c.dataset.expanded === '1';
+  if (expanded) {
+    c.style.height = '300px';
+    c.dataset.expanded = '0';
+    if (b) b.textContent = '⬇ הרחב';
+  } else {
+    c.style.height = '70vh';
+    c.dataset.expanded = '1';
+    if (b) b.textContent = '⬆ צמצם';
+  }
+  setTimeout(() => { try { window.dispatchEvent(new Event('resize')); } catch(e) {} }, 50);
+}
 function nearMeToggleHTML() {
   const id = 'nmt_' + Math.random().toString(36).slice(2,9);
   return `
@@ -2587,7 +2603,7 @@ function renderListPage(category, title, filters, activeFilter) {
 
         </div>
       </div>
-    ` : `<div class="map-container"><div id="listMap" style="width:100%;height:100%;"></div></div>${nearMeToggleHTML()}`}
+    ` : `<div class="map-container" id="mapContainer" style="position:relative;"><div id="listMap" style="width:100%;height:100%;"></div><button onclick="toggleMapExpand()" id="mapExpandBtn" style="position:absolute;bottom:8px;left:8px;background:#fff;border:1px solid #E5E7EB;border-radius:6px;padding:6px 10px;cursor:pointer;font-family:Heebo;font-size:0.78rem;font-weight:700;color:#2C5F6E;box-shadow:0 2px 6px rgba(0,0,0,0.15);z-index:1000;">⬇ הרחב</button></div>${nearMeToggleHTML()}`}
     ${contentHTML}
     ${items.length > 10 ? `<button onclick="window.scrollTo({top:0,behavior:'smooth'})" style="position:fixed;bottom:80px;left:16px;background:#E76F51;color:#fff;border:none;width:46px;height:46px;border-radius:50%;font-size:1.1rem;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,0.25);z-index:50;display:flex;align-items:center;justify-content:center;" title="חזור לראש"><i class="fas fa-arrow-up"></i></button>` : ''}
   `;
