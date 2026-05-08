@@ -2501,6 +2501,7 @@ function renderListPage(category, title, filters, activeFilter) {
         return `<button class="filter-tab ${f === active ? 'active' : ''}" onclick="navigateTo('${category}','${f.replace(/'/g, "\\'")}')">${f}${showCount ? ` <span style="opacity:0.7;font-size:0.75rem;">(${count})</span>` : ''}</button>`;
       }).join('')}
       ${category !== 'abudhabi' ? `<button class="filter-tab" onclick="navigateTo('abudhabi')" style="background:#B85C8E;color:#fff;border-color:#B85C8E;font-weight:700;">🏛 אבו דאבי</button>` : ''}
+      <button class="filter-tab" onclick="navigateTo('map')" style="background:#2A9D8F;color:#fff;border-color:#2A9D8F;font-weight:700;">📍 מפה מסכמת</button>
     </div>
     ${category === 'transport' && active === 'מטרו' ? `<div style="padding:0 16px 8px;display:flex;flex-direction:column;gap:8px;">
       <select onchange="jumpToMetroStation('red', this.value)" style="width:100%;padding:10px;border-radius:8px;border:2px solid #D32F2F;background:#fff;font-family:Heebo;color:#D32F2F;font-size:0.9rem;font-weight:600;cursor:pointer;">
