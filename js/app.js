@@ -3673,10 +3673,10 @@ function renderREListings(filterType) {
         <label style="display:block;font-size:0.78rem;color:#2C5F6E;font-weight:600;margin-bottom:4px;">גודל מודעה (חינם)</label>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px;">
           <label style="display:flex;align-items:center;gap:6px;padding:8px;border:2px solid #E5E7EB;border-radius:6px;cursor:pointer;font-size:0.78rem;background:#fff;">
-            <input type="radio" name="reSize" value="small" checked> 📏 קטנה (150px)
+            <input type="radio" name="reSize" value="small" checked> 📏 קטנה (תמונה מימין)
           </label>
           <label style="display:flex;align-items:center;gap:6px;padding:8px;border:2px solid #E5E7EB;border-radius:6px;cursor:pointer;font-size:0.78rem;background:#fff;">
-            <input type="radio" name="reSize" value="large"> 📐 גדולה (300px)
+            <input type="radio" name="reSize" value="large"> 📐 גדולה (תמונה למעלה)
           </label>
         </div>
 
@@ -3740,34 +3740,43 @@ async function deleteOwnListing(id) {
 function listingFullCard(l, isFeatured) {
   const photo = (l.photos && l.photos[0]) || '';
   const typeColor = l.type === 'sale' ? '#E76F51' : '#2A9D8F';
-  const imgHeight = l.size === 'large' ? 300 : 150;
+  const isLarge = l.size === 'large';
   const highlight = l.highlight || 'none';
   const cardBg = highlight === 'negative' ? '#0A1F3D' : highlight === 'emphasized' ? '#FFF8E7' : '#fff';
   const cardBorder = highlight === 'negative' ? '2px solid #1E3A8A' : highlight === 'emphasized' ? '3px solid #F4A261' : '1px solid #E5E7EB';
-  const titleColor = highlight === 'negative' ? '#fff' : '#2C5F6E';
   const descColor = highlight === 'negative' ? '#cbd5e1' : '#2C5F6E';
-  return `
-    <div onclick="openListingModal('${l.id}')" style="background:${cardBg};border-radius:16px;overflow:hidden;box-shadow:0 6px 20px rgba(0,0,0,0.08);cursor:pointer;border:${cardBorder};position:relative;">
-      ${isFeatured ? `<div style="position:absolute;top:12px;right:12px;background:linear-gradient(135deg,#B8923A,#F4A261);color:#fff;font-size:0.65rem;font-weight:900;padding:4px 10px;border-radius:10px;z-index:2;letter-spacing:0.4px;box-shadow:0 4px 10px rgba(244,162,97,0.4);">⭐ מומלץ</div>` : ''}
-      <div style="position:relative;width:100%;height:${imgHeight}px;background:#F5F5F5;overflow:hidden;">
-        ${photo ? `<img src="${photo}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none'">` : `<div style="width:100%;height:100%;background:linear-gradient(135deg,#E5E7EB,#F5F5F5);display:flex;align-items:center;justify-content:center;color:#9CA3AF;font-size:2.5rem;">🏙️</div>`}
-        <div style="position:absolute;bottom:0;right:0;left:0;background:linear-gradient(180deg,transparent 0%,rgba(0,0,0,0.7) 100%);padding:30px 14px 14px;">
-          <div style="display:flex;justify-content:space-between;align-items:end;gap:8px;">
-            <div style="flex:1;">
-              <div style="color:#fff;font-weight:800;font-size:1.05rem;line-height:1.25;text-shadow:0 1px 4px rgba(0,0,0,0.6);">${l.title}</div>
-              <div style="color:#F4A261;font-size:0.75rem;font-weight:700;margin-top:3px;">📍 ${l.area}</div>
-            </div>
-            <div style="background:#fff;color:${typeColor};padding:6px 12px;border-radius:10px;font-weight:900;font-size:0.95rem;white-space:nowrap;box-shadow:0 4px 10px rgba(0,0,0,0.25);">AED ${Number(l.price).toLocaleString()}</div>
+  const titleColor = highlight === 'negative' ? '#fff' : '#2C5F6E';
+  const photoEl = photo ? `<img src="${photo}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none'">` : `<div style="width:100%;height:100%;background:linear-gradient(135deg,#E5E7EB,#F5F5F5);display:flex;align-items:center;justify-content:center;color:#9CA3AF;font-size:2rem;">🏙️</div>`;
+  const badges = `${l.photos && l.photos.length > 1 ? `<div style="position:absolute;top:8px;left:8px;background:rgba(0,0,0,0.65);color:#fff;font-size:0.65rem;font-weight:700;padding:3px 8px;border-radius:10px;z-index:2;">📷 ${l.photos.length}</div>` : ''}<span style="position:absolute;top:8px;right:8px;background:${typeColor};color:#fff;font-size:0.62rem;padding:3px 8px;border-radius:10px;font-weight:800;z-index:2;">${l.type === 'sale' ? 'למכירה' : 'להשכרה'}</span>`;
+
+  if (isLarge) {
+    return `
+      <div onclick="openListingModal('${l.id}')" style="background:${cardBg};border-radius:14px;overflow:hidden;box-shadow:0 6px 20px rgba(0,0,0,0.08);cursor:pointer;border:${cardBorder};position:relative;">
+        ${isFeatured ? `<div style="position:absolute;top:10px;right:10px;background:linear-gradient(135deg,#B8923A,#F4A261);color:#fff;font-size:0.62rem;font-weight:900;padding:4px 9px;border-radius:10px;z-index:3;">⭐ מומלץ</div>` : ''}
+        <div style="position:relative;width:100%;height:240px;background:#F5F5F5;overflow:hidden;">${photoEl}${badges}</div>
+        <div style="padding:12px 14px;">
+          <div style="display:flex;justify-content:space-between;align-items:start;gap:8px;margin-bottom:6px;">
+            <div style="flex:1;"><div style="color:${titleColor};font-weight:800;font-size:1rem;line-height:1.3;">${l.title}</div><div style="color:#F4A261;font-size:0.72rem;font-weight:700;margin-top:2px;">📍 ${l.area}</div></div>
+            <div style="color:${typeColor};font-weight:900;font-size:1rem;white-space:nowrap;">AED ${Number(l.price).toLocaleString()}</div>
           </div>
+          ${l.desc ? `<div style="font-size:0.86rem;color:${descColor};line-height:1.55;margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${l.desc}</div>` : ''}
+          <button onclick="event.stopPropagation();openListingModal('${l.id}')" style="width:100%;padding:10px;background:#1A6B8A;color:#fff;border:none;border-radius:8px;font-size:0.85rem;font-weight:800;font-family:Heebo;cursor:pointer;">לפרטים נוספים ›</button>
         </div>
-        ${l.photos && l.photos.length > 1 ? `<div style="position:absolute;top:12px;left:12px;background:rgba(0,0,0,0.65);color:#fff;font-size:0.68rem;font-weight:700;padding:4px 9px;border-radius:10px;">📷 ${l.photos.length}</div>` : ''}
-        <span style="position:absolute;top:12px;${isFeatured ? 'left:65px;' : 'left:12px;'}background:${typeColor};color:#fff;font-size:0.65rem;padding:3px 9px;border-radius:10px;font-weight:800;">${l.type === 'sale' ? 'למכירה' : 'להשכרה'}</span>
+      </div>`;
+  }
+  // Small — horizontal: image on right, text on left (RTL)
+  return `
+    <div onclick="openListingModal('${l.id}')" style="background:${cardBg};border-radius:12px;overflow:hidden;box-shadow:0 4px 14px rgba(0,0,0,0.06);cursor:pointer;border:${cardBorder};position:relative;display:flex;gap:0;">
+      <div style="position:relative;width:120px;height:120px;flex-shrink:0;background:#F5F5F5;overflow:hidden;">${photoEl}${badges}</div>
+      <div style="flex:1;padding:10px 12px;min-width:0;">
+        <div style="display:flex;justify-content:space-between;align-items:start;gap:6px;margin-bottom:4px;">
+          <div style="color:${titleColor};font-weight:800;font-size:0.88rem;line-height:1.25;flex:1;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${l.title}</div>
+        </div>
+        <div style="color:#F4A261;font-size:0.68rem;font-weight:700;margin-bottom:2px;">📍 ${l.area}</div>
+        <div style="color:${typeColor};font-weight:900;font-size:0.88rem;margin-bottom:6px;">AED ${Number(l.price).toLocaleString()}</div>
+        <button onclick="event.stopPropagation();openListingModal('${l.id}')" style="width:100%;padding:6px;background:#1A6B8A;color:#fff;border:none;border-radius:6px;font-size:0.72rem;font-weight:700;font-family:Heebo;cursor:pointer;">לפרטים נוספים ›</button>
       </div>
-      <div style="padding:14px 16px;">
-        ${l.desc ? `<div style="font-size:0.95rem;color:${descColor};line-height:1.6;margin-bottom:12px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;">${l.desc}</div>` : ''}
-        <button onclick="event.stopPropagation();openListingModal('${l.id}')" style="width:100%;padding:11px;background:#1A6B8A;color:#fff;border:none;border-radius:8px;font-size:0.9rem;font-weight:800;font-family:Heebo;cursor:pointer;">לפרטים נוספים ›</button>
-      </div>
-    </div>
+    </div>`;
   `;
 }
 
