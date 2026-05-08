@@ -4044,7 +4044,12 @@ function openDetail(category, id) {
           </details>
         ` : ''}
         ${item.tags ? `<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;">${item.tags.map(t => `<span class="card-tag">${t}</span>`).join('')}</div>` : ''}
-        <div class="modal-desc">${item.description}${category === 'hotels' ? ` <a href="${item.website || 'https://www.google.com/search?q=' + encodeURIComponent((item.nameEn || item.name) + ' Dubai official site')}" target="_blank" style="color:#2A9D8F;font-weight:600;text-decoration:underline;font-size:0.85rem;white-space:nowrap;"><i class="fas fa-globe" style="font-size:0.75rem;"></i> אתר רשמי</a>` : ''}</div>
+        <div class="modal-desc">
+          ${item.description || ''}
+          ${item.priceRange ? `<div style="margin-top:8px;color:#E76F51;font-size:0.82rem;font-weight:600;">💰 ${item.priceRange}</div>` : ''}
+          ${item.hours && item.hours.length ? `<div style="margin-top:6px;color:#2A9D8F;font-size:0.82rem;font-weight:600;">🕐 ${item.hours[0]}</div>` : ''}
+          ${item.website ? `<div style="margin-top:6px;"><a href="${item.website}" target="_blank" style="color:#1A6B8A;font-weight:600;text-decoration:underline;font-size:0.85rem;"><i class="fas fa-globe" style="font-size:0.75rem;"></i> אתר רשמי</a></div>` : ''}
+        </div>
         ${item.googlePhotos && item.googlePhotos.length ? `
           <div style="display:flex;gap:6px;overflow-x:auto;margin-bottom:12px;">
             ${item.googlePhotos.map(url => `<img src="${url}" style="height:80px;border-radius:4px;flex-shrink:0;" onerror="this.style.display='none'">`).join('')}
