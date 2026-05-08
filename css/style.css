@@ -13,7 +13,7 @@
   --card-bg: #FFFFFF;
   --success: #2A9D8F;
   --danger: #E76F51;
-  --accent: #E9C46A;
+  --accent: #B8923A;
   --radius: 16px;
   --shadow: 0 4px 20px rgba(0,0,0,0.08);
 }
@@ -48,9 +48,9 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; heig
   transition: opacity 0.6s, visibility 0.6s;
 }
 .splash-screen.hidden { opacity:0; visibility:hidden; }
-.splash-logo { font-size:3rem; font-weight:800; color:#E9C46A; margin-bottom:0.5rem; }
+.splash-logo { font-size:3rem; font-weight:800; color:#B8923A; margin-bottom:0.5rem; }
 .splash-sub { color:rgba(255,255,255,0.7); font-size:1.1rem; margin-bottom:2rem; }
-.splash-spinner { width:40px; height:40px; border:3px solid rgba(255,255,255,0.2); border-top-color:#E9C46A; border-radius:50%; animation:spin 0.8s linear infinite; }
+.splash-spinner { width:40px; height:40px; border:3px solid rgba(255,255,255,0.2); border-top-color:#B8923A; border-radius:50%; animation:spin 0.8s linear infinite; }
 @keyframes spin { to { transform:rotate(360deg); } }
 
 /* ===== APP LAYOUT ===== */
@@ -491,6 +491,6 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; heig
 }
 @keyframes heroLetterIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
 @keyframes heroToOrange { to { color:#E76F51; } }
-@keyframes heroDubaiOrange { to { color:#E9C46A; } }
+@keyframes heroDubaiOrange { to { color:#B8923A; } }
 @keyframes heroSubIn { from { opacity:0; } to { opacity:1; } }
 @keyframes heroFadeOut { to { opacity:0; } }

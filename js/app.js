@@ -297,7 +297,7 @@ function renderMyTripPage() {
       </div>
       ${!trip.items.length ? `
         <div style="background:#F5E6CB;border-radius:10px;padding:30px 20px;text-align:center;color:#6B7F8D;">
-          <i class="fas fa-suitcase-rolling" style="font-size:2.5rem;color:#E9C46A;margin-bottom:12px;"></i>
+          <i class="fas fa-suitcase-rolling" style="font-size:2.5rem;color:#B8923A;margin-bottom:12px;"></i>
           <div style="font-size:0.95rem;font-weight:700;color:#2C5F6E;margin-bottom:8px;">הטיול ריק</div>
           <div style="font-size:0.8rem;line-height:1.6;">לחצו על + בכרטיסים (מלון/מסעדה/אטרקציה) כדי להוסיף לטיול. הפריטים שתבחרו יסומנו בלב ❤️ כאן.</div>
         </div>
@@ -484,7 +484,7 @@ const NEAR_CATS = [
   { key:'shopping', label:'קניות', color:'#F4A261', icon:'fa-shopping-bag' },
   { key:'nightlife', label:'בילויים', color:'#B85C8E', icon:'fa-glass-cheers' },
   { key:'kids', label:'ילדים', color:'#E76F51', icon:'fa-child' },
-  { key:'hotels', label:'מלונות', color:'#E9C46A', icon:'fa-hotel' }
+  { key:'hotels', label:'מלונות', color:'#B8923A', icon:'fa-hotel' }
 ];
 
 function renderNearMePage() {
@@ -550,7 +550,7 @@ function renderNearList(myLat, myLng) {
   const page = document.getElementById('page-near');
   page.innerHTML = `
     <div style="padding:14px 20px;background:linear-gradient(135deg,#2C5F6E,#2A9D8F);color:#fff;display:flex;align-items:center;gap:10px;">
-      <i class="fas fa-location-arrow" style="font-size:1.1rem;color:#E9C46A;"></i>
+      <i class="fas fa-location-arrow" style="font-size:1.1rem;color:#B8923A;"></i>
       <div style="flex:1;">
         <div style="font-weight:800;font-size:1rem;">קרוב אליך עכשיו</div>
         <div style="font-size:0.72rem;opacity:0.85;">2 הקרובים מכל קטגוריה (עוד 3 בלחיצה)</div>
@@ -665,8 +665,8 @@ function startDiscoveryRotation() {
         <div style="position:relative;width:100%;height:140px;overflow:hidden;">
           <img src="${item.image}" alt="${item.name}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none'">
           <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.1) 0%,rgba(0,0,0,0) 40%,rgba(0,0,0,0.85) 100%);"></div>
-          <div style="position:absolute;top:8px;right:8px;background:#E9C46A;color:#2C5F6E;font-size:0.65rem;padding:3px 10px;border-radius:12px;font-weight:700;">💡 ${catLabel[item._cat] || item._cat}</div>
-          ${item.rating ? `<div style="position:absolute;top:8px;left:8px;background:rgba(0,0,0,0.55);color:#E9C46A;font-size:0.7rem;padding:3px 8px;border-radius:10px;font-weight:600;">⭐ ${item.rating}</div>` : ''}
+          <div style="position:absolute;top:8px;right:8px;background:#B8923A;color:#2C5F6E;font-size:0.65rem;padding:3px 10px;border-radius:12px;font-weight:700;">💡 ${catLabel[item._cat] || item._cat}</div>
+          ${item.rating ? `<div style="position:absolute;top:8px;left:8px;background:rgba(0,0,0,0.55);color:#B8923A;font-size:0.7rem;padding:3px 8px;border-radius:10px;font-weight:600;">⭐ ${item.rating}</div>` : ''}
           <div style="position:absolute;bottom:8px;right:12px;left:12px;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,0.7);">
             <div style="font-weight:800;font-size:1rem;line-height:1.2;">${item.name}</div>
             <div style="font-size:0.72rem;opacity:0.95;margin-top:2px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${item.description || item.address || ''}</div>
@@ -745,9 +745,9 @@ const SUBCAT_HE = {
 };
 function subcategoryHe(sub) { return SUBCAT_HE[sub] || sub; }
 const CATEGORY_TITLE_COLORS = {
-  hotels:'#E9C46A', attractions:'#2A9D8F', restaurants:'#F4A261',
+  hotels:'#B8923A', attractions:'#2A9D8F', restaurants:'#F4A261',
   shopping:'#F4A261', nightlife:'#B85C8E', kids:'#E76F51',
-  transport:'#2A9D8F', casino:'#E9C46A', abudhabi:'#B85C8E'
+  transport:'#2A9D8F', casino:'#B8923A', abudhabi:'#B85C8E'
 };
 const VERIFIED_BADGE = '';
 
@@ -831,8 +831,8 @@ function cardHTML(item, category, mini) {
 
 // ===== MAP HELPERS =====
 const MARKER_COLORS = {
-  hotels:'#E9C46A', restaurants:'#E76F51', attractions:'#2A9D8F',
-  shopping:'#F4A261', nightlife:'#E76F51', transport:'#2A9D8F', casino:'#E9C46A'
+  hotels:'#B8923A', restaurants:'#E76F51', attractions:'#2A9D8F',
+  shopping:'#F4A261', nightlife:'#E76F51', transport:'#2A9D8F', casino:'#B8923A'
 };
 const SUBCAT_COLORS = {
   '7star':'#C9A961', '5star':'#E76F51', '4-5star':'#2A9D8F',
@@ -1008,7 +1008,7 @@ async function renderItinerariesPage() {
   page.innerHTML = `
     <div class="page-header">
       <button class="back-btn" onclick="navigateTo('home')"><i class="fas fa-arrow-right"></i></button>
-      <h2><i class="fas fa-route" style="color:#E9C46A;margin-left:6px;"></i> מסלולים מוכנים</h2>
+      <h2><i class="fas fa-route" style="color:#B8923A;margin-left:6px;"></i> מסלולים מוכנים</h2>
     </div>
     <div style="display:flex;gap:6px;padding:10px 16px 0;">
       <button onclick="switchItinView('day')" style="flex:1;padding:9px 4px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.78rem;cursor:pointer;border:${view==='day'?'2px solid #E76F51':'1px solid #E5E7EB'};background:${view==='day'?'#FFF5F2':'#fff'};color:${view==='day'?'#E76F51':'#6B7F8D'};">📅 מסלולי יום</button>
@@ -1017,12 +1017,12 @@ async function renderItinerariesPage() {
     </div>
     <div style="padding:12px 16px 80px;">
       ${view === 'day' ? `
-        <div style="background:#F5E6CB;border-right:3px solid #E9C46A;padding:10px 14px;border-radius:6px;font-size:0.85rem;color:#2C5F6E;margin-bottom:14px;">
+        <div style="background:#F5E6CB;border-right:3px solid #B8923A;padding:10px 14px;border-radius:6px;font-size:0.85rem;color:#2C5F6E;margin-bottom:14px;">
           💡 גררו את התחנות (אייקון ⋮⋮) לסדר אישי שלכם. לחיצה על "פתח ניווט" תפתח Google Maps.
         </div>
         <div id="itineraries-list">${ITINERARY_STATES.map((it, idx) => renderItineraryCard(it, idx)).join('')}</div>
       ` : `
-        <div style="background:#F5E6CB;border-right:3px solid #E9C46A;padding:10px 14px;border-radius:6px;font-size:0.85rem;color:#2C5F6E;margin-bottom:14px;">
+        <div style="background:#F5E6CB;border-right:3px solid #B8923A;padding:10px 14px;border-radius:6px;font-size:0.85rem;color:#2C5F6E;margin-bottom:14px;">
           💡 כל כוכב = נקודת מרכז עם אטרקציות מסביב. בחרו אזור — תכננו את היום בלי לזוז רחוק.
         </div>
         <div>${STAR_HUBS.map((h, i) => renderStarHub(h, i)).join('')}</div>
@@ -1126,7 +1126,7 @@ function renderStarHubInner(h, idx) {
           <div style="font-weight:800;font-size:1rem;line-height:1.2;">⭐ ${h.name}</div>
           <div style="font-size:0.72rem;opacity:0.92;margin-top:2px;">${h.spokes.length} זרועות</div>
         </div>
-        ${(() => { const r = parseInt(localStorage.getItem(`star-rating-${idx}`) || '0'); return r ? `<div style="background:rgba(0,0,0,0.25);color:#E9C46A;font-size:0.85rem;padding:3px 8px;border-radius:10px;letter-spacing:1px;">${'★'.repeat(r)}${'☆'.repeat(5-r)}</div>` : ''; })()}
+        ${(() => { const r = parseInt(localStorage.getItem(`star-rating-${idx}`) || '0'); return r ? `<div style="background:rgba(0,0,0,0.25);color:#B8923A;font-size:0.85rem;padding:3px 8px;border-radius:10px;letter-spacing:1px;">${'★'.repeat(r)}${'☆'.repeat(5-r)}</div>` : ''; })()}
       </div>
       <div style="height:240px;background:#F5F5F5;position:relative;cursor:zoom-in;" onclick="openStarHubMapModal(${idx})">
         <img src="${buildStarHubMap(h, '600x300')}" alt="כוכב ${h.name}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none'">
@@ -1152,7 +1152,7 @@ function renderStarHubInner(h, idx) {
         <div style="background:#F5E6CB;padding:14px 16px;text-align:center;border-top:1px solid #F5EFE6;">
           <div style="font-size:0.9rem;color:#2C5F6E;font-weight:700;margin-bottom:8px;">איך היה הכוכב?</div>
           <div style="display:flex;gap:8px;justify-content:center;">
-            ${[1,2,3,4,5].map(n => `<i class="fas fa-star" onclick="rateStarHub(${idx}, ${n})" style="font-size:1.6rem;color:${n <= saved ? '#E9C46A' : '#E5E7EB'};cursor:pointer;transition:color 0.2s;"></i>`).join('')}
+            ${[1,2,3,4,5].map(n => `<i class="fas fa-star" onclick="rateStarHub(${idx}, ${n})" style="font-size:1.6rem;color:${n <= saved ? '#B8923A' : '#E5E7EB'};cursor:pointer;transition:color 0.2s;"></i>`).join('')}
           </div>
           ${saved ? `<div style="font-size:0.7rem;color:#6B7F8D;margin-top:6px;">הדירוג שלך: ${saved}/5 ⭐</div>` : '<div style="font-size:0.7rem;color:#6B7F8D;margin-top:6px;">לחצו על כוכב כדי לדרג</div>'}
         </div>`;
@@ -1260,7 +1260,7 @@ function ITINERARY_TEMPLATE(it, idx, navUrl) {
                 <img src="${s.image}" alt="${s.name}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'">
                 <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.3) 0%,rgba(0,0,0,0) 30%,rgba(0,0,0,0) 50%,rgba(0,0,0,0.85) 100%);"></div>
                 <div style="position:absolute;top:10px;right:12px;display:flex;align-items:center;gap:6px;">
-                  ${(() => { const r = parseInt(localStorage.getItem(`itin-rating-${idx}`) || '0'); return r ? `<div style="background:rgba(0,0,0,0.5);color:#E9C46A;font-size:0.85rem;padding:3px 8px;border-radius:10px;letter-spacing:1px;">${'★'.repeat(r)}${'☆'.repeat(5-r)}</div>` : ''; })()}
+                  ${(() => { const r = parseInt(localStorage.getItem(`itin-rating-${idx}`) || '0'); return r ? `<div style="background:rgba(0,0,0,0.5);color:#B8923A;font-size:0.85rem;padding:3px 8px;border-radius:10px;letter-spacing:1px;">${'★'.repeat(r)}${'☆'.repeat(5-r)}</div>` : ''; })()}
                   <div style="font-size:1.8rem;">${it.icon}</div>
                 </div>
                 <div style="position:absolute;top:10px;left:12px;background:rgba(0,0,0,0.5);color:#fff;font-size:0.65rem;padding:3px 8px;border-radius:10px;">${j + 1}/${it.stops.length} · ${s.time}</div>
@@ -1337,7 +1337,7 @@ function ITINERARY_TEMPLATE(it, idx, navUrl) {
             <div style="background:#F5E6CB;padding:14px 16px;text-align:center;border-top:1px solid #F5EFE6;">
               <div style="font-size:0.9rem;color:#2C5F6E;font-weight:700;margin-bottom:8px;">איך היה הסיור?</div>
               <div id="rating-${idx}" style="display:flex;gap:8px;justify-content:center;">
-                ${[1,2,3,4,5].map(n => `<i class="fas fa-star" data-star="${n}" onclick="rateItinerary(${idx}, ${n})" style="font-size:1.6rem;color:${n <= saved ? '#E9C46A' : '#E5E7EB'};cursor:pointer;transition:color 0.2s;"></i>`).join('')}
+                ${[1,2,3,4,5].map(n => `<i class="fas fa-star" data-star="${n}" onclick="rateItinerary(${idx}, ${n})" style="font-size:1.6rem;color:${n <= saved ? '#B8923A' : '#E5E7EB'};cursor:pointer;transition:color 0.2s;"></i>`).join('')}
               </div>
               ${saved ? `<div style="font-size:0.7rem;color:#6B7F8D;margin-top:6px;">הדירוג שלך: ${saved}/5 ⭐</div>` : '<div style="font-size:0.7rem;color:#6B7F8D;margin-top:6px;">לחצו על כוכב כדי לדרג</div>'}
             </div>`;
@@ -1431,9 +1431,9 @@ function renderAlbumSection(idx) {
     <div style="border-top:1px solid #F5EFE6;">
       <div onclick="toggleStopDrawer('album-${idx}')" style="padding:12px 16px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;background:#fff;">
         <div style="display:flex;align-items:center;gap:8px;">
-          <i class="fas fa-camera" style="color:#E9C46A;"></i>
+          <i class="fas fa-camera" style="color:#B8923A;"></i>
           <span style="font-weight:700;color:#2C5F6E;font-size:0.95rem;">אלבום הגולשים</span>
-          ${entries.length ? `<span style="background:#E9C46A;color:#2C5F6E;font-size:0.7rem;padding:2px 8px;border-radius:10px;font-weight:700;">${entries.length}</span>` : ''}
+          ${entries.length ? `<span style="background:#B8923A;color:#2C5F6E;font-size:0.7rem;padding:2px 8px;border-radius:10px;font-weight:700;">${entries.length}</span>` : ''}
         </div>
         <i class="fas fa-chevron-down" id="album-${idx}-chevron" style="color:#6B7F8D;font-size:0.85rem;transition:transform 0.3s;"></i>
       </div>
@@ -1517,7 +1517,7 @@ function rateItinerary(idx, n) {
   const stars = container.querySelectorAll('[data-star]');
   stars.forEach(s => {
     const num = parseInt(s.dataset.star);
-    s.style.color = num <= n ? '#E9C46A' : '#E5E7EB';
+    s.style.color = num <= n ? '#B8923A' : '#E5E7EB';
   });
   const card = document.getElementById(`itin-card-${idx}`);
   if (card && ITINERARY_STATES[idx]) {
@@ -1694,7 +1694,7 @@ function renderMallPage(mallId) {
             </div>`;
         })()}
         <div style="display:flex;gap:8px;margin:10px 0;flex-wrap:wrap;font-size:0.8rem;">
-          ${info.hours ? `<span style="background:#F5E6CB;padding:4px 10px;border-radius:6px;color:#2C5F6E;"><i class="fas fa-clock" style="color:#E9C46A;"></i> ${info.hours}</span>` : ''}
+          ${info.hours ? `<span style="background:#F5E6CB;padding:4px 10px;border-radius:6px;color:#2C5F6E;"><i class="fas fa-clock" style="color:#B8923A;"></i> ${info.hours}</span>` : ''}
           ${info.phone ? `<a href="tel:${info.phone}" style="background:#F5E6CB;padding:4px 10px;border-radius:6px;color:#2C5F6E;text-decoration:none;"><i class="fas fa-phone" style="color:#2A9D8F;"></i> ${info.phone}</a>` : ''}
         </div>
         <div style="color:#2C5F6E;font-size:0.9rem;line-height:1.6;">${mall.description}</div>
@@ -1705,7 +1705,7 @@ function renderMallPage(mallId) {
         </div>
 
         ${info.highlights ? `
-          <div style="margin-top:18px;background:#F5E6CB;border-right:3px solid #E9C46A;padding:10px 14px;border-radius:6px;">
+          <div style="margin-top:18px;background:#F5E6CB;border-right:3px solid #B8923A;padding:10px 14px;border-radius:6px;">
             <div style="font-weight:700;color:#2C5F6E;margin-bottom:6px;font-size:0.9rem;">⭐ אטרקציות בולטות</div>
             <ul style="margin:0;padding-right:18px;color:#2C5F6E;font-size:0.85rem;line-height:1.6;">
               ${info.highlights.map(h => `<li>${h}</li>`).join('')}
@@ -1746,7 +1746,7 @@ const INFO_SECTIONS = {
     body:`עודכן לאחרונה: מאי 2026\n\nאיזה מידע אנחנו אוספים?\nWellCome Dubai פועל ללא רישום משתמשים. לא נאספים שמות, אימיילים, מספרי טלפון או כל פרט מזהה.\n\nנתוני מיקום (Geolocation)\nכאשר תלחצו על "הראה לי מה קרוב אליי", הדפדפן יבקש הרשאה לגישה למיקום. הנתון משמש אך ורק לחישוב מרחק לאטרקציות, ולא נשלח לשרת או נשמר בשום מקום.\n\nאחסון מקומי (LocalStorage)\nהדפדפן שומר נתונים טכניים על המכשיר שלכם, ללא שליחה לשרת:\n• שערי מטבע ומזג אוויר (זמני, להאצה)\n• נתוני המאגר של ספקים (קטגוריות, מסלולים)\n• דירוגים אישיים שהוספתם למסלולים\n\nתוכלו למחוק את כל הנתונים בכל רגע — Settings → Clear Browsing Data.\n\nשירותי צד שלישי\n• Google Maps — מציג מפות ונווטים. כפוף למדיניות הפרטיות של Google.\n• Open-Meteo — שירות מזג אוויר חינמי, ללא איסוף נתונים.\n• AeroDataBox / Booking — ספקי לוחות טיסות וזמינות מלונות (כאשר רלוונטי).\n• GitHub Pages — אחסון האתר.\n\nעוגיות (Cookies)\nהאתר אינו משתמש בעוגיות שיווק או מעקב.\n\nזכויות המשתמש\n• זכות עיון: כל הנתונים נשמרים מקומית במכשיר שלכם — אתם בשליטה מלאה.\n• זכות מחיקה: ניקוי נתוני הדפדפן ימחק הכל.\n• זכות התנגדות: ניתן לסרב להרשאת מיקום ללא פגיעה ביכולת הגלישה.\n\nשאלות?\nניתן לפנות אלינו בעמוד "צור קשר".`
   },
   contact: {
-    key:'contact', title:'צור קשר', icon:'fa-envelope', color:'#E9C46A',
+    key:'contact', title:'צור קשר', icon:'fa-envelope', color:'#B8923A',
     body:''
   }
 };
@@ -1821,7 +1821,7 @@ function renderContactForm() {
           <textarea name="message" required rows="5" style="width:100%;padding:10px;border:1px solid #E5E7EB;border-radius:6px;font-family:Heebo;font-size:0.9rem;color:#2C5F6E;resize:vertical;min-height:100px;box-sizing:border-box;"></textarea>
         </div>
         <div style="display:flex;gap:10px;">
-          <button type="submit" style="flex:1;background:#E9C46A;color:#2C5F6E;border:none;padding:12px;border-radius:6px;font-family:Heebo;font-weight:700;font-size:0.95rem;cursor:pointer;"><i class="fas fa-envelope"></i> שלח באימייל</button>
+          <button type="submit" style="flex:1;background:#B8923A;color:#2C5F6E;border:none;padding:12px;border-radius:6px;font-family:Heebo;font-weight:700;font-size:0.95rem;cursor:pointer;"><i class="fas fa-envelope"></i> שלח באימייל</button>
           <button type="button" onclick="submitContactForm(null, true)" style="flex:1;background:#25D366;color:#fff;border:none;padding:12px;border-radius:6px;font-family:Heebo;font-weight:700;font-size:0.95rem;cursor:pointer;"><i class="fab fa-whatsapp"></i> שלח בוואטסאפ</button>
         </div>
       </form>
@@ -1993,7 +1993,7 @@ function navigateToNearestMetro() {
 const DUBAI_AREAS = [
   { name:'דאון טאון', color:'#E76F51', desc:'האזור האורבני החדיש והנוצץ — ברג׳ ח׳ליפה, Dubai Mall, מזרקות דובאי, מסעדות וגורדי שחקים. לב התיירות המודרנית.', poly:[[25.2105,55.2705],[25.2098,55.2812],[25.2050,55.2870],[25.1950,55.2870],[25.1830,55.2810],[25.1820,55.2705],[25.1900,55.2640],[25.2010,55.2640]] },
   { name:'מרינה', color:'#2A9D8F', desc:'רצועת חוף 2 ק״מ, יאכטות, מסעדות, חיי לילה וגורדי שחקים. נבחרה ע״י Time Out לאחת מ-50 השכונות המגניבות בעולם.', poly:[[25.0950,55.1340],[25.0945,55.1455],[25.0870,55.1530],[25.0750,55.1530],[25.0700,55.1450],[25.0710,55.1350],[25.0810,55.1310]] },
-  { name:'פאלם ג׳ומיירה', color:'#E9C46A', desc:'אי מלאכותי בצורת דקל — אטרקציית סימן הזיהוי של דובאי. אתרי נופש יוקרתיים: Atlantis The Palm, FIVE Palm, Waldorf Astoria. חופים פרטיים ונוף ים.', poly:[[25.1430,55.1380],[25.1430,55.1620],[25.1330,55.1700],[25.1180,55.1700],[25.1040,55.1620],[25.1000,55.1500],[25.1040,55.1380],[25.1180,55.1300],[25.1330,55.1300]] },
+  { name:'פאלם ג׳ומיירה', color:'#B8923A', desc:'אי מלאכותי בצורת דקל — אטרקציית סימן הזיהוי של דובאי. אתרי נופש יוקרתיים: Atlantis The Palm, FIVE Palm, Waldorf Astoria. חופים פרטיים ונוף ים.', poly:[[25.1430,55.1380],[25.1430,55.1620],[25.1330,55.1700],[25.1180,55.1700],[25.1040,55.1620],[25.1000,55.1500],[25.1040,55.1380],[25.1180,55.1300],[25.1330,55.1300]] },
   { name:'JBR', color:'#F4A261', desc:'Jumeirah Beach Residence — טיילת תוססת על החוף, מסעדות, פעילויות מים ואקסטרים, מופעי רחוב. פופולרי במשפחות ובמקומיים.', poly:[[25.0930,55.1280],[25.0925,55.1450],[25.0820,55.1470],[25.0735,55.1430],[25.0720,55.1330],[25.0810,55.1280]] },
   { name:'דיירה', color:'#6B8E5A', desc:'האזור המסורתי והוותיק — שוק הזהב, שוק התבלינים, שוק הטקסטיל, שוק הפשפשים. נחל דובאי וסירות אברה. מלונות זולים, ערך מצוין לכסף.', poly:[[25.2950,55.2900],[25.2980,55.3200],[25.2920,55.3380],[25.2780,55.3450],[25.2640,55.3380],[25.2600,55.3200],[25.2640,55.3030]] },
   { name:'בור דובאי', color:'#C9A961', desc:'האזור ההיסטורי למגורים, שכונת אל-פאהידי, מוזיאון דובאי. מחלק את העיר בין צפון לדרום עם נחל דובאי.', poly:[[25.2720,55.2850],[25.2730,55.3050],[25.2680,55.3160],[25.2570,55.3180],[25.2440,55.3100],[25.2420,55.2960],[25.2480,55.2880]] },
@@ -2296,7 +2296,7 @@ function renderFoodDeliveryApps() {
 }
 
 const TOP_ISRAELI_PRODUCTS = [
-  { cat:'זהב ותכשיטים', emoji:'💍', color:'#E9C46A', items:[
+  { cat:'זהב ותכשיטים', emoji:'💍', color:'#B8923A', items:[
     { name:'Gold Souk (Deira)', desc:'שוק הזהב המסורתי — מאות חנויות, מחירי שוק עולמיים', rating:'⭐ 4.8', lat:25.2697, lng:55.2967, image:'https://images.unsplash.com/photo-1611652022419-a9419f74343d?w=400&h=400&fit=crop&q=80', web:'https://www.visitdubai.com/en/places-to-visit/gold-souk', map:'https://maps.google.com/?q=Gold+Souk+Deira+Dubai', video:'B8b5ZpkMRbo' },
     { name:'Damas — Dubai Mall', desc:'רשת תכשיטים מובילה, סניפים בכל קניון', rating:'⭐ 4.6', lat:25.1972, lng:55.2796, image:'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400&h=400&fit=crop&q=80', web:'https://www.damasjewellery.com', map:'https://maps.google.com/?q=Damas+Jewellery+Dubai+Mall', video:'qxHc6lZKxCM' },
     { name:'Joyalukkas — Gold Souk', desc:'תכשיטי זהב הודיים — אטרקטיבי לקלאסי', rating:'⭐ 4.7', lat:25.2701, lng:55.2972, image:'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=400&h=400&fit=crop&q=80', web:'https://www.joyalukkas.in', map:'https://maps.google.com/?q=Joyalukkas+Dubai', video:'wnBdvB1u8aQ' },
@@ -2397,7 +2397,7 @@ function renderTopProductsForIsraelis() {
   `).join('');
   return `
     <div style="padding:0 16px 20px;">
-      <div style="background:linear-gradient(135deg,#E9C46A,#F4A261);color:#fff;border-radius:12px;padding:14px;margin-bottom:14px;">
+      <div style="background:linear-gradient(135deg,#B8923A,#F4A261);color:#fff;border-radius:12px;padding:14px;margin-bottom:14px;">
         <div style="font-weight:800;font-size:1rem;margin-bottom:4px;">🛍️ הכי מבוקש על ידי ישראלים</div>
         <div style="font-size:0.78rem;opacity:0.95;line-height:1.5;">החנויות והשווקים המומלצים ביותר לזהב, בשמים, תמרים ואלקטרוניקה — בדירוג גולשים.</div>
       </div>
@@ -2625,7 +2625,7 @@ function renderFlightsPage() {
   page.innerHTML = `
     <div class="page-header">
       <button class="back-btn" onclick="navigateTo('home')"><i class="fas fa-arrow-right"></i></button>
-      <h2><i class="fas fa-plane" style="color:#E9C46A;margin-left:6px;"></i> טיסות ישראל ↔ דובאי</h2>
+      <h2><i class="fas fa-plane" style="color:#B8923A;margin-left:6px;"></i> טיסות ישראל ↔ דובאי</h2>
     </div>
     <div style="padding:16px 20px;">
       <!-- Live Flight Board -->
@@ -2634,7 +2634,7 @@ function renderFlightsPage() {
       <!-- Search Flights -->
       <div style="background:linear-gradient(135deg,#2C5F6E,#2A9D8F);border-radius:8px;padding:20px;color:#fff;margin-bottom:16px;">
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
-          <i class="fas fa-search" style="font-size:1.1rem;color:#E9C46A;"></i>
+          <i class="fas fa-search" style="font-size:1.1rem;color:#B8923A;"></i>
           <div>
             <div style="font-weight:700;font-size:1rem;">חפש טיסות TLV ✈ DXB</div>
             <div style="font-size:0.75rem;opacity:0.8;">השווה מחירים ומצא את הטיסה הזולה</div>
@@ -2651,7 +2651,7 @@ function renderFlightsPage() {
           </div>
         </div>
         <div style="display:flex;gap:8px;">
-          <button onclick="doFlightPageSearch()" style="flex:1;padding:12px;border-radius:8px;background:#E9C46A;color:#2C5F6E;border:none;font-family:Heebo;font-weight:700;cursor:pointer;font-size:0.9rem;">
+          <button onclick="doFlightPageSearch()" style="flex:1;padding:12px;border-radius:8px;background:#B8923A;color:#2C5F6E;border:none;font-family:Heebo;font-weight:700;cursor:pointer;font-size:0.9rem;">
             <i class="fas fa-search"></i> תוצאות מהירות
           </button>
           <button onclick="goToAviasales()" style="flex:1;padding:12px;border-radius:8px;background:#FF6B00;color:#fff;border:none;font-family:Heebo;font-weight:700;cursor:pointer;font-size:0.9rem;">
@@ -2684,7 +2684,7 @@ async function doFlightPageSearch() {
   const results = document.getElementById('flightPageResults');
   if (!results) return;
 
-  results.innerHTML = '<div style="text-align:center;padding:20px;"><i class="fas fa-spinner fa-spin" style="color:#E9C46A;"></i> מחפש טיסות TLV → DXB...</div>';
+  results.innerHTML = '<div style="text-align:center;padding:20px;"><i class="fas fa-spinner fa-spin" style="color:#B8923A;"></i> מחפש טיסות TLV → DXB...</div>';
 
   const flights = await searchFlights(depart, ret);
   if (!flights || flights.length === 0) {
@@ -2698,7 +2698,7 @@ async function doFlightPageSearch() {
     return `
       <div style="background:rgba(255,255,255,0.1);border-radius:6px;padding:12px;margin-bottom:8px;${f.deepLink ? 'cursor:pointer;' : ''}" ${f.deepLink ? `onclick="window.open('${f.deepLink}','_blank')"` : ''}>
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
-          <span style="font-size:1.1rem;font-weight:700;color:#E9C46A;">${f.price || f.priceRaw + ' ₪'}</span>
+          <span style="font-size:1.1rem;font-weight:700;color:#B8923A;">${f.price || f.priceRaw + ' ₪'}</span>
           ${outbound?.stops === 0 ? '<span style="background:#2A9D8F;color:#fff;font-size:0.65rem;padding:2px 8px;border-radius:10px;">ישיר</span>' : ''}
         </div>
         ${outbound ? `<div style="font-size:0.8rem;margin-bottom:3px;"><span style="font-weight:600;">${outbound.origin} → ${outbound.destination}</span> | ${outbound.carrier} | ${Math.floor(outbound.duration/60)}ש ${outbound.duration%60}ד</div>` : ''}
@@ -2748,7 +2748,7 @@ function renderWeatherPage() {
 
       <!-- 7 day forecast -->
       <div style="background:#fff;padding:16px;border-bottom:1px solid #E5E7EB;margin-bottom:16px;">
-        <div style="font-weight:700;color:#2C5F6E;margin-bottom:12px;"><i class="fas fa-calendar-week" style="color:#E9C46A;"></i> תחזית שבועית</div>
+        <div style="font-weight:700;color:#2C5F6E;margin-bottom:12px;"><i class="fas fa-calendar-week" style="color:#B8923A;"></i> תחזית שבועית</div>
         ${w.forecast.map(d => {
           const dayNum = new Date(d.date).getDay();
           const dateStr = new Date(d.date).toLocaleDateString('he-IL',{day:'numeric',month:'numeric'});
@@ -2796,7 +2796,7 @@ function renderWeatherPage() {
 function renderLiveCamsPage() {
   const page = document.getElementById('page-livecams');
   const cams = [
-    { name:'דובאי מרינה', desc:'מבט פנורמי על המרינה והגלגל הענק', img:'https://images.pexels.com/photos/14750359/pexels-photo-14750359.jpeg', url:'https://www.skylinewebcams.com/en/webcam/united-arab-emirates/dubai/dubai/dubai-marina.html', color:'#E9C46A' },
+    { name:'דובאי מרינה', desc:'מבט פנורמי על המרינה והגלגל הענק', img:'https://images.pexels.com/photos/14750359/pexels-photo-14750359.jpeg', url:'https://www.skylinewebcams.com/en/webcam/united-arab-emirates/dubai/dubai/dubai-marina.html', color:'#B8923A' },
     { name:'דובאי - קו הרקיע', desc:'תצפית רחבה על קו הרקיע של דובאי', img:'https://images.pexels.com/photos/26838210/pexels-photo-26838210.jpeg', url:'https://www.skylinewebcams.com/en/webcam/united-arab-emirates/dubai/dubai/dubai.html', color:'#F4A261' },
     { name:'Fairmont The Palm', desc:'מבט מהפאלם — מרינה + גלגל ענק', img:'https://images.pexels.com/photos/14750186/pexels-photo-14750186.jpeg', url:'https://www.webcamtaxi.com/en/united-arab-emirates/dubai/fairmont-thepalm-cam.html', color:'#2A9D8F' },
     { name:'Burj Khalifa Lake', desc:'מזרקת דובאי וברג׳ חליפה', img:'https://images.pexels.com/photos/29196946/pexels-photo-29196946.jpeg', url:'https://www.webcamtaxi.com/en/united-arab-emirates/dubai/burj-khalifa-lake-dubai.html', color:'#E76F51' },
@@ -2830,9 +2830,9 @@ function renderLiveCamsPage() {
         </a>
       `).join('')}
 
-      <div style="margin-top:8px;background:#F5E6CB;border-radius:6px;padding:10px;border-right:3px solid #E9C46A;">
+      <div style="margin-top:8px;background:#F5E6CB;border-radius:6px;padding:10px;border-right:3px solid #B8923A;">
         <div style="font-size:0.75rem;color:#2C5F6E;">
-          <i class="fas fa-info-circle" style="color:#E9C46A;"></i>
+          <i class="fas fa-info-circle" style="color:#B8923A;"></i>
           דובאי UTC+4 | שעה לפני ישראל בחורף, אותו זמן בקיץ
         </div>
       </div>
@@ -2940,7 +2940,7 @@ function renderInfoPage() {
           <a href="https://m.uber.com" target="_blank" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;border-radius:8px;background:#2C5F6E;color:#fff;text-decoration:none;font-weight:600;font-size:0.85rem;min-width:90px;">
             <i class="fas fa-car-side"></i> Uber
           </a>
-          <a href="https://www.google.com/maps/dir/?api=1&travelmode=transit&destination=Dubai" target="_blank" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;border-radius:8px;background:#E9C46A;color:#2C5F6E;text-decoration:none;font-weight:600;font-size:0.85rem;min-width:90px;">
+          <a href="https://www.google.com/maps/dir/?api=1&travelmode=transit&destination=Dubai" target="_blank" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;border-radius:8px;background:#B8923A;color:#2C5F6E;text-decoration:none;font-weight:600;font-size:0.85rem;min-width:90px;">
             <i class="fas fa-subway"></i> מטרו
           </a>
         </div>
@@ -2965,7 +2965,7 @@ function renderInfoPage() {
           <a href="https://www.deliveroo.ae" target="_blank" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;border-radius:8px;background:#2A9D8F;color:#fff;text-decoration:none;font-weight:600;font-size:0.85rem;">
             <i class="fas fa-biking"></i> Deliveroo
           </a>
-          <a href="https://www.noon.com/uae-en/noon-food/" target="_blank" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;border-radius:8px;background:#E9C46A;color:#2C5F6E;text-decoration:none;font-weight:600;font-size:0.85rem;">
+          <a href="https://www.noon.com/uae-en/noon-food/" target="_blank" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;border-radius:8px;background:#B8923A;color:#2C5F6E;text-decoration:none;font-weight:600;font-size:0.85rem;">
             <i class="fas fa-utensils"></i> Noon Food
           </a>
         </div>
@@ -3134,7 +3134,7 @@ function renderRealEstatePage() {
   page.innerHTML = `
     <div class="page-header" style="background:linear-gradient(135deg,#1A6B8A 0%,#2C5F6E 100%);color:#fff;border-bottom:none;">
       <button class="back-btn" onclick="navigateTo('home')" style="color:#fff !important;"><i class="fas fa-arrow-right"></i></button>
-      <h2 style="color:#fff;"><i class="fas fa-city" style="color:#E9C46A;margin-left:6px;"></i> פורטל הנדל"ן בדובאי</h2>
+      <h2 style="color:#fff;"><i class="fas fa-city" style="color:#B8923A;margin-left:6px;"></i> פורטל הנדל"ן בדובאי</h2>
     </div>
     <!-- Hero strip with subtle gradient -->
     <div style="background:linear-gradient(180deg,#F5E6CB 0%,transparent 100%);padding:18px 16px 10px;">
@@ -3151,7 +3151,7 @@ function renderRealEstatePage() {
         `).join('')}
       </div>
       <div style="margin-top:12px;">
-        <button onclick="navigateTo('business')" style="width:100%;padding:14px 16px;border-radius:12px;border:none;background:linear-gradient(135deg,#E9C46A,#F4A261);color:#2C5F6E;font-family:Heebo;font-weight:800;font-size:0.92rem;cursor:pointer;box-shadow:0 4px 14px rgba(233,196,106,0.4);display:flex;align-items:center;justify-content:center;gap:8px;">
+        <button onclick="navigateTo('business')" style="width:100%;padding:14px 16px;border-radius:12px;border:none;background:linear-gradient(135deg,#B8923A,#F4A261);color:#2C5F6E;font-family:Heebo;font-weight:800;font-size:0.92rem;cursor:pointer;box-shadow:0 4px 14px rgba(233,196,106,0.4);display:flex;align-items:center;justify-content:center;gap:8px;">
           <span style="font-size:1.3rem;">💼</span>
           <span>פורטל העסקים — בורסות, מניות וזהב</span>
           <span style="font-size:1rem;">←</span>
@@ -3172,7 +3172,7 @@ function renderBusinessPortal() {
   page.innerHTML = `
     <div class="page-header" style="background:linear-gradient(135deg,#1A6B8A 0%,#2C5F6E 100%);color:#fff;border-bottom:none;">
       <button class="back-btn" onclick="navigateTo('realestate')" style="color:#fff !important;"><i class="fas fa-arrow-right"></i></button>
-      <h2 style="color:#fff;"><i class="fas fa-chart-line" style="color:#E9C46A;margin-left:6px;"></i> פורטל העסקים</h2>
+      <h2 style="color:#fff;"><i class="fas fa-chart-line" style="color:#B8923A;margin-left:6px;"></i> פורטל העסקים</h2>
     </div>
     <div style="padding:18px 16px 80px;background:#FAF6EE;">
       <div style="background:#fff;border-radius:12px;padding:14px 16px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
@@ -3195,7 +3195,7 @@ function renderBusinessPortal() {
         <iframe scrolling="no" allowtransparency="true" frameborder="0" style="width:100%;height:380px;border:0;" src="https://www.tradingview-widget.com/embed-widget/symbol-overview/?locale=en#%7B%22symbols%22%3A%5B%5B%22OANDA%3AXAUUSD%7C1Y%22%5D%2C%5B%22OANDA%3AXAGUSD%7C1Y%22%5D%2C%5B%22TVC%3AUSOIL%7C1Y%22%5D%5D%2C%22chartOnly%22%3Afalse%2C%22width%22%3A%22100%25%22%2C%22height%22%3A380%2C%22colorTheme%22%3A%22light%22%7D"></iframe>
       </div>
 
-      <div style="background:linear-gradient(135deg,#E9C46A20,#F4A26120);border:1px solid #E9C46A;border-radius:12px;padding:14px 16px;font-size:0.8rem;color:#7B5E1F;line-height:1.6;">
+      <div style="background:linear-gradient(135deg,#B8923A20,#F4A26120);border:1px solid #B8923A;border-radius:12px;padding:14px 16px;font-size:0.8rem;color:#7B5E1F;line-height:1.6;">
         ⚠️ הנתונים מסופקים על ידי TradingView לצרכי מידע בלבד. אינם המלצה להשקעה.
       </div>
     </div>
@@ -3253,7 +3253,7 @@ function renderBrokersFullPage() {
   page.innerHTML = `
     <div class="page-header" style="background:linear-gradient(135deg,#B85C8E 0%,#1A6B8A 100%);color:#fff;border-bottom:none;">
       <button class="back-btn" onclick="switchRETab('articles')" style="color:#fff !important;"><i class="fas fa-arrow-right"></i></button>
-      <h2 style="color:#fff;"><i class="fas fa-handshake" style="color:#E9C46A;margin-left:6px;"></i> מתווכים מומלצים</h2>
+      <h2 style="color:#fff;"><i class="fas fa-handshake" style="color:#B8923A;margin-left:6px;"></i> מתווכים מומלצים</h2>
     </div>
     <div style="display:flex;gap:8px;padding:12px 14px;background:#F5E6CB;border-bottom:1px solid #F5EFE6;">
       <button onclick="showBrokerCriteria()" style="flex:1;padding:11px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.82rem;cursor:pointer;background:#fff;border:2px solid #1A6B8A;color:#1A6B8A;">✓ מה נדרש מהמתווך?</button>
@@ -3419,7 +3419,7 @@ const STAT_GRADIENTS = {
   '#1A6B8A': 'linear-gradient(135deg,#1A6B8A,#2A9D8F)',
   '#2A9D8F': 'linear-gradient(135deg,#2A9D8F,#5B9DC7)',
   '#E76F51': 'linear-gradient(135deg,#E76F51,#F4A261)',
-  '#F4A261': 'linear-gradient(135deg,#F4A261,#E9C46A)',
+  '#F4A261': 'linear-gradient(135deg,#F4A261,#B8923A)',
   '#B85C8E': 'linear-gradient(135deg,#B85C8E,#5B9DC7)'
 };
 
@@ -3613,7 +3613,7 @@ function listingFullCard(l, isFeatured) {
   const descColor = highlight === 'negative' ? '#cbd5e1' : '#2C5F6E';
   return `
     <div onclick="openListingModal('${l.id}')" style="background:${cardBg};border-radius:16px;overflow:hidden;box-shadow:0 6px 20px rgba(0,0,0,0.08);cursor:pointer;border:${cardBorder};position:relative;">
-      ${isFeatured ? `<div style="position:absolute;top:12px;right:12px;background:linear-gradient(135deg,#E9C46A,#F4A261);color:#fff;font-size:0.65rem;font-weight:900;padding:4px 10px;border-radius:10px;z-index:2;letter-spacing:0.4px;box-shadow:0 4px 10px rgba(244,162,97,0.4);">⭐ מומלץ</div>` : ''}
+      ${isFeatured ? `<div style="position:absolute;top:12px;right:12px;background:linear-gradient(135deg,#B8923A,#F4A261);color:#fff;font-size:0.65rem;font-weight:900;padding:4px 10px;border-radius:10px;z-index:2;letter-spacing:0.4px;box-shadow:0 4px 10px rgba(244,162,97,0.4);">⭐ מומלץ</div>` : ''}
       <div style="position:relative;width:100%;height:${imgHeight}px;background:#F5F5F5;overflow:hidden;">
         ${photo ? `<img src="${photo}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none'">` : `<div style="width:100%;height:100%;background:linear-gradient(135deg,#E5E7EB,#F5F5F5);display:flex;align-items:center;justify-content:center;color:#9CA3AF;font-size:2.5rem;">🏙️</div>`}
         <div style="position:absolute;bottom:0;right:0;left:0;background:linear-gradient(180deg,transparent 0%,rgba(0,0,0,0.7) 100%);padding:30px 14px 14px;">

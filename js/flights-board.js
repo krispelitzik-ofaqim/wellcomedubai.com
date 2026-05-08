@@ -112,19 +112,19 @@ function renderFlightBoard(containerId) {
       <div style="background:linear-gradient(135deg,#2C5F6E,#1a4a5a);padding:12px 16px;">
         <div style="margin-bottom:6px;">
           <div style="display:flex;align-items:center;gap:8px;">
-            <i class="fas fa-plane" style="color:#E9C46A;font-size:1rem;"></i>
+            <i class="fas fa-plane" style="color:#B8923A;font-size:1rem;"></i>
             <span style="color:#fff;font-weight:700;font-size:0.95rem;">נמל התעופה דובאי (DXB)</span>
           </div>
           <div style="color:rgba(255,255,255,0.75);font-size:0.78rem;margin-top:3px;padding-right:24px;">${new Date().toLocaleDateString('he-IL',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}</div>
         </div>
         <div style="display:flex;gap:4px;align-items:center;" id="boardTabs">
-          <button onclick="loadFlightBoard('Departure')" id="tabDep" style="padding:6px 14px;border-radius:6px;border:none;font-family:Heebo;font-size:0.8rem;font-weight:600;cursor:pointer;background:#E9C46A;color:#2C5F6E;">
+          <button onclick="loadFlightBoard('Departure')" id="tabDep" style="padding:6px 14px;border-radius:6px;border:none;font-family:Heebo;font-size:0.8rem;font-weight:600;cursor:pointer;background:#B8923A;color:#2C5F6E;">
             <i class="fas fa-plane-departure"></i> המראות
           </button>
           <button onclick="loadFlightBoard('Arrival')" id="tabArr" style="padding:6px 14px;border-radius:6px;border:none;font-family:Heebo;font-size:0.8rem;font-weight:600;cursor:pointer;background:rgba(255,255,255,0.15);color:#fff;">
             <i class="fas fa-plane-arrival"></i> נחיתות
           </button>
-          <span id="dubaiClock" style="color:#E9C46A;font-weight:700;direction:ltr;font-size:0.85rem;margin-right:auto;">${new Date().toLocaleTimeString('he-IL',{timeZone:'Asia/Dubai',hour:'2-digit',minute:'2-digit'})} 🇦🇪</span>
+          <span id="dubaiClock" style="color:#B8923A;font-weight:700;direction:ltr;font-size:0.85rem;margin-right:auto;">${new Date().toLocaleTimeString('he-IL',{timeZone:'Asia/Dubai',hour:'2-digit',minute:'2-digit'})} 🇦🇪</span>
           <span style="background:rgba(255,0,0,0.85);color:#fff;font-size:0.55rem;padding:3px 7px;border-radius:8px;font-weight:700;animation:pulse 1.5s infinite;">● LIVE</span>
         </div>
       </div>
@@ -153,10 +153,10 @@ async function loadFlightBoard(direction) {
   const tabArr = document.getElementById('tabArr');
   if (tabDep && tabArr) {
     if (direction === 'Departure') {
-      tabDep.style.background = '#E9C46A'; tabDep.style.color = '#2C5F6E';
+      tabDep.style.background = '#B8923A'; tabDep.style.color = '#2C5F6E';
       tabArr.style.background = 'rgba(255,255,255,0.15)'; tabArr.style.color = '#fff';
     } else {
-      tabArr.style.background = '#E9C46A'; tabArr.style.color = '#2C5F6E';
+      tabArr.style.background = '#B8923A'; tabArr.style.color = '#2C5F6E';
       tabDep.style.background = 'rgba(255,255,255,0.15)'; tabDep.style.color = '#fff';
     }
   }
@@ -215,7 +215,7 @@ function openFlightDetail(flight, airline, city, cityCode, scheduled, actual, te
       <div style="background:linear-gradient(135deg,#2C5F6E,#2A9D8F);padding:20px;color:#fff;">
         <button onclick="document.getElementById('detailModal').classList.remove('active')" style="position:absolute;top:10px;left:10px;background:rgba(255,255,255,0.25);border:none;color:#fff;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1.1rem;font-weight:700;z-index:10;display:flex;align-items:center;justify-content:center;">✕</button>
         <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
-          <i class="fas fa-${isDepart ? 'plane-departure' : 'plane-arrival'}" style="font-size:1.8rem;color:#E9C46A;"></i>
+          <i class="fas fa-${isDepart ? 'plane-departure' : 'plane-arrival'}" style="font-size:1.8rem;color:#B8923A;"></i>
           <div>
             <div style="font-size:1.4rem;font-weight:800;">${flight}</div>
             <div style="opacity:0.8;font-size:0.85rem;">${airline}</div>
@@ -227,7 +227,7 @@ function openFlightDetail(flight, airline, city, cityCode, scheduled, actual, te
             <div style="font-size:0.7rem;opacity:0.7;">${isDepart ? 'דובאי' : city}</div>
           </div>
           <div style="display:flex;flex-direction:column;align-items:center;">
-            <i class="fas fa-long-arrow-alt-left" style="font-size:1.2rem;color:#E9C46A;"></i>
+            <i class="fas fa-long-arrow-alt-left" style="font-size:1.2rem;color:#B8923A;"></i>
             <div style="font-size:0.65rem;opacity:0.6;">${isDepart ? 'המראה' : 'נחיתה'}</div>
           </div>
           <div style="text-align:center;">
@@ -271,7 +271,7 @@ function openFlightDetail(flight, airline, city, cityCode, scheduled, actual, te
           <a href="https://www.flightaware.com/live/flight/${flightClean}" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border-radius:8px;background:#2C5F6E;color:#fff;text-decoration:none;font-weight:600;">
             <i class="fas fa-radar"></i> מעקב - FlightAware
           </a>
-          <a href="https://www.google.com/search?q=${flightClean}+flight+status" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border-radius:8px;background:#E9C46A;color:#2C5F6E;text-decoration:none;font-weight:600;">
+          <a href="https://www.google.com/search?q=${flightClean}+flight+status" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border-radius:8px;background:#B8923A;color:#2C5F6E;text-decoration:none;font-weight:600;">
             <i class="fab fa-google"></i> חפש בגוגל
           </a>
         </div>

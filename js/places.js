@@ -166,7 +166,7 @@ function ratingHTML(item) {
 
   const stars = Math.round(rating);
   const starsHTML = Array(5).fill(0).map((_, i) =>
-    `<i class="fas fa-star" style="color:${i < stars ? '#E9C46A' : '#ddd'};font-size:0.7rem;"></i>`
+    `<i class="fas fa-star" style="color:${i < stars ? '#B8923A' : '#ddd'};font-size:0.7rem;"></i>`
   ).join('');
 
   return `
@@ -194,7 +194,7 @@ function reviewsHTML(item) {
         <div style="background:#F5E6CB;border-radius:8px;padding:10px;margin-bottom:6px;font-size:0.8rem;">
           <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
             <span style="font-weight:600;color:#2C5F6E;">${r.author}</span>
-            <span style="color:#E9C46A;">${'★'.repeat(r.rating)}</span>
+            <span style="color:#B8923A;">${'★'.repeat(r.rating)}</span>
           </div>
           <div style="color:#6B7F8D;line-height:1.5;">${r.text || ''}${r.text?.length >= 150 ? '...' : ''}</div>
           <div style="color:#aaa;font-size:0.7rem;margin-top:2px;">${r.time || ''}</div>

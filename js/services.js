@@ -108,7 +108,7 @@ async function loadWeatherWidget() {
         </div>
       ` : ''}
       <div onclick="navigateTo('livecams')" style="margin-top:10px;padding:8px;background:rgba(255,255,255,0.15);border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;font-size:0.8rem;">
-        <i class="fas fa-video" style="color:#E9C46A;"></i>
+        <i class="fas fa-video" style="color:#B8923A;"></i>
         <span>מצלמות חיות בדובאי</span>
         <span style="background:rgba(255,0,0,0.8);color:#fff;font-size:0.55rem;padding:1px 6px;border-radius:8px;font-weight:700;">LIVE</span>
       </div>
@@ -159,7 +159,7 @@ async function loadCurrencyWidget() {
   el.innerHTML = `
     <div style="background:#fff;border-radius:8px;padding:16px;border:1px solid #E5E7EB;">
       <div style="font-weight:700;color:#2C5F6E;font-size:0.9rem;margin-bottom:10px;">
-        <i class="fas fa-exchange-alt" style="color:#E9C46A;"></i> מחשבון המרת מטבע
+        <i class="fas fa-exchange-alt" style="color:#B8923A;"></i> מחשבון המרת מטבע
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;font-size:0.75rem;">
         <div style="background:#F5E6CB;border-radius:6px;padding:8px;text-align:center;"><b style="color:#E76F51;">1 ₪</b> = ${r.AED?.toFixed(3)} AED</div>

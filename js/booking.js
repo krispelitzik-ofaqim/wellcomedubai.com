@@ -181,7 +181,7 @@ async function doBookingSearch(sortBy) {
           <div style="font-weight:600;color:#2C5F6E;font-size:0.9rem;margin-bottom:2px;">${h.name}</div>
           <div style="font-size:0.75rem;color:#6B7F8D;margin-bottom:4px;">${h.address || ''}</div>
           <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
-            ${h.stars ? `<span style="color:#E9C46A;font-size:0.75rem;">${'★'.repeat(h.stars)}</span>` : ''}
+            ${h.stars ? `<span style="color:#B8923A;font-size:0.75rem;">${'★'.repeat(h.stars)}</span>` : ''}
             ${h.reviewScore ? `<span style="background:#2A9D8F;color:#fff;padding:2px 6px;border-radius:4px;font-size:0.7rem;font-weight:600;">${h.reviewScore}/10</span>` : ''}
             ${h.reviewCount ? `<span style="color:#6B7F8D;font-size:0.7rem;">(${h.reviewCount} ביקורות)</span>` : ''}
           </div>
