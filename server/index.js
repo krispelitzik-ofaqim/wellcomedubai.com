@@ -236,6 +236,8 @@ app.get('/api/og-image', async (req, res) => {
       const img = html.match(/<img[^>]+src=["'](https?:\/\/[^"']+\.(?:jpe?g|png|webp))["'][^>]*>/i);
       if (img && img[1]) image = img[1];
     }
+    // Reject Google's brand image (returned when redirect to article fails)
+    if (image && /googleusercontent\.com|gstatic\.com|google\.com\/.*logo/i.test(image)) image = '';
     ogCache.set(url, { image, fetchedAt: Date.now() });
     res.json({ success: true, image });
   } catch {
