@@ -3262,12 +3262,42 @@ function renderREArticlesWithStats() {
     const stats = await loadUAEStats();
     el.innerHTML = renderStatsCarousel(stats);
   }, 50);
+  setTimeout(loadRENews, 100);
   return `
+    ${reSectionTitle('📰', 'חדשות נדל״ן בדובאי', '#E76F51')}
+    <div id="reNewsSlider" style="display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:10px;margin-bottom:22px;"><div style="padding:20px;color:#6B7F8D;text-align:center;width:100%;">⏳ טוען...</div></div>
     ${reSectionTitle('📊', 'מדדים כלכליים — UAE (4 שנים אחרונות)', '#1A6B8A')}
     <div id="uaeStatsBoxArticles" style="margin-bottom:22px;"><div style="text-align:center;padding:20px;color:#6B7F8D;font-size:0.78rem;"><i class="fas fa-spinner fa-spin"></i> טוען נתונים...</div></div>
     ${reSectionTitle('📚', 'מאמרים ומדריכים', '#5B9DC7')}
     ${renderREArticles()}
   `;
+}
+
+async function loadRENews() {
+  const container = document.getElementById('reNewsSlider');
+  if (!container) return;
+  try {
+    const rss = 'https://news.google.com/rss/search?q=Dubai+real+estate+property&hl=en&gl=AE&ceid=AE:en';
+    const apiUrl = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(rss);
+    const r = await fetch(apiUrl);
+    const j = await r.json();
+    const items = (j.items || []).slice(0, 10);
+    if (!items.length) { container.innerHTML = '<div style="padding:20px;color:#6B7F8D;text-align:center;width:100%;">לא נמצאו חדשות</div>'; return; }
+    container.innerHTML = items.map(it => {
+      const img = it.enclosure?.link || it.thumbnail || 'images/wellcomedubai.stamp/skyscrapers-looking-up-sky-modern-metropolis-modern-city.jpg';
+      const date = it.pubDate ? new Date(it.pubDate).toLocaleDateString('he-IL') : '';
+      const title = (it.title || '').slice(0, 80);
+      return `<a href="${it.link}" target="_blank" rel="noopener" style="flex-shrink:0;width:240px;scroll-snap-align:start;background:#fff;border:1px solid #E5E7EB;border-radius:10px;overflow:hidden;text-decoration:none;display:block;">
+        <img src="${img}" onerror="this.src='images/wellcomedubai.stamp/skyscrapers-looking-up-sky-modern-metropolis-modern-city.jpg'" style="width:100%;height:130px;object-fit:cover;display:block;">
+        <div style="padding:8px 10px;">
+          <div style="color:#2C5F6E;font-weight:700;font-size:0.78rem;line-height:1.3;margin-bottom:4px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;">${title}</div>
+          <div style="color:#6B7F8D;font-size:0.65rem;">${date}</div>
+        </div>
+      </a>`;
+    }).join('');
+  } catch (e) {
+    container.innerHTML = '<div style="padding:20px;color:#6B7F8D;text-align:center;width:100%;">שגיאה בטעינה</div>';
+  }
 }
 
 function renderBrokersBannerBottom() {
