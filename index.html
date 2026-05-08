@@ -199,13 +199,14 @@
           </div>
         </div>
         <div id="weatherInlineBanner" onclick="navigateTo('weather')" class="qt-bnr" style="flex:1;height:170px;border-radius:12px;cursor:pointer;display:flex;flex-direction:column;box-shadow:0 4px 12px rgba(0,0,0,0.12);overflow:hidden;background:#fff;border:1px solid #E5E7EB;">
-          <div id="weatherDynamicBg" style="position:relative;height:115px;overflow:hidden;background:linear-gradient(180deg,#FFB347,#FFCC70);transition:background 1.5s;display:flex;align-items:center;justify-content:center;gap:8px;">
-            <i id="weatherDynamicIcon" class="fas fa-sun" style="color:#fff;font-size:1.8rem;text-shadow:0 3px 10px rgba(0,0,0,0.35);"></i>
-            <div id="weatherDynamicTemp" style="color:#fff;font-weight:900;font-size:2.5rem;text-shadow:0 3px 10px rgba(0,0,0,0.45);line-height:1;"></div>
+          <div class="qt-imgs" style="position:relative;height:115px;overflow:hidden;background:#eee;">
+            <img data-bnr="weather" data-idx="0" src="https://images.pexels.com/photos/3617500/pexels-photo-3617500.jpeg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:1;transition:opacity 1.2s;">
+            <img data-bnr="weather" data-idx="1" src="https://images.pexels.com/photos/2113554/pexels-photo-2113554.jpeg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.2s;">
+            <i class="fas fa-sun" style="position:absolute;top:8px;right:8px;color:#fff;font-size:1rem;text-shadow:0 2px 6px rgba(0,0,0,0.7);background:rgba(244,162,97,0.85);width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;"></i>
           </div>
           <div style="background:#fff;padding:8px 6px;border-top:3px solid #F4A261;text-align:center;">
             <div style="font-weight:800;font-size:0.85rem;color:#2C5F6E;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">מזג אוויר</div>
-            <div id="weatherDynamicLabel" style="font-size:0.65rem;color:#6B7F8D;margin-top:2px;font-weight:600;">תחזית בדובאי</div>
+            <div style="font-size:0.65rem;color:#6B7F8D;margin-top:2px;font-weight:600;">תחזית בדובאי</div>
           </div>
         </div>
         <div onclick="navigateTo('currency')" class="qt-bnr" style="flex:1;height:170px;border-radius:12px;cursor:pointer;display:flex;flex-direction:column;box-shadow:0 4px 12px rgba(0,0,0,0.12);overflow:hidden;background:#fff;border:1px solid #E5E7EB;">
@@ -223,8 +224,8 @@
 
       <script>
       (function qtBannerCycle(){
-        const bnrs=['flights','currency'];
-        let idx={flights:0,currency:0};
+        const bnrs=['flights','weather','currency'];
+        let idx={flights:0,weather:0,currency:0};
         setInterval(()=>{
           bnrs.forEach(b=>{
             const cur=document.querySelector(`img[data-bnr="${b}"][data-idx="${idx[b]}"]`);
@@ -233,46 +234,6 @@
             if(cur&&nxt){cur.style.opacity='0';nxt.style.opacity='1';idx[b]=next;}
           });
         },8000);
-      })();
-      (function dynamicWeather(){
-        function applyState(code, hour, temp){
-          var bg=document.getElementById('weatherDynamicBg');
-          var icon=document.getElementById('weatherDynamicIcon');
-          var lbl=document.getElementById('weatherDynamicLabel');
-          var tEl=document.getElementById('weatherDynamicTemp');
-          if(!bg||!icon) return;
-          var grad='linear-gradient(180deg,#FFB347,#FFCC70)', cls='fa-sun', label='בהיר';
-          if(code>=71&&code<=77){grad='linear-gradient(180deg,#E0F0FF,#FFFFFF)';cls='fa-snowflake';label='שלג';}
-          else if((code>=61&&code<=67)||(code>=80&&code<=86)){grad='linear-gradient(180deg,#5A7A8E,#7E97A9)';cls='fa-cloud-showers-heavy';label='גשם';}
-          else if(code>=51&&code<=57){grad='linear-gradient(180deg,#8BAEC4,#B0C7D8)';cls='fa-cloud-rain';label='טפטוף';}
-          else if(code>=45&&code<=48){grad='linear-gradient(180deg,#B8C8D2,#E0E5E8)';cls='fa-smog';label='ערפל';}
-          else if(code>=2&&code<=3){grad='linear-gradient(180deg,#7DA0BD,#B6CFE0)';cls='fa-cloud';label='מעונן';}
-          else if(code===1){grad='linear-gradient(180deg,#FFC04D,#FFE189)';cls='fa-cloud-sun';label='מעונן חלקית';}
-          else {
-            if(hour<6||hour>=20){grad='linear-gradient(180deg,#0D1B3D,#2C3E6B)';cls='fa-moon';label='לילה צלול';}
-            else if(hour<10){grad='linear-gradient(180deg,#FF9E6B,#FFCC80)';cls='fa-sun';label='בוקר';}
-            else if(hour<16){grad='linear-gradient(180deg,#FFB347,#FFCC70)';cls='fa-sun';label='בהיר';}
-            else {grad='linear-gradient(180deg,#E76F51,#F4A261)';cls='fa-sun';label='שקיעה';}
-          }
-          bg.style.background=grad;
-          icon.className='fas '+cls;
-          if(tEl) tEl.textContent=(temp!==null&&temp!==undefined)?Math.round(temp)+'°':'';
-          if(lbl) lbl.textContent=label+' · דובאי';
-        }
-        // Show default immediately
-        applyState(0,new Date().getHours(),null);
-        // Then fetch real data
-        function load(){
-          var url='https://api.open-meteo.com/v1/forecast?latitude=25.2048&longitude=55.2708&current=temperature_2m,weather_code&timezone=auto';
-          fetch(url).then(function(r){return r.json();}).then(function(j){
-            var c=j&&j.current||{};
-            var code=(typeof c.weather_code==='number')?c.weather_code:0;
-            var temp=(typeof c.temperature_2m==='number')?c.temperature_2m:null;
-            applyState(code,new Date().getHours(),temp);
-          }).catch(function(){});
-        }
-        load();
-        setInterval(load,15*60*1000);
       })();
       </script>
 
