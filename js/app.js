@@ -761,12 +761,27 @@ function getCategoryPhotosMap() {
   };
 }
 
+function pickBestPhoto(photoList, placeName) {
+  if (!photoList || !photoList.length) return null;
+  const firstWord = placeName ? placeName.toLowerCase().split(' ')[0] : '';
+  const selfMatch = photoList.find(p => {
+    const attr = (p.authorAttributions?.[0]?.displayName || '').toLowerCase();
+    return (p.widthPx || 0) >= 1500 && firstWord && attr.includes(firstWord);
+  });
+  if (selfMatch) return selfMatch;
+  const hiRes = photoList.find(p => (p.widthPx || 0) >= 1500);
+  if (hiRes) return hiRes;
+  return photoList[0];
+}
+
 function getCardImage(item, category) {
   const isGenericTemplate = item.image && /\/(hotel|night|kid|rest)_\d+\.(jpe?g|png|webp)$/i.test(item.image);
   if (item.image && !isGenericTemplate) return item.image;
   const photos = getCategoryPhotosMap()[category];
-  if (photos && photos[item.id]?.photos?.[0]?.name) {
-    return placePhotoUrl(photos[item.id].photos[0].name, 600);
+  const placePhotos = photos && photos[item.id];
+  if (placePhotos?.photos?.length) {
+    const best = pickBestPhoto(placePhotos.photos, placePhotos.placeName);
+    if (best?.name) return placePhotoUrl(best.name, 600);
   }
   return item.image;
 }
