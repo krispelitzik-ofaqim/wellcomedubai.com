@@ -3777,7 +3777,6 @@ function listingFullCard(l, isFeatured) {
         <div style="text-align:left;"><a onclick="event.stopPropagation();openListingModal('${l.id}')" style="color:#1A6B8A;font-size:0.72rem;font-weight:700;cursor:pointer;text-decoration:none;">לפרטים נוספים «</a></div>
       </div>
     </div>`;
-  `;
 }
 
 function listingHalfCard(l) {
