@@ -3342,7 +3342,11 @@ function renderREArticles() {
         <div style="width:42px;height:42px;border-radius:12px;background:${c};display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;color:#fff;">${a.icon}</div>
         <div style="font-weight:800;color:#2C5F6E;font-size:0.97rem;line-height:1.3;letter-spacing:-0.2px;flex:1;">${a.title}</div>
       </div>
-      <div style="padding:13px 16px 16px;color:#2C5F6E;font-size:0.86rem;line-height:1.75;">${a.body}</div>
+      <div style="padding:13px 16px 16px;color:#2C5F6E;font-size:0.86rem;line-height:1.75;">
+        <ol style="margin:0;padding-right:18px;">
+          ${a.body.split(/\.\s+/).filter(s => s.trim()).map(s => `<li style="margin-bottom:6px;">${s.trim()}${s.endsWith('.') ? '' : '.'}</li>`).join('')}
+        </ol>
+      </div>
     </div>
   `;}).join('');
 }
