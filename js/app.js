@@ -3760,7 +3760,7 @@ function listingFullCard(l, isFeatured) {
             <div style="color:${typeColor};font-weight:900;font-size:1rem;white-space:nowrap;">AED ${Number(l.price).toLocaleString()}</div>
           </div>
           ${l.desc ? `<div style="font-size:0.86rem;color:${descColor};line-height:1.55;margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${l.desc}</div>` : ''}
-          <button onclick="event.stopPropagation();openListingModal('${l.id}')" style="width:100%;padding:10px;background:#1A6B8A;color:#fff;border:none;border-radius:8px;font-size:0.85rem;font-weight:800;font-family:Heebo;cursor:pointer;">לפרטים נוספים ›</button>
+          <div style="text-align:left;"><a onclick="event.stopPropagation();openListingModal('${l.id}')" style="color:#1A6B8A;font-size:0.82rem;font-weight:700;cursor:pointer;text-decoration:none;">לפרטים נוספים «</a></div>
         </div>
       </div>`;
   }
@@ -3774,7 +3774,7 @@ function listingFullCard(l, isFeatured) {
         </div>
         <div style="color:#F4A261;font-size:0.68rem;font-weight:700;margin-bottom:2px;">📍 ${l.area}</div>
         <div style="color:${typeColor};font-weight:900;font-size:0.88rem;margin-bottom:6px;">AED ${Number(l.price).toLocaleString()}</div>
-        <button onclick="event.stopPropagation();openListingModal('${l.id}')" style="width:100%;padding:6px;background:#1A6B8A;color:#fff;border:none;border-radius:6px;font-size:0.72rem;font-weight:700;font-family:Heebo;cursor:pointer;">לפרטים נוספים ›</button>
+        <div style="text-align:left;"><a onclick="event.stopPropagation();openListingModal('${l.id}')" style="color:#1A6B8A;font-size:0.72rem;font-weight:700;cursor:pointer;text-decoration:none;">לפרטים נוספים «</a></div>
       </div>
     </div>`;
   `;
