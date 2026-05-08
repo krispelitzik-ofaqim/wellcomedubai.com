@@ -2869,7 +2869,6 @@ function renderMapPage() {
       <h2>מפת דובאי ${hasGoogle() ? '(Google Maps)' : '(OpenStreetMap)'}</h2>
     </div>
     <div class="filter-tabs">
-      <button class="filter-tab active" onclick="filterMap('all',this)">הכל</button>
       <button class="filter-tab" onclick="filterMap('hotels',this)">מלונות</button>
       <button class="filter-tab" onclick="filterMap('restaurants',this)">מסעדות</button>
       <button class="filter-tab" onclick="filterMap('attractions',this)">אטרקציות</button>
@@ -2878,6 +2877,7 @@ function renderMapPage() {
       <button class="filter-tab" onclick="filterMap('kids',this)">ילדים</button>
       <button class="filter-tab" onclick="filterMap('transport',this)">תחבורה</button>
       <button class="filter-tab" onclick="filterMap('casino',this)">בידור</button>
+      <button class="filter-tab active" onclick="filterMap('all',this)" style="background:#2A9D8F;color:#fff;border-color:#2A9D8F;font-weight:700;">📍 מפה מסכמת</button>
     </div>
     <div style="padding:0 16px 8px;">
       <button class="areas-toggle" onclick="toggleAreas()" style="width:100%;padding:10px;border-radius:8px;border:1px solid ${areasVisible ? '#2A9D8F' : '#E5E7EB'};background:${areasVisible ? '#2A9D8F' : '#fff'};color:${areasVisible ? '#fff' : '#2C5F6E'};font-family:Heebo;font-size:0.9rem;font-weight:700;cursor:pointer;">${areasVisible ? '✓ אזורים — מופעל' : '🗺️ הצג אזורי דובאי (10)'}</button>
