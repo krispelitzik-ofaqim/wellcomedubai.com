@@ -3174,20 +3174,18 @@ function renderBusinessPortal() {
       <button class="back-btn" onclick="navigateTo('realestate')" style="color:#fff !important;"><i class="fas fa-arrow-right"></i></button>
       <h2 style="color:#fff;"><i class="fas fa-chart-line" style="color:#B8923A;margin-left:6px;"></i> פורטל העסקים</h2>
     </div>
+    <div style="background:#fff;padding:0;border-bottom:1px solid #E5E7EB;">
+      <iframe scrolling="no" allowtransparency="true" frameborder="0" style="width:100%;height:46px;border:0;display:block;" src="https://s.tradingview.com/embed-widget/ticker-tape/?locale=en#%7B%22symbols%22%3A%5B%7B%22description%22%3A%22USD%2FAED%22%2C%22proName%22%3A%22FX_IDC%3AUSDAED%22%7D%2C%7B%22description%22%3A%22EUR%2FAED%22%2C%22proName%22%3A%22FX_IDC%3AEURAED%22%7D%2C%7B%22description%22%3A%22GBP%2FAED%22%2C%22proName%22%3A%22FX_IDC%3AGBPAED%22%7D%2C%7B%22description%22%3A%22AED%2FILS%22%2C%22proName%22%3A%22FX_IDC%3AAEDILS%22%7D%2C%7B%22description%22%3A%22USD%2FILS%22%2C%22proName%22%3A%22FX_IDC%3AUSDILS%22%7D%5D%2C%22isTransparent%22%3Afalse%2C%22showSymbolLogo%22%3Atrue%2C%22colorTheme%22%3A%22light%22%2C%22displayMode%22%3A%22regular%22%7D"></iframe>
+    </div>
     <div style="padding:18px 16px 80px;background:#FAF6EE;">
       <div style="background:#fff;border-radius:12px;padding:14px 16px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
         <div style="font-weight:800;color:#1A6B8A;font-size:1rem;margin-bottom:6px;">💼 שוק ההון של דובאי</div>
-        <div style="color:#2C5F6E;font-size:0.85rem;line-height:1.6;">דובאי מארחת 3 בורסות עיקריות: <b>DFM</b> (מניות מקומיות), <b>Nasdaq Dubai</b> (מניות בינלאומיות) ו-<b>DGCX</b> (זהב, מתכות וסחורות).</div>
+        <div style="color:#2C5F6E;font-size:0.85rem;line-height:1.6;">דובאי מארחת 2 בורסות עיקריות: <b>DFM</b> (מניות מקומיות) ו-<b>DGCX</b> (זהב, מתכות וסחורות).</div>
       </div>
 
       <div style="background:#fff;border-radius:12px;padding:14px 14px 10px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
         <div style="font-weight:700;color:#1A6B8A;font-size:0.95rem;margin-bottom:8px;">📊 DFM — Dubai Financial Market</div>
         <iframe scrolling="no" allowtransparency="true" frameborder="0" style="width:100%;height:380px;border:0;" src="https://www.tradingview-widget.com/embed-widget/symbol-overview/?locale=en#%7B%22symbols%22%3A%5B%5B%22DFM%3ADFM%7C1Y%22%5D%2C%5B%22DFM%3AEMAAR%7C1Y%22%5D%2C%5B%22DFM%3ADIB%7C1Y%22%5D%5D%2C%22chartOnly%22%3Afalse%2C%22width%22%3A%22100%25%22%2C%22height%22%3A380%2C%22colorTheme%22%3A%22light%22%7D"></iframe>
-      </div>
-
-      <div style="background:#fff;border-radius:12px;padding:14px 14px 10px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
-        <div style="font-weight:700;color:#1A6B8A;font-size:0.95rem;margin-bottom:8px;">🌍 Nasdaq Dubai — מניות בינלאומיות</div>
-        <iframe scrolling="no" allowtransparency="true" frameborder="0" style="width:100%;height:380px;border:0;" src="https://www.tradingview-widget.com/embed-widget/symbol-overview/?locale=en#%7B%22symbols%22%3A%5B%5B%22NASDAQ%3AAAPL%7C1Y%22%5D%2C%5B%22NASDAQ%3AGOOGL%7C1Y%22%5D%2C%5B%22NASDAQ%3AMSFT%7C1Y%22%5D%5D%2C%22chartOnly%22%3Afalse%2C%22width%22%3A%22100%25%22%2C%22height%22%3A380%2C%22colorTheme%22%3A%22light%22%7D"></iframe>
       </div>
 
       <div style="background:#fff;border-radius:12px;padding:14px 14px 10px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
