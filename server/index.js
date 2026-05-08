@@ -178,4 +178,69 @@ app.delete('/api/admin/listings/:id', requireAdmin, (req, res) => {
   res.json({ ok: true });
 });
 
+// ─── OG image scraper (cache 24h, follows Google News redirects) ─────────────
+const ogCache = new Map();
+async function resolveGoogleNews(url) {
+  if (!/news\.google\.com/i.test(url)) return url;
+  try {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 8000);
+    const r = await fetch(url, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 14_4) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+      },
+      signal: ctrl.signal,
+      redirect: 'follow',
+    });
+    clearTimeout(timer);
+    let resolved = r.url;
+    if (resolved.includes('news.google.com')) {
+      const html = await r.text();
+      const m = html.match(/<a[^>]+href=["']([^"']+)["'][^>]*data-n-au/i)
+            || html.match(/<meta[^>]+http-equiv=["']refresh["'][^>]+content=["'][^;]+;\s*url=([^"']+)["']/i)
+            || html.match(/data-url=["'](https?:\/\/[^"']+)["']/i);
+      if (m && m[1]) resolved = m[1].replace(/&amp;/g, '&');
+    }
+    return resolved;
+  } catch { return url; }
+}
+
+app.get('/api/og-image', async (req, res) => {
+  const url = String(req.query.url || '');
+  if (!url || !/^https?:\/\//i.test(url)) return res.status(400).json({ success: false, error: 'invalid url' });
+  const cached = ogCache.get(url);
+  if (cached && Date.now() - cached.fetchedAt < 24 * 60 * 60 * 1000) {
+    return res.json({ success: true, image: cached.image, cached: true });
+  }
+  try {
+    const realUrl = await resolveGoogleNews(url);
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 8000);
+    const r = await fetch(realUrl, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 14_4) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'Accept-Language': 'he,en;q=0.9',
+      },
+      signal: ctrl.signal,
+      redirect: 'follow',
+    });
+    clearTimeout(timer);
+    const html = await r.text();
+    const m1 = html.match(/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i);
+    const m2 = html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i);
+    const m3 = html.match(/<meta[^>]+name=["']twitter:image["'][^>]+content=["']([^"']+)["']/i);
+    let image = (m1 && m1[1]) || (m2 && m2[1]) || (m3 && m3[1]) || '';
+    if (!image) {
+      const img = html.match(/<img[^>]+src=["'](https?:\/\/[^"']+\.(?:jpe?g|png|webp))["'][^>]*>/i);
+      if (img && img[1]) image = img[1];
+    }
+    ogCache.set(url, { image, fetchedAt: Date.now() });
+    res.json({ success: true, image });
+  } catch {
+    res.json({ success: false, error: 'fetch failed' });
+  }
+});
+
 app.listen(PORT, () => console.log(`Wellcome Dubai server running on port ${PORT}`));

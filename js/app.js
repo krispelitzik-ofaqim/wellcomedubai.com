@@ -3231,20 +3231,36 @@ async function loadBizNews() {
     const j = await r.json();
     const items = (j.items || []).slice(0, 10);
     if (!items.length) { container.innerHTML = '<div style="padding:20px;color:#6B7F8D;text-align:center;width:100%;">לא נמצאו חדשות</div>'; return; }
-    container.innerHTML = items.map(it => {
-      const img = it.enclosure?.link || it.thumbnail || 'images/Yizhak/economy-dubai-skyline-charts.jpg';
+    container.innerHTML = items.map((it, i) => {
+      const img = it.enclosure?.link || it.thumbnail || '';
       const date = it.pubDate ? new Date(it.pubDate).toLocaleDateString('he-IL') : '';
       const title = (it.title || '').slice(0, 80);
-      return `<a href="${it.link}" target="_blank" rel="noopener" style="flex-shrink:0;width:240px;scroll-snap-align:start;background:#fff;border:1px solid #E5E7EB;border-radius:10px;overflow:hidden;text-decoration:none;display:block;">
-        <img src="${img}" onerror="this.src='images/Yizhak/economy-dubai-skyline-charts.jpg'" style="width:100%;height:130px;object-fit:cover;display:block;">
+      return `<a href="${it.link}" target="_blank" rel="noopener" data-news-i="${i}" data-news-link="${encodeURIComponent(it.link)}" style="flex-shrink:0;width:240px;scroll-snap-align:start;background:#fff;border:1px solid #E5E7EB;border-radius:10px;overflow:hidden;text-decoration:none;display:block;">
+        <img src="${img || 'images/Yizhak/economy-dubai-skyline-charts.jpg'}" onerror="this.src='images/Yizhak/economy-dubai-skyline-charts.jpg'" style="width:100%;height:130px;object-fit:cover;display:block;">
         <div style="padding:8px 10px;">
           <div style="color:#2C5F6E;font-weight:700;font-size:0.78rem;line-height:1.3;margin-bottom:4px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;">${title}</div>
           <div style="color:#6B7F8D;font-size:0.65rem;">${date}</div>
         </div>
       </a>`;
     }).join('');
+    fetchOgImagesForCards(container, items);
   } catch (e) {
     container.innerHTML = '<div style="padding:20px;color:#6B7F8D;text-align:center;width:100%;">שגיאה בטעינה</div>';
+  }
+}
+
+async function fetchOgImagesForCards(container, items) {
+  for (let i = 0; i < items.length; i++) {
+    const it = items[i];
+    const card = container.querySelector(`a[data-news-i="${i}"]`);
+    if (!card) continue;
+    const img = card.querySelector('img');
+    if (it.enclosure?.link || it.thumbnail) continue;
+    try {
+      const r = await fetch('https://wellcomedubaicom-production.up.railway.app/api/og-image?url=' + encodeURIComponent(it.link));
+      const j = await r.json();
+      if (j.success && j.image && img) img.src = j.image;
+    } catch {}
   }
 }
 
@@ -3283,18 +3299,19 @@ async function loadRENews() {
     const j = await r.json();
     const items = (j.items || []).slice(0, 10);
     if (!items.length) { container.innerHTML = '<div style="padding:20px;color:#6B7F8D;text-align:center;width:100%;">לא נמצאו חדשות</div>'; return; }
-    container.innerHTML = items.map(it => {
-      const img = it.enclosure?.link || it.thumbnail || 'images/wellcomedubai.stamp/skyscrapers-looking-up-sky-modern-metropolis-modern-city.jpg';
+    container.innerHTML = items.map((it, i) => {
+      const img = it.enclosure?.link || it.thumbnail || '';
       const date = it.pubDate ? new Date(it.pubDate).toLocaleDateString('he-IL') : '';
       const title = (it.title || '').slice(0, 80);
-      return `<a href="${it.link}" target="_blank" rel="noopener" style="flex-shrink:0;width:240px;scroll-snap-align:start;background:#fff;border:1px solid #E5E7EB;border-radius:10px;overflow:hidden;text-decoration:none;display:block;">
-        <img src="${img}" onerror="this.src='images/wellcomedubai.stamp/skyscrapers-looking-up-sky-modern-metropolis-modern-city.jpg'" style="width:100%;height:130px;object-fit:cover;display:block;">
+      return `<a href="${it.link}" target="_blank" rel="noopener" data-news-i="${i}" style="flex-shrink:0;width:240px;scroll-snap-align:start;background:#fff;border:1px solid #E5E7EB;border-radius:10px;overflow:hidden;text-decoration:none;display:block;">
+        <img src="${img || 'images/wellcomedubai.stamp/skyscrapers-looking-up-sky-modern-metropolis-modern-city.jpg'}" onerror="this.src='images/wellcomedubai.stamp/skyscrapers-looking-up-sky-modern-metropolis-modern-city.jpg'" style="width:100%;height:130px;object-fit:cover;display:block;">
         <div style="padding:8px 10px;">
           <div style="color:#2C5F6E;font-weight:700;font-size:0.78rem;line-height:1.3;margin-bottom:4px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;">${title}</div>
           <div style="color:#6B7F8D;font-size:0.65rem;">${date}</div>
         </div>
       </a>`;
     }).join('');
+    fetchOgImagesForCards(container, items);
   } catch (e) {
     container.innerHTML = '<div style="padding:20px;color:#6B7F8D;text-align:center;width:100%;">שגיאה בטעינה</div>';
   }
