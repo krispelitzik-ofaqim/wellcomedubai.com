@@ -762,6 +762,8 @@ function getCategoryPhotosMap() {
 }
 
 function getCardImage(item, category) {
+  const isGenericTemplate = item.image && /\/(hotel|night|kid|rest)_\d+\.(jpe?g|png|webp)$/i.test(item.image);
+  if (item.image && !isGenericTemplate) return item.image;
   const photos = getCategoryPhotosMap()[category];
   if (photos && photos[item.id]?.photos?.[0]?.name) {
     return placePhotoUrl(photos[item.id].photos[0].name, 600);

@@ -6,7 +6,7 @@ const DEFAULT_DATA = {
     // === 7 STARS / ULTRA LUXURY ===
     { id:1, name:"Burj Al Arab", nameEn:"Burj Al Arab Jumeirah", category:"hotels", subcategory:"7star", stars:7, description:"המלון הסמלי ביותר בדובאי בצורת מפרש, עם שירות 24/7 ייחודי וסוויטות דו-קומתיות.", image:"images/hotels/1.jpg", rating:4.9, price:"$$$$$", priceRange:"₪4,000-25,000 ללילה", address:"Jumeirah Beach Road", lat:25.1412, lng:55.1855, phone:"+971-4-301-7777", tags:["7 כוכבים","מפרש","אייקוני"], featured:true },
     { id:2, name:"Atlantis The Royal", nameEn:"Atlantis The Royal", category:"hotels", subcategory:"7star", stars:7, description:"מלון חדש ומרהיב על הפאלם עם 17 מסעדות ובריכות ספקטקולריות.", image:"images/hotels/2.jpg", rating:4.8, price:"$$$$$", priceRange:"₪2,000-40,000 ללילה", address:"Palm Jumeirah", lat:25.1304, lng:55.1171, phone:"+971-4-426-2000", tags:["7 כוכבים","פאלם","חדש"], featured:true },
-    { id:3, name:"Armani Hotel Dubai", nameEn:"Armani Hotel Dubai", category:"hotels", subcategory:"7star", stars:7, description:"בתוך ברג' חליפה, מעוצב אישית על ידי ג'ורג'יו ארמאני.", image:"images/hotels/hotel_3.jpeg", rating:4.8, price:"$$$$$", priceRange:"₪2,500-15,000 ללילה", address:"Burj Khalifa, Downtown", lat:25.1972, lng:55.2744, phone:"+971-4-888-3888", tags:["7 כוכבים","ארמאני","עיצוב"], featured:true },
+    { id:3, name:"Armani Hotel Dubai", nameEn:"Armani Hotel Dubai", category:"hotels", subcategory:"7star", stars:7, description:"בתוך ברג' חליפה, מעוצב אישית על ידי ג'ורג'יו ארמאני.", image:"images/hotels/armani-burj-pool.jpg", rating:4.8, price:"$$$$$", priceRange:"₪2,500-15,000 ללילה", address:"Burj Khalifa, Downtown", lat:25.1972, lng:55.2744, phone:"+971-4-888-3888", tags:["7 כוכבים","ארמאני","עיצוב"], featured:true },
     { id:4, name:"Bvlgari Resort Dubai", nameEn:"Bvlgari Resort Dubai", category:"hotels", subcategory:"7star", stars:7, description:"מלון בלעדי על אי פרטי בצורת סוס ים, מעוצב במותג בולגרי.", image:"images/hotels/bvlgari-resort-dubai.png", rating:4.9, price:"$$$$$", priceRange:"₪2,200-90,000 ללילה", address:"Jumeirah Bay Island", lat:25.2014, lng:55.2438, phone:"+971-4-777-5555", tags:["7 כוכבים","אי פרטי","בולגרי"], featured:true },
     { id:5, name:"The Lana - Dorchester", nameEn:"The Lana Dorchester Collection", category:"hotels", subcategory:"7star", stars:7, description:"חבר בשרשרת דורצ'סטר, עם נוף מרהיב לתעלת דובאי.", image:"images/hotels/hotel_5.jpeg", rating:4.8, price:"$$$$$", priceRange:"₪3,400-92,000 ללילה", address:"Business Bay", lat:25.1867, lng:55.2625, phone:"+971-4-220-0000", tags:["7 כוכבים","דורצ'סטר","חדש"], featured:false },
     { id:6, name:"One&Only The Palm", nameEn:"One&Only The Palm", category:"hotels", subcategory:"7star", stars:7, description:"מלון בוטיק אינטימי על הפאלם עם גינות ים תיכוניות ושירות יוצא דופן.", image:"images/hotels/hotel_6.jpeg", rating:4.7, price:"$$$$$", priceRange:"₪2,600-18,000 ללילה", address:"Palm Jumeirah", lat:25.1150, lng:55.1380, phone:"+971-4-440-1010", tags:["7 כוכבים","בוטיק","פאלם"], featured:false },
@@ -431,7 +431,7 @@ const PRACTICAL_INFO = {
   ]
 };
 
-const DB_VERSION = 176;
+const DB_VERSION = 177;
 function getDB() {
   const ver = localStorage.getItem(DB_KEY + '_ver');
   if (ver && Number(ver) >= DB_VERSION) {
