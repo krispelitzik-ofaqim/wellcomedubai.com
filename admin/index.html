@@ -468,6 +468,9 @@
         <h2>מודעות נדל"ן (${listings.length})</h2>
         <button class="admin-add-btn" onclick="renderListingsSection()"><i class="fas fa-sync"></i> רענן</button>
       </div>
+      <div style="background:#FEF3C7;border-right:3px solid #B8923A;border-radius:6px;padding:8px 12px;margin-bottom:12px;font-size:0.78rem;color:#92400E;">
+        🔑 טוקן: <code style="background:#fff;padding:2px 6px;border-radius:3px;font-family:monospace;">dubai-admin-2026-secret</code>
+      </div>
       <h3 style="color:var(--white);margin:18px 0 10px;">⏱ ממתינות לאישור (${pending.length})</h3>
       ${pending.length ? pending.map(l => card(l, true)).join('') : '<div style="color:var(--gray);padding:14px;">אין מודעות ממתינות</div>'}
       <h3 style="color:var(--white);margin:24px 0 10px;">✓ מאושרות (${approved.length})</h3>
