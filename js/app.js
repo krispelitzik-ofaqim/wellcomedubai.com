@@ -39,7 +39,7 @@ function initApp() {
   setupNavigation();
   setupSearch();
   setupHashRouting();
-  fetch('data/hotel-photos.json?v=5').then(r => r.ok ? r.json() : null).then(j => { if (j) { window.HOTEL_PHOTOS = j; if (currentPage === 'home') renderHome(); } }).catch(() => {});
+  fetch('data/hotel-photos.json?v=6').then(r => r.ok ? r.json() : null).then(j => { if (j) { window.HOTEL_PHOTOS = j; if (currentPage === 'home') renderHome(); } }).catch(() => {});
   fetch('data/attraction-photos.json?v=2').then(r => r.ok ? r.json() : null).then(j => { if (j) { window.ATTRACTION_PHOTOS = j; if (currentPage === 'home') renderHome(); } }).catch(() => {});
   fetch('data/restaurant-places-photos.json?v=2').then(r => r.ok ? r.json() : null).then(j => { if (j) { window.RESTAURANT_PHOTOS = j; if (currentPage === 'home') renderHome(); } }).catch(() => {});
   fetch('data/shopping-photos.json?v=2').then(r => r.ok ? r.json() : null).then(j => { if (j) { window.SHOPPING_PHOTOS = j; if (currentPage === 'home') renderHome(); } }).catch(() => {});
@@ -3921,7 +3921,7 @@ function navGallery(dir) {
 async function ensureHotelPhotos() {
   if (window.HOTEL_PHOTOS) return window.HOTEL_PHOTOS;
   try {
-    const r = await fetch('data/hotel-photos.json?v=5');
+    const r = await fetch('data/hotel-photos.json?v=6');
     if (r.ok) window.HOTEL_PHOTOS = await r.json();
   } catch(e) {}
   return window.HOTEL_PHOTOS;
