@@ -3190,7 +3190,12 @@ function renderBusinessPortal() {
     <div style="padding:18px 16px 80px;background:#FAF6EE;">
       <div style="background:#fff;border-radius:12px;padding:14px 16px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
         <div style="font-weight:800;color:#1A6B8A;font-size:1rem;margin-bottom:6px;">💼 פורטל העסקים</div>
-        <div style="color:#2C5F6E;font-size:0.85rem;line-height:1.6;">שערי המטבעות העיקריים מול הדירהם בראש הדף. למטה — מדדי זהב, כסף ונפט בזמן אמת מ-DGCX.</div>
+        <div style="color:#2C5F6E;font-size:0.85rem;line-height:1.6;">שערי המטבעות העיקריים מול הדירהם בראש הדף. למטה — חדשות עסקים מדובאי + מדדי זהב, כסף ונפט בזמן אמת.</div>
+      </div>
+
+      <div style="background:#fff;border-radius:12px;padding:14px 14px 10px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+        <div style="font-weight:700;color:#1A6B8A;font-size:0.95rem;margin-bottom:10px;">📰 חדשות עסקים מדובאי</div>
+        <div id="bizNewsSlider" style="display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:6px;"><div style="padding:20px;color:#6B7F8D;text-align:center;width:100%;">⏳ טוען...</div></div>
       </div>
 
       <div style="background:#fff;border-radius:12px;padding:14px 14px 10px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
@@ -3213,6 +3218,34 @@ function renderBusinessPortal() {
       </div>
     </div>
   `;
+  loadBizNews();
+}
+
+async function loadBizNews() {
+  const container = document.getElementById('bizNewsSlider');
+  if (!container) return;
+  try {
+    const rss = 'https://news.google.com/rss/search?q=Dubai+business+economy&hl=en&gl=AE&ceid=AE:en';
+    const apiUrl = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(rss);
+    const r = await fetch(apiUrl);
+    const j = await r.json();
+    const items = (j.items || []).slice(0, 10);
+    if (!items.length) { container.innerHTML = '<div style="padding:20px;color:#6B7F8D;text-align:center;width:100%;">לא נמצאו חדשות</div>'; return; }
+    container.innerHTML = items.map(it => {
+      const img = it.enclosure?.link || it.thumbnail || 'images/Yizhak/economy-dubai-skyline-charts.jpg';
+      const date = it.pubDate ? new Date(it.pubDate).toLocaleDateString('he-IL') : '';
+      const title = (it.title || '').slice(0, 80);
+      return `<a href="${it.link}" target="_blank" rel="noopener" style="flex-shrink:0;width:240px;scroll-snap-align:start;background:#fff;border:1px solid #E5E7EB;border-radius:10px;overflow:hidden;text-decoration:none;display:block;">
+        <img src="${img}" onerror="this.src='images/Yizhak/economy-dubai-skyline-charts.jpg'" style="width:100%;height:130px;object-fit:cover;display:block;">
+        <div style="padding:8px 10px;">
+          <div style="color:#2C5F6E;font-weight:700;font-size:0.78rem;line-height:1.3;margin-bottom:4px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;">${title}</div>
+          <div style="color:#6B7F8D;font-size:0.65rem;">${date}</div>
+        </div>
+      </a>`;
+    }).join('');
+  } catch (e) {
+    container.innerHTML = '<div style="padding:20px;color:#6B7F8D;text-align:center;width:100%;">שגיאה בטעינה</div>';
+  }
 }
 
 function reSectionTitle(emoji, text, color = '#1A6B8A') {
