@@ -2514,7 +2514,7 @@ function renderListPage(category, title, filters, activeFilter) {
     <div style="display:flex;gap:24px;overflow-x:auto;padding:6px 16px 10px;border-bottom:1px solid rgba(184,146,58,0.2);margin-bottom:14px;">
       ${[...filters.filter(f => f !== 'הכל'), ...(filters.includes('הכל') ? ['הכל'] : [])].map(f => {
         const isActive = f === active;
-        return `<a onclick="navigateTo('${category}','${f.replace(/'/g, "\\'")}')" style="flex-shrink:0;cursor:pointer;font-family:Heebo;font-weight:${isActive?'900':'500'};font-size:0.95rem;color:${isActive?'#2C5F6E':'#9CA3AF'};padding:6px 0;border-bottom:${isActive?'2px solid #B8923A':'2px solid transparent'};white-space:nowrap;">${f}</a>`;
+        return `<a onclick="navigateTo('${category}','${f.replace(/'/g, "\\'")}')" style="flex-shrink:0;cursor:pointer;font-family:Heebo;font-weight:${isActive?'900':'500'};font-size:0.95rem;color:${isActive?'#2C5F6E':'#9CA3AF'};padding:6px 0;border-bottom:${isActive?'1.5px solid #B8923A':'1.5px solid transparent'};white-space:nowrap;">${f}</a>`;
       }).join('')}
       ${category !== 'abudhabi' ? `<a onclick="navigateTo('abudhabi')" style="flex-shrink:0;cursor:pointer;font-family:Heebo;font-weight:700;font-size:0.95rem;color:#B85C8E;padding:6px 0;border-bottom:2px solid transparent;white-space:nowrap;">🏛 אבו דאבי</a>` : ''}
     </div>
@@ -3183,11 +3183,11 @@ function renderRealEstatePage() {
     <div style="background:#FDF6EC;padding:6px 4px 0;border-bottom:1px solid #E8DEC8;">
       <div style="display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:2px;">
         ${topButtons.map(t => `
-          <button onclick="${t.nav ? `navigateTo('${t.nav}')` : `switchRETab('${t.id}')`}" style="flex:1;min-width:max-content;padding:11px 14px 10px;background:transparent;border:none;font-family:Heebo;font-weight:${tab===t.id?'800':'600'};font-size:0.82rem;color:${tab===t.id?t.color:'#6B7F8D'};cursor:pointer;border-bottom:2.5px solid ${tab===t.id?t.color:'transparent'};white-space:nowrap;scroll-snap-align:start;transition:all 0.2s;">
+          <button onclick="${t.nav ? `navigateTo('${t.nav}')` : `switchRETab('${t.id}')`}" style="flex:1;min-width:max-content;padding:11px 14px 10px;background:transparent;border:none;font-family:Heebo;font-weight:${tab===t.id?'800':'600'};font-size:0.82rem;color:${tab===t.id?t.color:'#6B7F8D'};cursor:pointer;border-bottom:1.5px solid ${tab===t.id?t.color:'transparent'};white-space:nowrap;scroll-snap-align:start;transition:all 0.2s;">
             ${t.icon} ${t.label}
           </button>
         `).join('')}
-        <button onclick="switchRETab('israeli')" style="flex:1;min-width:max-content;padding:11px 14px 10px;background:transparent;border:none;font-family:Heebo;font-weight:${tab==='israeli'?'800':'600'};font-size:0.82rem;color:${tab==='israeli'?'#B85C8E':'#6B7F8D'};cursor:pointer;border-bottom:2.5px solid ${tab==='israeli'?'#B85C8E':'transparent'};white-space:nowrap;scroll-snap-align:start;transition:all 0.2s;">
+        <button onclick="switchRETab('israeli')" style="flex:1;min-width:max-content;padding:11px 14px 10px;background:transparent;border:none;font-family:Heebo;font-weight:${tab==='israeli'?'800':'600'};font-size:0.82rem;color:${tab==='israeli'?'#B85C8E':'#6B7F8D'};cursor:pointer;border-bottom:1.5px solid ${tab==='israeli'?'#B85C8E':'transparent'};white-space:nowrap;scroll-snap-align:start;transition:all 0.2s;">
           🇮🇱 ישראליות <span style="background:#B85C8E;color:#fff;font-size:0.55rem;padding:1px 5px;border-radius:5px;font-weight:800;letter-spacing:0.5px;vertical-align:middle;">חדש</span>
         </button>
       </div>
@@ -3402,7 +3402,7 @@ function renderEventsCalendar() {
     <div style="padding:18px 18px 90px;min-height:calc(100vh - 150px);background:${yearBg[activeYear] || '#FAF6EE'};transition:background 0.4s;">
 
       <div style="display:flex;gap:32px;overflow-x:auto;margin-bottom:32px;padding-bottom:8px;border-bottom:1px solid rgba(184,146,58,0.2);">
-        ${years.map(y => `<a onclick="window._eventsYear=${y};renderEventsCalendar();" style="flex-shrink:0;cursor:pointer;font-family:Heebo;font-weight:${y===activeYear?'900':'500'};font-size:1.1rem;color:${y===activeYear?'#2C5F6E':'#9CA3AF'};padding:8px 0;border-bottom:${y===activeYear?'2px solid #B8923A':'2px solid transparent'};letter-spacing:0.5px;">${y}</a>`).join('')}
+        ${years.map(y => `<a onclick="window._eventsYear=${y};renderEventsCalendar();" style="flex-shrink:0;cursor:pointer;font-family:Heebo;font-weight:${y===activeYear?'900':'500'};font-size:1.1rem;color:${y===activeYear?'#2C5F6E':'#9CA3AF'};padding:8px 0;border-bottom:${y===activeYear?'1.5px solid #B8923A':'1.5px solid transparent'};letter-spacing:0.5px;">${y}</a>`).join('')}
       </div>
 
       ${HEB_MONTHS.slice(1).map((m, i) => {
