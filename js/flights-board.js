@@ -182,10 +182,10 @@ async function loadFlightBoard(direction) {
     ${noTLV ? '<div style="background:#FFF3CD;color:#856404;padding:8px;font-size:0.7rem;text-align:center;border-radius:4px;margin-bottom:6px;">⚠️ לא נמצאו טיסות מזוהות לישראל ב-12 ש׳ הקרובות. מציג את כל הטיסות.</div>' : ''}
     <!-- Table header -->
     <div style="display:grid;grid-template-columns:60px 50px 1fr 60px;gap:4px;padding:8px 4px;font-size:0.72rem;color:#6B7F8D;font-weight:600;border-bottom:1px solid #F5EFE6;">
-      <span>טיסה</span>
-      <span>${isDepart ? 'יעד' : 'מוצא'}</span>
-      <span>חברה</span>
-      <span>סטטוס</span>
+      <span style="text-align:start;">טיסה</span>
+      <span style="text-align:center;">${isDepart ? 'יעד' : 'מוצא'}</span>
+      <span style="text-align:start;">חברה</span>
+      <span style="text-align:center;">סטטוס</span>
     </div>
     ${flights.map(f => `
       <div style="display:grid;grid-template-columns:60px 50px 1fr 60px;gap:4px;padding:8px 4px;font-size:0.85rem;align-items:center;border-bottom:1px solid #faf5ed;cursor:pointer;${f.isTLV ? 'background:#FFF8E7;' : ''}" onclick="openFlightDetail('${f.flight}','${f.airline}','${isDepart ? f.destination : f.origin}','${isDepart ? f.destinationCode : f.originCode}','${formatTime(f.scheduled)}','${formatTime(f.actual)}','${f.terminal}','${f.status}','${isDepart ? 'departure' : 'arrival'}','${f.isTLV}')">
