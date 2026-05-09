@@ -3123,6 +3123,22 @@ function toggleGalleryPreview() {
   const isOpen = wrap.style.display !== 'none';
   wrap.style.display = isOpen ? 'none' : 'block';
   if (arrow) arrow.style.transform = isOpen ? 'rotate(0)' : 'rotate(180deg)';
+  if (window._galleryAutoCloseTimer) clearTimeout(window._galleryAutoCloseTimer);
+  if (window._galleryAutoCloseObserver) try { window._galleryAutoCloseObserver.disconnect(); } catch {}
+  if (!isOpen) {
+    const closeIfHidden = () => {
+      if (wrap.style.display === 'none') return;
+      wrap.style.display = 'none';
+      if (arrow) arrow.style.transform = 'rotate(0)';
+    };
+    window._galleryAutoCloseTimer = setTimeout(closeIfHidden, 12000);
+    if ('IntersectionObserver' in window) {
+      window._galleryAutoCloseObserver = new IntersectionObserver(([entry]) => {
+        if (!entry.isIntersecting) closeIfHidden();
+      }, { threshold: 0.05 });
+      window._galleryAutoCloseObserver.observe(wrap);
+    }
+  }
 }
 function openGalleryAt(idx) {
   window._galleryPageIdx = idx || 0;
