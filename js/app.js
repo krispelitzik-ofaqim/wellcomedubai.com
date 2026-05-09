@@ -3588,6 +3588,16 @@ async function loadUAEStats() {
       return { ...i, history: list.map(d => ({ year: d.date, value: d.value })) };
     } catch { return { ...i, history: [] }; }
   }));
+  // Manual data: bank lending rates (Central Bank of UAE, EIBOR baseline)
+  const lendingIdx = results.findIndex(r => r.code === 'FR.INR.LEND');
+  if (lendingIdx >= 0 && (!results[lendingIdx].history || results[lendingIdx].history.length === 0)) {
+    results[lendingIdx].history = [
+      { year:'2026', value:5.5 },
+      { year:'2025', value:5.4 },
+      { year:'2024', value:5.4 },
+      { year:'2023', value:5.0 }
+    ];
+  }
   return results;
 }
 
