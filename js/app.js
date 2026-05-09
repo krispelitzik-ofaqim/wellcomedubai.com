@@ -4090,7 +4090,7 @@ function renderREInvestments() {
     <div style="border-radius:14px;overflow:hidden;border:1px solid #E5E7EB;margin-bottom:18px;box-shadow:0 4px 14px rgba(0,0,0,0.06);">
       ${renderLiveInvestmentMap()}
     </div>
-    ${reSectionTitle('🏙️', 'אזורי השקעה — לחץ על סמן במפה לפרטים', '#F4A261')}
+    <div style="font-weight:900;color:#1A4A5E;font-size:1.05rem;margin:18px 0 12px;letter-spacing:-0.3px;">אזורי השקעה — לחץ על סמן במפה לפרטים</div>
     <div style="display:none;">
     ${RE_INVESTMENTS.map((i, idx) => `
       <div style="background:#fff;border:1px solid #E5E7EB;border-radius:14px;padding:14px 16px;margin-bottom:11px;box-shadow:0 2px 10px rgba(0,0,0,0.04);position:relative;overflow:hidden;">
