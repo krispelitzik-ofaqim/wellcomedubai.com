@@ -718,29 +718,28 @@ function pickDiverseBySubcategory(items, n) {
 }
 
 function renderHome() {
-  const hotels = pickDiverseBySubcategory(sortByRating(getAllItems('hotels')), 6);
-  const hotelsContainer = document.getElementById('topHotels');
-  if (hotelsContainer) hotelsContainer.innerHTML = hotels.map(item => cardHTML(item, 'hotels')).join('');
-
-  const attractions = pickDiverseBySubcategory(sortByRating(getAllItems('attractions')), 6);
-  const attrContainer = document.getElementById('topAttractions');
-  if (attrContainer) attrContainer.innerHTML = attractions.map(item => cardHTML(item, 'attractions')).join('');
-
-  const restaurants = pickDiverseBySubcategory(sortByRating(getAllItems('restaurants')), 6);
-  const restContainer = document.getElementById('topRestaurants');
-  if (restContainer) restContainer.innerHTML = restaurants.map(item => cardHTML(item, 'restaurants')).join('');
-
-  const shopping = pickDiverseBySubcategory(sortByRating(getAllItems('shopping')), 6);
-  const shopContainer = document.getElementById('topShopping');
-  if (shopContainer) shopContainer.innerHTML = shopping.map(item => cardHTML(item, 'shopping', true)).join('');
-
-  const kids = pickDiverseBySubcategory(sortByRating(getAllItems('kids')), 6);
-  const kidsContainer = document.getElementById('topKids');
-  if (kidsContainer) kidsContainer.innerHTML = kids.map(item => cardHTML(item, 'kids', true)).join('');
-
-  const nightlife = pickDiverseBySubcategory(sortByRating(getAllItems('nightlife')), 6);
-  const nightlifeContainer = document.getElementById('topNightlife');
-  if (nightlifeContainer) nightlifeContainer.innerHTML = nightlife.map(item => cardHTML(item, 'nightlife', true)).join('');
+  const renderSection = (cat, picker) => {
+    const containerId = 'top' + cat.charAt(0).toUpperCase() + cat.slice(1);
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    const hidden = localStorage.getItem('home_hidden_' + cat) === '1';
+    const heading = container.previousElementSibling && container.previousElementSibling.tagName === 'H2' ? container.previousElementSibling : null;
+    if (hidden) {
+      container.style.display = 'none';
+      if (heading) heading.style.display = 'none';
+      return;
+    }
+    container.style.display = '';
+    if (heading) heading.style.display = '';
+    const items = pickDiverseBySubcategory(sortByRating(getAllItems(cat)), 6);
+    container.innerHTML = items.map(item => cardHTML(item, cat, ['shopping','kids','nightlife'].includes(cat))).join('');
+  };
+  renderSection('hotels');
+  renderSection('attractions');
+  renderSection('restaurants');
+  renderSection('shopping');
+  renderSection('kids');
+  renderSection('nightlife');
 
   startDiscoveryRotation();
 

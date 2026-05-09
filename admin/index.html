@@ -210,7 +210,7 @@
   </div>
 </div>
 
-<script src="../js/data.js?v=99"></script>
+<script src="../js/data.js?v=121"></script>
 <script>
   let currentSection = 'dashboard';
 
@@ -866,22 +866,45 @@
 
     const iconMap = { hotels:'fa-hotel', restaurants:'fa-utensils', attractions:'fa-landmark', shopping:'fa-shopping-bag', nightlife:'fa-glass-cheers', transport:'fa-subway', casino:'fa-dice', kids:'fa-child' };
     const nameMap = { hotels:'מלונות', restaurants:'מסעדות', attractions:'אטרקציות', shopping:'קניות', nightlife:'בילויים', transport:'תחבורה', casino:'בידור ומשחקים', kids:'ילדים ומשפחות' };
+    const subLabelMap = {
+      '7star':'יוקרה','5star':'תקציב גבוה','4-5star':'תקציב בינוני','3-4star':'סביר','budget':'תקציב צנוע','luxury':'יוקרה','business':'עסקים',
+      'israeli':'ישראלי / כשר','middle-east':'מזרח תיכוני','asian':'אסייתי','european':'אירופאי','american':'אמריקאי','seafood':'דגים','steakhouse':'סטייקייה','vegan':'טבעוני','street':'רחוב','local':'מקומי','ultra-luxury':'יוקרה','indian':'הודי','italian':'איטלקי','french':'צרפתי','turkish':'טורקי',
+      'landmark':'ציון דרך','museum':'מוזיאון','art':'אומנות','adventure':'אקסטרים','beach':'חוף','waterpark':'פארק מים','theme-park':'פארק שעשועים','tour':'סיור','zoo':'גן חיות','desert':'ספארי מדבר','judaism':'יהדות','sport':'ספורט','aquarium':'אקווריום','show':'מופע','extreme':'אקסטרים',
+      'mall':'קניון','souk':'שוק','alcohol':'אלכוהול','metro':'מטרו','taxi':'מונית','rental':'השכרת רכב'
+    };
+    const isHidden = (cat) => localStorage.getItem('home_hidden_' + cat) === '1';
 
     content.innerHTML = `
       <div class="admin-header"><h2>דשבורד</h2></div>
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-icon"><i class="fas fa-database"></i></div>
-          <div class="stat-number">${stats.total}</div>
-          <div class="stat-label">סה"כ פריטים</div>
-        </div>
-        ${Object.entries(stats).filter(([k]) => k !== 'total').map(([key, val]) => `
-          <div class="stat-card" style="cursor:pointer;" onclick="showSection('${key}')">
-            <div class="stat-icon"><i class="fas ${iconMap[key]}"></i></div>
-            <div class="stat-number">${val}</div>
-            <div class="stat-label">${nameMap[key]}</div>
-          </div>
-        `).join('')}
+      <div class="stat-card" style="margin-bottom:14px;">
+        <div class="stat-icon"><i class="fas fa-database"></i></div>
+        <div class="stat-number">${stats.total}</div>
+        <div class="stat-label">סה"כ פריטים</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr;gap:12px;">
+        ${['hotels','restaurants','attractions','shopping','nightlife','kids','transport','casino'].map(key => {
+          const val = stats[key] || 0;
+          const sub = stats[key + '_sub'] || {};
+          const subRows = Object.entries(sub).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:0.78rem;color:var(--gray);"><span>${subLabelMap[k] || k}</span><span style="color:var(--gold);font-weight:700;">${v}</span></div>`).join('');
+          const hidden = isHidden(key);
+          return `
+            <div class="stat-card" style="text-align:right;padding:14px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+                <div style="display:flex;align-items:center;gap:10px;cursor:pointer;" onclick="showSection('${key}')">
+                  <div class="stat-icon" style="margin:0;"><i class="fas ${iconMap[key]}"></i></div>
+                  <div>
+                    <div style="font-weight:700;color:var(--white);font-size:0.95rem;">${nameMap[key]}</div>
+                    <div style="font-size:0.7rem;color:var(--gray);">${val} פריטים בסך הכל</div>
+                  </div>
+                </div>
+                <button onclick="toggleHomeCategory('${key}')" class="action-btn edit" title="הצג/הסתר בדף הבית" style="display:flex;align-items:center;gap:6px;font-size:0.75rem;">
+                  <i class="fas fa-${hidden ? 'eye-slash' : 'eye'}"></i> ${hidden ? 'מוסתר' : 'גלוי'}
+                </button>
+              </div>
+              ${subRows ? `<div style="border-top:1px solid rgba(212,168,67,0.15);padding-top:8px;">${subRows}</div>` : ''}
+            </div>
+          `;
+        }).join('')}
       </div>
       <h3 style="margin:24px 0 14px;color:var(--white);">כל הפריטים המומלצים</h3>
       <table class="admin-table">
@@ -912,6 +935,11 @@
   function toggleRealEstateBlock() {
     const cur = localStorage.getItem('realestate_hidden') === '1';
     localStorage.setItem('realestate_hidden', cur ? '0' : '1');
+    renderDashboard();
+  }
+  function toggleHomeCategory(cat) {
+    const cur = localStorage.getItem('home_hidden_' + cat) === '1';
+    localStorage.setItem('home_hidden_' + cat, cur ? '0' : '1');
     renderDashboard();
   }
 

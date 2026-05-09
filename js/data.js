@@ -541,15 +541,18 @@ function searchAll(query) {
 
 function getStats() {
   const db = getDB();
-  return {
-    hotels: db.hotels?.length || 0,
-    restaurants: db.restaurants?.length || 0,
-    attractions: db.attractions?.length || 0,
-    shopping: db.shopping?.length || 0,
-    nightlife: db.nightlife?.length || 0,
-    kids: db.kids?.length || 0,
-    transport: db.transport?.length || 0,
-    casino: db.casino?.length || 0,
-    total: Object.values(db).reduce((sum, arr) => sum + arr.length, 0)
-  };
+  const cats = ['hotels','restaurants','attractions','shopping','nightlife','kids','transport','casino'];
+  const out = { total: 0 };
+  for (const c of cats) {
+    const arr = db[c] || [];
+    out[c] = arr.length;
+    out.total += arr.length;
+    const sub = {};
+    for (const it of arr) {
+      const k = it.subcategory || 'אחר';
+      sub[k] = (sub[k] || 0) + 1;
+    }
+    out[c + '_sub'] = sub;
+  }
+  return out;
 }
