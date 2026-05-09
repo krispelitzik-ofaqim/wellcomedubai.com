@@ -3203,6 +3203,12 @@ function renderRealEstatePage() {
 }
 
 function renderIsraeliInvestments() {
+  const stats = [
+    { val:'1,000+', label:'חברות ישראליות עם נציגות בדובאי', color:'#1A6B8A' },
+    { val:'$2.5B+', label:'השקעות הדדיות מאז הסכמי אברהם', color:'#2A9D8F' },
+    { val:'600K+', label:'ישראלים מבקרים בדובאי בשנה', color:'#E76F51' },
+    { val:'8-12%', label:'תשואת נדל"ן ממוצעת בפרויקטים פופולריים', color:'#B8923A' }
+  ];
   const sectors = [
     { icon:'🛡️', name:'סייבר וביטחון', desc:'Check Point, Cybereason, Sygnia — משרדים ב-DIFC. שיתוף מודיעיני ושוק אזרחי גדול.', kpi:'12+ חברות' },
     { icon:'💳', name:'פינטק', desc:'Pagaya, eToro, Rapyd — דובאי כשער לשוק המזרח התיכון והמפרץ.', kpi:'8+ חברות' },
@@ -3223,66 +3229,99 @@ function renderIsraeliInvestments() {
     { name:'IBI Tech Fund', desc:'משרד דובאי לחיבור משקיעים ישראלים לעסקאות נדל"ן ופינטק', tag:'PE' }
   ];
 
-  return `
-    <!-- Top areas for Israelis -->
-    <div style="background:#fff;border-radius:14px;padding:14px;margin-bottom:14px;box-shadow:0 2px 10px rgba(0,0,0,0.05);border:1px solid #E8DEC8;">
+  const slides = [
+    `<div style="background:#fff;border-radius:14px;padding:14px;box-shadow:0 2px 10px rgba(0,0,0,0.05);border:1px solid #E8DEC8;height:100%;box-sizing:border-box;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+        <div style="font-weight:800;color:#1A4A5E;font-size:0.95rem;">🇮🇱 התמונה הגדולה</div>
+        <span style="background:#FDF6EC;color:#B8923A;font-size:0.6rem;padding:3px 8px;border-radius:8px;font-weight:800;letter-spacing:0.5px;">2026</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        ${stats.map(s => `
+          <div style="background:#FDFAF2;border:1px solid #F0E6D2;border-right:3px solid ${s.color};border-radius:8px;padding:10px;">
+            <div style="color:${s.color};font-size:1.1rem;font-weight:900;font-family:'SF Mono',Menlo,monospace;line-height:1.1;">${s.val}</div>
+            <div style="color:#6B7F8D;font-size:0.68rem;font-weight:600;margin-top:3px;line-height:1.3;">${s.label}</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>`,
+    `<div style="background:#fff;border-radius:14px;padding:14px;box-shadow:0 2px 10px rgba(0,0,0,0.05);border:1px solid #E8DEC8;height:100%;box-sizing:border-box;">
       <div style="font-weight:800;color:#1A4A5E;font-size:0.95rem;margin-bottom:4px;">🏙️ אזורים שישראלים קונים בהם</div>
-      <div style="color:#6B7F8D;font-size:0.72rem;margin-bottom:12px;">דירוג לפי תשואה ופופולריות בקרב ישראלים</div>
+      <div style="color:#6B7F8D;font-size:0.7rem;margin-bottom:10px;">דירוג לפי תשואה ופופולריות</div>
       ${topAreas.map((a,i) => `
-        <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:${i===topAreas.length-1?'none':'1px solid #F0E6D2'};">
-          <div style="background:linear-gradient(135deg,#B85C8E,#1A6B8A);color:#fff;width:26px;height:26px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.8rem;flex-shrink:0;">${i+1}</div>
-          <div style="flex:1;">
-            <div style="font-weight:800;color:#1A4A5E;font-size:0.88rem;">${a.name}</div>
-            <div style="color:#6B7F8D;font-size:0.7rem;margin-top:2px;">${a.note}</div>
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:${i===topAreas.length-1?'none':'1px solid #F0E6D2'};">
+          <div style="background:linear-gradient(135deg,#B85C8E,#1A6B8A);color:#fff;width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.75rem;flex-shrink:0;">${i+1}</div>
+          <div style="flex:1;min-width:0;">
+            <div style="font-weight:800;color:#1A4A5E;font-size:0.82rem;">${a.name}</div>
+            <div style="color:#6B7F8D;font-size:0.66rem;margin-top:1px;">${a.note}</div>
           </div>
-          <div style="text-align:left;">
-            <div style="color:#2A9D8F;font-weight:800;font-size:0.85rem;font-family:'SF Mono',Menlo,monospace;">${a.yield}</div>
-            <div style="color:#6B7F8D;font-size:0.65rem;font-family:'SF Mono',Menlo,monospace;">החל מ-${a.entry}</div>
+          <div style="text-align:left;flex-shrink:0;">
+            <div style="color:#2A9D8F;font-weight:800;font-size:0.8rem;font-family:'SF Mono',Menlo,monospace;">${a.yield}</div>
+            <div style="color:#6B7F8D;font-size:0.62rem;font-family:'SF Mono',Menlo,monospace;">${a.entry}</div>
           </div>
         </div>
       `).join('')}
-    </div>
-
-    <!-- Sectors -->
-    <div style="background:#fff;border-radius:14px;padding:14px;margin-bottom:14px;box-shadow:0 2px 10px rgba(0,0,0,0.05);border:1px solid #E8DEC8;">
+    </div>`,
+    `<div style="background:#fff;border-radius:14px;padding:14px;box-shadow:0 2px 10px rgba(0,0,0,0.05);border:1px solid #E8DEC8;height:100%;box-sizing:border-box;">
       <div style="font-weight:800;color:#1A4A5E;font-size:0.95rem;margin-bottom:4px;">🚀 ענפים פורחים</div>
-      <div style="color:#6B7F8D;font-size:0.72rem;margin-bottom:12px;">5 הסקטורים שמובילים את ההשקעה ההדדית</div>
+      <div style="color:#6B7F8D;font-size:0.7rem;margin-bottom:10px;">5 הסקטורים המובילים</div>
       ${sectors.map(s => `
-        <div style="display:flex;align-items:flex-start;gap:10px;padding:11px 0;border-bottom:1px solid #F0E6D2;">
-          <span style="font-size:1.3rem;line-height:1;flex-shrink:0;margin-top:2px;">${s.icon}</span>
-          <div style="flex:1;">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:3px;">
-              <div style="font-weight:800;color:#1A4A5E;font-size:0.85rem;">${s.name}</div>
-              <span style="background:#FDF6EC;color:#B8923A;font-size:0.6rem;padding:2px 7px;border-radius:6px;font-weight:800;font-family:'SF Mono',Menlo,monospace;">${s.kpi}</span>
+        <div style="display:flex;align-items:flex-start;gap:9px;padding:8px 0;border-bottom:1px solid #F0E6D2;">
+          <span style="font-size:1.15rem;line-height:1;flex-shrink:0;margin-top:2px;">${s.icon}</span>
+          <div style="flex:1;min-width:0;">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:2px;">
+              <div style="font-weight:800;color:#1A4A5E;font-size:0.82rem;">${s.name}</div>
+              <span style="background:#FDF6EC;color:#B8923A;font-size:0.58rem;padding:2px 6px;border-radius:5px;font-weight:800;font-family:'SF Mono',Menlo,monospace;flex-shrink:0;">${s.kpi}</span>
             </div>
-            <div style="color:#6B7F8D;font-size:0.74rem;line-height:1.5;">${s.desc}</div>
+            <div style="color:#6B7F8D;font-size:0.7rem;line-height:1.45;">${s.desc}</div>
           </div>
         </div>
       `).join('')}
-    </div>
-
-    <!-- Funds -->
-    <div style="background:#fff;border-radius:14px;padding:14px;margin-bottom:14px;box-shadow:0 2px 10px rgba(0,0,0,0.05);border:1px solid #E8DEC8;">
-      <div style="font-weight:800;color:#1A4A5E;font-size:0.95rem;margin-bottom:4px;">💼 קרנות וגופי השקעה ישראליים בדובאי</div>
-      <div style="color:#6B7F8D;font-size:0.72rem;margin-bottom:12px;">משרדים פעילים בדובאי / DIFC</div>
+    </div>`,
+    `<div style="background:#fff;border-radius:14px;padding:14px;box-shadow:0 2px 10px rgba(0,0,0,0.05);border:1px solid #E8DEC8;height:100%;box-sizing:border-box;">
+      <div style="font-weight:800;color:#1A4A5E;font-size:0.95rem;margin-bottom:4px;">💼 קרנות וגופי השקעה</div>
+      <div style="color:#6B7F8D;font-size:0.7rem;margin-bottom:10px;">משרדים פעילים בדובאי / DIFC</div>
       ${funds.map(f => `
-        <div style="display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid #F0E6D2;">
-          <div style="background:linear-gradient(135deg,#1A6B8A,#2C5F6E);color:#E9C46A;width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.65rem;flex-shrink:0;letter-spacing:0.5px;">${f.tag}</div>
-          <div style="flex:1;">
-            <div style="font-weight:800;color:#1A4A5E;font-size:0.85rem;">${f.name}</div>
-            <div style="color:#6B7F8D;font-size:0.74rem;margin-top:2px;line-height:1.5;">${f.desc}</div>
+        <div style="display:flex;align-items:flex-start;gap:9px;padding:8px 0;border-bottom:1px solid #F0E6D2;">
+          <div style="background:linear-gradient(135deg,#1A6B8A,#2C5F6E);color:#E9C46A;width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.6rem;flex-shrink:0;letter-spacing:0.5px;">${f.tag}</div>
+          <div style="flex:1;min-width:0;">
+            <div style="font-weight:800;color:#1A4A5E;font-size:0.82rem;">${f.name}</div>
+            <div style="color:#6B7F8D;font-size:0.7rem;margin-top:1px;line-height:1.45;">${f.desc}</div>
           </div>
         </div>
       `).join('')}
+    </div>`
+  ];
+
+  return `
+    <!-- Horizontal slider -->
+    <div style="margin:0 -16px 12px;">
+      <div id="israeliSlider" style="display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:10px;padding:0 16px 6px;-webkit-overflow-scrolling:touch;scrollbar-width:none;" onscroll="updateIsraeliDots()">
+        ${slides.map((s,i) => `<div style="flex:0 0 92%;scroll-snap-align:center;" data-slide="${i}">${s}</div>`).join('')}
+      </div>
+      <div id="israeliDots" style="display:flex;justify-content:center;gap:5px;margin-top:8px;">
+        ${slides.map((_,i) => `<div data-dot="${i}" style="width:${i===0?'18px':'6px'};height:6px;border-radius:3px;background:${i===0?'#1A4A5E':'#D4C9B0'};transition:all 0.25s;"></div>`).join('')}
+      </div>
     </div>
 
-    <!-- CTA -->
-    <div style="background:linear-gradient(135deg,#0E2A38,#1A4A5E);border-radius:14px;padding:18px;color:#fff;box-shadow:0 4px 14px rgba(14,42,56,0.25);">
-      <div style="font-weight:800;font-size:1rem;margin-bottom:6px;color:#E9C46A;">רוצה להתחיל להשקיע?</div>
-      <div style="font-size:0.78rem;opacity:0.9;line-height:1.5;margin-bottom:12px;">דבר עם מתווך ישראלי-מקומי שמכיר את השוק, מדבר עברית, ומלווה אותך מהחיפוש ועד הרישום.</div>
-      <button onclick="switchRETab('brokers-full')" style="width:100%;padding:12px;background:#E9C46A;color:#0E2A38;border:none;border-radius:10px;font-family:Heebo;font-weight:800;font-size:0.9rem;cursor:pointer;">📞 דבר עם מתווך מומלץ →</button>
+    <!-- CTA — submit project -->
+    <div style="background:linear-gradient(135deg,#0E2A38,#1A4A5E);border-radius:14px;padding:18px;color:#fff;box-shadow:0 4px 14px rgba(14,42,56,0.25);margin-top:12px;">
+      <div style="font-weight:800;font-size:1rem;margin-bottom:6px;color:#E9C46A;">יש לך פרויקט להציע?</div>
+      <div style="font-size:0.78rem;opacity:0.9;line-height:1.5;margin-bottom:12px;">יזמים, משקיעים וחברות — העלו פרויקט נדל"ן לתצוגה בפורטל. חשיפה לקהל ישראלי בדובאי.</div>
+      <button onclick="switchRETab('sale');setTimeout(()=>{const f=document.getElementById('reFormBox');if(f){f.style.display='block';document.getElementById('reFormArrow').style.transform='rotate(180deg)';f.scrollIntoView({behavior:'smooth',block:'center'});}},200)" style="width:100%;padding:12px;background:#E9C46A;color:#0E2A38;border:none;border-radius:10px;font-family:Heebo;font-weight:800;font-size:0.9rem;cursor:pointer;">📤 העלה פרויקט →</button>
     </div>
   `;
+}
+
+function updateIsraeliDots() {
+  const slider = document.getElementById('israeliSlider');
+  const dots = document.getElementById('israeliDots');
+  if (!slider || !dots) return;
+  const slideWidth = slider.scrollWidth / slider.children.length;
+  const idx = Math.round(slider.scrollLeft / slideWidth);
+  Array.from(dots.children).forEach((d, i) => {
+    d.style.width = i === idx ? '18px' : '6px';
+    d.style.background = i === idx ? '#1A4A5E' : '#D4C9B0';
+  });
 }
 
 function renderBusinessPortal() {
