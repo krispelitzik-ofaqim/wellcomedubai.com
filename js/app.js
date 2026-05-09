@@ -3944,18 +3944,36 @@ function showBrokerCriteria() {
   modal.innerHTML = `
     <div style="background:#fff;width:92%;max-width:480px;max-height:88vh;border-radius:14px;overflow-y:auto;padding:0;display:flex;flex-direction:column;">
       <div style="background:linear-gradient(135deg,#1A6B8A,#2A9D8F);color:#fff;padding:18px 20px;display:flex;justify-content:space-between;align-items:center;">
-        <div style="font-weight:800;font-size:1.05rem;">✓ קריטריונים למתווך מורשה</div>
+        <div style="font-weight:800;font-size:1.05rem;">✓ נדרש לאימות</div>
         <button onclick="document.getElementById('detailModal').classList.remove('active')" style="background:rgba(255,255,255,0.25);border:none;color:#fff;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1rem;">×</button>
       </div>
-      <div style="padding:18px 22px;color:#2C5F6E;line-height:2;font-size:0.9rem;">
-        <div style="margin-bottom:6px;">• ניסיון מוכח בנדל"ן בדובאי — מעל שנתיים</div>
-        <div style="margin-bottom:6px;">• רישיון RERA תקף (Real Estate Regulatory Agency)</div>
-        <div style="margin-bottom:6px;">• דובר עברית או רקע בעבודה עם ישראלים</div>
-        <div style="margin-bottom:6px;">• ערוץ תקשורת מוסדר (אתר/לינקדאין/וואטסאפ)</div>
-        <div style="margin-bottom:6px;">• הצגת חוזה מכר/השכרה שביצע</div>
-        <div style="margin-bottom:6px;">• שיחת אימות אישית</div>
-        <div style="margin-bottom:6px;">• 2 ממליצים לפחות</div>
-        <div style="margin-bottom:6px;">• הצגת תעודת זהות וקבלות מסים</div>
+      <div style="padding:18px 22px;color:#2C5F6E;font-size:0.88rem;">
+        <div style="font-weight:800;color:#1A6B8A;margin-bottom:8px;border-bottom:1px solid #F0E6D2;padding-bottom:5px;">סוכן נדל"ן</div>
+        <div style="line-height:1.9;margin-bottom:14px;">
+          <div>• ניסיון מוכח בנדל"ן בדובאי — מעל שנתיים</div>
+          <div>• רישיון RERA תקף (Real Estate Regulatory Agency)</div>
+          <div>• הצגת חוזה מכר/השכרה שביצע</div>
+        </div>
+        <div style="font-weight:800;color:#2A9D8F;margin-bottom:8px;border-bottom:1px solid #F0E6D2;padding-bottom:5px;">רואה חשבון</div>
+        <div style="line-height:1.9;margin-bottom:14px;">
+          <div>• תעודת דיפלומה ורישיון רו"ח תקף (UAE)</div>
+          <div>• חברות בלשכת רו"ח / ICAEW / ACCA או שווה ערך</div>
+          <div>• ניסיון מוכח עם חברות / יחידים זרים</div>
+        </div>
+        <div style="font-weight:800;color:#B85C8E;margin-bottom:8px;border-bottom:1px solid #F0E6D2;padding-bottom:5px;">עורך דין</div>
+        <div style="line-height:1.9;margin-bottom:14px;">
+          <div>• תעודת דיפלומה במשפטים ורישיון לשכת עורכי דין</div>
+          <div>• הסמכה לפעול באמירויות (Bar Admission)</div>
+          <div>• הצגת תיק/עסקה שטיפל</div>
+        </div>
+        <div style="font-weight:800;color:#1A4A5E;margin-bottom:8px;border-bottom:1px solid #F0E6D2;padding-bottom:5px;">משותף לכולם</div>
+        <div style="line-height:1.9;">
+          <div>• דובר עברית או רקע בעבודה עם ישראלים</div>
+          <div>• ערוץ תקשורת מוסדר (אתר/לינקדאין/וואטסאפ)</div>
+          <div>• שיחת אימות אישית</div>
+          <div>• 2 ממליצים לפחות</div>
+          <div>• הצגת תעודת זהות וקבלות מסים</div>
+        </div>
       </div>
       <button onclick="document.getElementById('detailModal').classList.remove('active')" style="margin:0 22px 22px;background:#1A6B8A;color:#fff;border:none;padding:12px;border-radius:8px;font-family:Heebo;font-weight:800;cursor:pointer;">הבנתי</button>
     </div>
