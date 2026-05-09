@@ -3239,7 +3239,8 @@ function renderEventsCalendar() {
   const currentMonth = new Date().getMonth() + 1;
   const activeYear = window._eventsYear || currentYear;
   const colors = { sport:'#2A9D8F', culture:'#E76F51' };
-  const years = [currentYear, currentYear + 1];
+  const years = [currentYear, currentYear + 1, currentYear + 2, currentYear + 3, currentYear + 4];
+  const futureYear = activeYear > currentYear + 1;
   page.innerHTML = `
     <div class="page-header">
       <button class="back-btn" onclick="navigateTo('home')"><i class="fas fa-arrow-right"></i></button>
@@ -3251,16 +3252,23 @@ function renderEventsCalendar() {
       </div>
       ${HEB_MONTHS.slice(1).map((m, i) => {
         const monthNum = i + 1;
-        const events = DUBAI_EVENTS.filter(e => e.month === monthNum);
+        const events = futureYear ? [] : DUBAI_EVENTS.filter(e => e.month === monthNum);
         const isCurrent = (activeYear === currentYear) && (monthNum === currentMonth);
+        const yearColors = {
+          [currentYear]: 'linear-gradient(135deg,#1A6B8A,#2C5F6E)',
+          [currentYear+1]: 'linear-gradient(135deg,#B85C8E,#7A3D5E)',
+          [currentYear+2]: 'linear-gradient(135deg,#2A9D8F,#1A6B5E)',
+          [currentYear+3]: 'linear-gradient(135deg,#B8923A,#7A5E20)',
+          [currentYear+4]: 'linear-gradient(135deg,#E76F51,#A04F39)'
+        };
         return `
           <div style="background:#fff;border-radius:14px;overflow:hidden;border:${isCurrent ? '2px solid #E76F51' : '1px solid #E5E7EB'};box-shadow:0 4px 12px rgba(0,0,0,0.06);margin-bottom:14px;">
-            <div style="padding:14px 18px;background:${isCurrent ? 'linear-gradient(135deg,#E76F51,#F4A261)' : 'linear-gradient(135deg,#1A6B8A,#2C5F6E)'};color:#fff;display:flex;align-items:center;justify-content:space-between;">
+            <div style="padding:14px 18px;background:${isCurrent ? 'linear-gradient(135deg,#E76F51,#F4A261)' : (yearColors[activeYear] || 'linear-gradient(135deg,#1A6B8A,#2C5F6E)')};color:#fff;display:flex;align-items:center;justify-content:space-between;">
               <div style="font-weight:900;font-size:1.15rem;">${m} ${activeYear}</div>
               <div style="font-size:0.78rem;opacity:0.9;">${events.length} אירועים${isCurrent ? ' · החודש' : ''}</div>
             </div>
             <div style="padding:12px 14px;">
-              ${events.length === 0 ? `<div style="color:#9CA3AF;font-size:0.85rem;text-align:center;padding:24px 0;">אין אירועים גדולים בחודש זה</div>` : events.map(e => `
+              ${futureYear ? `<div style="color:#6B7F8D;font-size:0.85rem;text-align:center;padding:24px 12px;line-height:1.6;">📅 לוח אירועים עדכני<br>ייטען עם פתיחת קופות הכרטיסים</div>` : events.length === 0 ? `<div style="color:#9CA3AF;font-size:0.85rem;text-align:center;padding:24px 0;">אין אירועים גדולים בחודש זה</div>` : events.map(e => `
                 <div style="padding:12px 14px;background:#F5E6CB;border-right:4px solid ${colors[e.cat] || '#1A6B8A'};border-radius:8px;margin-bottom:10px;">
                   <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
                     <div style="font-weight:800;color:#2C5F6E;font-size:0.95rem;line-height:1.3;">${e.name}</div>
