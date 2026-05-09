@@ -108,7 +108,7 @@ function navigateTo(page, subcategory, opts) {
 
   switch(page) {
     case 'home': renderHome(); break;
-    case 'hotels': renderListPage('hotels', 'מלונות', ['הכל','$$$$$ יוקרה','$$$$ תקציב גבוה','$$$ תקציב בינוני','$$ סביר','$ תקציב צנוע'], subcategory); break;
+    case 'hotels': renderListPage('hotels', 'מלונות', ['הכל','יוקרה','תקציב גבוה','תקציב בינוני','סביר','תקציב צנוע'], subcategory); break;
     case 'restaurants': renderListPage('restaurants', 'מסעדות', ['הכל','יוקרתי מאוד','יוקרתי','עממי','ישראלי','לבנוני','טורקי','אוכל רחוב','משלוחים'], subcategory); break;
     case 'attractions': renderListPage('attractions', 'אטרקציות', ['הכל','חובה לביקור','מוזיאון','אומנות','אקסטרים','חוף','פארק מים','פארק שעשועים','סיור','גן חיות','ספארי מדבר','יהדות','ספורט'], subcategory); break;
     case 'shopping': renderListPage('shopping', 'קניונים ושווקים', ['הכל','הכי מבוקש','קניון','שוק','אלכוהול'], subcategory); break;
@@ -772,7 +772,7 @@ function isVerifiedImage(item, category) {
   return item.image && new RegExp(`^images/${category}/${item.id}\\.jpg$`).test(item.image);
 }
 const SUBCAT_HE = {
-  '7star':'$$$$$ יוקרה','5star':'$$$$ תקציב גבוה','4-5star':'$$$ תקציב בינוני','3-4star':'$$ סביר','luxury':'יוקרה','business':'עסקים','budget':'$ תקציב צנוע',
+  '7star':'יוקרה','5star':'תקציב גבוה','4-5star':'תקציב בינוני','3-4star':'סביר','luxury':'יוקרה','business':'עסקים','budget':'תקציב צנוע',
   'ultra-luxury':'יוקרתי מאוד','local':'עממי','israeli':'ישראלי','lebanese':'לבנוני','turkish':'טורקי','street':'אוכל רחוב','asian':'אסייתי','seafood':'פירות ים',
   'landmark':'חובה לביקור','museum':'מוזיאון','adventure':'הרפתקה','extreme':'אקסטרים','art':'אומנות','beach':'חוף','waterpark':'פארק מים','theme-park':'פארק שעשועים','tour':'סיור','zoo':'גן חיות','aquarium':'אקווריום','kids-zone':'מתחם ילדים','snow':'שלג','car-rental':'השכרת רכב','desert-safari':'ספארי מדבר',
   'mall':'קניון','souk':'שוק','judaism':'יהדות','alcohol':'אלכוהול',
@@ -2255,7 +2255,7 @@ function focusMapItem(category, id) {
 
 // ===== LIST PAGE =====
 const SUBCAT_MAP = {
-  '$$$$$ יוקרה':'7star','$$$$ תקציב גבוה':'5star','$$$ תקציב בינוני':'4-5star','$$ סביר':'3-4star','יוקרה':'luxury','עסקים':'business','$ תקציב צנוע':'budget',
+  'יוקרה':'7star','תקציב גבוה':'5star','תקציב בינוני':'4-5star','סביר':'3-4star','עסקים':'business','תקציב צנוע':'budget',
   'יוקרתי מאוד':'ultra-luxury','יוקרתי':'luxury','עממי':'local','ישראלי':'israeli','לבנוני':'lebanese','טורקי':'turkish','אוכל רחוב':'street',
   'אסייתי':'asian','מקומי':'local','פירות ים':'seafood',
   'חובה לביקור':'landmark','מוזיאון':'museum','הרפתקה':'adventure','אקסטרים':'extreme','אומנות':'art','חוף':'beach','פארק מים':'waterpark','פארק שעשועים':'theme-park','סיור':'tour','גן חיות':'zoo','אקווריום':'aquarium','מתחם ילדים':'kids-zone','שלג':'snow','השכרת רכב':'car-rental','ספארי מדבר':'desert-safari',
