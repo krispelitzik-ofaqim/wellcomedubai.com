@@ -3240,12 +3240,19 @@ function renderEventsCalendar() {
   const activeYear = window._eventsYear || currentYear;
   const years = [currentYear, currentYear + 1, currentYear + 2, currentYear + 3, currentYear + 4];
   const futureYear = activeYear > currentYear + 1;
+  const yearBg = {
+    [currentYear]: '#FAF6EE',
+    [currentYear+1]: '#FBF3F4',
+    [currentYear+2]: '#F0F7F4',
+    [currentYear+3]: '#F9F2DD',
+    [currentYear+4]: '#FCF1ED'
+  };
   page.innerHTML = `
     <div class="page-header">
       <button class="back-btn" onclick="navigateTo('home')"><i class="fas fa-arrow-right"></i></button>
       <h2><i class="fas fa-calendar-alt" style="color:#B8923A;margin-left:6px;"></i> לוח אירועים</h2>
     </div>
-    <div style="padding:18px 18px 90px;min-height:calc(100vh - 150px);">
+    <div style="padding:18px 18px 90px;min-height:calc(100vh - 150px);background:${yearBg[activeYear] || '#FAF6EE'};transition:background 0.4s;">
 
       <div style="display:flex;gap:32px;overflow-x:auto;margin-bottom:32px;padding-bottom:8px;border-bottom:1px solid rgba(184,146,58,0.2);">
         ${years.map(y => `<a onclick="window._eventsYear=${y};renderEventsCalendar();" style="flex-shrink:0;cursor:pointer;font-family:Heebo;font-weight:${y===activeYear?'900':'500'};font-size:1.1rem;color:${y===activeYear?'#2C5F6E':'#9CA3AF'};padding:8px 0;border-bottom:${y===activeYear?'2px solid #B8923A':'2px solid transparent'};letter-spacing:0.5px;">${y}</a>`).join('')}
