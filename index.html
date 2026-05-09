@@ -80,9 +80,7 @@
       <img src="images/icon-new.jpg" style="width:32px;height:32px;border-radius:8px;box-shadow:0 3px 8px rgba(0,0,0,0.35),0 1px 3px rgba(0,0,0,0.25);">
       Dubai<span>WellCome</span>
     </div>
-    <div class="header-actions">
-      <button class="header-btn" onclick="toggleSearch()" title="חיפוש"><i class="fas fa-search"></i></button>
-    </div>
+    <div class="header-actions"></div>
   </header>
 
   <!-- Expandable Search Bar -->
@@ -141,26 +139,26 @@
 
       <!-- Top Hotels -->
       <h2 style="padding:20px 20px 10px;font-size:1.5rem;font-weight:800;color:#2C5F6E;display:flex;align-items:center;justify-content:space-between;margin:0 20px;">
-        <span style="color:#B8923A;"><i class="fas fa-hotel" style="margin-left:8px;"></i>מלונות מובילים</span>
-        <a href="#" onclick="navigateTo('hotels');return false;" style="color:#E76F51;font-size:0.85rem;font-weight:600;text-decoration:none;">הכל &larr;</a>
+        <span style="color:#B8923A;">מלונות מובילים</span>
+        <a href="#" onclick="navigateTo('hotels');return false;" style="color:#E76F51;font-size:0.85rem;font-weight:600;text-decoration:none;margin-left:auto;">הכל &larr;</a>
       </h2>
       <div class="cards-scroll" id="topHotels"></div>
 
       <h2 style="padding:20px 20px 10px;font-size:1.5rem;font-weight:800;color:#2C5F6E;display:flex;align-items:center;justify-content:space-between;margin:0 20px;">
-        <span style="color:#2A9D8F;"><i class="fas fa-landmark" style="margin-left:8px;"></i>אטרקציות חובה</span>
-        <a href="#" onclick="navigateTo('attractions');return false;" style="color:#E76F51;font-size:0.85rem;font-weight:600;text-decoration:none;">הכל &larr;</a>
+        <span style="color:#2A9D8F;">אטרקציות חובה</span>
+        <a href="#" onclick="navigateTo('attractions');return false;" style="color:#E76F51;font-size:0.85rem;font-weight:600;text-decoration:none;margin-left:auto;">הכל &larr;</a>
       </h2>
       <div class="cards-scroll" id="topAttractions"></div>
 
       <h2 style="padding:20px 20px 10px;font-size:1.5rem;font-weight:800;color:#2C5F6E;display:flex;align-items:center;justify-content:space-between;margin:0 20px;">
-        <span style="color:#F4A261;"><i class="fas fa-utensils" style="margin-left:8px;"></i>מסעדות</span>
-        <a href="#" onclick="navigateTo('restaurants');return false;" style="color:#E76F51;font-size:0.85rem;font-weight:600;text-decoration:none;">הכל &larr;</a>
+        <span style="color:#F4A261;">מסעדות</span>
+        <a href="#" onclick="navigateTo('restaurants');return false;" style="color:#E76F51;font-size:0.85rem;font-weight:600;text-decoration:none;margin-left:auto;">הכל &larr;</a>
       </h2>
       <div class="cards-scroll" id="topRestaurants"></div>
 
       <!-- Learn About Dubai -->
       <h2 style="padding:14px 20px 6px;font-size:1.05rem;font-weight:700;color:#2C5F6E;display:flex;align-items:center;justify-content:space-between;margin:0 20px;">
-        <span style="color:#2A9D8F;"><i class="fas fa-book-open" style="margin-left:6px;font-size:0.9rem;"></i>להכיר את דובאי</span>
+        <span style="color:#2A9D8F;">להכיר את דובאי</span>
       </h2>
       <div class="cards-scroll" id="learnCards" style="padding-bottom:8px;">
         <div onclick="openLearn('about-app')" style="min-width:120px;width:120px;height:120px;scroll-snap-align:start;border-radius:10px;cursor:pointer;color:#fff;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,0.2);background:linear-gradient(180deg,rgba(0,0,0,0.05) 0%,rgba(0,0,0,0.7) 100%),url('images/icon-new.jpg') center/cover;display:flex;flex-direction:column;justify-content:flex-end;padding:8px;border:2px solid #B8923A;">
@@ -194,26 +192,26 @@
 
       <!-- More Categories toggle -->
       <div onclick="toggleMoreCats(this)" style="margin:18px 20px 6px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;">
-        <span style="color:#E76F51;font-weight:800;font-size:1.05rem;"><i class="fas fa-layer-group" style="margin-left:8px;"></i>קטגוריות נוספות</span>
+        <span style="color:#E76F51;font-weight:800;font-size:1.05rem;">קטגוריות נוספות</span>
         <i class="fas fa-chevron-down" id="moreCatsArrow" style="color:#E76F51;transition:transform 0.3s;"></i>
       </div>
 
       <div id="moreCatsSections" style="display:none;">
         <h2 style="padding:14px 20px 6px;font-size:1.05rem;font-weight:700;color:#2C5F6E;display:flex;align-items:center;justify-content:space-between;margin:0 20px;">
-          <span style="color:#F4A261;"><i class="fas fa-shopping-bag" style="margin-left:6px;font-size:0.9rem;"></i>קניות</span>
-          <a href="#" onclick="navigateTo('shopping');return false;" style="color:#E76F51;font-size:0.75rem;font-weight:600;text-decoration:none;">הכל &larr;</a>
+          <span style="color:#F4A261;">קניות</span>
+          <a href="#" onclick="navigateTo('shopping');return false;" style="color:#E76F51;font-size:0.75rem;font-weight:600;text-decoration:none;margin-left:auto;">הכל &larr;</a>
         </h2>
         <div class="cards-scroll cards-scroll-mini" id="topShopping"></div>
 
         <h2 style="padding:14px 20px 6px;font-size:1.05rem;font-weight:700;color:#2C5F6E;display:flex;align-items:center;justify-content:space-between;margin:0 20px;">
-          <span style="color:#B85C8E;"><i class="fas fa-glass-cheers" style="margin-left:6px;font-size:0.9rem;"></i>בילויים</span>
-          <a href="#" onclick="navigateTo('nightlife');return false;" style="color:#E76F51;font-size:0.75rem;font-weight:600;text-decoration:none;">הכל &larr;</a>
+          <span style="color:#B85C8E;">בילויים</span>
+          <a href="#" onclick="navigateTo('nightlife');return false;" style="color:#E76F51;font-size:0.75rem;font-weight:600;text-decoration:none;margin-left:auto;">הכל &larr;</a>
         </h2>
         <div class="cards-scroll cards-scroll-mini" id="topNightlife"></div>
 
         <h2 style="padding:14px 20px 6px;font-size:1.05rem;font-weight:700;color:#2C5F6E;display:flex;align-items:center;justify-content:space-between;margin:0 20px;">
-          <span style="color:#E76F51;"><i class="fas fa-child" style="margin-left:6px;font-size:0.9rem;"></i>ילדים ומשפחות</span>
-          <a href="#" onclick="navigateTo('kids');return false;" style="color:#E76F51;font-size:0.75rem;font-weight:600;text-decoration:none;">הכל &larr;</a>
+          <span style="color:#E76F51;">ילדים ומשפחות</span>
+          <a href="#" onclick="navigateTo('kids');return false;" style="color:#E76F51;font-size:0.75rem;font-weight:600;text-decoration:none;margin-left:auto;">הכל &larr;</a>
         </h2>
         <div class="cards-scroll cards-scroll-mini" id="topKids"></div>
       </div>
