@@ -4127,7 +4127,7 @@ function renderREInvestments() {
         <div>✓ ויזת משקיע מ-AED 750K</div>
       </div>
     </div>
-    ${reSectionTitle('🗺️', 'אזורים מובילים — מפה חיה', '#E76F51')}
+    <div style="font-weight:900;color:#1A4A5E;font-size:1.05rem;margin:18px 0 12px;letter-spacing:-0.3px;">אזורים מובילים — מפה חיה</div>
     <div style="border-radius:14px;overflow:hidden;border:1px solid #E5E7EB;margin-bottom:18px;box-shadow:0 4px 14px rgba(0,0,0,0.06);">
       ${renderLiveInvestmentMap()}
     </div>
