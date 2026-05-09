@@ -3520,7 +3520,7 @@ function renderREArticlesWithStats() {
   }, 50);
   setTimeout(loadRENews, 100);
   return `
-    ${reSectionTitle('📰', 'חדשות נדל״ן בדובאי', '#E76F51')}
+    <div style="font-weight:900;color:#1A4A5E;font-size:1.05rem;margin:18px 0 12px;letter-spacing:-0.3px;">חדשות נדל״ן בדובאי</div>
     <div id="reNewsSlider" style="display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:10px;margin-bottom:22px;"><div style="padding:20px;color:#6B7F8D;text-align:center;width:100%;">⏳ טוען...</div></div>
     ${reSectionTitle('📊', 'מדדים כלכליים — UAE (4 שנים אחרונות)', '#1A6B8A')}
     <div id="uaeStatsBoxArticles" style="margin-bottom:22px;"><div style="text-align:center;padding:20px;color:#6B7F8D;font-size:0.78rem;"><i class="fas fa-spinner fa-spin"></i> טוען נתונים...</div></div>
