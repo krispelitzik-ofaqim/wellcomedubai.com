@@ -2511,13 +2511,12 @@ function renderListPage(category, title, filters, activeFilter) {
       <button class="back-btn" onclick="navigateTo('home')"><i class="fas fa-arrow-right"></i></button>
       <h2>${title}</h2>
     </div>
-    <div class="filter-tabs">
+    <div style="display:flex;gap:24px;overflow-x:auto;padding:6px 16px 10px;border-bottom:1px solid rgba(184,146,58,0.2);margin-bottom:14px;">
       ${[...filters.filter(f => f !== 'הכל'), ...(filters.includes('הכל') ? ['הכל'] : [])].map(f => {
-        const count = f === 'הכל' ? items.length : items.filter(i => i.subcategory === SUBCAT_MAP[f]).length;
-        const showCount = count > 1;
-        return `<button class="filter-tab ${f === active ? 'active' : ''}" onclick="navigateTo('${category}','${f.replace(/'/g, "\\'")}')">${f}${showCount ? ` <span style="opacity:0.7;font-size:0.75rem;">(${count})</span>` : ''}</button>`;
+        const isActive = f === active;
+        return `<a onclick="navigateTo('${category}','${f.replace(/'/g, "\\'")}')" style="flex-shrink:0;cursor:pointer;font-family:Heebo;font-weight:${isActive?'900':'500'};font-size:0.95rem;color:${isActive?'#2C5F6E':'#9CA3AF'};padding:6px 0;border-bottom:${isActive?'2px solid #B8923A':'2px solid transparent'};white-space:nowrap;">${f}</a>`;
       }).join('')}
-      ${category !== 'abudhabi' ? `<button class="filter-tab" onclick="navigateTo('abudhabi')" style="background:#B85C8E;color:#fff;border-color:#B85C8E;font-weight:700;">🏛 אבו דאבי</button>` : ''}
+      ${category !== 'abudhabi' ? `<a onclick="navigateTo('abudhabi')" style="flex-shrink:0;cursor:pointer;font-family:Heebo;font-weight:700;font-size:0.95rem;color:#B85C8E;padding:6px 0;border-bottom:2px solid transparent;white-space:nowrap;">🏛 אבו דאבי</a>` : ''}
     </div>
     ${category === 'transport' && active === 'מטרו' ? `<div style="padding:0 16px 8px;display:flex;flex-direction:column;gap:8px;">
       <select onchange="jumpToMetroStation('red', this.value)" style="width:100%;padding:10px;border-radius:8px;border:2px solid #D32F2F;background:#fff;font-family:Heebo;color:#D32F2F;font-size:0.9rem;font-weight:600;cursor:pointer;">
