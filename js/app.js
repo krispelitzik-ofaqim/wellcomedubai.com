@@ -697,28 +697,48 @@ function startDiscoveryRotation() {
   window._discoveryInterval = setInterval(showItem, 10000);
 }
 
+function pickDiverseBySubcategory(items, n) {
+  const seen = new Set();
+  const picked = [];
+  for (const it of items) {
+    const sub = it.subcategory || '__none__';
+    if (seen.has(sub)) continue;
+    seen.add(sub);
+    picked.push(it);
+    if (picked.length >= n) break;
+  }
+  if (picked.length < n) {
+    for (const it of items) {
+      if (picked.includes(it)) continue;
+      picked.push(it);
+      if (picked.length >= n) break;
+    }
+  }
+  return picked;
+}
+
 function renderHome() {
-  const hotels = sortByRating(getAllItems('hotels')).slice(0, 6);
+  const hotels = pickDiverseBySubcategory(sortByRating(getAllItems('hotels')), 6);
   const hotelsContainer = document.getElementById('topHotels');
   if (hotelsContainer) hotelsContainer.innerHTML = hotels.map(item => cardHTML(item, 'hotels')).join('');
 
-  const attractions = sortByRating(getAllItems('attractions')).slice(0, 6);
+  const attractions = pickDiverseBySubcategory(sortByRating(getAllItems('attractions')), 6);
   const attrContainer = document.getElementById('topAttractions');
   if (attrContainer) attrContainer.innerHTML = attractions.map(item => cardHTML(item, 'attractions')).join('');
 
-  const restaurants = sortByRating(getAllItems('restaurants')).slice(0, 6);
+  const restaurants = pickDiverseBySubcategory(sortByRating(getAllItems('restaurants')), 6);
   const restContainer = document.getElementById('topRestaurants');
   if (restContainer) restContainer.innerHTML = restaurants.map(item => cardHTML(item, 'restaurants')).join('');
 
-  const shopping = sortByRating(getAllItems('shopping')).slice(0, 6);
+  const shopping = pickDiverseBySubcategory(sortByRating(getAllItems('shopping')), 6);
   const shopContainer = document.getElementById('topShopping');
   if (shopContainer) shopContainer.innerHTML = shopping.map(item => cardHTML(item, 'shopping', true)).join('');
 
-  const kids = sortByRating(getAllItems('kids')).slice(0, 6);
+  const kids = pickDiverseBySubcategory(sortByRating(getAllItems('kids')), 6);
   const kidsContainer = document.getElementById('topKids');
   if (kidsContainer) kidsContainer.innerHTML = kids.map(item => cardHTML(item, 'kids', true)).join('');
 
-  const nightlife = sortByRating(getAllItems('nightlife')).slice(0, 6);
+  const nightlife = pickDiverseBySubcategory(sortByRating(getAllItems('nightlife')), 6);
   const nightlifeContainer = document.getElementById('topNightlife');
   if (nightlifeContainer) nightlifeContainer.innerHTML = nightlife.map(item => cardHTML(item, 'nightlife', true)).join('');
 
