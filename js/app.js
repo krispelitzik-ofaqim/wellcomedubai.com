@@ -3138,23 +3138,21 @@ async function loadREListings() {
   } catch (e) { console.error('load listings failed', e); return []; }
 }
 
-function renderRealEstatePage() {
-  const page = document.getElementById('page-realestate');
-  if (!page) return;
-  const tab = window.RE_TAB || 'invest';
+function renderREHeader(activeTab, opts = {}) {
+  const showHero = opts.showHero !== false;
+  const subtitle = opts.subtitle || 'פורטל הנדל"ן בדובאי';
   const topButtons = [
     { id:'sale',     line1:'דירות', line2:'למכירה',  color:'#1A6B8A' },
     { id:'rent',     line1:'דירות', line2:'להשכרה',  color:'#2A9D8F' },
     { id:'invest',   line1:'פורטל', line2:'הנדל"ן',  color:'#E76F51' },
     { id:'business', line1:'פורטל', line2:'העסקים',  color:'#B8923A', nav:'business' }
   ];
-  page.innerHTML = `
+  return `
     <div class="page-header" style="background:linear-gradient(135deg,#0E2A38 0%,#1A4A5E 100%);color:#fff;border-bottom:none;">
-      <button class="back-btn" onclick="navigateTo('home')" style="color:#fff !important;"><i class="fas fa-arrow-right"></i></button>
-      <h2 style="color:#fff;letter-spacing:0.3px;"><i class="fas fa-city" style="color:#E9C46A;margin-left:6px;"></i> פורטל הנדל"ן בדובאי</h2>
+      <button class="back-btn" onclick="${opts.backAction || "navigateTo('home')"}" style="color:#fff !important;"><i class="fas fa-arrow-right"></i></button>
+      <h2 style="color:#fff;letter-spacing:0.3px;"><i class="fas fa-city" style="color:#E9C46A;margin-left:6px;"></i> ${subtitle}</h2>
     </div>
-
-    <!-- Financial Index Hero -->
+    ${showHero ? `
     <div style="background:linear-gradient(180deg,#0E2A38 0%,#1A4A5E 100%);padding:14px 16px 22px;">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
         <div style="color:#E9C46A;font-size:0.7rem;font-weight:700;letter-spacing:1.2px;">DUBAI REAL ESTATE INDEX</div>
@@ -3178,23 +3176,30 @@ function renderRealEstatePage() {
         </div>
       </div>
     </div>
-
-    <!-- Flat tabs — 5 columns, 2 lines each -->
+    ` : ''}
     <div style="background:#FDF6EC;padding:6px 6px 0;border-bottom:1px solid #E8DEC8;">
       <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:0;">
         ${topButtons.map(t => `
-          <button onclick="${t.nav ? `navigateTo('${t.nav}')` : `switchRETab('${t.id}')`}" style="padding:9px 2px 8px;background:transparent;border:none;font-family:Heebo;font-weight:${tab===t.id?'800':'600'};font-size:0.78rem;color:${tab===t.id?t.color:'#6B7F8D'};cursor:pointer;border-bottom:1.5px solid ${tab===t.id?t.color:'transparent'};line-height:1.2;transition:all 0.2s;">
+          <button onclick="${t.nav ? `navigateTo('${t.nav}')` : `switchRETab('${t.id}')`}" style="padding:9px 2px 8px;background:transparent;border:none;font-family:Heebo;font-weight:${activeTab===t.id?'800':'600'};font-size:0.78rem;color:${activeTab===t.id?t.color:'#6B7F8D'};cursor:pointer;border-bottom:1.5px solid ${activeTab===t.id?t.color:'transparent'};line-height:1.2;transition:all 0.2s;">
             <div>${t.line1}</div>
             <div>${t.line2}</div>
           </button>
         `).join('')}
-        <button onclick="switchRETab('israeli')" style="padding:9px 2px 8px;background:transparent;border:none;font-family:Heebo;font-weight:${tab==='israeli'?'800':'600'};font-size:0.78rem;color:${tab==='israeli'?'#B85C8E':'#6B7F8D'};cursor:pointer;border-bottom:1.5px solid ${tab==='israeli'?'#B85C8E':'transparent'};line-height:1.2;transition:all 0.2s;">
+        <button onclick="switchRETab('israeli')" style="padding:9px 2px 8px;background:transparent;border:none;font-family:Heebo;font-weight:${activeTab==='israeli'?'800':'600'};font-size:0.78rem;color:${activeTab==='israeli'?'#B85C8E':'#6B7F8D'};cursor:pointer;border-bottom:1.5px solid ${activeTab==='israeli'?'#B85C8E':'transparent'};line-height:1.2;transition:all 0.2s;">
           <div>השקעות</div>
           <div>ישראליות</div>
         </button>
       </div>
     </div>
+  `;
+}
 
+function renderRealEstatePage() {
+  const page = document.getElementById('page-realestate');
+  if (!page) return;
+  const tab = window.RE_TAB || 'invest';
+  page.innerHTML = `
+    ${renderREHeader(tab)}
     <div style="padding:14px 16px 80px;background:#FDF6EC;">
       ${tab === 'articles' ? (renderREArticlesWithStats() + renderBrokersBannerBottom())
         : tab === 'invest' ? (renderREArticlesWithStats() + renderREInvestments() + renderBrokersBannerBottom())
@@ -3309,9 +3314,262 @@ function renderIsraeliInvestments() {
     <div style="background:linear-gradient(135deg,#0E2A38,#1A4A5E);border-radius:14px;padding:18px;color:#fff;box-shadow:0 4px 14px rgba(14,42,56,0.25);margin-top:12px;">
       <div style="font-weight:800;font-size:1rem;margin-bottom:6px;color:#E9C46A;">יש לך פרויקט להציע?</div>
       <div style="font-size:0.78rem;opacity:0.9;line-height:1.5;margin-bottom:12px;">יזמים, משקיעים וחברות — העלו פרויקט נדל"ן לתצוגה בפורטל. חשיפה לקהל ישראלי בדובאי.</div>
-      <button onclick="switchRETab('sale');setTimeout(()=>{const f=document.getElementById('reFormBox');if(f){f.style.display='block';document.getElementById('reFormArrow').style.transform='rotate(180deg)';f.scrollIntoView({behavior:'smooth',block:'center'});}},200)" style="width:100%;padding:12px;background:#E9C46A;color:#0E2A38;border:none;border-radius:10px;font-family:Heebo;font-weight:800;font-size:0.9rem;cursor:pointer;">📤 העלה פרויקט →</button>
+      <button onclick="showProjectSubmit()" style="width:100%;padding:12px;background:#E9C46A;color:#0E2A38;border:none;border-radius:10px;font-family:Heebo;font-weight:800;font-size:0.9rem;cursor:pointer;">📤 העלה פרויקט →</button>
+    </div>
+
+    ${renderUserProjects()}
+  `;
+}
+
+function renderUserProjects() {
+  const projects = getREListings().filter(l => l.type === 'project');
+  if (!projects.length) return '';
+  return `
+    <div style="font-weight:900;color:#1A4A5E;font-size:1.05rem;margin:24px 0 12px;letter-spacing:-0.3px;">פרויקטים מיזמים</div>
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      ${projects.map(p => projectCard(p)).join('')}
     </div>
   `;
+}
+
+function projectCard(p) {
+  const main = p.video || (p.photos && p.photos[0]) || '';
+  const isVideo = !!p.video;
+  const others = (p.photos || []).slice(p.video ? 0 : 1, 5);
+  const isEmphasized = p.highlight === 'emphasized';
+  const isNegative = p.highlight === 'negative';
+  const bg = isNegative ? '#0A1F3D' : isEmphasized ? '#FFF8E7' : '#fff';
+  const fg = isNegative ? '#fff' : '#1A4A5E';
+  const border = isNegative ? '2px solid #1E3A8A' : isEmphasized ? '2px solid #F4A261' : '1px solid #E8DEC8';
+  return `
+    <div onclick="openProjectDetail('${p.id}')" style="background:${bg};border:${border};border-radius:14px;overflow:hidden;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,0.08);">
+      <div style="height:300px;background:#000;position:relative;overflow:hidden;">
+        ${isVideo
+          ? `<video src="${main}" muted loop autoplay playsinline style="width:100%;height:100%;object-fit:cover;display:block;"></video>`
+          : main
+            ? `<img src="${main}" style="width:100%;height:100%;object-fit:cover;display:block;">`
+            : `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#666;">אין מדיה</div>`
+        }
+        ${isVideo ? `<div style="position:absolute;top:10px;right:10px;background:rgba(0,0,0,0.6);color:#fff;padding:4px 9px;border-radius:6px;font-size:0.65rem;font-weight:800;letter-spacing:0.5px;">▶ סרטון</div>` : ''}
+        ${isEmphasized ? `<div style="position:absolute;top:10px;left:10px;background:#F4A261;color:#fff;padding:4px 9px;border-radius:6px;font-size:0.65rem;font-weight:800;letter-spacing:0.5px;">⭐ מובלט</div>` : ''}
+      </div>
+      ${others.length ? `
+        <div style="display:flex;gap:4px;padding:6px;background:${isNegative?'#0A1F3D':'#FAF6EE'};">
+          ${others.map(ph => `<img src="${ph}" style="flex:1;height:54px;object-fit:cover;border-radius:4px;">`).join('')}
+        </div>
+      ` : ''}
+      <div style="padding:14px 16px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;gap:8px;">
+          <div style="font-weight:900;color:${fg};font-size:1.05rem;line-height:1.2;">${p.title}</div>
+          ${p.yieldPct ? `<span style="background:#2A9D8F;color:#fff;font-size:0.7rem;padding:3px 8px;border-radius:6px;font-weight:800;font-family:'SF Mono',Menlo,monospace;flex-shrink:0;">${p.yieldPct}%</span>` : ''}
+        </div>
+        ${p.developer ? `<div style="color:${isNegative?'rgba(255,255,255,0.7)':'#6B7F8D'};font-size:0.78rem;margin-bottom:6px;">🏢 ${p.developer}</div>` : ''}
+        <div style="color:${isNegative?'rgba(255,255,255,0.7)':'#6B7F8D'};font-size:0.78rem;margin-bottom:8px;">📍 ${p.area}${p.delivery?` · 📅 מסירה ${p.delivery}`:''}</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div style="color:${isNegative?'#E9C46A':'#E76F51'};font-weight:900;font-size:1.1rem;font-family:'SF Mono',Menlo,monospace;">החל מ-AED ${p.price}</div>
+          <span style="color:${isNegative?'#E9C46A':'#1A6B8A'};font-size:0.8rem;font-weight:700;">פרטים מלאים ←</span>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function showProjectSubmit() {
+  const page = document.getElementById('page-realestate');
+  if (!page) { alert('שגיאה'); return; }
+  navigateTo('realestate');
+  setTimeout(() => {
+    page.innerHTML = `
+    ${renderREHeader('', { showHero:false, subtitle:'העלה פרויקט', backAction:"switchRETab('israeli')" })}
+      <div style="padding:18px 16px 90px;background:#FDF6EC;">
+        <div style="background:#fff;border-radius:12px;padding:16px;box-shadow:0 2px 8px rgba(0,0,0,0.05);margin-bottom:14px;">
+          <div style="font-weight:800;color:#1A4A5E;font-size:0.9rem;margin-bottom:10px;border-bottom:1px solid #F0E6D2;padding-bottom:6px;">פרטי הפרויקט</div>
+          <input id="projTitle" placeholder="* שם הפרויקט (לדוגמה: Marina Heights)" style="width:100%;padding:11px;border:1px solid #E5E7EB;border-radius:8px;font-family:Heebo;font-size:0.88rem;margin-bottom:8px;box-sizing:border-box;">
+          <input id="projDeveloper" placeholder="* יזם / חברה (לדוגמה: Emaar)" style="width:100%;padding:11px;border:1px solid #E5E7EB;border-radius:8px;font-family:Heebo;font-size:0.88rem;margin-bottom:8px;box-sizing:border-box;">
+          <select id="projType" style="width:100%;padding:11px;border:1px solid #E5E7EB;border-radius:8px;font-family:Heebo;font-size:0.88rem;margin-bottom:8px;background:#fff;box-sizing:border-box;">
+            <option value="residential">מגורים</option>
+            <option value="commercial">משרדים / מסחר</option>
+            <option value="mixed">מעורב</option>
+            <option value="hotel">מלונאות</option>
+          </select>
+          <input id="projArea" placeholder="* אזור (Marina, Downtown, JVC, Palm...)" style="width:100%;padding:11px;border:1px solid #E5E7EB;border-radius:8px;font-family:Heebo;font-size:0.88rem;margin-bottom:8px;box-sizing:border-box;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+            <input id="projLat" placeholder="Lat (אופציונלי)" style="padding:11px;border:1px solid #E5E7EB;border-radius:8px;font-family:Heebo;font-size:0.85rem;box-sizing:border-box;">
+            <input id="projLng" placeholder="Lng (אופציונלי)" style="padding:11px;border:1px solid #E5E7EB;border-radius:8px;font-family:Heebo;font-size:0.85rem;box-sizing:border-box;">
+          </div>
+        </div>
+
+        <div style="background:#fff;border-radius:12px;padding:16px;box-shadow:0 2px 8px rgba(0,0,0,0.05);margin-bottom:14px;">
+          <div style="font-weight:800;color:#1A4A5E;font-size:0.9rem;margin-bottom:10px;border-bottom:1px solid #F0E6D2;padding-bottom:6px;">מסחר ופיננסים</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+            <input id="projPrice" placeholder="* מחיר התחלה (AED)" style="padding:11px;border:1px solid #E5E7EB;border-radius:8px;font-family:Heebo;font-size:0.88rem;box-sizing:border-box;">
+            <input id="projYield" placeholder="תשואה צפויה %" style="padding:11px;border:1px solid #E5E7EB;border-radius:8px;font-family:Heebo;font-size:0.88rem;box-sizing:border-box;">
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+            <input id="projUnits" placeholder="מס׳ יחידות" style="padding:11px;border:1px solid #E5E7EB;border-radius:8px;font-family:Heebo;font-size:0.88rem;box-sizing:border-box;">
+            <input id="projDelivery" placeholder="מסירה (Q4 2027)" style="padding:11px;border:1px solid #E5E7EB;border-radius:8px;font-family:Heebo;font-size:0.88rem;box-sizing:border-box;">
+          </div>
+        </div>
+
+        <div style="background:#fff;border-radius:12px;padding:16px;box-shadow:0 2px 8px rgba(0,0,0,0.05);margin-bottom:14px;">
+          <div style="font-weight:800;color:#1A4A5E;font-size:0.9rem;margin-bottom:10px;border-bottom:1px solid #F0E6D2;padding-bottom:6px;">תיאור</div>
+          <textarea id="projDesc" placeholder="תיאור מלא של הפרויקט — תכונות, יתרונות, מתקנים..." rows="5" style="width:100%;padding:11px;border:1px solid #E5E7EB;border-radius:8px;font-family:Heebo;font-size:0.85rem;box-sizing:border-box;resize:vertical;"></textarea>
+        </div>
+
+        <div style="background:#fff;border-radius:12px;padding:16px;box-shadow:0 2px 8px rgba(0,0,0,0.05);margin-bottom:14px;">
+          <div style="font-weight:800;color:#1A4A5E;font-size:0.9rem;margin-bottom:10px;border-bottom:1px solid #F0E6D2;padding-bottom:6px;">מדיה</div>
+          <label style="display:block;font-size:0.78rem;color:#2C5F6E;font-weight:600;margin-bottom:4px;">תמונות (עד 8)</label>
+          <input id="rePhotos" type="file" accept="image/*" multiple onchange="previewREPhotos(this)" style="width:100%;font-family:Heebo;font-size:0.78rem;margin-bottom:8px;">
+          <div id="rePhotosPreview" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;"></div>
+          <label style="display:block;font-size:0.78rem;color:#2C5F6E;font-weight:600;margin-bottom:4px;">סרטון (עד 3 דקות) — חשוב!</label>
+          <input id="reVideo" type="file" accept="video/*" onchange="previewREVideo(this)" style="width:100%;font-family:Heebo;font-size:0.78rem;margin-bottom:8px;">
+          <div id="reVideoPreview" style="margin-bottom:10px;"></div>
+          <label style="display:block;font-size:0.78rem;color:#2C5F6E;font-weight:600;margin-bottom:4px;">ברושור PDF (אופציונלי)</label>
+          <input id="projBrochure" type="file" accept=".pdf" onchange="previewProjBrochure(this)" style="width:100%;font-family:Heebo;font-size:0.78rem;margin-bottom:6px;">
+          <div id="projBrochurePreview" style="font-size:0.78rem;color:#2A9D8F;font-weight:600;"></div>
+        </div>
+
+        <div style="background:#fff;border-radius:12px;padding:16px;box-shadow:0 2px 8px rgba(0,0,0,0.05);margin-bottom:14px;">
+          <div style="font-weight:800;color:#1A4A5E;font-size:0.9rem;margin-bottom:10px;border-bottom:1px solid #F0E6D2;padding-bottom:6px;">סגנון הצגה</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <label style="display:flex;align-items:center;justify-content:center;padding:14px;border:2px solid #F4A261;border-radius:10px;cursor:pointer;font-size:0.85rem;background:#FFF8E7;font-weight:700;color:#7B5E1F;">
+              <input type="radio" name="projHighlight" value="emphasized" checked style="margin-left:6px;"> ⭐ מודגש
+            </label>
+            <label style="display:flex;align-items:center;justify-content:center;padding:14px;border:2px solid #1E3A8A;border-radius:10px;cursor:pointer;font-size:0.85rem;background:#0A1F3D;font-weight:700;color:#fff;">
+              <input type="radio" name="projHighlight" value="negative" style="margin-left:6px;"> 🎴 נגטיב
+            </label>
+          </div>
+        </div>
+
+        <div style="background:#fff;border-radius:12px;padding:16px;box-shadow:0 2px 8px rgba(0,0,0,0.05);margin-bottom:14px;">
+          <div style="font-weight:800;color:#1A4A5E;font-size:0.9rem;margin-bottom:10px;border-bottom:1px solid #F0E6D2;padding-bottom:6px;">יצירת קשר</div>
+          <input id="projPhone" placeholder="* WhatsApp / טלפון (+971...)" style="width:100%;padding:11px;border:1px solid #E5E7EB;border-radius:8px;font-family:Heebo;font-size:0.88rem;margin-bottom:8px;box-sizing:border-box;">
+          <input id="projEmail" placeholder="* אימייל" style="width:100%;padding:11px;border:1px solid #E5E7EB;border-radius:8px;font-family:Heebo;font-size:0.88rem;box-sizing:border-box;">
+        </div>
+
+        <button onclick="submitProject(this)" style="width:100%;padding:15px;background:linear-gradient(135deg,#0E2A38,#1A4A5E);color:#E9C46A;border:none;border-radius:12px;font-family:Heebo;font-weight:900;font-size:1rem;cursor:pointer;box-shadow:0 4px 14px rgba(14,42,56,0.25);">📤 שלח לאישור</button>
+        <div style="text-align:center;color:#6B7F8D;font-size:0.7rem;margin-top:10px;">* שדות חובה. הפרויקט יופיע באתר לאחר אישור מנהל.</div>
+      </div>
+    `;
+  }, 50);
+}
+
+function previewProjBrochure(input) {
+  const file = input.files && input.files[0];
+  const box = document.getElementById('projBrochurePreview');
+  if (!file) { window._projBrochure = null; box.textContent = ''; return; }
+  if (file.size > 20 * 1024 * 1024) {
+    alert('הברושור גדול מ-20MB');
+    input.value = ''; window._projBrochure = null; box.textContent = ''; return;
+  }
+  window._projBrochure = file;
+  box.textContent = `📎 ${file.name} · ${(file.size/1024/1024).toFixed(1)}MB`;
+}
+
+async function submitProject(btn) {
+  const v = id => (document.getElementById(id) || {}).value || '';
+  const title = v('projTitle').trim();
+  const developer = v('projDeveloper').trim();
+  const area = v('projArea').trim();
+  const price = v('projPrice').trim();
+  const phone = v('projPhone').trim();
+  const email = v('projEmail').trim();
+  if (!title || !developer || !area || !price || !phone || !email) {
+    alert('נא למלא את כל שדות החובה (סומנו ב-*)'); return;
+  }
+  if (btn) { btn.disabled = true; btn.textContent = '⏳ שולח...'; }
+  try {
+    const fd = new FormData();
+    fd.append('type', 'project');
+    fd.append('size', 'large');
+    fd.append('title', title);
+    fd.append('developer', developer);
+    fd.append('area', area);
+    fd.append('price', price);
+    fd.append('phone', phone);
+    fd.append('email', email);
+    fd.append('projectType', v('projType'));
+    fd.append('units', v('projUnits').trim());
+    fd.append('delivery', v('projDelivery').trim());
+    fd.append('yieldPct', v('projYield').trim());
+    fd.append('desc', v('projDesc').trim());
+    if (v('projLat').trim()) fd.append('lat', v('projLat').trim());
+    if (v('projLng').trim()) fd.append('lng', v('projLng').trim());
+    const hl = document.querySelector('input[name="projHighlight"]:checked');
+    fd.append('highlight', hl ? hl.value : 'emphasized');
+    (window._rePhotos || []).slice(0, 8).forEach((p, i) => fd.append('photos', p.blob, `photo_${i}.jpg`));
+    if (window._reVideo) fd.append('video', window._reVideo, window._reVideo.name);
+    if (window._projBrochure) fd.append('brochure', window._projBrochure, window._projBrochure.name);
+    const r = await fetch(`${RE_API}/api/listings`, { method: 'POST', body: fd });
+    if (!r.ok) throw new Error('upload failed');
+    const j = await r.json();
+    if (j.listing && j.listing.id) markOwnListing(j.listing.id);
+    window._rePhotos = []; window._reVideo = null; window._projBrochure = null;
+    alert('✓ הפרויקט נשלח לאישור — יופיע באתר לאחר אישור המנהל');
+    closeFrame();
+  } catch (e) {
+    alert('שגיאה בשליחה — נסה שוב');
+    if (btn) { btn.disabled = false; btn.textContent = '📤 שלח לאישור'; }
+  }
+}
+
+function openProjectDetail(id) {
+  const projects = getREListings();
+  const p = projects.find(x => x.id === id);
+  if (!p) { alert('הפרויקט לא נמצא'); return; }
+  const page = document.getElementById('page-realestate');
+  if (!page) { alert('שגיאה'); return; }
+  navigateTo('realestate');
+  setTimeout(() => {
+  const photos = p.photos || [];
+  const isNegative = p.highlight === 'negative';
+  page.innerHTML = `
+    ${renderREHeader('', { showHero:false, subtitle:p.title.slice(0,30), backAction:"switchRETab('israeli')" })}
+    <div style="background:${isNegative?'#0A1F3D':'#FDF6EC'};color:${isNegative?'#fff':'#1A4A5E'};">
+      <div style="background:#000;height:340px;position:relative;">
+        ${p.video
+          ? `<video src="${p.video}" controls autoplay muted playsinline style="width:100%;height:100%;object-fit:contain;display:block;background:#000;"></video>`
+          : photos[0]
+            ? `<img src="${photos[0]}" style="width:100%;height:100%;object-fit:cover;display:block;">`
+            : `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#666;">אין מדיה</div>`
+        }
+      </div>
+
+      ${photos.length ? `
+        <div class="thin-slider" style="display:flex;gap:6px;padding:10px;overflow-x:auto;background:${isNegative?'#0E2A38':'#FAF6EE'};">
+          ${photos.map(ph => `<img src="${ph}" onclick="window.open('${ph}','_blank')" style="height:80px;border-radius:6px;cursor:pointer;flex-shrink:0;">`).join('')}
+        </div>
+      ` : ''}
+
+      <div style="padding:18px;">
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:14px;">
+          ${p.yieldPct ? `<span style="background:#2A9D8F;color:#fff;padding:5px 11px;border-radius:8px;font-weight:800;font-size:0.85rem;font-family:'SF Mono',Menlo,monospace;">תשואה ${p.yieldPct}%</span>` : ''}
+          <span style="background:${isNegative?'rgba(233,196,106,0.15)':'#FFF8E7'};color:${isNegative?'#E9C46A':'#7B5E1F'};padding:5px 11px;border-radius:8px;font-weight:800;font-size:0.85rem;font-family:'SF Mono',Menlo,monospace;">החל מ-AED ${p.price}</span>
+          ${p.delivery ? `<span style="background:${isNegative?'rgba(255,255,255,0.1)':'#fff'};border:1px solid ${isNegative?'#3A5A6E':'#E8DEC8'};color:${isNegative?'#fff':'#1A4A5E'};padding:5px 11px;border-radius:8px;font-weight:700;font-size:0.8rem;">📅 ${p.delivery}</span>` : ''}
+          ${p.units ? `<span style="background:${isNegative?'rgba(255,255,255,0.1)':'#fff'};border:1px solid ${isNegative?'#3A5A6E':'#E8DEC8'};color:${isNegative?'#fff':'#1A4A5E'};padding:5px 11px;border-radius:8px;font-weight:700;font-size:0.8rem;">${p.units} יחידות</span>` : ''}
+        </div>
+
+        <div style="background:${isNegative?'rgba(255,255,255,0.05)':'#fff'};border:1px solid ${isNegative?'#3A5A6E':'#E8DEC8'};border-radius:12px;padding:16px;margin-bottom:14px;">
+          <div style="font-weight:900;font-size:0.9rem;margin-bottom:8px;color:${isNegative?'#E9C46A':'#1A4A5E'};">📍 מיקום</div>
+          <div style="font-size:0.85rem;">${p.area}</div>
+        </div>
+
+        ${p.desc ? `
+          <div style="background:${isNegative?'rgba(255,255,255,0.05)':'#fff'};border:1px solid ${isNegative?'#3A5A6E':'#E8DEC8'};border-radius:12px;padding:16px;margin-bottom:14px;white-space:pre-line;line-height:1.7;font-size:0.88rem;">${p.desc}</div>
+        ` : ''}
+
+        ${p.brochure ? `
+          <a href="${p.brochure}" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:8px;background:#1A6B8A;color:#fff;padding:13px;border-radius:10px;text-decoration:none;font-weight:800;font-size:0.9rem;margin-bottom:10px;">📄 הורד ברושור PDF</a>
+        ` : ''}
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px;">
+          <a href="https://wa.me/${(p.phone||'').replace(/\\D/g,'')}" target="_blank" style="background:#25D366;color:#fff;padding:14px;border-radius:10px;text-decoration:none;font-weight:800;font-size:0.9rem;text-align:center;">💬 WhatsApp</a>
+          ${p.email ? `<a href="mailto:${p.email}" style="background:linear-gradient(135deg,#0E2A38,#1A4A5E);color:#E9C46A;padding:14px;border-radius:10px;text-decoration:none;font-weight:800;font-size:0.9rem;text-align:center;">✉ אימייל</a>` : `<a href="tel:${p.phone}" style="background:linear-gradient(135deg,#0E2A38,#1A4A5E);color:#E9C46A;padding:14px;border-radius:10px;text-decoration:none;font-weight:800;font-size:0.9rem;text-align:center;">📞 חייג</a>`}
+        </div>
+      </div>
+    </div>
+  `;
+  }, 50);
 }
 
 function updateIsraeliDots() {
@@ -3582,15 +3840,12 @@ function renderBrokersFullPage() {
   const page = document.getElementById('page-realestate');
   if (!page) return;
   page.innerHTML = `
-    <div class="page-header" style="background:linear-gradient(135deg,#B85C8E 0%,#1A6B8A 100%);color:#fff;border-bottom:none;">
-      <button class="back-btn" onclick="switchRETab('articles')" style="color:#fff !important;"><i class="fas fa-arrow-right"></i></button>
-      <h2 style="color:#fff;"><i class="fas fa-handshake" style="color:#B8923A;margin-left:6px;"></i> מתווכים מומלצים</h2>
-    </div>
-    <div style="display:flex;gap:8px;padding:12px 14px;background:#F5E6CB;border-bottom:1px solid #F5EFE6;">
+    ${renderREHeader('', { showHero:false, subtitle:'מתווכים מומלצים', backAction:"switchRETab('invest')" })}
+    <div style="display:flex;gap:8px;padding:12px 14px;background:#FDF6EC;border-bottom:1px solid #E8DEC8;">
       <button onclick="showBrokerCriteria()" style="flex:1;padding:11px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.82rem;cursor:pointer;background:#fff;border:2px solid #1A6B8A;color:#1A6B8A;">✓ מה נדרש מהמתווך?</button>
       <button onclick="showBrokerSubmit()" style="flex:1;padding:11px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.82rem;cursor:pointer;background:#B85C8E;border:none;color:#fff;">+ המלץ על מתווך</button>
     </div>
-    <div style="padding:14px 16px 80px;">
+    <div style="padding:14px 16px 80px;background:#FDF6EC;">
       ${renderREBrokers()}
     </div>
   `;

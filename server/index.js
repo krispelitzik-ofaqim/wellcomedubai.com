@@ -48,7 +48,7 @@ const upload = multer({
   storage,
   limits: { fileSize: 100 * 1024 * 1024 },
   fileFilter: (_req, file, cb) => {
-    cb(null, /\.(jpe?g|png|webp|gif|mp4|mov|webm|m4v)$/i.test(file.originalname));
+    cb(null, /\.(jpe?g|png|webp|gif|mp4|mov|webm|m4v|pdf)$/i.test(file.originalname));
   }
 });
 
@@ -121,13 +121,14 @@ app.get('/api/listings', (_req, res) => {
   res.json({ listings: approved });
 });
 
-app.post('/api/listings', upload.fields([{ name: 'photos', maxCount: 8 }, { name: 'video', maxCount: 1 }]), (req, res) => {
+app.post('/api/listings', upload.fields([{ name: 'photos', maxCount: 8 }, { name: 'video', maxCount: 1 }, { name: 'brochure', maxCount: 1 }]), (req, res) => {
   try {
-    const { title, type, price, area, desc, phone, size, highlight } = req.body;
+    const { title, type, price, area, desc, phone, size, highlight, developer, units, delivery, yieldPct, email, projectType, lat, lng } = req.body;
     if (!title || !price || !area || !phone) return res.status(400).json({ error: 'missing fields' });
     const files = req.files || {};
     const photos = (files.photos || []).map(f => `/uploads/${f.filename}`);
     const video = files.video && files.video[0] ? `/uploads/${files.video[0].filename}` : '';
+    const brochure = files.brochure && files.brochure[0] ? `/uploads/${files.brochure[0].filename}` : '';
     const listing = {
       id: 'l_' + Date.now() + '_' + Math.round(Math.random() * 1000),
       title, type: type || 'sale', price, area, desc: desc || '', phone, photos, video,
@@ -136,6 +137,17 @@ app.post('/api/listings', upload.fields([{ name: 'photos', maxCount: 8 }, { name
       status: 'pending',
       createdAt: new Date().toISOString()
     };
+    if (type === 'project') {
+      listing.size = 'large';
+      listing.developer = developer || '';
+      listing.units = units || '';
+      listing.delivery = delivery || '';
+      listing.yieldPct = yieldPct || '';
+      listing.email = email || '';
+      listing.projectType = projectType || 'residential';
+      listing.brochure = brochure;
+      if (lat && lng) { listing.lat = parseFloat(lat); listing.lng = parseFloat(lng); }
+    }
     const db = readDB();
     db.listings = db.listings || [];
     db.listings.unshift(listing);
