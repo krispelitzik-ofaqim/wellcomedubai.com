@@ -2054,12 +2054,10 @@ function drawAreas() {
       });
       areaShapes.push(poly);
       const center = a.poly.reduce((acc,p) => [acc[0]+p[0]/a.poly.length, acc[1]+p[1]/a.poly.length], [0,0]);
-      const text = a.name;
-      const w = Math.max(80, text.length * 7 + 16);
-      const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="26"><rect x="0" y="0" rx="13" ry="13" width="${w}" height="26" fill="${a.color}" stroke="#fff" stroke-width="2"/><text x="${w/2}" y="18" font-family="Heebo,Arial" font-size="12" font-weight="800" fill="#fff" text-anchor="middle" direction="rtl">${text}</text></svg>`;
       const label = new google.maps.Marker({
         position: {lat:center[0], lng:center[1]}, map: map, clickable:false,
-        icon: { url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg), anchor: new google.maps.Point(w/2, 13) }
+        icon: { path: google.maps.SymbolPath.CIRCLE, scale:0, fillOpacity:0, strokeOpacity:0 },
+        label: { text:a.name, color:'#fff', fontWeight:'800', fontSize:'13px', className:'area-map-label' }
       });
       areaShapes.push(label);
     });
@@ -2067,7 +2065,7 @@ function drawAreas() {
     DUBAI_AREAS.forEach(a => {
       const poly = L.polygon(a.poly, { color:a.color, fillColor:a.color, fillOpacity:0.38, weight:3, opacity:0.95 }).addTo(map);
       poly.bindPopup(`<div style="direction:rtl;max-width:220px;border-top:3px solid ${a.color};padding-top:6px;"><b style="color:${a.color};">${a.name}</b><p style="margin:6px 0 0;font-size:0.78rem;line-height:1.4;">${a.desc || ''}</p></div>`);
-      poly.bindTooltip(`<div style="background:${a.color};color:#fff;padding:3px 10px;border-radius:13px;font-weight:800;font-size:12px;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.3);">${a.name}</div>`, { permanent:true, direction:'center', className:'area-pill-label', opacity:1 });
+      poly.bindTooltip(a.name, { permanent:true, direction:'center', className:'area-label' });
       areaShapes.push(poly);
     });
   }
