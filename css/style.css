@@ -173,6 +173,11 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; heig
 .qt-card:hover, .qt-card:active { transform:translateY(-2px); box-shadow:0 8px 22px rgba(0,0,0,0.18) !important; }
 @keyframes bounceDown { 0%,100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
 .no-scrollbar::-webkit-scrollbar { display: none; }
+.thin-slider { scrollbar-width: thin; scrollbar-color: #B85C8E #F0E6D2; }
+.thin-slider::-webkit-scrollbar { height: 3px; }
+.thin-slider::-webkit-scrollbar-track { background: #F0E6D2; border-radius: 2px; }
+.thin-slider::-webkit-scrollbar-thumb { background: #B85C8E; border-radius: 2px; }
+.thin-slider::-webkit-scrollbar-thumb:hover { background: #1A4A5E; }
 .add-trip-btn { transition: transform 0.2s; position: relative; }
 .add-trip-btn:hover { transform: scale(1.15); }
 .add-trip-btn:hover::after {

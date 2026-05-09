@@ -3521,10 +3521,10 @@ function renderREArticlesWithStats() {
   setTimeout(loadRENews, 100);
   return `
     <div style="font-weight:900;color:#1A4A5E;font-size:1.05rem;margin:18px 0 12px;letter-spacing:-0.3px;">חדשות נדל״ן בדובאי</div>
-    <div id="reNewsSlider" style="display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:10px;margin-bottom:22px;"><div style="padding:20px;color:#6B7F8D;text-align:center;width:100%;">⏳ טוען...</div></div>
+    <div id="reNewsSlider" class="thin-slider" style="display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:10px;margin-bottom:22px;"><div style="padding:20px;color:#6B7F8D;text-align:center;width:100%;">⏳ טוען...</div></div>
     <div style="font-weight:900;color:#1A4A5E;font-size:1.05rem;margin:18px 0 12px;letter-spacing:-0.3px;">מדדים כלכליים — UAE</div>
     <div id="uaeStatsBoxArticles" style="margin-bottom:22px;"><div style="text-align:center;padding:20px;color:#6B7F8D;font-size:0.78rem;"><i class="fas fa-spinner fa-spin"></i> טוען נתונים...</div></div>
-    ${reSectionTitle('📚', 'מאמרים ומדריכים', '#5B9DC7')}
+    <div style="font-weight:900;color:#1A4A5E;font-size:1.05rem;margin:18px 0 12px;letter-spacing:-0.3px;">מאמרים ומדריכים</div>
     ${renderREArticles()}
   `;
 }
@@ -3814,7 +3814,7 @@ function renderStatsCarousel(stats) {
     valueFormatter: v => fmtVal(v, s.unit)
   })).join('');
   return `
-    <div class="no-scrollbar" style="display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:4px;-webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none;">
+    <div class="thin-slider" style="display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:6px;-webkit-overflow-scrolling:touch;">
       ${israeliSlide}
       ${uaeSlides}
     </div>
