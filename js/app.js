@@ -3179,32 +3179,18 @@ function renderRealEstatePage() {
       </div>
     </div>
 
-    <!-- 2x2 button grid -->
-    <div style="background:#FDF6EC;padding:14px 16px 6px;">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;">
+    <!-- Flat tabs (no rectangles) -->
+    <div style="background:#FDF6EC;padding:6px 4px 0;border-bottom:1px solid #E8DEC8;">
+      <div style="display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:2px;">
         ${topButtons.map(t => `
-          <button onclick="${t.nav ? `navigateTo('${t.nav}')` : `switchRETab('${t.id}')`}" style="padding:14px 10px;border-radius:12px;font-family:Heebo;font-weight:800;font-size:0.85rem;cursor:pointer;border:1px solid ${tab===t.id?'transparent':'#E8DEC8'};background:${tab===t.id?`linear-gradient(135deg,${t.color},${t.color}dd)`:`#fff`};color:${tab===t.id?'#fff':'#2C5F6E'};display:flex;align-items:center;gap:10px;text-align:right;box-shadow:${tab===t.id?`0 6px 18px ${t.color}55`:`0 2px 8px rgba(0,0,0,0.04)`};border-right:4px solid ${t.color};transition:all 0.25s;">
-            <span style="font-size:1.5rem;line-height:1;flex-shrink:0;">${t.icon}</span>
-            <div style="flex:1;text-align:right;">
-              <div style="line-height:1.15;">${t.label}</div>
-              <div style="font-size:0.65rem;opacity:${tab===t.id?'0.9':'0.6'};font-weight:600;margin-top:2px;">${t.sub}</div>
-            </div>
+          <button onclick="${t.nav ? `navigateTo('${t.nav}')` : `switchRETab('${t.id}')`}" style="flex:1;min-width:max-content;padding:11px 14px 10px;background:transparent;border:none;font-family:Heebo;font-weight:${tab===t.id?'800':'600'};font-size:0.82rem;color:${tab===t.id?t.color:'#6B7F8D'};cursor:pointer;border-bottom:2.5px solid ${tab===t.id?t.color:'transparent'};white-space:nowrap;scroll-snap-align:start;transition:all 0.2s;">
+            ${t.icon} ${t.label}
           </button>
         `).join('')}
+        <button onclick="switchRETab('israeli')" style="flex:1;min-width:max-content;padding:11px 14px 10px;background:transparent;border:none;font-family:Heebo;font-weight:${tab==='israeli'?'800':'600'};font-size:0.82rem;color:${tab==='israeli'?'#B85C8E':'#6B7F8D'};cursor:pointer;border-bottom:2.5px solid ${tab==='israeli'?'#B85C8E':'transparent'};white-space:nowrap;scroll-snap-align:start;transition:all 0.2s;">
+          🇮🇱 ישראליות <span style="background:#B85C8E;color:#fff;font-size:0.55rem;padding:1px 5px;border-radius:5px;font-weight:800;letter-spacing:0.5px;vertical-align:middle;">חדש</span>
+        </button>
       </div>
-
-      <!-- Israeli Investments — featured banner -->
-      <button onclick="switchRETab('israeli')" style="margin-top:9px;width:100%;padding:14px;border-radius:12px;font-family:Heebo;font-weight:800;font-size:0.92rem;cursor:pointer;border:none;background:${tab==='israeli'?'linear-gradient(135deg,#B85C8E,#1A6B8A)':'linear-gradient(135deg,#fff 0%,#FDF6EC 100%)'};color:${tab==='israeli'?'#fff':'#2C5F6E'};display:flex;align-items:center;gap:12px;text-align:right;box-shadow:${tab==='israeli'?'0 6px 20px rgba(184,92,142,0.45)':'0 3px 10px rgba(184,92,142,0.18)'};border:1px solid ${tab==='israeli'?'transparent':'#B85C8E'};border-right:4px solid #B85C8E;">
-        <span style="font-size:1.7rem;line-height:1;flex-shrink:0;">🇮🇱</span>
-        <div style="flex:1;text-align:right;">
-          <div style="line-height:1.15;display:flex;align-items:center;gap:6px;">
-            השקעות ישראליות בדובאי
-            <span style="background:${tab==='israeli'?'rgba(255,255,255,0.25)':'#B85C8E'};color:#fff;font-size:0.6rem;padding:2px 7px;border-radius:8px;font-weight:800;letter-spacing:0.5px;">חדש</span>
-          </div>
-          <div style="font-size:0.7rem;opacity:${tab==='israeli'?'0.95':'0.7'};font-weight:600;margin-top:3px;">חברות, קרנות ופרויקטים מובילים</div>
-        </div>
-        <span style="font-size:1.1rem;color:${tab==='israeli'?'#fff':'#B85C8E'};">←</span>
-      </button>
     </div>
 
     <div style="padding:14px 16px 80px;background:#FDF6EC;">
@@ -3217,12 +3203,6 @@ function renderRealEstatePage() {
 }
 
 function renderIsraeliInvestments() {
-  const stats = [
-    { val:'1,000+', label:'חברות ישראליות עם נציגות בדובאי', color:'#1A6B8A' },
-    { val:'$2.5B+', label:'השקעות הדדיות מאז הסכמי אברהם', color:'#2A9D8F' },
-    { val:'600K+', label:'ישראלים מבקרים בדובאי בשנה', color:'#E76F51' },
-    { val:'8-12%', label:'תשואת נדל"ן ממוצעת בפרויקטים פופולריים', color:'#B8923A' }
-  ];
   const sectors = [
     { icon:'🛡️', name:'סייבר וביטחון', desc:'Check Point, Cybereason, Sygnia — משרדים ב-DIFC. שיתוף מודיעיני ושוק אזרחי גדול.', kpi:'12+ חברות' },
     { icon:'💳', name:'פינטק', desc:'Pagaya, eToro, Rapyd — דובאי כשער לשוק המזרח התיכון והמפרץ.', kpi:'8+ חברות' },
@@ -3244,22 +3224,6 @@ function renderIsraeliInvestments() {
   ];
 
   return `
-    <!-- KPI strip -->
-    <div style="background:#fff;border-radius:14px;padding:14px;margin-bottom:14px;box-shadow:0 2px 10px rgba(0,0,0,0.05);border:1px solid #E8DEC8;">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
-        <div style="font-weight:800;color:#1A4A5E;font-size:0.95rem;">🇮🇱 התמונה הגדולה</div>
-        <span style="background:#FDF6EC;color:#B8923A;font-size:0.6rem;padding:3px 8px;border-radius:8px;font-weight:800;letter-spacing:0.5px;">2026</span>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-        ${stats.map(s => `
-          <div style="background:#FDFAF2;border:1px solid #F0E6D2;border-right:3px solid ${s.color};border-radius:8px;padding:10px;">
-            <div style="color:${s.color};font-size:1.15rem;font-weight:900;font-family:'SF Mono',Menlo,monospace;line-height:1.1;">${s.val}</div>
-            <div style="color:#6B7F8D;font-size:0.7rem;font-weight:600;margin-top:3px;line-height:1.3;">${s.label}</div>
-          </div>
-        `).join('')}
-      </div>
-    </div>
-
     <!-- Top areas for Israelis -->
     <div style="background:#fff;border-radius:14px;padding:14px;margin-bottom:14px;box-shadow:0 2px 10px rgba(0,0,0,0.05);border:1px solid #E8DEC8;">
       <div style="font-weight:800;color:#1A4A5E;font-size:0.95rem;margin-bottom:4px;">🏙️ אזורים שישראלים קונים בהם</div>
