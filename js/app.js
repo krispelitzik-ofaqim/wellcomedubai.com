@@ -2459,10 +2459,12 @@ function renderListPage(category, title, filters, activeFilter) {
       const groupItems = allInGroup.slice(0, MAX_PER_PAGE);
       if (!groupItems.length) return '';
       const hasMore = allInGroup.length > MAX_PER_PAGE;
+      const eventsLink = category === 'casino' ? `<a onclick="navigateTo('events')" style="color:#B8923A;font-size:0.7rem;font-weight:700;cursor:pointer;text-decoration:underline;white-space:nowrap;">לוח אירועים ←</a>` : '';
       return `
         <div style="padding:14px 16px 6px;display:flex;align-items:center;gap:8px;">
           <div style="flex:1;height:1px;background:#E5E7EB;"></div>
           <h3 style="margin:0;color:#2C5F6E;font-size:0.95rem;font-weight:700;">${g} <span style="color:#6B7F8D;font-size:0.75rem;font-weight:500;">(${allInGroup.length})</span></h3>
+          ${eventsLink}
           <div style="flex:1;height:1px;background:#E5E7EB;"></div>
         </div>
         <div style="display:grid;grid-template-columns:1fr;gap:10px;padding:0 16px 8px;">
