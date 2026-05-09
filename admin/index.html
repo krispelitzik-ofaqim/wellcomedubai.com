@@ -906,6 +906,14 @@
           `;
         }).join('')}
       </div>
+      <h3 style="margin:18px 0 10px;color:var(--white);">בלוקים בדף הבית</h3>
+      <div class="stat-card" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between;padding:14px;" onclick="toggleRealEstateBlock()">
+        <div>
+          <div style="font-weight:700;color:var(--white);">פורטל הנדל"ן</div>
+          <div style="font-size:0.78rem;color:var(--gray);" id="reBlockStatus">${localStorage.getItem('realestate_hidden') === '1' ? '⚪ מוסתר' : '🟢 גלוי'}</div>
+        </div>
+        <button class="action-btn edit"><i class="fas fa-${localStorage.getItem('realestate_hidden') === '1' ? 'eye-slash' : 'eye'}"></i></button>
+      </div>
       <h3 style="margin:24px 0 14px;color:var(--white);">כל הפריטים המומלצים</h3>
       <table class="admin-table">
         <thead><tr><th>תמונה</th><th>שם</th><th>קטגוריה</th><th>דירוג</th><th>מחיר</th></tr></thead>
@@ -921,14 +929,6 @@
           `).join('')}
         </tbody>
       </table>
-      <h3 style="margin:24px 0 14px;color:var(--white);">בלוקים בדף הבית</h3>
-      <div class="stat-card" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between;padding:14px;" onclick="toggleRealEstateBlock()">
-        <div>
-          <div style="font-weight:700;color:var(--white);">פורטל הנדל"ן</div>
-          <div style="font-size:0.78rem;color:var(--gray);" id="reBlockStatus">${localStorage.getItem('realestate_hidden') === '1' ? '⚪ מוסתר' : '🟢 גלוי'}</div>
-        </div>
-        <button class="action-btn edit"><i class="fas fa-${localStorage.getItem('realestate_hidden') === '1' ? 'eye-slash' : 'eye'}"></i></button>
-      </div>
     `;
   }
 
