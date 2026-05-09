@@ -3,11 +3,11 @@
 :root {
   --gold: #E76F51;
   --gold-light: #F4A261;
-  --dark-blue: #F5E6CB;
+  --dark-blue: #F0DFB8;
   --navy: #FFFFFF;
   --navy-light: #F5EFE6;
   --white: #2C5F6E;
-  --gray-light: #F5E6CB;
+  --gray-light: #F0DFB8;
   --gray: #6B7F8D;
   --text: #2C5F6E;
   --card-bg: #FFFFFF;
@@ -314,7 +314,7 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; heig
 }
 .modal-btn.primary { background:var(--gold); color:#FFFFFF; }
 .modal-btn.primary:hover { background:var(--gold-light); }
-.modal-btn.secondary { background:#F5E6CB; color:#2C5F6E; border:1px solid #E5E7EB; }
+.modal-btn.secondary { background:#F0DFB8; color:#2C5F6E; border:1px solid #E5E7EB; }
 .modal-close {
   position:fixed; top:12px; left:12px;
   width:40px; height:40px; border-radius:50%;
