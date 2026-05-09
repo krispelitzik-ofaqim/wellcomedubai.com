@@ -108,7 +108,7 @@ function navigateTo(page, subcategory, opts) {
 
   switch(page) {
     case 'home': renderHome(); break;
-    case 'hotels': renderListPage('hotels', 'מלונות', ['הכל','7 כוכבים','5 כוכבים','4-5 כוכבים','3-4 כוכבים','תקציבי'], subcategory); break;
+    case 'hotels': renderListPage('hotels', 'מלונות', ['הכל','7 כוכבים','5 כוכבים','4-5 כוכבים','3-4 כוכבים','צנוע'], subcategory); break;
     case 'restaurants': renderListPage('restaurants', 'מסעדות', ['הכל','יוקרתי מאוד','יוקרתי','עממי','ישראלי','לבנוני','טורקי','אוכל רחוב','משלוחים'], subcategory); break;
     case 'attractions': renderListPage('attractions', 'אטרקציות', ['הכל','חובה לביקור','מוזיאון','אומנות','אקסטרים','חוף','פארק מים','פארק שעשועים','סיור','גן חיות','ספארי מדבר','יהדות','ספורט'], subcategory); break;
     case 'shopping': renderListPage('shopping', 'קניונים ושווקים', ['הכל','הכי מבוקש','קניון','שוק','אלכוהול'], subcategory); break;
@@ -752,7 +752,7 @@ function isVerifiedImage(item, category) {
   return item.image && new RegExp(`^images/${category}/${item.id}\\.jpg$`).test(item.image);
 }
 const SUBCAT_HE = {
-  '7star':'7 כוכבים','5star':'5 כוכבים','4-5star':'4-5 כוכבים','3-4star':'3-4 כוכבים','luxury':'יוקרה','business':'עסקים','budget':'תקציבי',
+  '7star':'7 כוכבים','5star':'5 כוכבים','4-5star':'4-5 כוכבים','3-4star':'3-4 כוכבים','luxury':'יוקרה','business':'עסקים','budget':'צנוע',
   'ultra-luxury':'יוקרתי מאוד','local':'עממי','israeli':'ישראלי','lebanese':'לבנוני','turkish':'טורקי','street':'אוכל רחוב','asian':'אסייתי','seafood':'פירות ים',
   'landmark':'חובה לביקור','museum':'מוזיאון','adventure':'הרפתקה','extreme':'אקסטרים','art':'אומנות','beach':'חוף','waterpark':'פארק מים','theme-park':'פארק שעשועים','tour':'סיור','zoo':'גן חיות','aquarium':'אקווריום','kids-zone':'מתחם ילדים','snow':'שלג','car-rental':'השכרת רכב','desert-safari':'ספארי מדבר',
   'mall':'קניון','souk':'שוק','judaism':'יהדות','alcohol':'אלכוהול',
@@ -2235,7 +2235,7 @@ function focusMapItem(category, id) {
 
 // ===== LIST PAGE =====
 const SUBCAT_MAP = {
-  '7 כוכבים':'7star','5 כוכבים':'5star','4-5 כוכבים':'4-5star','3-4 כוכבים':'3-4star','יוקרה':'luxury','עסקים':'business','תקציבי':'budget',
+  '7 כוכבים':'7star','5 כוכבים':'5star','4-5 כוכבים':'4-5star','3-4 כוכבים':'3-4star','יוקרה':'luxury','עסקים':'business','צנוע':'budget',
   'יוקרתי מאוד':'ultra-luxury','יוקרתי':'luxury','עממי':'local','ישראלי':'israeli','לבנוני':'lebanese','טורקי':'turkish','אוכל רחוב':'street',
   'אסייתי':'asian','מקומי':'local','פירות ים':'seafood',
   'חובה לביקור':'landmark','מוזיאון':'museum','הרפתקה':'adventure','אקסטרים':'extreme','אומנות':'art','חוף':'beach','פארק מים':'waterpark','פארק שעשועים':'theme-park','סיור':'tour','גן חיות':'zoo','אקווריום':'aquarium','מתחם ילדים':'kids-zone','שלג':'snow','השכרת רכב':'car-rental','ספארי מדבר':'desert-safari',
@@ -2253,6 +2253,7 @@ function cardGridHTML(item, category) {
           <div style="position:relative;">
             <img src="${getCardImage(item, category)}" alt="${item.name}" style="width:100%;height:220px;object-fit:cover;" onerror="this.style.display='none'">
             ${item.subcategory ? `<div style="position:absolute;top:8px;left:8px;background:${CATEGORY_TITLE_COLORS[category] || 'rgba(0,0,0,0.65)'};color:#fff;padding:4px 11px;border-radius:12px;font-size:0.75rem;font-weight:700;box-shadow:0 1px 4px rgba(0,0,0,0.35);">${subcategoryHe(item.subcategory)}</div>` : ''}
+            ${item.kosher ? `<div style="position:absolute;bottom:8px;left:8px;background:linear-gradient(135deg,#1A4A5E,#0E2A38);color:#E9C46A;padding:5px 10px;border-radius:8px;font-size:0.7rem;font-weight:900;box-shadow:0 2px 6px rgba(0,0,0,0.4);border:1px solid #E9C46A;letter-spacing:0.3px;z-index:2;">✡ מכבד כשרות</div>` : ''}
             ${item.nameHe ? `<div style="position:absolute;bottom:10px;right:12px;left:12px;color:#fff;font-weight:800;font-size:1.15rem;text-shadow:0 2px 10px rgba(0,0,0,0.85),0 0 5px rgba(0,0,0,0.7);text-align:right;">${item.nameHe}</div>` : ''}
           </div>
           <div style="padding:10px;">
