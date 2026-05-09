@@ -469,23 +469,26 @@
 
   function renderCustomAudioPlayer(src, real) {
     const id = 'aud_' + Math.random().toString(36).slice(2, 9);
-    if (!real) return '';
+    const opacity = real ? '1' : '0.55';
     return `
-      <div style="padding:12px 18px 0;">
-        <audio id="${id}" src="${src}" preload="metadata" style="display:none;"></audio>
-        <div style="background:linear-gradient(135deg,#1A6B8A,#2C5F6E);border-radius:14px;padding:14px 16px;box-shadow:0 4px 14px rgba(26,107,138,0.25);">
-          <div onclick="togglePlayer('${id}')" style="display:flex;align-items:center;gap:14px;cursor:pointer;">
-            <div id="${id}_btn" style="width:48px;height:48px;border-radius:50%;background:#E9C46A;color:#0E2A38;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;font-weight:900;">▶</div>
-            <div style="flex:1;">
-              <div id="${id}_label" style="color:#fff;font-weight:800;font-size:0.95rem;">הקשב לסיפור</div>
-              <div style="color:rgba(233,196,106,0.85);font-size:0.7rem;font-weight:600;margin-top:2px;">לחץ להפעלה</div>
+      <div style="padding:14px 20px 10px;">
+        ${real ? `<audio id="${id}" src="${src}" preload="metadata" style="display:none;"></audio>` : ''}
+        <div style="display:flex;align-items:center;gap:10px;opacity:${opacity};">
+          <button onclick="${real ? `togglePlayer('${id}')` : ''}" id="${id}_btn" style="width:44px;height:44px;border-radius:50%;background:#E76F51;color:#fff;border:none;font-size:1.1rem;cursor:${real?'pointer':'default'};display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 6px rgba(231,111,81,0.35);">▶</button>
+          <div style="flex:1;display:flex;flex-direction:column;gap:5px;">
+            <div onclick="${real ? `seekPlayer('${id}', event)` : ''}" id="${id}_track" style="height:5px;background:rgba(0,0,0,0.1);border-radius:3px;cursor:${real?'pointer':'default'};position:relative;">
+              <div id="${id}_fill" style="position:absolute;top:0;left:0;width:${real?'0':'30'}%;height:100%;background:#E76F51;border-radius:3px;"></div>
             </div>
-            <div style="color:rgba(255,255,255,0.7);font-size:0.7rem;font-family:'SF Mono',Menlo,monospace;" id="${id}_time_pair"><span id="${id}_time">0:00</span> / <span id="${id}_dur">0:00</span></div>
-          </div>
-          <div onclick="seekPlayer('${id}', event)" id="${id}_track" style="margin-top:10px;height:4px;background:rgba(255,255,255,0.18);border-radius:2px;cursor:pointer;position:relative;overflow:hidden;">
-            <div id="${id}_fill" style="position:absolute;top:0;left:0;width:0;height:100%;background:#E9C46A;border-radius:2px;transition:width 0.15s;"></div>
+            <div style="display:flex;justify-content:space-between;font-size:0.65rem;color:#6B7F8D;font-weight:600;">
+              <span id="${id}_time">${real ? '0:00' : '0:00'}</span>
+              <span id="${id}_dur">${real ? '0:00' : '—'}</span>
+            </div>
           </div>
         </div>
+        <div style="display:flex;justify-content:center;gap:6px;margin-top:8px;">
+          ${[1, 1.5, 2].map(s => `<button onclick="${real ? `setSpeed('${id}', ${s}, this)` : ''}" data-speed="${s}" style="background:#1A1A1A;color:#fff;border:none;padding:4px 12px;border-radius:14px;font-family:Heebo;font-size:0.7rem;font-weight:700;cursor:${real?'pointer':'default'};opacity:${s===1?'1':'0.6'};">x${s}</button>`).join('')}
+        </div>
+        ${!real ? `<div style="text-align:center;color:#6B7F8D;font-size:0.68rem;margin-top:6px;">⏺ הקלטה תבוא בקרוב</div>` : ''}
       </div>
     `;
   }
@@ -500,12 +503,12 @@
     const a = document.getElementById(id);
     const btn = document.getElementById(id + '_btn');
     if (!a) return;
-    const label = document.getElementById(id + '_label');
     if (a.paused) {
       if (a.duration && a.currentTime >= a.duration - 0.2) a.currentTime = 0;
       a.play();
       btn.textContent = '❚❚';
-      if (label) label.textContent = 'מנגן את הסיפור...';
+      btn.style.background = '#F4A261';
+      btn.style.boxShadow = '0 2px 6px rgba(244,162,97,0.45)';
       a.ontimeupdate = () => {
         const pct = (a.currentTime / a.duration) * 100;
         const fill = document.getElementById(id + '_fill');
@@ -521,11 +524,12 @@
         const dur = document.getElementById(id + '_dur');
         if (dur) dur.textContent = fmtTime(a.duration);
       }
-      a.onended = () => { btn.textContent = '▶'; if (label) label.textContent = 'הקשב לסיפור'; };
+      a.onended = () => { btn.textContent = '▶'; btn.style.background = '#E76F51'; btn.style.boxShadow = '0 2px 6px rgba(231,111,81,0.35)'; };
     } else {
       a.pause();
       btn.textContent = '▶';
-      if (label) label.textContent = 'הקשב לסיפור';
+      btn.style.background = '#E76F51';
+      btn.style.boxShadow = '0 2px 6px rgba(231,111,81,0.35)';
     }
   }
 
