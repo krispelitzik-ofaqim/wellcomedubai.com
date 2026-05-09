@@ -3282,7 +3282,7 @@ function renderEventsCalendar() {
                   <div style="flex:1;min-width:0;">
                     <div style="font-weight:600;color:#2C5F6E;font-size:1.05rem;line-height:1.35;margin-bottom:5px;">${e.name}</div>
                     <div style="color:#6B7F8D;font-size:0.85rem;line-height:1.6;margin-bottom:8px;">${e.desc}</div>
-                    <a onclick="openInFrame('https://klook.tpk.lv/8HSINbXI?aff_url=${encodeURIComponent('https://www.klook.com/en-US/search/result/?query=' + encodeURIComponent(e.name + ' Dubai'))}','${e.name.replace(/'/g,"\\'")} - רכוש כרטיסים')" style="color:#E76F51;font-size:0.82rem;font-weight:700;cursor:pointer;text-decoration:none;letter-spacing:0.3px;">רכישת כרטיסים ←</a>
+                    <a href="https://klook.tpk.lv/8HSINbXI" target="_blank" rel="noopener" data-no-iframe="1" style="color:#E76F51;font-size:0.82rem;font-weight:700;cursor:pointer;text-decoration:none;letter-spacing:0.3px;">רכישת כרטיסים ←</a>
                   </div>
                 </div>
               `;
