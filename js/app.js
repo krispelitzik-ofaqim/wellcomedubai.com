@@ -110,12 +110,12 @@ function navigateTo(page, subcategory, opts) {
     case 'home': renderHome(); break;
     case 'hotels': renderListPage('hotels', 'מלונות', ['הכל','7 כוכבים','5 כוכבים','4-5 כוכבים','3-4 כוכבים','תקציבי'], subcategory); break;
     case 'restaurants': renderListPage('restaurants', 'מסעדות', ['הכל','יוקרתי מאוד','יוקרתי','עממי','ישראלי','לבנוני','טורקי','אוכל רחוב','משלוחים'], subcategory); break;
-    case 'attractions': renderListPage('attractions', 'אטרקציות', ['הכל','חובה לביקור','מוזיאון','אומנות','אקסטרים','חוף','פארק מים','פארק שעשועים','סיור','גן חיות','ספארי מדבר','יהדות'], subcategory); break;
+    case 'attractions': renderListPage('attractions', 'אטרקציות', ['הכל','חובה לביקור','מוזיאון','אומנות','אקסטרים','חוף','פארק מים','פארק שעשועים','סיור','גן חיות','ספארי מדבר','יהדות','ספורט'], subcategory); break;
     case 'shopping': renderListPage('shopping', 'קניונים ושווקים', ['הכל','הכי מבוקש','קניון','שוק','אלכוהול'], subcategory); break;
     case 'nightlife': renderListPage('nightlife', 'בילויים', ['הכל','מועדון','בר גג','ביץ׳ קלאב','בידור','מופע'], subcategory); break;
     case 'kids': renderListPage('kids', 'ילדים ומשפחות', ['הכל','פארק שעשועים','פארק מים','אקווריום','מתחם ילדים','שלג'], subcategory); break;
     case 'transport': renderListPage('transport', 'תחבורה', ['הכל','מטרו','מונית','סירה','אפליקציה','אוטובוס','השכרת רכב'], subcategory); break;
-    case 'casino': renderListPage('casino', 'בידור ומשחקים', ['הכל','קזינו','מרוצים','ספורט'], subcategory); break;
+    case 'casino': renderListPage('casino', 'בידור ומשחקים', ['הכל','קזינו','מרוצים','ספורט','הופעות מוסיקה'], subcategory); break;
     case 'abudhabi': renderListPage('abudhabi', 'אבו דאבי', ['הכל','חובה לביקור','מוזיאון','דת','פארק שעשועים','פארק מים','קניון','שוק','ספורט'], subcategory); break;
     case 'map': renderMapPage(); break;
     case 'flights': renderFlightsPage(); break;
@@ -2241,7 +2241,7 @@ const SUBCAT_MAP = {
   'קניון':'mall','שוק':'souk','יהדות':'judaism','אלכוהול':'alcohol',
   'מועדון':'club','לאונג\'':'lounge','בר גג':'rooftop','ביץ׳ קלאב':'beach-club','בידור':'entertainment','מופע':'show',
   'מטרו':'metro','מונית':'taxi','סירה':'boat','אפליקציה':'app','אוטובוס':'bus',
-  'קזינו':'casino','מרוצים':'racing','ספורט':'sport','קניות':'shopping'
+  'קזינו':'casino','מרוצים':'racing','ספורט':'sport','קניות':'shopping','הופעות מוסיקה':'music-show'
 };
 
 function cardGridHTML(item, category) {
