@@ -3143,10 +3143,10 @@ function renderRealEstatePage() {
   if (!page) return;
   const tab = window.RE_TAB || 'invest';
   const topButtons = [
-    { id:'sale',     label:'דירות למכירה',   icon:'🏠', color:'#1A6B8A', sub:'מצא בית חלומות' },
-    { id:'rent',     label:'דירות להשכרה',   icon:'🔑', color:'#2A9D8F', sub:'לטווח קצר וארוך' },
-    { id:'invest',   label:'פורטל הנדל"ן',   icon:'📊', color:'#E76F51', sub:'מאמרים וגרפים' },
-    { id:'business', label:'פורטל העסקים',   icon:'💼', color:'#B8923A', sub:'מטבעות וסחורות', nav:'business' }
+    { id:'sale',     line1:'דירות', line2:'למכירה',  color:'#1A6B8A' },
+    { id:'rent',     line1:'דירות', line2:'להשכרה',  color:'#2A9D8F' },
+    { id:'invest',   line1:'פורטל', line2:'הנדל"ן',  color:'#E76F51' },
+    { id:'business', line1:'פורטל', line2:'העסקים',  color:'#B8923A', nav:'business' }
   ];
   page.innerHTML = `
     <div class="page-header" style="background:linear-gradient(135deg,#0E2A38 0%,#1A4A5E 100%);color:#fff;border-bottom:none;">
@@ -3179,16 +3179,19 @@ function renderRealEstatePage() {
       </div>
     </div>
 
-    <!-- Flat tabs (no rectangles) -->
-    <div style="background:#FDF6EC;padding:6px 4px 0;border-bottom:1px solid #E8DEC8;">
-      <div style="display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:2px;">
+    <!-- Flat tabs — 5 columns, 2 lines each -->
+    <div style="background:#FDF6EC;padding:6px 6px 0;border-bottom:1px solid #E8DEC8;">
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:0;">
         ${topButtons.map(t => `
-          <button onclick="${t.nav ? `navigateTo('${t.nav}')` : `switchRETab('${t.id}')`}" style="flex:1;min-width:max-content;padding:11px 14px 10px;background:transparent;border:none;font-family:Heebo;font-weight:${tab===t.id?'800':'600'};font-size:0.82rem;color:${tab===t.id?t.color:'#6B7F8D'};cursor:pointer;border-bottom:1.5px solid ${tab===t.id?t.color:'transparent'};white-space:nowrap;scroll-snap-align:start;transition:all 0.2s;">
-            ${t.icon} ${t.label}
+          <button onclick="${t.nav ? `navigateTo('${t.nav}')` : `switchRETab('${t.id}')`}" style="padding:9px 2px 8px;background:transparent;border:none;font-family:Heebo;font-weight:${tab===t.id?'800':'600'};font-size:0.78rem;color:${tab===t.id?t.color:'#6B7F8D'};cursor:pointer;border-bottom:1.5px solid ${tab===t.id?t.color:'transparent'};line-height:1.2;transition:all 0.2s;">
+            <div>${t.line1}</div>
+            <div>${t.line2}</div>
           </button>
         `).join('')}
-        <button onclick="switchRETab('israeli')" style="flex:1;min-width:max-content;padding:11px 14px 10px;background:transparent;border:none;font-family:Heebo;font-weight:${tab==='israeli'?'800':'600'};font-size:0.82rem;color:${tab==='israeli'?'#B85C8E':'#6B7F8D'};cursor:pointer;border-bottom:1.5px solid ${tab==='israeli'?'#B85C8E':'transparent'};white-space:nowrap;scroll-snap-align:start;transition:all 0.2s;">
-          🇮🇱 ישראליות <span style="background:#B85C8E;color:#fff;font-size:0.55rem;padding:1px 5px;border-radius:5px;font-weight:800;letter-spacing:0.5px;vertical-align:middle;">חדש</span>
+        <button onclick="switchRETab('israeli')" style="padding:9px 2px 8px;background:transparent;border:none;font-family:Heebo;font-weight:${tab==='israeli'?'800':'600'};font-size:0.78rem;color:${tab==='israeli'?'#B85C8E':'#6B7F8D'};cursor:pointer;border-bottom:1.5px solid ${tab==='israeli'?'#B85C8E':'transparent'};line-height:1.2;transition:all 0.2s;position:relative;">
+          <div>השקעות</div>
+          <div>ישראליות</div>
+          <span style="position:absolute;top:2px;left:50%;transform:translateX(-50%);background:#B85C8E;color:#fff;font-size:0.5rem;padding:0 4px;border-radius:4px;font-weight:800;letter-spacing:0.3px;line-height:1.4;">חדש</span>
         </button>
       </div>
     </div>
