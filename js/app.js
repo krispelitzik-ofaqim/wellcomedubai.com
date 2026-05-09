@@ -136,6 +136,7 @@ function navigateTo(page, subcategory, opts) {
     case 'gallery': renderGalleryPage(); break;
     case 'realestate': renderRealEstatePage(); break;
     case 'business': renderBusinessPortal(); break;
+    case 'events': renderEventsCalendar(); break;
   }
 }
 
@@ -3214,6 +3215,63 @@ function renderBusinessPortal() {
     </div>
   `;
   loadBizNews();
+}
+
+const DUBAI_EVENTS = [
+  { month:1, day:'מס׳', name:'Dubai Marathon', cat:'sport', desc:'מרתון בינלאומי 42K — אחד המהירים בעולם.', link:{cat:'attractions',id:296} },
+  { month:1, day:'אמצע', name:'Dubai Desert Classic', cat:'sport', desc:'טורניר גולף DP World Tour ב-Emirates GC.', link:{cat:'attractions',id:297} },
+  { month:1, day:'כל החודש', name:'Dubai Shopping Festival', cat:'culture', desc:'ענק קניות, מבצעים, מופעים ולייזר ברחבי העיר.' },
+  { month:2, day:'סוף', name:'Dubai Tennis Championships', cat:'sport', desc:'טורניר טניס בינלאומי — אורחים מובילים.', link:{cat:'attractions',id:295} },
+  { month:3, day:'סוף', name:'Dubai World Cup', cat:'sport', desc:'גביע מרוצי הסוסים הגדול בעולם — Meydan.', link:{cat:'casino',id:602} },
+  { month:3, day:'מס׳', name:'Art Dubai', cat:'culture', desc:'יריד אמנות בינלאומי — Madinat Jumeirah.' },
+  { month:5, day:'אמצע', name:'Eid al-Adha Festival', cat:'culture', desc:'חג מוסלמי — אירועים ומבצעים בכל העיר.' },
+  { month:7, day:'כל החודש', name:'Dubai Summer Surprises', cat:'culture', desc:'פסטיבל קניות קיץ — מבצעים עצומים, פעילויות ילדים.' },
+  { month:11, day:'סוף', name:'F1 Abu Dhabi GP', cat:'sport', desc:'גרנד פרי פורמולה 1 ב-Yas Marina (~1.5 שעה מדובאי).', link:{cat:'abudhabi',id:604} },
+  { month:12, day:'תחילת', name:'UAE National Day', cat:'culture', desc:'יום העצמאות (2 בדצמבר) — מצעדים, זיקוקים, חגיגות.' },
+  { month:12, day:'סוף', name:'NYE Dubai Fireworks', cat:'culture', desc:'מופע זיקוקים בערב ראש השנה — Burj Khalifa & Atlantis.' }
+];
+const HEB_MONTHS = ['','ינואר','פברואר','מרץ','אפריל','מאי','יוני','יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'];
+
+function renderEventsCalendar() {
+  const page = document.getElementById('page-events');
+  if (!page) return;
+  const currentMonth = new Date().getMonth() + 1;
+  const colors = { sport:'#2A9D8F', culture:'#E76F51' };
+  page.innerHTML = `
+    <div class="page-header">
+      <button class="back-btn" onclick="navigateTo('home')"><i class="fas fa-arrow-right"></i></button>
+      <h2><i class="fas fa-calendar-alt" style="color:#B8923A;margin-left:6px;"></i> לוח אירועים שנתי</h2>
+    </div>
+    <div style="padding:14px 16px;background:#FAF6EE;min-height:calc(100vh - 150px);">
+      <div style="background:#fff;border-right:4px solid #B8923A;padding:10px 14px;border-radius:6px;font-size:0.82rem;color:#2C5F6E;line-height:1.5;margin-bottom:14px;">💡 גלילה ימינה לאחור — שמאלה לחודש הבא</div>
+      <div style="display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:14px;">
+        ${HEB_MONTHS.slice(1).map((m, i) => {
+          const monthNum = i + 1;
+          const events = DUBAI_EVENTS.filter(e => e.month === monthNum);
+          const isCurrent = monthNum === currentMonth;
+          return `
+            <div style="flex-shrink:0;width:280px;scroll-snap-align:start;background:#fff;border-radius:14px;overflow:hidden;border:${isCurrent ? '2px solid #E76F51' : '1px solid #E5E7EB'};box-shadow:0 4px 12px rgba(0,0,0,0.06);">
+              <div style="padding:12px 14px;background:${isCurrent ? 'linear-gradient(135deg,#E76F51,#F4A261)' : 'linear-gradient(135deg,#1A6B8A,#2C5F6E)'};color:#fff;display:flex;align-items:center;justify-content:space-between;">
+                <div style="font-weight:900;font-size:1rem;">${m}</div>
+                <div style="font-size:0.7rem;opacity:0.85;">${events.length} אירועים${isCurrent ? ' · החודש' : ''}</div>
+              </div>
+              <div style="padding:10px 12px;min-height:200px;">
+                ${events.length === 0 ? `<div style="color:#9CA3AF;font-size:0.8rem;text-align:center;padding:20px 0;">אין אירועים גדולים</div>` : events.map(e => `
+                  <div ${e.link ? `onclick="navigateTo('${e.link.cat}');setTimeout(()=>openDetail('${e.link.cat}',${e.link.id}),300);" style="cursor:pointer;"` : ''} style="padding:8px 10px;background:#F5E6CB;border-right:3px solid ${colors[e.cat] || '#1A6B8A'};border-radius:6px;margin-bottom:8px;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+                      <div style="font-weight:800;color:#2C5F6E;font-size:0.85rem;line-height:1.25;">${e.name}</div>
+                      <div style="background:${colors[e.cat] || '#1A6B8A'};color:#fff;font-size:0.65rem;font-weight:700;padding:2px 7px;border-radius:8px;white-space:nowrap;">${e.day}</div>
+                    </div>
+                    <div style="color:#6B7F8D;font-size:0.72rem;margin-top:3px;line-height:1.4;">${e.desc}</div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    </div>
+  `;
 }
 
 async function loadBizNews() {
