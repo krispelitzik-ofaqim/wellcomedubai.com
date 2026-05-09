@@ -3752,9 +3752,9 @@ function showNewsPreview(source, index) {
         <h3 style="margin:0 0 10px;color:#1A4A5E;font-size:1.05rem;font-weight:900;line-height:1.35;">${it.title || ''}</h3>
         ${sourceName ? `<div style="color:#6B7F8D;font-size:0.72rem;margin-bottom:14px;">${sourceName}</div>` : ''}
         <div style="color:#2C5F6E;font-size:0.88rem;line-height:1.7;">${summary || 'אין תקציר זמין.'}</div>
-      </div>
-      <div style="padding:14px 18px 16px;border-top:1px solid #F0E6D2;flex-shrink:0;background:#FDF6EC;">
-        <button onclick="openNewsSourceLink('${encodeURIComponent(it.link)}')" style="width:100%;padding:13px;background:linear-gradient(135deg,#0E2A38,#1A4A5E);color:#E9C46A;border:none;border-radius:10px;font-family:Heebo;font-weight:800;font-size:0.9rem;cursor:pointer;">📰 לכתבה המלאה במקור ←</button>
+        <div style="margin-top:14px;text-align:left;">
+          <a onclick="openNewsSourceLink('${encodeURIComponent(it.link)}')" style="color:#1A6B8A;font-size:0.85rem;font-weight:700;cursor:pointer;text-decoration:underline;">לכתבה במקור ←</a>
+        </div>
       </div>
     </div>
   `;
