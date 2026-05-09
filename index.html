@@ -387,12 +387,12 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDIqkbn9__0EdYjyCRQv4w-Gi3tHWwSwro&libraries=places&language=en" async defer onerror="window._googleMapsBlocked=true;"></script>
-<script src="js/data.js?v=116"></script>
+<script src="js/data.js?v=117"></script>
 <script src="js/places.js?v=11"></script>
 <script src="js/booking.js?v=11"></script>
 <script src="js/services.js?v=11"></script>
 <script src="js/flights-board.js?v=11"></script>
-<script src="js/app.js?v=259"></script>
+<script src="js/app.js?v=260"></script>
 <script>
 (function autoVersionCheck() {
   var scripts = document.getElementsByTagName('script');
@@ -577,7 +577,7 @@
         </div>
         ${item.video ? `<div style="width:100%;aspect-ratio:16/9;flex-shrink:0;background:#000;"><iframe src="https://www.youtube.com/embed/${item.video}?rel=0" style="width:100%;height:100%;border:0;display:block;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>` : (item.image ? `<div style="width:100%;height:180px;overflow:hidden;flex-shrink:0;"><img src="${item.image}" alt="${item.title}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.parentElement.style.display='none'"></div>` : '')}
         ${item.audio ? renderCustomAudioPlayer(item.audio, true) : renderCustomAudioPlayer('', false)}
-        <div style="padding:20px;overflow-y:auto;color:#2C5F6E;line-height:1.8;font-size:0.95rem;white-space:pre-line;">${item.text}</div>
+        <div style="padding:20px;overflow-y:auto;color:#2C5F6E;line-height:1.8;font-size:0.95rem;white-space:pre-line;">${item.text}${item.cta ? `<div style="margin-top:18px;padding-top:14px;border-top:1px solid #F0E6D2;"><button onclick="closeFrame();navigateTo('${item.cta.page}','${item.cta.subcategory || ''}')" style="width:100%;padding:14px;background:linear-gradient(135deg,${item.color},#2C5F6E);color:#fff;border:none;border-radius:10px;font-family:Heebo;font-weight:800;font-size:0.95rem;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,0.15);">${item.cta.label} ←</button></div>` : ''}</div>
       </div>
     `;
     modal.classList.add('active');

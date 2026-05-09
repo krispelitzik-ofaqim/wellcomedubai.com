@@ -247,6 +247,9 @@ const DEFAULT_DATA = {
 
     // === JUDAISM ===
     { id:256, name:"בית הכנסת JCC UAE", nameEn:"Jewish Community Center UAE", category:"attractions", subcategory:"judaism", description:"מרכז קהילתי יהודי ובית כנסת אורתודוקסי פעיל בדובאי בהובלת הרב לוי דוכמן. תפילות, בר/בת מצווה, אירועים. מסעדה כשרה במקום.", image:"images/attractions/256.jpg", rating:4.9, price:"חינם", priceRange:"חינם", address:"Villa Centro, Umm Suqeim", lat:25.1500, lng:55.2100, tags:["יהדות","בית כנסת","קהילה"], featured:true },
+    { id:274, name:"חב\"ד דובאי", nameEn:"Chabad of UAE", category:"attractions", subcategory:"judaism", description:"בית חב\"ד פעיל בדובאי בהובלת הרב לוי דוכמן — תפילות יומיות, ארוחות שבת, סדרי פסח, חגים, סיוע לתיירים ישראלים, מקווה ומסעדה כשרה במתחם.", image:"images/attractions/256.jpg", rating:4.9, price:"חינם", priceRange:"חינם — תרומה מומלצת", address:"Umm Suqeim, Dubai", lat:25.1502, lng:55.2095, tags:["יהדות","חב\"ד","קהילה"], featured:true },
+    { id:275, name:"מקווה דובאי", nameEn:"Mikveh Dubai", category:"attractions", subcategory:"judaism", description:"מקווה כשר לנשים בדובאי בניהול הקהילה היהודית — שעות פעילות בתיאום מראש. שירות חינם לחברות הקהילה ולתיירות ישראלית.", image:"images/attractions/256.jpg", rating:4.8, price:"חינם", priceRange:"חינם — תרומה מומלצת", address:"Umm Suqeim, Dubai", lat:25.1503, lng:55.2098, tags:["יהדות","מקווה","קהילה"], featured:false },
+    { id:276, name:"קהילה יהודית בדובאי", nameEn:"Jewish Community of UAE", category:"attractions", subcategory:"judaism", description:"קהילה יהודית רשמית של ~3,000 חברים שצמחה אחרי הסכמי אברהם (2020). כוללת בתי כנסת, מקווה, מסעדות כשרות, גן ילדים יהודי וקייטרינג.", image:"images/Yizhak/israelis-flags-il-uae.jpg", rating:4.9, price:"חינם", priceRange:"חינם", address:"Dubai (כל העיר)", lat:25.2048, lng:55.2708, tags:["יהדות","קהילה","הסכמי אברהם"], featured:true },
     { id:258, name:"The View at the Palm", nameEn:"The View at the Palm Jumeirah", category:"attractions", subcategory:"landmark", description:"מרפסת תצפית בקומה 52 (240 מ׳) של מגדל Palm Tower. נוף 360° לפאלם ג'ומיירה, Atlantis וקו הרקיע. כולל תצוגה אינטראקטיבית של תולדות הפאלם.", image:"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/The_View_at_the_Palm%2C_Dubai.jpg/960px-The_View_at_the_Palm%2C_Dubai.jpg", rating:4.4, price:"$$", priceRange:"AED 100-180", address:"Palm Tower, Palm Jumeirah", lat:25.1153, lng:55.1391, tags:["תצפית","פאלם","ציון דרך"], featured:true },
     { id:259, name:"Sky Views Dubai", nameEn:"Sky Views Observatory", category:"attractions", subcategory:"landmark", description:"מרפסת תצפית בגובה 219 מ׳ במלון Address Sky View. כוללת מסלול זכוכית בין שני המגדלים, ומגלשה חיצונית מקומה 53. נוף ל-Burj Khalifa.", image:"images/attractions/259.jpg", rating:4.5, price:"$$", priceRange:"AED 100-300", address:"Address Sky View Hotel, Downtown", lat:25.1942, lng:55.2745, tags:["תצפית","זכוכית","מגלשה"], website:"https://www.visitdubai.com/en/places-to-visit/sky-views-dubai", featured:true },
         { id:260, name:"Jumeirah Mosque", nameEn:"Jumeirah Mosque", category:"attractions", subcategory:"landmark", description:"המסגד היחיד בדובאי הפתוח לסיורים מודרכים לתיירים מכל הדתות. סיורי 'Open Doors, Open Minds' מציגים את האסלאם והתרבות המקומית.", image:"https://images.pexels.com/photos/14750357/pexels-photo-14750357.jpeg", rating:4.6, price:"$", priceRange:"AED 35", address:"Jumeirah Beach Road", lat:25.2334, lng:55.2654, tags:["מסגד","סיור","תרבות"], website:"https://www.cultures.ae", featured:true },
@@ -452,7 +455,7 @@ const PRACTICAL_INFO = {
   ]
 };
 
-const DB_VERSION = 183;
+const DB_VERSION = 184;
 function getDB() {
   const ver = localStorage.getItem(DB_KEY + '_ver');
   if (ver && Number(ver) >= DB_VERSION) {
