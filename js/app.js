@@ -3218,17 +3218,17 @@ function renderBusinessPortal() {
 }
 
 const DUBAI_EVENTS = [
-  { month:1, day:'מס׳', name:'Dubai Marathon', cat:'sport', desc:'מרתון בינלאומי 42K — אחד המהירים בעולם.', link:{cat:'attractions',id:296} },
-  { month:1, day:'אמצע', name:'Dubai Desert Classic', cat:'sport', desc:'טורניר גולף DP World Tour ב-Emirates GC.', link:{cat:'attractions',id:297} },
-  { month:1, day:'כל החודש', name:'Dubai Shopping Festival', cat:'culture', desc:'ענק קניות, מבצעים, מופעים ולייזר ברחבי העיר.' },
-  { month:2, day:'סוף', name:'Dubai Tennis Championships', cat:'sport', desc:'טורניר טניס בינלאומי — אורחים מובילים.', link:{cat:'attractions',id:295} },
-  { month:3, day:'סוף', name:'Dubai World Cup', cat:'sport', desc:'גביע מרוצי הסוסים הגדול בעולם — Meydan.', link:{cat:'casino',id:602} },
-  { month:3, day:'מס׳', name:'Art Dubai', cat:'culture', desc:'יריד אמנות בינלאומי — Madinat Jumeirah.' },
-  { month:5, day:'אמצע', name:'Eid al-Adha Festival', cat:'culture', desc:'חג מוסלמי — אירועים ומבצעים בכל העיר.' },
-  { month:7, day:'כל החודש', name:'Dubai Summer Surprises', cat:'culture', desc:'פסטיבל קניות קיץ — מבצעים עצומים, פעילויות ילדים.' },
-  { month:11, day:'סוף', name:'F1 Abu Dhabi GP', cat:'sport', desc:'גרנד פרי פורמולה 1 ב-Yas Marina (~1.5 שעה מדובאי).', link:{cat:'abudhabi',id:604} },
-  { month:12, day:'תחילת', name:'UAE National Day', cat:'culture', desc:'יום העצמאות (2 בדצמבר) — מצעדים, זיקוקים, חגיגות.' },
-  { month:12, day:'סוף', name:'NYE Dubai Fireworks', cat:'culture', desc:'מופע זיקוקים בערב ראש השנה — Burj Khalifa & Atlantis.' }
+  { month:1, day:'7-8.1', name:'Dubai Marathon', cat:'sport', desc:'מרתון בינלאומי 42K — אחד המהירים בעולם.', link:{cat:'attractions',id:296} },
+  { month:1, day:'16-19.1', name:'Dubai Desert Classic', cat:'sport', desc:'טורניר גולף DP World Tour ב-Emirates GC.', link:{cat:'attractions',id:297} },
+  { month:1, day:'1-31.1', name:'Dubai Shopping Festival', cat:'culture', desc:'ענק קניות, מבצעים, מופעים ולייזר ברחבי העיר (ממשיך מדצמבר).' },
+  { month:2, day:'22-29.2', name:'Dubai Tennis Championships', cat:'sport', desc:'טורניר טניס בינלאומי — אורחים מובילים.', link:{cat:'attractions',id:295} },
+  { month:3, day:'28.3', name:'Dubai World Cup', cat:'sport', desc:'גביע מרוצי הסוסים הגדול בעולם — Meydan.', link:{cat:'casino',id:602} },
+  { month:3, day:'5-9.3', name:'Art Dubai', cat:'culture', desc:'יריד אמנות בינלאומי — Madinat Jumeirah.' },
+  { month:5, day:'27-31.5', name:'Eid al-Adha Festival', cat:'culture', desc:'חג מוסלמי — אירועים ומבצעים בכל העיר (תאריך משתנה).' },
+  { month:7, day:'1.7-31.8', name:'Dubai Summer Surprises', cat:'culture', desc:'פסטיבל קניות קיץ — מבצעים עצומים, פעילויות ילדים.' },
+  { month:11, day:'28-30.11', name:'F1 Abu Dhabi GP', cat:'sport', desc:'גרנד פרי פורמולה 1 ב-Yas Marina (~1.5 שעה מדובאי).', link:{cat:'abudhabi',id:604} },
+  { month:12, day:'2.12', name:'UAE National Day', cat:'culture', desc:'יום העצמאות — מצעדים, זיקוקים, חגיגות בכל העיר.' },
+  { month:12, day:'31.12', name:'NYE Dubai Fireworks', cat:'culture', desc:'מופע זיקוקים בערב ראש השנה — Burj Khalifa & Atlantis.' }
 ];
 const HEB_MONTHS = ['','ינואר','פברואר','מרץ','אפריל','מאי','יוני','יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'];
 
@@ -3247,8 +3247,8 @@ function renderEventsCalendar() {
       <h2><i class="fas fa-calendar-alt" style="color:#B8923A;margin-left:6px;"></i> לוח אירועים שנתי</h2>
     </div>
     <div style="padding:14px 16px 80px;background:#FAF6EE;min-height:calc(100vh - 150px);">
-      <div style="display:flex;gap:8px;justify-content:center;margin-bottom:18px;">
-        ${years.map(y => `<button onclick="window._eventsYear=${y};renderEventsCalendar();" style="padding:10px 28px;border-radius:10px;border:none;cursor:pointer;font-family:Heebo;font-weight:900;font-size:1.05rem;background:${y===activeYear?'linear-gradient(135deg,#1A6B8A,#2C5F6E)':'#fff'};color:${y===activeYear?'#fff':'#2C5F6E'};box-shadow:${y===activeYear?'0 4px 12px rgba(26,107,138,0.3)':'0 2px 6px rgba(0,0,0,0.08)'};border:1px solid ${y===activeYear?'transparent':'#E5E7EB'};">${y}</button>`).join('')}
+      <div style="display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;margin-bottom:18px;padding-bottom:6px;">
+        ${years.map(y => `<button onclick="window._eventsYear=${y};renderEventsCalendar();" style="flex-shrink:0;scroll-snap-align:start;padding:10px 22px;border-radius:10px;cursor:pointer;font-family:Heebo;font-weight:900;font-size:1rem;background:${y===activeYear?'linear-gradient(135deg,#1A6B8A,#2C5F6E)':'#fff'};color:${y===activeYear?'#fff':'#2C5F6E'};box-shadow:${y===activeYear?'0 4px 12px rgba(26,107,138,0.3)':'0 2px 6px rgba(0,0,0,0.08)'};border:1px solid ${y===activeYear?'transparent':'#E5E7EB'};">${y}</button>`).join('')}
       </div>
       ${HEB_MONTHS.slice(1).map((m, i) => {
         const monthNum = i + 1;
