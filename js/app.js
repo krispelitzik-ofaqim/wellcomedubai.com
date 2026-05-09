@@ -3330,8 +3330,8 @@ async function openNewsInFrame(encodedUrl, title) {
     const j = await r.json();
     if (j.success && j.url && !j.url.includes('news.google.com')) target = j.url;
   } catch {}
-  if (typeof openInFrame === 'function') openInFrame(target, title);
-  else window.open(target, '_blank');
+  // News sites typically block iframe — open in new tab for full article
+  window.open(target, '_blank', 'noopener');
 }
 
 const NEWS_FALLBACK_IMAGES = [
