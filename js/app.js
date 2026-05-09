@@ -3311,11 +3311,9 @@ function renderIsraeliInvestments() {
       </div>
     </div>
 
-    <!-- CTA — submit project -->
-    <div style="background:linear-gradient(135deg,#0E2A38,#1A4A5E);border-radius:14px;padding:18px;color:#fff;box-shadow:0 4px 14px rgba(14,42,56,0.25);margin-top:12px;">
-      <div style="font-weight:800;font-size:1rem;margin-bottom:6px;color:#E9C46A;">יש לך פרויקט להציע?</div>
-      <div style="font-size:0.78rem;opacity:0.9;line-height:1.5;margin-bottom:12px;">יזמים, משקיעים וחברות — העלו פרויקט נדל"ן לתצוגה בפורטל. חשיפה לקהל ישראלי בדובאי.</div>
-      <button onclick="showProjectSubmit()" style="width:100%;padding:12px;background:#E9C46A;color:#0E2A38;border:none;border-radius:10px;font-family:Heebo;font-weight:800;font-size:0.9rem;cursor:pointer;">📤 העלה פרויקט →</button>
+    <!-- CTA — submit project (subtle) -->
+    <div style="margin-top:14px;text-align:center;font-size:0.8rem;color:#6B7F8D;">
+      יש לך פרויקט להציע? <a onclick="showProjectSubmit()" style="color:#1A6B8A;font-weight:700;cursor:pointer;text-decoration:underline;">העלה פרויקט ←</a>
     </div>
 
     ${renderUserProjects()}
