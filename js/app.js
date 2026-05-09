@@ -3188,10 +3188,9 @@ function renderRealEstatePage() {
             <div>${t.line2}</div>
           </button>
         `).join('')}
-        <button onclick="switchRETab('israeli')" style="padding:9px 2px 8px;background:transparent;border:none;font-family:Heebo;font-weight:${tab==='israeli'?'800':'600'};font-size:0.78rem;color:${tab==='israeli'?'#B85C8E':'#6B7F8D'};cursor:pointer;border-bottom:1.5px solid ${tab==='israeli'?'#B85C8E':'transparent'};line-height:1.2;transition:all 0.2s;position:relative;">
+        <button onclick="switchRETab('israeli')" style="padding:9px 2px 8px;background:transparent;border:none;font-family:Heebo;font-weight:${tab==='israeli'?'800':'600'};font-size:0.78rem;color:${tab==='israeli'?'#B85C8E':'#6B7F8D'};cursor:pointer;border-bottom:1.5px solid ${tab==='israeli'?'#B85C8E':'transparent'};line-height:1.2;transition:all 0.2s;">
           <div>השקעות</div>
           <div>ישראליות</div>
-          <span style="position:absolute;top:2px;left:50%;transform:translateX(-50%);background:#B85C8E;color:#fff;font-size:0.5rem;padding:0 4px;border-radius:4px;font-weight:800;letter-spacing:0.3px;line-height:1.4;">חדש</span>
         </button>
       </div>
     </div>
