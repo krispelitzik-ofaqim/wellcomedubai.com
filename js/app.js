@@ -3710,11 +3710,12 @@ async function loadBizNews() {
     const j = await r.json();
     const items = (j.items || []).slice(0, 10);
     if (!items.length) { container.innerHTML = '<div style="padding:20px;color:#6B7F8D;text-align:center;width:100%;">לא נמצאו חדשות</div>'; return; }
+    window._bizNewsItems = items;
     container.innerHTML = items.map((it, i) => {
       const img = it.enclosure?.link || it.thumbnail || '';
       const date = it.pubDate ? new Date(it.pubDate).toLocaleDateString('he-IL') : '';
       const title = (it.title || '').slice(0, 80);
-      return `<a onclick="openNewsInFrame('${encodeURIComponent(it.link)}','${(it.title || '').replace(/'/g,"\\'").slice(0,80)}')" data-news-i="${i}" style="flex-shrink:0;width:240px;scroll-snap-align:start;background:#fff;border:1px solid #E5E7EB;border-radius:10px;overflow:hidden;text-decoration:none;display:block;cursor:pointer;">
+      return `<a onclick="showNewsPreview('biz',${i})" data-news-i="${i}" style="flex-shrink:0;width:240px;scroll-snap-align:start;background:#fff;border:1px solid #E5E7EB;border-radius:10px;overflow:hidden;text-decoration:none;display:block;cursor:pointer;">
         <img src="${img || 'images/Yizhak/economy-dubai-skyline-charts.jpg'}" onerror="this.src='images/Yizhak/economy-dubai-skyline-charts.jpg'" style="width:100%;height:130px;object-fit:cover;display:block;">
         <div style="padding:8px 10px;">
           <div style="color:#2C5F6E;font-weight:700;font-size:0.78rem;line-height:1.3;margin-bottom:4px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;">${title}</div>
@@ -3728,7 +3729,43 @@ async function loadBizNews() {
   }
 }
 
-async function openNewsInFrame(encodedUrl, title) {
+function showNewsPreview(source, index) {
+  const items = source === 'biz' ? (window._bizNewsItems || []) : (window._reNewsItems || []);
+  const it = items[index];
+  if (!it) return;
+  const img = it.enclosure?.link || it.thumbnail || 'images/Yizhak/dubai-skyline-evening.jpg';
+  const date = it.pubDate ? new Date(it.pubDate).toLocaleDateString('he-IL', {day:'numeric',month:'long',year:'numeric'}) : '';
+  const summary = (it.description || it.content || '').replace(/<[^>]+>/g,'').replace(/&nbsp;/g,' ').replace(/&quot;/g,'"').replace(/&amp;/g,'&').trim().slice(0, 700);
+  const sourceName = (it.author || (it.link||'').match(/\/\/(?:www\.)?([^\/]+)/)?.[1] || '');
+  const modal = document.getElementById('detailModal');
+  modal.innerHTML = `
+    <div style="background:#fff;width:94%;max-width:520px;max-height:90vh;border-radius:14px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 12px 40px rgba(0,0,0,0.35);">
+      <div style="background:linear-gradient(135deg,#0E2A38,#1A4A5E);padding:14px 18px;color:#fff;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="background:#E76F51;color:#fff;font-size:0.6rem;padding:3px 8px;border-radius:6px;font-weight:800;letter-spacing:0.5px;">חדשות</span>
+          <span style="color:rgba(255,255,255,0.75);font-size:0.7rem;">${date}</span>
+        </div>
+        <button onclick="closeFrame()" style="background:rgba(255,255,255,0.2);border:none;color:#fff;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1rem;">×</button>
+      </div>
+      <img src="${img}" onerror="this.style.display='none'" style="width:100%;height:200px;object-fit:cover;display:block;flex-shrink:0;">
+      <div style="padding:18px;overflow-y:auto;">
+        <h3 style="margin:0 0 10px;color:#1A4A5E;font-size:1.05rem;font-weight:900;line-height:1.35;">${it.title || ''}</h3>
+        ${sourceName ? `<div style="color:#6B7F8D;font-size:0.72rem;margin-bottom:14px;">${sourceName}</div>` : ''}
+        <div style="color:#2C5F6E;font-size:0.88rem;line-height:1.7;">${summary || 'אין תקציר זמין.'}</div>
+      </div>
+      <div style="padding:14px 18px 16px;border-top:1px solid #F0E6D2;flex-shrink:0;background:#FDF6EC;">
+        <button onclick="openNewsSourceLink('${encodeURIComponent(it.link)}')" style="width:100%;padding:13px;background:linear-gradient(135deg,#0E2A38,#1A4A5E);color:#E9C46A;border:none;border-radius:10px;font-family:Heebo;font-weight:800;font-size:0.9rem;cursor:pointer;">📰 לכתבה המלאה במקור ←</button>
+      </div>
+    </div>
+  `;
+  modal.classList.add('active');
+  modal.style.alignItems = 'center';
+  modal.style.justifyContent = 'center';
+  modal.style.padding = '0';
+  modal.onclick = (e) => { if (e.target === modal) closeFrame(); };
+}
+
+async function openNewsSourceLink(encodedUrl) {
   const url = decodeURIComponent(encodedUrl);
   let target = url;
   try {
@@ -3736,9 +3773,11 @@ async function openNewsInFrame(encodedUrl, title) {
     const j = await r.json();
     if (j.success && j.url && !j.url.includes('news.google.com')) target = j.url;
   } catch {}
-  // News sites typically block iframe — open in new tab for full article
   window.open(target, '_blank', 'noopener');
 }
+
+// Backwards compat wrapper (old card onclick)
+async function openNewsInFrame(encodedUrl) { return openNewsSourceLink(encodedUrl); }
 
 const NEWS_FALLBACK_IMAGES = [
   'images/Yizhak/dubai-skyline-evening.jpg',
@@ -3796,11 +3835,12 @@ async function loadRENews() {
     const j = await r.json();
     const items = (j.items || []).slice(0, 10);
     if (!items.length) { container.innerHTML = '<div style="padding:20px;color:#6B7F8D;text-align:center;width:100%;">לא נמצאו חדשות</div>'; return; }
+    window._reNewsItems = items;
     container.innerHTML = items.map((it, i) => {
       const img = it.enclosure?.link || it.thumbnail || '';
       const date = it.pubDate ? new Date(it.pubDate).toLocaleDateString('he-IL') : '';
       const title = (it.title || '').slice(0, 80);
-      return `<a onclick="openNewsInFrame('${encodeURIComponent(it.link)}','${(it.title || '').replace(/'/g,"\\'").slice(0,80)}')" data-news-i="${i}" style="flex-shrink:0;width:240px;scroll-snap-align:start;background:#fff;border:1px solid #E5E7EB;border-radius:10px;overflow:hidden;text-decoration:none;display:block;cursor:pointer;">
+      return `<a onclick="showNewsPreview('re',${i})" data-news-i="${i}" style="flex-shrink:0;width:240px;scroll-snap-align:start;background:#fff;border:1px solid #E5E7EB;border-radius:10px;overflow:hidden;text-decoration:none;display:block;cursor:pointer;">
         <img src="${img || 'images/wellcomedubai.stamp/skyscrapers-looking-up-sky-modern-metropolis-modern-city.jpg'}" onerror="this.src='images/wellcomedubai.stamp/skyscrapers-looking-up-sky-modern-metropolis-modern-city.jpg'" style="width:100%;height:130px;object-fit:cover;display:block;">
         <div style="padding:8px 10px;">
           <div style="color:#2C5F6E;font-weight:700;font-size:0.78rem;line-height:1.3;margin-bottom:4px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;">${title}</div>
