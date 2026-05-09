@@ -33,6 +33,37 @@
 </head>
 <body>
 
+<!-- Desktop Landing (only on width > 768px) -->
+<div id="desktopLanding" style="display:none;position:fixed;inset:0;z-index:99999;background:linear-gradient(135deg,#1A6B8A 0%,#2C5F6E 100%);align-items:center;justify-content:center;padding:40px 20px;">
+  <div style="max-width:520px;width:100%;background:#fff;border-radius:24px;padding:48px 36px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.4);border:3px solid #B8923A;">
+    <img src="images/icon-new.jpg" style="width:120px;height:120px;border-radius:24px;margin-bottom:18px;box-shadow:0 8px 24px rgba(0,0,0,0.25);">
+    <div style="font-size:1.8rem;font-weight:900;color:#1A6B8A;margin-bottom:6px;">WellCome <span style="color:#E76F51;">Dubai</span></div>
+    <div style="font-size:1.05rem;font-weight:700;color:#2C5F6E;margin-bottom:18px;">המדריך הישראלי המלא לדובאי</div>
+    <div style="font-size:0.92rem;color:#6B7F8D;line-height:1.7;margin-bottom:28px;text-align:right;">
+      <div>✓ מלונות, מסעדות, אטרקציות</div>
+      <div>✓ תחבורה, מזג אוויר, שערי מטבע</div>
+      <div>✓ מסלולים מוכנים — בעברית</div>
+    </div>
+    <div style="font-size:0.85rem;color:#2C5F6E;font-weight:700;margin-bottom:14px;">📱 הורד את האפליקציה לחוויה מלאה</div>
+    <div style="display:flex;gap:10px;justify-content:center;margin-bottom:24px;flex-wrap:wrap;">
+      <a href="#" target="_blank" style="display:flex;align-items:center;gap:6px;background:#000;color:#fff;padding:10px 18px;border-radius:10px;text-decoration:none;font-weight:700;font-size:0.85rem;"><i class="fab fa-apple" style="font-size:1.2rem;"></i> App Store</a>
+      <a href="#" target="_blank" style="display:flex;align-items:center;gap:6px;background:#000;color:#fff;padding:10px 18px;border-radius:10px;text-decoration:none;font-weight:700;font-size:0.85rem;"><i class="fab fa-google-play" style="font-size:1.1rem;"></i> Google Play</a>
+    </div>
+    <button onclick="(function(){localStorage.setItem('wd_skip_landing',Date.now());document.getElementById('desktopLanding').style.display='none';})()" style="background:none;border:none;color:#6B7F8D;text-decoration:underline;cursor:pointer;font-family:Heebo;font-size:0.85rem;">המשך לאתר במחשב ←</button>
+  </div>
+</div>
+<script>
+(function() {
+  if (window.innerWidth > 768) {
+    var skip = localStorage.getItem('wd_skip_landing');
+    var sevenDays = 7 * 24 * 60 * 60 * 1000;
+    if (!skip || (Date.now() - parseInt(skip, 10)) > sevenDays) {
+      document.getElementById('desktopLanding').style.display = 'flex';
+    }
+  }
+})();
+</script>
+
 <!-- Splash Screen -->
 <div class="splash-screen">
   <img src="images/icon-new.jpg" style="width:80px;height:80px;border-radius:18px;margin-bottom:12px;box-shadow:0 8px 20px rgba(0,0,0,0.45),0 2px 6px rgba(0,0,0,0.3);">
