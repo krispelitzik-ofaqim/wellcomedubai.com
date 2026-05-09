@@ -3238,47 +3238,48 @@ function renderEventsCalendar() {
   const currentYear = new Date().getFullYear();
   const currentMonth = new Date().getMonth() + 1;
   const activeYear = window._eventsYear || currentYear;
-  const colors = { sport:'#2A9D8F', culture:'#E76F51' };
   const years = [currentYear, currentYear + 1, currentYear + 2, currentYear + 3, currentYear + 4];
   const futureYear = activeYear > currentYear + 1;
   page.innerHTML = `
     <div class="page-header">
       <button class="back-btn" onclick="navigateTo('home')"><i class="fas fa-arrow-right"></i></button>
-      <h2><i class="fas fa-calendar-alt" style="color:#B8923A;margin-left:6px;"></i> לוח אירועים שנתי</h2>
+      <h2><i class="fas fa-calendar-alt" style="color:#B8923A;margin-left:6px;"></i> לוח אירועים</h2>
     </div>
-    <div style="padding:14px 16px 80px;background:#FAF6EE;min-height:calc(100vh - 150px);">
-      <div style="display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;margin-bottom:18px;padding-bottom:6px;">
-        ${years.map(y => `<button onclick="window._eventsYear=${y};renderEventsCalendar();" style="flex-shrink:0;scroll-snap-align:start;padding:10px 22px;border-radius:10px;cursor:pointer;font-family:Heebo;font-weight:900;font-size:1rem;background:${y===activeYear?'linear-gradient(135deg,#1A6B8A,#2C5F6E)':'#fff'};color:${y===activeYear?'#fff':'#2C5F6E'};box-shadow:${y===activeYear?'0 4px 12px rgba(26,107,138,0.3)':'0 2px 6px rgba(0,0,0,0.08)'};border:1px solid ${y===activeYear?'transparent':'#E5E7EB'};">${y}</button>`).join('')}
+    <div style="padding:18px 18px 90px;min-height:calc(100vh - 150px);">
+
+      <div style="display:flex;gap:32px;overflow-x:auto;margin-bottom:32px;padding-bottom:8px;border-bottom:1px solid rgba(184,146,58,0.2);">
+        ${years.map(y => `<a onclick="window._eventsYear=${y};renderEventsCalendar();" style="flex-shrink:0;cursor:pointer;font-family:Heebo;font-weight:${y===activeYear?'900':'500'};font-size:1.1rem;color:${y===activeYear?'#2C5F6E':'#9CA3AF'};padding:8px 0;border-bottom:${y===activeYear?'2px solid #B8923A':'2px solid transparent'};letter-spacing:0.5px;">${y}</a>`).join('')}
       </div>
+
       ${HEB_MONTHS.slice(1).map((m, i) => {
         const monthNum = i + 1;
         const events = futureYear ? [] : DUBAI_EVENTS.filter(e => e.month === monthNum);
         const isCurrent = (activeYear === currentYear) && (monthNum === currentMonth);
-        const yearColors = {
-          [currentYear]: 'linear-gradient(135deg,#1A6B8A,#2C5F6E)',
-          [currentYear+1]: 'linear-gradient(135deg,#B85C8E,#7A3D5E)',
-          [currentYear+2]: 'linear-gradient(135deg,#2A9D8F,#1A6B5E)',
-          [currentYear+3]: 'linear-gradient(135deg,#B8923A,#7A5E20)',
-          [currentYear+4]: 'linear-gradient(135deg,#E76F51,#A04F39)'
-        };
         return `
-          <div style="background:#fff;border-radius:14px;overflow:hidden;border:${isCurrent ? '2px solid #E76F51' : '1px solid #E5E7EB'};box-shadow:0 4px 12px rgba(0,0,0,0.06);margin-bottom:14px;">
-            <div style="padding:14px 18px;background:${isCurrent ? 'linear-gradient(135deg,#E76F51,#F4A261)' : (yearColors[activeYear] || 'linear-gradient(135deg,#1A6B8A,#2C5F6E)')};color:#fff;display:flex;align-items:center;justify-content:space-between;">
-              <div style="font-weight:900;font-size:1.15rem;">${m} ${activeYear}</div>
-              <div style="font-size:0.78rem;opacity:0.9;">${events.length} אירועים${isCurrent ? ' · החודש' : ''}</div>
+          <div style="margin-bottom:42px;">
+            <div style="display:flex;align-items:baseline;gap:14px;margin-bottom:14px;">
+              <div style="font-weight:300;font-size:2.4rem;color:${isCurrent?'#E76F51':'#2C5F6E'};letter-spacing:-1px;line-height:1;">${m}</div>
+              <div style="color:#9CA3AF;font-size:0.78rem;font-weight:500;">${events.length ? events.length + ' אירועים' : ''}${isCurrent ? ' · החודש' : ''}</div>
+              <div style="flex:1;height:1px;background:rgba(184,146,58,0.3);"></div>
             </div>
-            <div style="padding:12px 14px;">
-              ${futureYear ? `<div style="color:#6B7F8D;font-size:0.85rem;text-align:center;padding:24px 12px;line-height:1.6;">📅 לוח אירועים עדכני<br>ייטען עם פתיחת קופות הכרטיסים</div>` : events.length === 0 ? `<div style="color:#9CA3AF;font-size:0.85rem;text-align:center;padding:24px 0;">אין אירועים גדולים בחודש זה</div>` : events.map(e => `
-                <div style="padding:12px 14px;background:#F5E6CB;border-right:4px solid ${colors[e.cat] || '#1A6B8A'};border-radius:8px;margin-bottom:10px;">
-                  <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
-                    <div style="font-weight:800;color:#2C5F6E;font-size:0.95rem;line-height:1.3;">${e.name}</div>
-                    <div style="background:${colors[e.cat] || '#1A6B8A'};color:#fff;font-size:0.7rem;font-weight:700;padding:3px 9px;border-radius:8px;white-space:nowrap;">${e.day}</div>
+            ${futureYear ? `<div style="color:#9CA3AF;font-size:0.88rem;padding:18px 0;line-height:1.7;font-style:italic;">לוח אירועים עדכני ייטען עם פתיחת קופות הכרטיסים</div>` : events.length === 0 ? '' : events.map(e => {
+              const parts = String(e.day).split('.');
+              const dayPart = parts[0] || e.day;
+              const monthShort = HEB_MONTHS[parseInt(parts[1]) || monthNum] || '';
+              return `
+                <div style="display:flex;gap:18px;padding:18px 0;border-bottom:1px solid rgba(184,146,58,0.15);">
+                  <div style="flex-shrink:0;text-align:center;min-width:60px;border-left:1px solid rgba(184,146,58,0.4);padding-left:14px;">
+                    <div style="font-weight:800;font-size:1.4rem;color:#2C5F6E;line-height:1;">${dayPart}</div>
+                    <div style="font-size:0.65rem;color:#B8923A;font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-top:4px;">${monthShort.slice(0,3) || HEB_MONTHS[monthNum].slice(0,3)}</div>
                   </div>
-                  <div style="color:#6B7F8D;font-size:0.82rem;margin-top:6px;line-height:1.55;">${e.desc}</div>
-                  <a onclick="openInFrame('https://klook.tpk.lv/8HSINbXI?aff_url=${encodeURIComponent('https://www.klook.com/en-US/search/result/?query=' + encodeURIComponent(e.name + ' Dubai'))}','${e.name.replace(/'/g,"\\'")} - רכוש כרטיסים')" style="display:inline-block;margin-top:8px;padding:7px 14px;background:#2A9D8F;color:#fff;border-radius:8px;font-size:0.78rem;font-weight:700;cursor:pointer;text-decoration:none;"><i class="fas fa-ticket-alt"></i> רכוש כרטיסים</a>
+                  <div style="flex:1;min-width:0;">
+                    <div style="font-weight:600;color:#2C5F6E;font-size:1.05rem;line-height:1.35;margin-bottom:5px;">${e.name}</div>
+                    <div style="color:#6B7F8D;font-size:0.85rem;line-height:1.6;margin-bottom:8px;">${e.desc}</div>
+                    <a onclick="openInFrame('https://klook.tpk.lv/8HSINbXI?aff_url=${encodeURIComponent('https://www.klook.com/en-US/search/result/?query=' + encodeURIComponent(e.name + ' Dubai'))}','${e.name.replace(/'/g,"\\'")} - רכוש כרטיסים')" style="color:#E76F51;font-size:0.82rem;font-weight:700;cursor:pointer;text-decoration:none;letter-spacing:0.3px;">רכישת כרטיסים ←</a>
+                  </div>
                 </div>
-              `).join('')}
-            </div>
+              `;
+            }).join('')}
           </div>
         `;
       }).join('')}
