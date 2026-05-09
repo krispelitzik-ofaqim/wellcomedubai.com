@@ -3257,12 +3257,13 @@ function renderEventsCalendar() {
               </div>
               <div style="padding:10px 12px;min-height:200px;">
                 ${events.length === 0 ? `<div style="color:#9CA3AF;font-size:0.8rem;text-align:center;padding:20px 0;">אין אירועים גדולים</div>` : events.map(e => `
-                  <div ${e.link ? `onclick="navigateTo('${e.link.cat}');setTimeout(()=>openDetail('${e.link.cat}',${e.link.id}),300);" style="cursor:pointer;"` : ''} style="padding:8px 10px;background:#F5E6CB;border-right:3px solid ${colors[e.cat] || '#1A6B8A'};border-radius:6px;margin-bottom:8px;">
+                  <div style="padding:8px 10px;background:#F5E6CB;border-right:3px solid ${colors[e.cat] || '#1A6B8A'};border-radius:6px;margin-bottom:8px;">
                     <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
                       <div style="font-weight:800;color:#2C5F6E;font-size:0.85rem;line-height:1.25;">${e.name}</div>
                       <div style="background:${colors[e.cat] || '#1A6B8A'};color:#fff;font-size:0.65rem;font-weight:700;padding:2px 7px;border-radius:8px;white-space:nowrap;">${e.day}</div>
                     </div>
                     <div style="color:#6B7F8D;font-size:0.72rem;margin-top:3px;line-height:1.4;">${e.desc}</div>
+                    <a onclick="openInFrame('https://klook.tpk.lv/8HSINbXI?aff_url=${encodeURIComponent('https://www.klook.com/en-US/search/result/?query=' + encodeURIComponent(e.name + ' Dubai'))}','${e.name.replace(/'/g,"\\'")} - רכוש כרטיסים')" style="display:inline-block;margin-top:6px;padding:5px 10px;background:#2A9D8F;color:#fff;border-radius:6px;font-size:0.7rem;font-weight:700;cursor:pointer;text-decoration:none;"><i class="fas fa-ticket-alt"></i> רכוש כרטיסים</a>
                   </div>
                 `).join('')}
               </div>
