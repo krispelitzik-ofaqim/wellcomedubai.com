@@ -4548,42 +4548,38 @@ async function submitREListing(btn) {
 }
 
 function renderREBrokers() {
-  const accents = ['#1A6B8A','#2A9D8F','#E76F51','#B85C8E','#F4A261','#5B9DC7'];
   const groups = [
-    { type:'broker', label:'סוכני נדל"ן', icon:'🏢' },
-    { type:'accountant', label:'רואי חשבון', icon:'📊' },
-    { type:'lawyer', label:'עורכי דין', icon:'⚖️' }
+    { type:'broker', label:'סוכני נדל"ן', color:'#1A6B8A' },
+    { type:'accountant', label:'רואי חשבון', color:'#2A9D8F' },
+    { type:'lawyer', label:'עורכי דין', color:'#B85C8E' }
   ];
-  let cardIdx = 0;
   return groups.map(g => {
     const items = RE_BROKERS_DEFAULT.filter(b => (b.type || 'broker') === g.type);
     if (!items.length) return '';
     return `
-      <div style="font-weight:900;color:#1A4A5E;font-size:1rem;margin:14px 0 10px;letter-spacing:-0.3px;">${g.label}</div>
-      ${items.map(b => {
-        const c = accents[cardIdx++ % accents.length];
-        return `
-        <div style="background:#fff;border:1.5px solid ${c}30;border-radius:14px;padding:14px;margin-bottom:12px;box-shadow:0 4px 12px rgba(0,0,0,0.05);position:relative;overflow:hidden;">
-          ${b.verified ? `<div style="position:absolute;top:8px;left:8px;background:${c};color:#fff;font-size:0.6rem;font-weight:800;padding:3px 9px;border-radius:10px;letter-spacing:0.5px;">✓ מאומת</div>` : ''}
-          <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
-            ${b.image ? `<img src="${b.image}" style="width:64px;height:64px;border-radius:50%;object-fit:cover;border:3px solid ${c};flex-shrink:0;" onerror="this.style.display='none'">` : `<div style="width:64px;height:64px;border-radius:50%;background:${c};color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.4rem;font-weight:800;flex-shrink:0;">${b.name.split(' ')[0][0]}</div>`}
+      <div style="font-weight:900;color:${g.color};font-size:0.95rem;margin:18px 0 6px;letter-spacing:-0.2px;">${g.label}</div>
+      <div>
+        ${items.map((b, i) => {
+          const isLast = i === items.length - 1;
+          const initial = (b.name.split(' ')[0] || '?')[0];
+          const subtitle = `${b.specialty || ''}${b.langs ? ' · ' + b.langs.slice(0,2).join('/') : ''}`;
+          return `
+          <div style="display:flex;align-items:center;gap:10px;padding:11px 4px;${isLast?'':'border-bottom:1px solid #F0E6D2;'}">
+            ${b.image ? `<img src="${b.image}" style="width:44px;height:44px;border-radius:50%;object-fit:cover;flex-shrink:0;border-right:2px solid ${g.color};" onerror="this.style.display='none'">` : `<div style="width:44px;height:44px;border-radius:50%;background:${g.color}20;color:${g.color};display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1rem;flex-shrink:0;">${initial}</div>`}
             <div style="flex:1;min-width:0;">
-              <div style="font-weight:800;color:#2C5F6E;font-size:1rem;">${b.name}</div>
-              <div style="font-size:0.78rem;color:${c};font-weight:700;">${b.company}</div>
-              ${b.years ? `<div style="font-size:0.7rem;color:#6B7F8D;margin-top:2px;">⏱ ${b.years} ניסיון בדובאי</div>` : ''}
+              <div style="display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;">
+                <span style="font-weight:800;color:#1A4A5E;font-size:0.92rem;">${b.name}</span>
+                <span style="color:#6B7F8D;font-size:0.72rem;">${b.company}${b.years ? ' · ' + b.years : ''}</span>
+              </div>
+              <div style="color:#6B7F8D;font-size:0.7rem;line-height:1.35;margin-top:2px;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden;">${subtitle}</div>
+            </div>
+            <div style="display:flex;gap:6px;flex-shrink:0;">
+              <a href="https://wa.me/${b.whatsapp}" target="_blank" title="WhatsApp" style="width:34px;height:34px;background:#25D366;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.85rem;text-decoration:none;"><i class="fab fa-whatsapp"></i></a>
+              <a href="tel:${b.phone}" title="חייג" style="width:34px;height:34px;background:${g.color};color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.8rem;text-decoration:none;"><i class="fas fa-phone"></i></a>
             </div>
           </div>
-          <div style="background:#F5E6CB;padding:8px 10px;border-radius:8px;margin-bottom:8px;">
-            <div style="font-size:0.75rem;color:#2C5F6E;margin-bottom:3px;"><strong>התמחות:</strong> ${b.specialty}</div>
-            <div style="font-size:0.72rem;color:#6B7F8D;">🗣️ ${b.langs.join(' · ')}</div>
-          </div>
-          <div style="display:flex;gap:6px;">
-            <a href="tel:${b.phone}" style="flex:1;padding:9px;background:#2A9D8F;color:#fff;border-radius:8px;text-align:center;text-decoration:none;font-size:0.78rem;font-weight:700;"><i class="fas fa-phone"></i> חייג</a>
-            <a href="https://wa.me/${b.whatsapp}" target="_blank" style="flex:1;padding:9px;background:#25D366;color:#fff;border-radius:8px;text-align:center;text-decoration:none;font-size:0.78rem;font-weight:700;"><i class="fab fa-whatsapp"></i> וואטסאפ</a>
-            <a href="mailto:${b.email}" style="flex:1;padding:9px;background:#1A6B8A;color:#fff;border-radius:8px;text-align:center;text-decoration:none;font-size:0.78rem;font-weight:700;"><i class="fas fa-envelope"></i> אימייל</a>
-          </div>
-        </div>
-      `;}).join('')}
+        `;}).join('')}
+      </div>
     `;
   }).join('');
 }
