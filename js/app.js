@@ -3214,6 +3214,8 @@ function renderIsraeliInvestments() {
     { val:'1,000+', label:'חברות ישראליות עם נציגות בדובאי', color:'#1A6B8A' },
     { val:'$2.5B+', label:'השקעות הדדיות מאז הסכמי אברהם', color:'#2A9D8F' },
     { val:'600K+', label:'ישראלים מבקרים בדובאי בשנה', color:'#E76F51' },
+    { val:'70+', label:'טיסות שבועיות מישראל', color:'#B85C8E' },
+    { val:'3:00', label:'שעות טיסה — בלי ויזה', color:'#5B9DC7' },
     { val:'8-12%', label:'תשואת נדל"ן ממוצעת בפרויקטים פופולריים', color:'#B8923A' }
   ];
   const sectors = [
@@ -3237,19 +3239,17 @@ function renderIsraeliInvestments() {
   ];
 
   const slides = [
-    `<div style="background:#fff;border-radius:14px;padding:14px;box-shadow:0 2px 10px rgba(0,0,0,0.05);border:1px solid #E8DEC8;height:100%;box-sizing:border-box;">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
-        <div style="font-weight:800;color:#1A4A5E;font-size:0.95rem;">🇮🇱 התמונה הגדולה</div>
+    `<div style="background:#fff;border-radius:14px;padding:16px 18px;box-shadow:0 2px 10px rgba(0,0,0,0.05);border:1px solid #E8DEC8;height:100%;box-sizing:border-box;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+        <div style="font-weight:800;color:#1A4A5E;font-size:0.95rem;">התמונה הגדולה</div>
         <span style="background:#FDF6EC;color:#B8923A;font-size:0.6rem;padding:3px 8px;border-radius:8px;font-weight:800;letter-spacing:0.5px;">2026</span>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-        ${stats.map(s => `
-          <div style="background:#FDFAF2;border:1px solid #F0E6D2;border-right:3px solid ${s.color};border-radius:8px;padding:10px;">
-            <div style="color:${s.color};font-size:1.1rem;font-weight:900;font-family:'SF Mono',Menlo,monospace;line-height:1.1;">${s.val}</div>
-            <div style="color:#6B7F8D;font-size:0.68rem;font-weight:600;margin-top:3px;line-height:1.3;">${s.label}</div>
-          </div>
-        `).join('')}
-      </div>
+      ${stats.map((s,i) => `
+        <div style="display:flex;align-items:baseline;gap:12px;padding:10px 0;border-bottom:${i===stats.length-1?'none':'1px solid #F5EDD8'};">
+          <div style="color:${s.color};font-size:1.35rem;font-weight:900;font-family:'SF Mono',Menlo,monospace;line-height:1;min-width:78px;text-align:right;">${s.val}</div>
+          <div style="color:#1A4A5E;font-size:0.82rem;font-weight:600;line-height:1.4;flex:1;">${s.label}</div>
+        </div>
+      `).join('')}
     </div>`,
     `<div style="background:#fff;border-radius:14px;padding:14px;box-shadow:0 2px 10px rgba(0,0,0,0.05);border:1px solid #E8DEC8;height:100%;box-sizing:border-box;">
       <div style="font-weight:800;color:#1A4A5E;font-size:0.95rem;margin-bottom:4px;">🏙️ אזורים שישראלים קונים בהם</div>
