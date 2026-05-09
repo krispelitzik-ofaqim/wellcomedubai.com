@@ -465,10 +465,11 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; heig
   .category-icon { width:40px; height:40px; font-size:1.2rem; }
 }
 
-/* Scrollbar */
-::-webkit-scrollbar { width:4px; }
-::-webkit-scrollbar-track { background:#F5E6CB; }
-::-webkit-scrollbar-thumb { background:#CBD5E0; border-radius:4px; }
+/* Scrollbar — thin global style */
+* { scrollbar-width: thin; scrollbar-color: #B85C8E #F0E6D2; }
+::-webkit-scrollbar { width:3px; height:3px; }
+::-webkit-scrollbar-track { background:#F0E6D2; border-radius:2px; }
+::-webkit-scrollbar-thumb { background:#B85C8E; border-radius:2px; }
 
 /* Animations */
 .fade-in { animation: fadeIn 0.4s ease; }
