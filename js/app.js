@@ -269,7 +269,7 @@ function renderMyTripPage() {
   page.innerHTML = `
     <div class="page-header">
       <button class="back-btn" onclick="navigateTo('home')"><i class="fas fa-arrow-right"></i></button>
-      <h2><i class="fas fa-suitcase-rolling" style="color:#E76F51;margin-left:6px;"></i> הטיול שלי</h2>
+      <h2>הטיול שלי</h2>
     </div>
     <div style="display:flex;gap:6px;padding:10px 16px 0;">
       <button onclick="switchItinView('day');navigateTo('itineraries')" style="flex:1;padding:9px 4px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.78rem;cursor:pointer;border:1px solid #E5E7EB;background:#fff;color:#6B7F8D;">📅 מסלולי יום</button>
@@ -1044,7 +1044,7 @@ async function renderItinerariesPage() {
   page.innerHTML = `
     <div class="page-header">
       <button class="back-btn" onclick="navigateTo('home')"><i class="fas fa-arrow-right"></i></button>
-      <h2><i class="fas fa-route" style="color:#B8923A;margin-left:6px;"></i> מסלולים מוכנים</h2>
+      <h2>מסלולים מוכנים</h2>
     </div>
     <div style="display:flex;gap:6px;padding:10px 16px 0;">
       <button onclick="switchItinView('day')" style="flex:1;padding:9px 4px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.78rem;cursor:pointer;border:${view==='day'?'2px solid #E76F51':'1px solid #E5E7EB'};background:${view==='day'?'#FFF5F2':'#fff'};color:${view==='day'?'#E76F51':'#6B7F8D'};">📅 מסלולי יום</button>
@@ -1794,7 +1794,7 @@ function renderLegalPage() {
   page.innerHTML = `
     <div class="page-header">
       <button class="back-btn" onclick="navigateTo('home')"><i class="fas fa-arrow-right"></i></button>
-      <h2><i class="fas fa-info-circle" style="color:#2C5F6E;margin-left:6px;"></i> מידע</h2>
+      <h2>מידע</h2>
     </div>
     <div style="padding:12px 16px 80px;display:flex;flex-direction:column;gap:10px;">
       ${items.map(s => `
@@ -2663,7 +2663,7 @@ function renderFlightsPage() {
   page.innerHTML = `
     <div class="page-header">
       <button class="back-btn" onclick="navigateTo('home')"><i class="fas fa-arrow-right"></i></button>
-      <h2><i class="fas fa-plane" style="color:#B8923A;margin-left:6px;"></i> טיסות ישראל ↔ דובאי</h2>
+      <h2>טיסות ישראל ↔ דובאי</h2>
     </div>
     <div style="padding:16px 20px;">
       <!-- Live Flight Board -->
@@ -2754,7 +2754,7 @@ function renderWeatherPage() {
   page.innerHTML = `
     <div class="page-header">
       <button class="back-btn" onclick="navigateTo('home')"><i class="fas fa-arrow-right"></i></button>
-      <h2><i class="fas fa-cloud-sun" style="color:#2A9D8F;margin-left:6px;"></i> מזג אוויר</h2>
+      <h2>מזג אוויר</h2>
     </div>
     <div style="padding:0;">
       <div id="weatherPageContent" style="text-align:center;padding:30px;color:#6B7F8D;"><i class="fas fa-spinner fa-spin" style="color:#2A9D8F;font-size:1.3rem;"></i><br>טוען תחזית...</div>
@@ -2819,7 +2819,7 @@ function renderLiveCamsPage() {
   page.innerHTML = `
     <div class="page-header">
       <button class="back-btn" onclick="navigateTo('home')"><i class="fas fa-arrow-right"></i></button>
-      <h2><i class="fas fa-video" style="color:#E76F51;margin-left:6px;"></i> דובאי עכשיו - שידור חי</h2>
+      <h2>דובאי עכשיו - שידור חי</h2>
     </div>
     <div style="padding:12px 16px;">
       <div id="liveCamWeather" style="margin-bottom:12px;"></div>
@@ -3677,7 +3677,7 @@ function renderEventsCalendar() {
   page.innerHTML = `
     <div class="page-header">
       <button class="back-btn" onclick="navigateTo('home')"><i class="fas fa-arrow-right"></i></button>
-      <h2><i class="fas fa-calendar-alt" style="color:#B8923A;margin-left:6px;"></i> לוח אירועים</h2>
+      <h2>לוח אירועים</h2>
     </div>
     <div style="padding:18px 18px 90px;min-height:calc(100vh - 150px);background:${yearBg[activeYear] || '#FAF6EE'};transition:background 0.4s;">
 
