@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>צור קשר · WellCome Dubai</title>
+<meta name="description" content="צור קשר — WellCome Dubai">
+<link rel="icon" href="images/favicon.ico">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  *,*::before,*::after {box-sizing:border-box;}
+  body {margin:0;font-family:Heebo,system-ui,sans-serif;background:#FDF6EC;color:#2C5F6E;line-height:1.6;}
+  .wrap {max-width:760px;margin:0 auto;min-height:100vh;background:#FDF6EC;}
+  .page-header {display:flex;align-items:center;gap:12px;padding:14px 16px;background:#FDF6EC;border-bottom:1px solid #E5E7EB;position:sticky;top:0;z-index:10;}
+  .back-btn {background:none;border:none;font-size:1.2rem;color:#2C5F6E;cursor:pointer;text-decoration:none;}
+  .page-header h2 {margin:0;font-size:1.1rem;font-weight:700;color:#2C5F6E;}
+  .content {padding:16px 20px 80px;}
+  .card {background:#fff;border:1px solid #E5E7EB;border-radius:10px;padding:18px;font-size:0.92rem;line-height:1.8;color:#2C5F6E;white-space:pre-line;box-shadow:0 2px 8px rgba(0,0,0,0.04);}
+  .icon-circle {display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:#B8923A;color:#fff;margin-left:6px;font-size:0.8rem;}
+  footer {text-align:center;color:#6B7F8D;font-size:0.75rem;padding:20px 16px 30px;}
+  a {color:#5B9DC7;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="page-header">
+    <a class="back-btn" href="index.html" aria-label="חזרה"><i class="fas fa-arrow-right"></i></a>
+    <h2><span class="icon-circle"><i class="fas fa-envelope"></i></span>צור קשר</h2>
+  </div>
+  <div class="content">
+    <form action="mailto:krispelitzik@gmail.com" method="post" enctype="text/plain" style="background:#fff;border:1px solid #E5E7EB;border-radius:10px;padding:18px;box-shadow:0 2px 8px rgba(0,0,0,0.04);margin-bottom:14px;">
+  <div style="color:#2C5F6E;font-size:0.92rem;line-height:1.7;margin-bottom:16px;">
+    יש לכם הצעה, תיקון, שיתוף תמונה או רעיון לשיתוף פעולה? נשמח לשמוע!
+  </div>
+  <div style="margin-bottom:12px;">
+    <label style="display:block;color:#2C5F6E;font-weight:600;font-size:0.85rem;margin-bottom:5px;">שם מלא *</label>
+    <input type="text" name="name" required style="width:100%;padding:10px;border:1px solid #E5E7EB;border-radius:6px;font-family:Heebo;font-size:0.9rem;color:#2C5F6E;box-sizing:border-box;">
+  </div>
+  <div style="margin-bottom:12px;">
+    <label style="display:block;color:#2C5F6E;font-weight:600;font-size:0.85rem;margin-bottom:5px;">אימייל *</label>
+    <input type="email" name="email" required style="width:100%;padding:10px;border:1px solid #E5E7EB;border-radius:6px;font-family:Heebo;font-size:0.9rem;direction:ltr;text-align:left;box-sizing:border-box;">
+  </div>
+  <div style="margin-bottom:12px;">
+    <label style="display:block;color:#2C5F6E;font-weight:600;font-size:0.85rem;margin-bottom:5px;">נושא *</label>
+    <select name="topic" required style="width:100%;padding:10px;border:1px solid #E5E7EB;border-radius:6px;font-family:Heebo;font-size:0.9rem;color:#2C5F6E;background:#fff;box-sizing:border-box;">
+      <option value="">בחר נושא...</option>
+      <option value="error">דיווח על שגיאה / מידע לא מעודכן</option>
+      <option value="suggestion">הצעה לשיפור / תוספת</option>
+      <option value="photo">שיתוף תמונה אמיתית מהמקום</option>
+      <option value="partnership">שיתוף פעולה עסקי</option>
+      <option value="other">אחר</option>
+    </select>
+  </div>
+  <div style="margin-bottom:14px;">
+    <label style="display:block;color:#2C5F6E;font-weight:600;font-size:0.85rem;margin-bottom:5px;">הודעה *</label>
+    <textarea name="message" required rows="5" style="width:100%;padding:10px;border:1px solid #E5E7EB;border-radius:6px;font-family:Heebo;font-size:0.9rem;color:#2C5F6E;resize:vertical;min-height:100px;box-sizing:border-box;"></textarea>
+  </div>
+  <button type="submit" style="width:100%;background:#B8923A;color:#2C5F6E;border:none;padding:12px;border-radius:6px;font-family:Heebo;font-weight:700;font-size:0.95rem;cursor:pointer;">שלח באימייל</button>
+</form>
+<div style="background:#F5E6CB;border-radius:10px;padding:14px;font-size:0.82rem;color:#2C5F6E;text-align:center;">
+  או צור קשר ישיר:<br>
+  <a href="mailto:krispelitzik@gmail.com" style="color:#E76F51;font-weight:700;text-decoration:none;">krispelitzik@gmail.com</a>
+</div>
+  </div>
+  <footer>© 2026 WellCome Dubai · גרסה 1.0</footer>
+</div>
+</body>
+</html>
