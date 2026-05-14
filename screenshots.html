@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Screenshots Generator · WellCome Dubai</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, Heebo, sans-serif;
+    background: #ffffff;
+    min-height: 100vh;
+    padding: 24px 12px;
+  }
+  .topbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 28px;
+    padding: 14px;
+    background: #f6f6f6;
+    border-radius: 10px;
+  }
+  .btn {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 8px;
+    background: #fff;
+    color: #2c5f6e;
+    font-family: Heebo, sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+  .btn.active { background: #007AFF; color: #fff; }
+  .info { color: #666; font-size: 0.85rem; align-self: center; padding: 0 8px; }
+  .stage {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    background: #fff;
+  }
+  .frame-wrap { display: inline-block; }
+  iframe { display: block; border: 0; background: #fff; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <button class="btn active" data-device="iphone67" onclick="pick('iphone67')">iPhone 6.7"</button>
+  <button class="btn" data-device="iphone65" onclick="pick('iphone65')">iPhone 6.5"</button>
+  <button class="btn" data-device="ipad13" onclick="pick('ipad13')">iPad 12.9"</button>
+  <button class="btn" data-device="ipad11" onclick="pick('ipad11')">iPad 11"</button>
+  <button class="btn" data-device="android" onclick="pick('android')">Android</button>
+  <button class="btn" onclick="reload()"><i class="fas fa-rotate-right"></i> רענן</button>
+  <div class="info" id="size">1290 × 2796</div>
+</div>
+
+<div class="stage" id="stage"></div>
+
+<script>
+const DEVICES = {
+  iphone67: { name: 'iPhone 6.7"', w: 430, h: 932, scale: 3, radius: 55, color: '#1d1d1f', notch: 'island' },
+  iphone65: { name: 'iPhone 6.5"', w: 414, h: 896, scale: 3, radius: 50, color: '#1d1d1f', notch: 'notch' },
+  ipad13:   { name: 'iPad 12.9"',  w: 1024, h: 1366, scale: 2, radius: 30, color: '#0a0a0a', notch: 'none' },
+  ipad11:   { name: 'iPad 11"',    w: 834,  h: 1194, scale: 2, radius: 28, color: '#0a0a0a', notch: 'none' },
+  android:  { name: 'Galaxy S25',  w: 384,  h: 832,  scale: 3.5, radius: 40, color: '#0a0a0a', notch: 'camera' },
+};
+
+const REAL = {
+  iphone67: '1290 × 2796',
+  iphone65: '1242 × 2688',
+  ipad13:   '2048 × 2732',
+  ipad11:   '1668 × 2388',
+  android:  '1344 × 2912',
+};
+
+let current = 'iphone67';
+
+function pick(d) {
+  current = d;
+  document.querySelectorAll('.btn').forEach(b => b.classList.toggle('active', b.dataset.device === d));
+  document.getElementById('size').textContent = REAL[d];
+  render();
+}
+
+function reload() {
+  const ifr = document.getElementById('previewFrame');
+  if (ifr) ifr.src = ifr.src;
+}
+
+function render() {
+  const d = DEVICES[current];
+  const W = d.w, H = d.h;
+  const stage = document.getElementById('stage');
+  const island = d.notch === 'island'
+    ? `<div style="position:absolute;top:11px;left:50%;transform:translateX(-50%);width:120px;height:35px;background:#000;border-radius:20px;z-index:5;"></div>` : '';
+  const notch = d.notch === 'notch'
+    ? `<div style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:160px;height:28px;background:#000;border-radius:0 0 18px 18px;z-index:5;"></div>` : '';
+  const camera = d.notch === 'camera'
+    ? `<div style="position:absolute;top:14px;left:50%;transform:translateX(-50%);width:10px;height:10px;background:#000;border-radius:50%;z-index:5;"></div>` : '';
+  const statusBarH = d.notch === 'none' ? 24 : (d.notch === 'island' ? 47 : 32);
+  stage.innerHTML = `
+    <div class="frame-wrap">
+      <div style="position:relative;width:${W + 24}px;height:${H + 24}px;background:${d.color};border-radius:${d.radius}px;padding:12px;box-shadow:0 20px 50px rgba(0,0,0,0.25), inset 0 0 0 2px #2a2a2c;">
+        ${island}${notch}${camera}
+        <div style="width:${W}px;height:${H}px;border-radius:${d.radius - 12}px;overflow:hidden;background:#fff;position:relative;">
+          <div style="position:absolute;top:0;left:0;right:0;height:${statusBarH}px;background:#000;z-index:6;display:flex;align-items:center;justify-content:space-between;padding:0 24px;color:#fff;font-size:0.78rem;font-weight:600;">
+            <span>9:41</span>
+            <span style="display:flex;gap:5px;align-items:center;"><i class="fas fa-signal"></i> <i class="fas fa-wifi"></i> <i class="fas fa-battery-three-quarters"></i></span>
+          </div>
+          <iframe id="previewFrame" src="index.html" style="width:${W}px;height:${H - statusBarH}px;margin-top:${statusBarH}px;"></iframe>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+render();
+</script>
+
+</body>
+</html>
