@@ -54,7 +54,7 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; heig
 @keyframes spin { to { transform:rotate(360deg); } }
 
 /* ===== APP LAYOUT ===== */
-.app { display:none; flex-direction:column; height:100dvh; overflow:hidden; }
+.app { display:none; flex-direction:column; min-height:100vh; }
 .app.active { display:flex; }
 
 /* ===== TOP HEADER ===== */
@@ -84,7 +84,7 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; heig
 
 /* ===== HERO SECTION ===== */
 .hero {
-  position:relative; height:100dvh; overflow:hidden;
+  position:relative; height:calc(100dvh - 60px); overflow:hidden;
 }
 .hero + h2, .hero ~ h2, .hero ~ .cards-scroll { display:none !important; }
 .hero-bg {
@@ -290,7 +290,7 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; heig
 .modal-overlay.active { display:flex; }
 .modal-sheet {
   background:#FFFFFF; width:100%; max-width:500px;
-  height:100dvh; max-height:100dvh; border-radius:0;
+  height:calc(100dvh - 60px); max-height:calc(100dvh - 60px); border-radius:0;
   overflow-y:scroll; -webkit-overflow-scrolling:touch; overscroll-behavior:contain;
   animation:slideUp 0.3s ease;
   box-shadow:0 -4px 30px rgba(0,0,0,0.15);
@@ -450,7 +450,7 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; heig
 @media (min-width:768px) {
   .categories-grid { grid-template-columns:repeat(4,1fr); }
   .listings-grid { grid-template-columns:repeat(2,1fr); }
-  .hero { height:100dvh; }
+  .hero { height:calc(100dvh - 60px); }
   .hero-title { font-size:2.5rem; }
 }
 @media (max-width:600px) {
