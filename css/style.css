@@ -54,7 +54,7 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; heig
 @keyframes spin { to { transform:rotate(360deg); } }
 
 /* ===== APP LAYOUT ===== */
-.app { display:none; flex-direction:column; min-height:100vh; }
+.app { display:none; flex-direction:column; height:100dvh; overflow:hidden; }
 .app.active { display:flex; }
 
 /* ===== TOP HEADER ===== */
@@ -84,7 +84,7 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; heig
 
 /* ===== HERO SECTION ===== */
 .hero {
-  position:relative; height:calc(100dvh - 80px); overflow:hidden;
+  position:relative; height:100dvh; overflow:hidden;
 }
 .hero + h2, .hero ~ h2, .hero ~ .cards-scroll { display:none !important; }
 .hero-bg {
