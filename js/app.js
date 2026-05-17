@@ -279,9 +279,9 @@ function renderMyTripPage() {
       <h2>הטיול שלי</h2>
     </div>
     <div style="display:flex;gap:6px;padding:10px 16px 0;">
-      <button onclick="switchItinView('day');navigateTo('itineraries')" style="flex:1;padding:9px 4px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.78rem;cursor:pointer;border:1px solid #E5E7EB;background:#fff;color:#6B7F8D;">📅 מסלולי יום</button>
-      <button onclick="switchItinView('star');navigateTo('itineraries')" style="flex:1;padding:9px 4px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.78rem;cursor:pointer;border:1px solid #E5E7EB;background:#fff;color:#6B7F8D;">⭐ טיולי כוכב</button>
-      <button style="flex:1;padding:9px 4px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.78rem;cursor:pointer;border:2px solid #E76F51;background:#FFF5F2;color:#E76F51;">❤️ הטיול שלי</button>
+      <button onclick="switchItinView('day');navigateTo('itineraries')" style="flex:1;padding:9px 4px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.78rem;cursor:pointer;border:1px solid #E5E7EB;background:#fff;color:#6B7F8D;">מסלולי יום</button>
+      <button onclick="switchItinView('star');navigateTo('itineraries')" style="flex:1;padding:9px 4px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.78rem;cursor:pointer;border:1px solid #E5E7EB;background:#fff;color:#6B7F8D;">טיולי כוכב</button>
+      <button style="flex:1;padding:9px 4px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.78rem;cursor:pointer;border:2px solid #E76F51;background:#FFF5F2;color:#E76F51;">הטיול שלי</button>
     </div>
     <div style="background:#F5E6CB;border-right:3px solid #E76F51;padding:10px 14px;margin:12px 16px 0;border-radius:6px;font-size:0.82rem;color:#2C5F6E;line-height:1.5;">
       💡 הוסף לכאן אלמנטים לתכנון הטיול שלך על ידי לחיצה על <strong>+</strong> בכל קטגוריה באפליקציה.
@@ -1054,9 +1054,9 @@ async function renderItinerariesPage() {
       <h2>מסלולים מוכנים</h2>
     </div>
     <div style="display:flex;gap:6px;padding:10px 16px 0;">
-      <button onclick="switchItinView('day')" style="flex:1;padding:9px 4px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.78rem;cursor:pointer;border:${view==='day'?'2px solid #E76F51':'1px solid #E5E7EB'};background:${view==='day'?'#FFF5F2':'#fff'};color:${view==='day'?'#E76F51':'#6B7F8D'};">📅 מסלולי יום</button>
-      <button onclick="switchItinView('star')" style="flex:1;padding:9px 4px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.78rem;cursor:pointer;border:${view==='star'?'2px solid #E76F51':'1px solid #E5E7EB'};background:${view==='star'?'#FFF5F2':'#fff'};color:${view==='star'?'#E76F51':'#6B7F8D'};">⭐ טיולי כוכב</button>
-      <button onclick="navigateTo('mytrip')" style="flex:1;padding:9px 4px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.78rem;cursor:pointer;border:1px solid #E5E7EB;background:#fff;color:#6B7F8D;">❤️ הטיול שלי</button>
+      <button onclick="switchItinView('day')" style="flex:1;padding:9px 4px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.78rem;cursor:pointer;border:${view==='day'?'2px solid #E76F51':'1px solid #E5E7EB'};background:${view==='day'?'#FFF5F2':'#fff'};color:${view==='day'?'#E76F51':'#6B7F8D'};">מסלולי יום</button>
+      <button onclick="switchItinView('star')" style="flex:1;padding:9px 4px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.78rem;cursor:pointer;border:${view==='star'?'2px solid #E76F51':'1px solid #E5E7EB'};background:${view==='star'?'#FFF5F2':'#fff'};color:${view==='star'?'#E76F51':'#6B7F8D'};">טיולי כוכב</button>
+      <button onclick="navigateTo('mytrip')" style="flex:1;padding:9px 4px;border-radius:8px;font-family:Heebo;font-weight:700;font-size:0.78rem;cursor:pointer;border:1px solid #E5E7EB;background:#fff;color:#6B7F8D;">הטיול שלי</button>
     </div>
     <div style="padding:12px 16px 80px;">
       ${view === 'day' ? `
@@ -2199,7 +2199,7 @@ function buildGoogleMap(el, zoom, items) {
             <b style="color:${color};">${item.name}</b><br>
             <span style="color:#666;font-size:12px;">${item.address||''}</span><br>
             ${item.rating ? `⭐ ${item.rating} ` : ''}${item.category !== 'transport' ? (item.price||'') : ''}<br>
-            <a href="${navUrl(item.lat, item.lng, item.name || '')}" target="_blank" style="color:${color};font-weight:600;">🧭 נווט</a>
+            <a href="${navUrl(item.lat, item.lng, item.name || '')}" target="_blank" style="color:${color};font-weight:600;">נווט</a>
             &nbsp;|&nbsp;
             <a href="#" onclick="openDetail('${item.category}',${item.id});return false;" style="color:#3B82F6;">📋 פרטים</a>
           </div>
@@ -2238,7 +2238,7 @@ function buildLeafletMap(el, zoom, items) {
         ${item.image ? `<img src="${item.image}" alt="${item.name}" style="width:100%;height:110px;object-fit:cover;border-radius:6px;margin-bottom:6px;display:block;" onerror="this.style.display='none'">` : ''}
         <b>${item.name}</b><br>${item.address||''}<br>
         ${item.rating ? '⭐ '+item.rating : ''} ${item.category !== 'transport' ? (item.price||'') : ''}<br>
-        <a href="${navUrl(item.lat, item.lng, item.name || '')}" target="_blank" style="color:#E76F51;font-weight:600;">🧭 נווט בגוגל</a>
+        <a href="${navUrl(item.lat, item.lng, item.name || '')}" target="_blank" style="color:#E76F51;font-weight:600;">נווט בגוגל</a>
       </div>`);
   });
 }
@@ -2431,7 +2431,7 @@ function renderTopProductsForIsraelis() {
             <div style="font-size:0.78rem;color:#6B7F8D;line-height:1.45;margin-bottom:6px;">${it.desc}</div>
             <div style="display:flex;gap:5px;">
               ${it.web ? `<button onclick="openInFrame('${it.web}','${it.name.replace(/'/g,"\\'")}')" style="flex:1;text-align:center;padding:5px;background:#1A6B8A;color:#fff;border-radius:5px;border:none;font-size:0.7rem;font-weight:700;cursor:pointer;font-family:Heebo;">🌐 אתר</button>` : ''}
-              ${it.map ? `<button onclick="openInFrame('${it.map}','${it.name.replace(/'/g,"\\'")} - מפה')" style="flex:1;text-align:center;padding:5px;background:#E76F51;color:#fff;border-radius:5px;border:none;font-size:0.7rem;font-weight:700;cursor:pointer;font-family:Heebo;">📍 מפה</button>` : ''}
+              ${it.map ? `<button onclick="openInFrame('${it.map}','${it.name.replace(/'/g,"\\'")} - מפה')" style="flex:1;text-align:center;padding:5px;background:#E76F51;color:#fff;border-radius:5px;border:none;font-size:0.7rem;font-weight:700;cursor:pointer;font-family:Heebo;">מפה</button>` : ''}
               <a href="https://www.youtube.com/results?search_query=${encodeURIComponent(it.name + ' Dubai')}" target="_blank" style="flex:1;text-align:center;padding:5px;background:#dc2626;color:#fff;border-radius:5px;text-decoration:none;font-size:0.7rem;font-weight:700;font-family:Heebo;">🎬 סרטון</a>
             </div>
           </div>
@@ -2565,7 +2565,7 @@ function renderListPage(category, title, filters, activeFilter) {
         <option value="">📍 קפוץ למיקום על המפה...</option>
         ${filtered.map(i => `<option value="${i.id}" style="color:${getMarkerColor({...i, category})};font-weight:600;">${i.name}</option>`).join('')}
       </select>
-      <button class="areas-toggle" onclick="toggleAreas()" title="הצג/הסתר אזורים" style="padding:10px 12px;border-radius:8px;border:1px solid ${areasVisible ? '#2A9D8F' : '#E5E7EB'};background:${areasVisible ? '#2A9D8F' : '#fff'};color:${areasVisible ? '#fff' : '#2C5F6E'};font-family:Heebo;font-size:0.85rem;font-weight:600;cursor:pointer;white-space:nowrap;transition:all 0.2s;">${areasVisible ? '✓ אזורים' : '🗺️ אזורים'}</button>
+      <button class="areas-toggle" onclick="toggleAreas()" title="הצג/הסתר אזורים" style="padding:10px 12px;border-radius:8px;border:1px solid ${areasVisible ? '#2A9D8F' : '#E5E7EB'};background:${areasVisible ? '#2A9D8F' : '#fff'};color:${areasVisible ? '#fff' : '#2C5F6E'};font-family:Heebo;font-size:0.85rem;font-weight:600;cursor:pointer;white-space:nowrap;transition:all 0.2s;">${areasVisible ? '✓ אזורים' : 'אזורים'}</button>
     </div>` : ''}
     ${category === 'transport' && active === 'מטרו' ? `
       <div style="margin:0 16px 12px;border-radius:8px;overflow:hidden;border:1px solid #E5E7EB;cursor:pointer;background:#fff;" onclick="openInFrame('https://dubaimetrorail.com/dubai-metro-map/','מפת מטרו דובאי')">
@@ -2901,7 +2901,7 @@ function renderMapPage() {
       <button class="filter-tab active" onclick="filterMap('all',this)">הכל</button>
     </div>
     <div style="padding:0 16px 8px;">
-      <button class="areas-toggle" onclick="toggleAreas()" style="width:100%;padding:10px;border-radius:8px;border:1px solid ${areasVisible ? '#2A9D8F' : '#E5E7EB'};background:${areasVisible ? '#2A9D8F' : '#fff'};color:${areasVisible ? '#fff' : '#2C5F6E'};font-family:Heebo;font-size:0.9rem;font-weight:700;cursor:pointer;">${areasVisible ? '✓ אזורים — מופעל' : '🗺️ הצג אזורי דובאי (10)'}</button>
+      <button class="areas-toggle" onclick="toggleAreas()" style="width:100%;padding:10px;border-radius:8px;border:1px solid ${areasVisible ? '#2A9D8F' : '#E5E7EB'};background:${areasVisible ? '#2A9D8F' : '#fff'};color:${areasVisible ? '#fff' : '#2C5F6E'};font-family:Heebo;font-size:0.9rem;font-weight:700;cursor:pointer;">${areasVisible ? '✓ אזורים — מופעל' : 'הצג אזורי דובאי (10)'}</button>
     </div>
     <div id="areasStrip" style="display:${areasVisible ? 'flex' : 'none'};padding:0 16px 8px;overflow-x:auto;gap:8px;scroll-snap-type:x mandatory;">
       ${DUBAI_AREAS.map((a, i) => `
