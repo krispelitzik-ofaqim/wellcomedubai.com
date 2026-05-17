@@ -74,14 +74,6 @@
 
 <!-- App -->
 <div class="app">
-  <!-- Top Header -->
-  <header class="top-header">
-    <div class="logo" style="display:flex;align-items:center;gap:8px;">
-      <img src="images/icon-new.jpg" style="width:32px;height:32px;border-radius:8px;box-shadow:0 3px 8px rgba(0,0,0,0.35),0 1px 3px rgba(0,0,0,0.25);">
-      Dubai<span>WellCome</span>
-    </div>
-    <div class="header-actions"></div>
-  </header>
 
   <!-- Expandable Search Bar -->
   <div id="searchBar" style="display:none;background:#fff;padding:10px 20px;border-bottom:1px solid #E5E7EB;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
@@ -577,9 +569,11 @@
           </div>
           <button onclick="closeFrame()" style="background:rgba(255,255,255,0.25);border:none;color:#fff;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1rem;">×</button>
         </div>
-        ${item.video ? `<div style="width:100%;aspect-ratio:16/9;flex-shrink:0;background:#000;"><iframe src="https://www.youtube.com/embed/${item.video}?rel=0" style="width:100%;height:100%;border:0;display:block;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>` : (item.image ? `<div style="width:100%;height:180px;overflow:hidden;flex-shrink:0;"><img src="${item.image}" alt="${item.title}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.parentElement.style.display='none'"></div>` : '')}
-        ${item.audio ? renderCustomAudioPlayer(item.audio, true) : renderCustomAudioPlayer('', false)}
-        <div style="padding:20px;overflow-y:auto;color:#2C5F6E;line-height:1.8;font-size:0.95rem;white-space:pre-line;">${item.text}${item.cta ? `<div style="margin-top:18px;padding-top:14px;border-top:1px solid #F0E6D2;"><button onclick="closeFrame();navigateTo('${item.cta.page}','${item.cta.subcategory || ''}')" style="width:100%;padding:14px;background:linear-gradient(135deg,${item.color},#2C5F6E);color:#fff;border:none;border-radius:10px;font-family:Heebo;font-weight:800;font-size:0.95rem;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,0.15);">${item.cta.label} ←</button></div>` : ''}</div>
+        <div style="overflow-y:auto;flex:1;">
+          ${item.video ? `<div style="width:100%;aspect-ratio:16/9;background:#000;"><iframe src="https://www.youtube.com/embed/${item.video}?rel=0" style="width:100%;height:100%;border:0;display:block;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>` : (item.image ? `<div style="width:100%;height:180px;overflow:hidden;"><img src="${item.image}" alt="${item.title}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.parentElement.style.display='none'"></div>` : '')}
+          ${item.audio ? renderCustomAudioPlayer(item.audio, true) : renderCustomAudioPlayer('', false)}
+          <div style="padding:20px;color:#2C5F6E;line-height:1.8;font-size:0.95rem;white-space:pre-line;">${item.text}${item.cta ? `<div style="margin-top:18px;padding-top:14px;border-top:1px solid #F0E6D2;"><button onclick="closeFrame();navigateTo('${item.cta.page}','${item.cta.subcategory || ''}')" style="width:100%;padding:14px;background:linear-gradient(135deg,${item.color},#2C5F6E);color:#fff;border:none;border-radius:10px;font-family:Heebo;font-weight:800;font-size:0.95rem;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,0.15);">${item.cta.label} ←</button></div>` : ''}</div>
+        </div>
       </div>
     `;
     modal.classList.add('active');
