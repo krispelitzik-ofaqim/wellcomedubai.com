@@ -84,8 +84,9 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; heig
 
 /* ===== HERO SECTION ===== */
 .hero {
-  position:relative; height:300px; overflow:hidden;
+  position:relative; height:calc(100dvh - 60px); overflow:hidden;
 }
+.hero ~ h2, .hero ~ .cards-scroll { display:none !important; }
 .hero-bg {
   position:absolute; inset:0;
   background-size:cover;
@@ -449,7 +450,7 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; heig
 @media (min-width:768px) {
   .categories-grid { grid-template-columns:repeat(4,1fr); }
   .listings-grid { grid-template-columns:repeat(2,1fr); }
-  .hero { height:350px; }
+  .hero { height:calc(100dvh - 60px); }
   .hero-title { font-size:2.5rem; }
 }
 @media (max-width:600px) {
