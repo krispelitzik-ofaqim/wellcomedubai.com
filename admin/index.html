@@ -512,27 +512,29 @@
     sessionStorage.setItem('preview_device', device);
     const content = document.getElementById('adminContent');
     const SPECS = {
-      iphone16:    { label: 'iPhone 16',         W: 393, H: 852, radius: 55 },
-      iphone17pro: { label: 'iPhone 17 Pro',     W: 402, H: 874, radius: 58 },
-      iphone18max: { label: 'iPhone 18 Pro Max', W: 440, H: 956, radius: 62 },
+      iphone16:    { label: 'iPhone 16',         W: 393, H: 852, radius: 55, ios: true,  icon: 'fa-apple' },
+      iphone17pro: { label: 'iPhone 17 Pro',     W: 402, H: 874, radius: 58, ios: true,  icon: 'fa-apple' },
+      iphone18max: { label: 'iPhone 18 Pro Max', W: 440, H: 956, radius: 62, ios: true,  icon: 'fa-apple' },
+      android:     { label: 'Galaxy S25',        W: 384, H: 832, radius: 40, ios: false, icon: 'fa-android' },
     };
     const spec = SPECS[device] || SPECS.iphone16;
     const W = spec.W;
     const H = spec.H;
     const radius = spec.radius;
-    const frameColor = '#1d1d1f';
-    const isIphone = true;
+    const isIphone = spec.ios;
+    const frameColor = isIphone ? '#1d1d1f' : '#0a0a0a';
 
     const islandIphone = `
       <div style="position:absolute;top:11px;left:50%;transform:translateX(-50%);width:120px;height:35px;background:#000;border-radius:20px;z-index:5;"></div>`;
-    const cameraAndroid = '';
+    const cameraAndroid = `
+      <div style="position:absolute;top:14px;left:50%;transform:translateX(-50%);width:10px;height:10px;background:#000;border-radius:50%;z-index:5;"></div>`;
 
     content.innerHTML = `
       <div class="admin-header"><h2><i class="fas fa-mobile-screen"></i> תצוגה במכשירים</h2></div>
       <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;">
         ${Object.entries(SPECS).map(([key, s]) => `
-          <button onclick="renderPreviewSection('${key}')" style="padding:10px 18px;border:none;border-radius:8px;background:${device === key ? '#E76F51' : '#fff'};color:${device === key ? '#fff' : '#2C5F6E'};font-weight:700;cursor:pointer;font-family:Heebo;box-shadow:0 1px 3px rgba(0,0,0,0.1);">
-            <i class="fab fa-apple"></i> ${s.label}
+          <button onclick="renderPreviewSection('${key}')" style="padding:10px 18px;border:none;border-radius:8px;background:${device === key ? (s.ios ? '#E76F51' : '#2A9D8F') : '#fff'};color:${device === key ? '#fff' : '#2C5F6E'};font-weight:700;cursor:pointer;font-family:Heebo;box-shadow:0 1px 3px rgba(0,0,0,0.1);">
+            <i class="fab ${s.icon}"></i> ${s.label}
           </button>
         `).join('')}
         <button onclick="document.getElementById('previewFrame').src=document.getElementById('previewFrame').src" style="padding:10px 16px;border:1px solid #E5E7EB;border-radius:8px;background:#fff;color:#6B7F8D;font-weight:600;cursor:pointer;font-family:Heebo;">
