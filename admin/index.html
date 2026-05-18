@@ -508,29 +508,33 @@
   setInterval(refreshListingsBadge, 15000);
 
   function renderPreviewSection(device) {
-    device = device || sessionStorage.getItem('preview_device') || 'iphone';
+    device = device || sessionStorage.getItem('preview_device') || 'iphone16';
     sessionStorage.setItem('preview_device', device);
     const content = document.getElementById('adminContent');
-    const isIphone = device === 'iphone';
-    const W = isIphone ? 393 : 384;
-    const H = isIphone ? 852 : 832;
-    const radius = isIphone ? 55 : 40;
-    const frameColor = isIphone ? '#1d1d1f' : '#0a0a0a';
+    const SPECS = {
+      iphone16:    { label: 'iPhone 16',         W: 393, H: 852, radius: 55 },
+      iphone17pro: { label: 'iPhone 17 Pro',     W: 402, H: 874, radius: 58 },
+      iphone18max: { label: 'iPhone 18 Pro Max', W: 440, H: 956, radius: 62 },
+    };
+    const spec = SPECS[device] || SPECS.iphone16;
+    const W = spec.W;
+    const H = spec.H;
+    const radius = spec.radius;
+    const frameColor = '#1d1d1f';
+    const isIphone = true;
 
     const islandIphone = `
       <div style="position:absolute;top:11px;left:50%;transform:translateX(-50%);width:120px;height:35px;background:#000;border-radius:20px;z-index:5;"></div>`;
-    const cameraAndroid = `
-      <div style="position:absolute;top:14px;left:50%;transform:translateX(-50%);width:10px;height:10px;background:#000;border-radius:50%;z-index:5;"></div>`;
+    const cameraAndroid = '';
 
     content.innerHTML = `
       <div class="admin-header"><h2><i class="fas fa-mobile-screen"></i> תצוגה במכשירים</h2></div>
-      <div style="display:flex;gap:10px;margin-bottom:20px;">
-        <button onclick="renderPreviewSection('iphone')" style="padding:10px 18px;border:none;border-radius:8px;background:${isIphone ? '#E76F51' : '#fff'};color:${isIphone ? '#fff' : '#2C5F6E'};font-weight:700;cursor:pointer;font-family:Heebo;box-shadow:0 1px 3px rgba(0,0,0,0.1);">
-          <i class="fab fa-apple"></i> iPhone 16
-        </button>
-        <button onclick="renderPreviewSection('android')" style="padding:10px 18px;border:none;border-radius:8px;background:${!isIphone ? '#2A9D8F' : '#fff'};color:${!isIphone ? '#fff' : '#2C5F6E'};font-weight:700;cursor:pointer;font-family:Heebo;box-shadow:0 1px 3px rgba(0,0,0,0.1);">
-          <i class="fab fa-android"></i> Galaxy S25
-        </button>
+      <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;">
+        ${Object.entries(SPECS).map(([key, s]) => `
+          <button onclick="renderPreviewSection('${key}')" style="padding:10px 18px;border:none;border-radius:8px;background:${device === key ? '#E76F51' : '#fff'};color:${device === key ? '#fff' : '#2C5F6E'};font-weight:700;cursor:pointer;font-family:Heebo;box-shadow:0 1px 3px rgba(0,0,0,0.1);">
+            <i class="fab fa-apple"></i> ${s.label}
+          </button>
+        `).join('')}
         <button onclick="document.getElementById('previewFrame').src=document.getElementById('previewFrame').src" style="padding:10px 16px;border:1px solid #E5E7EB;border-radius:8px;background:#fff;color:#6B7F8D;font-weight:600;cursor:pointer;font-family:Heebo;">
           <i class="fas fa-rotate-right"></i> רענן
         </button>
