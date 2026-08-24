@@ -280,4 +280,41 @@ app.get('/api/og-image', async (req, res) => {
   }
 });
 
+// ---- WellCome Dubai AI assistant (closed-domain, Claude via direct fetch) ----
+const AI_SYSTEM = `You are the WellCome Dubai AI travel assistant, a warm, knowledgeable local guide.
+You ONLY answer questions about visiting Dubai (and nearby Abu Dhabi): attractions, restaurants, hotels,
+nightlife, shopping, beaches, transport (metro, taxi, Careem), tips, events, budgets, culture, weather and getting around.
+If asked anything unrelated to a Dubai/UAE trip, politely say you can only help with Dubai and steer back.
+Keep answers concise and practical: 2-4 short sentences, friendly, specific (name real places when useful).
+Do not invent prices/opening-hours you are unsure about; suggest checking in the app.`;
+
+const AI_LANGS = { he: 'Hebrew', en: 'English', ru: 'Russian', hi: 'Hindi', ar: 'Arabic' };
+
+app.post('/api/ai/ask', async (req, res) => {
+  try {
+    const question = (req.body && req.body.question ? String(req.body.question) : '').slice(0, 600).trim();
+    const lang = req.body && req.body.lang;
+    if (!question) return res.status(400).json({ error: 'no question' });
+    const key = process.env.ANTHROPIC_API_KEY;
+    if (!key) return res.status(500).json({ error: 'AI not configured', answer: '' });
+    const langName = AI_LANGS[lang] || 'English';
+    const r = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01' },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 500,
+        system: AI_SYSTEM + ` Always answer in ${langName}.`,
+        messages: [{ role: 'user', content: question }],
+      }),
+    });
+    if (!r.ok) { const t = await r.text().catch(() => ''); return res.status(502).json({ error: 'ai upstream', detail: t.slice(0, 200), answer: '' }); }
+    const j = await r.json();
+    const answer = (j && j.content && j.content[0] && j.content[0].text) ? j.content[0].text : '';
+    res.json({ answer, places: [] });
+  } catch (e) {
+    res.status(500).json({ error: 'ai failed', answer: '' });
+  }
+});
+
 app.listen(PORT, () => console.log(`Wellcome Dubai server running on port ${PORT}`));
