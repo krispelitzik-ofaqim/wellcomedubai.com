@@ -317,4 +317,13 @@ app.post('/api/ai/ask', async (req, res) => {
   }
 });
 
+// ---- App version gate (drives the in-app "update available" popup) ----
+// Bump LATEST_VERSION in Railway Variables to make older installs show the update prompt.
+app.get('/api/version', (_req, res) => {
+  res.json({
+    latestVersion: process.env.LATEST_VERSION || '1.0.0',
+    minVersion: process.env.MIN_VERSION || '0.0.0',
+  });
+});
+
 app.listen(PORT, () => console.log(`Wellcome Dubai server running on port ${PORT}`));
