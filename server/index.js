@@ -290,17 +290,6 @@ Do not invent prices/opening-hours you are unsure about; suggest checking in the
 
 const AI_LANGS = { he: 'Hebrew', en: 'English', ru: 'Russian', hi: 'Hindi', ar: 'Arabic' };
 
-// TEMP debug: reveals whether Railway injects the key (no secret exposed). Remove after.
-app.get('/api/ai/debug', (req, res) => {
-  const k = process.env.ANTHROPIC_API_KEY || '';
-  res.json({
-    hasKey: !!k,
-    keyLen: k.length,
-    keyPrefix: k.slice(0, 7),
-    matchingEnvNames: Object.keys(process.env).filter(n => /ANTHRO|CLAUDE|API_KEY/i.test(n)),
-  });
-});
-
 app.post('/api/ai/ask', async (req, res) => {
   try {
     const question = (req.body && req.body.question ? String(req.body.question) : '').slice(0, 600).trim();
