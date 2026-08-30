@@ -3,6 +3,7 @@ const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
 const multer = require('multer');
+const crypto = require('crypto');
 
 const app = express();
 const PORT = process.env.PORT || 3002;
@@ -118,7 +119,28 @@ app.delete('/api/audio/:name', (req, res) => {
 app.get('/api/listings', (_req, res) => {
   const db = readDB();
   const approved = (db.listings || []).filter(l => l.status === 'approved').sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''));
-  res.json({ listings: approved });
+  // never expose the owner's secret delete token publicly
+  const clean = approved.map(({ delToken, ...rest }) => rest);
+  res.json({ listings: clean });
+});
+
+// Owner-delete: the device that created the listing holds the secret delToken.
+app.delete('/api/listings/:id', (req, res) => {
+  const id = req.params.id;
+  const token = (req.query && req.query.token) || (req.body && req.body.token);
+  const db = readDB();
+  const l = (db.listings || []).find(x => x.id === id);
+  if (!l) return res.status(404).json({ error: 'not found' });
+  if (!token || token !== l.delToken) return res.status(403).json({ error: 'forbidden' });
+  db.listings = db.listings.filter(x => x.id !== id);
+  writeDB(db);
+  try {
+    (l.photos || []).concat(l.video ? [l.video] : []).concat(l.brochure ? [l.brochure] : []).forEach(p => {
+      const fp = path.join(UPLOADS_DIR, path.basename(String(p)));
+      if (fp.startsWith(UPLOADS_DIR) && fs.existsSync(fp)) fs.unlinkSync(fp);
+    });
+  } catch {}
+  res.json({ ok: true });
 });
 
 app.post('/api/listings', upload.fields([{ name: 'photos', maxCount: 8 }, { name: 'video', maxCount: 1 }, { name: 'brochure', maxCount: 1 }]), (req, res) => {
@@ -129,12 +151,14 @@ app.post('/api/listings', upload.fields([{ name: 'photos', maxCount: 8 }, { name
     const photos = (files.photos || []).map(f => `/uploads/${f.filename}`);
     const video = files.video && files.video[0] ? `/uploads/${files.video[0].filename}` : '';
     const brochure = files.brochure && files.brochure[0] ? `/uploads/${files.brochure[0].filename}` : '';
+    const delToken = crypto.randomBytes(12).toString('hex');
     const listing = {
       id: 'l_' + Date.now() + '_' + Math.round(Math.random() * 1000),
       title, type: type || 'sale', price, area, desc: desc || '', phone, photos, video,
       size: size === 'large' ? 'large' : 'small',
       highlight: ['none','emphasized','negative'].includes(highlight) ? highlight : 'none',
       status: 'pending',
+      delToken,
       createdAt: new Date().toISOString()
     };
     if (type === 'project') {
