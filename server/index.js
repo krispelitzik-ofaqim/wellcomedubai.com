@@ -159,6 +159,31 @@ app.post('/api/listings', upload.fields([{ name: 'photos', maxCount: 8 }, { name
   }
 });
 
+// --- Visitors' photo album (shared across all users), keyed per tour/itinerary ---
+app.get('/api/album', (req, res) => {
+  const key = String(req.query.key || '').slice(0, 80);
+  const db = readDB();
+  const arr = (db.album && db.album[key]) || [];
+  res.json({ photos: arr.map(p => p.url) });
+});
+
+app.post('/api/album', upload.fields([{ name: 'photos', maxCount: 12 }]), (req, res) => {
+  try {
+    const key = String((req.body && req.body.key) || '').slice(0, 80);
+    if (!key) return res.status(400).json({ error: 'missing key' });
+    const files = (req.files && req.files.photos) || [];
+    if (!files.length) return res.status(400).json({ error: 'no photos' });
+    const db = readDB();
+    db.album = db.album || {};
+    db.album[key] = db.album[key] || [];
+    const added = files.map(f => ({ url: `/uploads/${f.filename}`, at: new Date().toISOString() }));
+    db.album[key].push(...added);
+    if (db.album[key].length > 200) db.album[key] = db.album[key].slice(-200); // cap runaway
+    writeDB(db);
+    res.json({ ok: true, photos: db.album[key].map(p => p.url) });
+  } catch (e) { console.error(e); res.status(500).json({ error: 'server error' }); }
+});
+
 app.get('/api/admin/listings', requireAdmin, (_req, res) => {
   const db = readDB();
   res.json({ listings: db.listings || [] });
