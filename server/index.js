@@ -375,4 +375,56 @@ app.get('/api/version', (_req, res) => {
   });
 });
 
+// ---- News proxy: fetch Google-News RSS server-side, parse to JSON, cache 30 min ----
+// Fixes slow/failing client-side news (rss2json rate limits + CORS). App calls /api/news?rss=<encoded rss url>.
+const NEWS_CACHE = new Map(); // rssUrl -> { at, items }
+const NEWS_TTL = 30 * 60 * 1000;
+
+function parseRssItems(xml) {
+  const items = [];
+  const blocks = String(xml).split(/<item>/i).slice(1);
+  for (const raw of blocks.slice(0, 12)) {
+    const chunk = raw.split(/<\/item>/i)[0];
+    const pick = (tag) => {
+      const m = chunk.match(new RegExp('<' + tag + '[^>]*>([\\s\\S]*?)<\\/' + tag + '>', 'i'));
+      if (!m) return '';
+      let v = m[1];
+      const cd = v.match(/<!\[CDATA\[([\s\S]*?)\]\]>/);
+      if (cd) v = cd[1];
+      return v.trim();
+    };
+    const strip = (s) => s.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+    const title = strip(pick('title'));
+    const link = strip(pick('link'));
+    const pubDate = strip(pick('pubDate'));
+    const description = pick('description');
+    let img = '';
+    const media = chunk.match(/<media:content[^>]*url="([^"]+)"/i) || chunk.match(/<enclosure[^>]*url="([^"]+)"/i);
+    if (media) img = media[1];
+    if (!img) { const im = (description || '').match(/<img[^>]*src="([^"]+)"/i); if (im) img = im[1]; }
+    if (title && link) items.push({ title, link, pubDate, description: strip(description), thumbnail: img, enclosure: { link: img } });
+  }
+  return items;
+}
+
+app.get('/api/news', async (req, res) => {
+  const rss = req.query.rss;
+  if (!rss || !/^https?:\/\//.test(rss)) return res.status(400).json({ items: [], error: 'bad rss' });
+  const now = Date.now();
+  const cached = NEWS_CACHE.get(rss);
+  if (cached && (now - cached.at) < NEWS_TTL) return res.json({ items: cached.items, cached: true });
+  try {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 9000);
+    const r = await fetch(rss, { headers: { 'User-Agent': 'Mozilla/5.0 (compatible; WellComeDubai/1.0)' }, signal: ctrl.signal });
+    clearTimeout(timer);
+    const xml = await r.text();
+    const items = parseRssItems(xml);
+    if (items.length) { NEWS_CACHE.set(rss, { at: now, items }); return res.json({ items }); }
+    return res.json({ items: cached ? cached.items : [], stale: !!cached });
+  } catch (e) {
+    return res.json({ items: cached ? cached.items : [], stale: !!cached });
+  }
+});
+
 app.listen(PORT, () => console.log(`Wellcome Dubai server running on port ${PORT}`));
