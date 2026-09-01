@@ -619,4 +619,83 @@ app.delete('/api/admin/coupons/:id', requireAdmin, (req, res) => {
 });
 
 
+
+// ─── Page views ─────────────────────────────────────────────────
+// Own analytics, no third party: the app posts a screen key, the server keeps a
+// per-day counter. Kept in its own file so coupon writes never race with it, and
+// flushed on a timer so a burst of screens is one disk write, not fifty.
+const VIEWS_PATH = path.join(DATA_DIR, 'views.json');
+const VIEWS_KEEP_DAYS = 120;
+let VIEWS = null;
+let viewsDirty = false;
+
+function loadViews() {
+  if (VIEWS) return VIEWS;
+  try { VIEWS = JSON.parse(fs.readFileSync(VIEWS_PATH, 'utf-8')); }
+  catch { VIEWS = { daily: {}, total: {} }; }
+  if (!VIEWS.daily) VIEWS.daily = {};
+  if (!VIEWS.total) VIEWS.total = {};
+  return VIEWS;
+}
+function today() { return new Date().toISOString().slice(0, 10); }
+function flushViews() {
+  if (!viewsDirty || !VIEWS) return;
+  // Drop days past the retention window so the file cannot grow without bound.
+  const cutoff = new Date(Date.now() - VIEWS_KEEP_DAYS * 86400000).toISOString().slice(0, 10);
+  for (const d of Object.keys(VIEWS.daily)) if (d < cutoff) delete VIEWS.daily[d];
+  try { fs.writeFileSync(VIEWS_PATH, JSON.stringify(VIEWS), 'utf-8'); viewsDirty = false; }
+  catch (e) { console.warn('views write failed', e); }
+}
+setInterval(flushViews, 10000).unref?.();
+
+// Screen keys are app-controlled; keep them short and boring so nothing odd
+// ends up as a JSON key.
+function cleanKey(k) {
+  return String(k || '').trim().slice(0, 60).replace(/[^a-zA-Z0-9:_-]/g, '');
+}
+
+function bump(key) {
+  const v = loadViews();
+  const d = today();
+  if (!v.daily[d]) v.daily[d] = {};
+  v.daily[d][key] = (v.daily[d][key] || 0) + 1;
+  v.total[key] = (v.total[key] || 0) + 1;
+  viewsDirty = true;
+}
+
+// POST /api/views  {key} or {keys:[...]} — count one or more screen opens.
+app.post('/api/views', (req, res) => {
+  try {
+    const b = req.body || {};
+    const raw = Array.isArray(b.keys) ? b.keys : [b.key];
+    const keys = raw.map(cleanKey).filter(Boolean).slice(0, 20);
+    if (!keys.length) return res.status(400).json({ success: false, error: 'key required' });
+    keys.forEach(bump);
+    res.json({ success: true });
+  } catch { res.status(500).json({ success: false }); }
+});
+
+// GET /api/views?key=coupon:123 — public count for one key (a business owner
+// seeing how many people opened their coupon).
+app.get('/api/views', (req, res) => {
+  const key = cleanKey(req.query.key);
+  if (!key) return res.status(400).json({ success: false, error: 'key required' });
+  const v = loadViews();
+  const days = [];
+  for (let i = 0; i < 30; i++) {
+    const d = new Date(Date.now() - i * 86400000).toISOString().slice(0, 10);
+    days.push({ date: d, n: (v.daily[d] && v.daily[d][key]) || 0 });
+  }
+  const sum = n => days.slice(0, n).reduce((a, x) => a + x.n, 0);
+  res.json({ success: true, key, total: v.total[key] || 0, today: days[0].n, last7: sum(7), last30: sum(30), days });
+});
+
+// GET /api/admin/views — everything, most viewed first.
+app.get('/api/admin/views', requireAdmin, (_req, res) => {
+  const v = loadViews();
+  const top = Object.entries(v.total).sort((a, b) => b[1] - a[1]).map(([key, n]) => ({ key, n }));
+  res.json({ success: true, total: top, daily: v.daily });
+});
+
+
 app.listen(PORT, () => console.log(`Wellcome Dubai server running on port ${PORT}`));

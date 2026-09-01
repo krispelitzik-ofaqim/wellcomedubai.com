@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>WellCome Dubai · סטטיסטיקה</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#16222C; --ink2:#5C6B75; --muted:#94A3AD;
+    --surface:#FFFFFF; --page:#F6F3ED; --line:#E7E0D4;
+    --teal:#2C5F6E; --teal-soft:#CBDDE2; --gold:#E9C46A; --orange:#E76F51; --green:#2E9E6B;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Heebo',Arial,sans-serif;background:var(--page);color:var(--ink);direction:rtl}
+  .wrap{max-width:1080px;margin:0 auto;padding:20px 16px 60px}
+  header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px;flex-wrap:wrap}
+  h1{font-size:22px;font-weight:800}
+  h1 span{color:var(--orange)}
+  .sub{color:var(--ink2);font-size:13px;margin-top:2px}
+  .btn{background:var(--teal);color:#fff;border:0;border-radius:6px;padding:9px 16px;font-family:inherit;font-weight:700;font-size:14px;cursor:pointer}
+  .btn.ghost{background:#fff;color:var(--teal);border:1px solid var(--line)}
+  input[type=password],input[type=text]{font-family:inherit;font-size:14px;padding:10px 12px;border:1px solid var(--line);border-radius:6px;background:#fff;color:var(--ink);direction:ltr;text-align:left}
+
+  .gate{position:fixed;inset:0;background:linear-gradient(140deg,#16222C,#2C5F6E);display:flex;align-items:center;justify-content:center;z-index:50;padding:24px}
+  .gate .card{background:#fff;border-radius:10px;padding:28px;width:100%;max-width:340px;text-align:center}
+  .gate .card b{display:block;font-size:19px;margin-bottom:4px}
+  .gate .card p{color:var(--ink2);font-size:13px;margin-bottom:18px}
+  .gate input{width:100%;margin-bottom:10px}
+  .gate .btn{width:100%}
+  .err{color:var(--orange);font-size:12px;min-height:16px;margin-bottom:6px}
+
+  .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:22px}
+  .tile{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:16px}
+  .tile .k{color:var(--muted);font-size:12px;font-weight:500;letter-spacing:.3px}
+  .tile .v{font-size:30px;font-weight:800;line-height:1.15;margin-top:6px;font-variant-numeric:tabular-nums}
+  .tile .d{font-size:12px;color:var(--ink2);margin-top:2px}
+
+  section{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:18px;margin-bottom:18px}
+  section h2{font-size:15px;font-weight:700;margin-bottom:2px}
+  section .hint{font-size:12px;color:var(--muted);margin-bottom:16px}
+
+  /* daily bars */
+  .days{display:flex;align-items:flex-end;gap:2px;height:150px;padding-top:8px}
+  .day{flex:1;min-width:0;position:relative;display:flex;flex-direction:column;justify-content:flex-end;height:100%;cursor:default}
+  .day i{display:block;background:var(--teal);border-radius:4px 4px 0 0;min-height:2px;transition:background .12s}
+  .day:hover i{background:var(--orange)}
+  .day em{position:absolute;bottom:100%;right:50%;transform:translate(50%,-6px);background:var(--ink);color:#fff;font-style:normal;font-size:11px;font-weight:600;padding:5px 8px;border-radius:4px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .12s;z-index:5}
+  .day:hover em{opacity:1}
+  .axis{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:8px}
+
+  /* top pages */
+  .row{display:grid;grid-template-columns:minmax(120px,1.4fr) 3fr auto;gap:10px;align-items:center;padding:7px 0}
+  .row .n{font-size:13px;font-weight:600;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;direction:ltr;text-align:right}
+  .row .bar{background:#F1EDE5;border-radius:4px;height:14px;overflow:hidden}
+  .row .bar i{display:block;height:100%;background:var(--teal);border-radius:4px}
+  .row .v{font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--ink2);min-width:44px;text-align:left}
+
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th{text-align:right;font-weight:600;color:var(--muted);font-size:12px;padding:8px 6px;border-bottom:1px solid var(--line)}
+  td{padding:10px 6px;border-bottom:1px solid #F1EDE5}
+  .pill{display:inline-block;font-size:11px;font-weight:700;padding:3px 9px;border-radius:4px}
+  .pill.live{background:#E3F3EB;color:var(--green)}
+  .pill.pend{background:#FBEEE9;color:var(--orange)}
+  .empty{color:var(--muted);font-size:13px;padding:14px 0}
+  @media(max-width:560px){ .row{grid-template-columns:minmax(90px,1.2fr) 2fr auto} }
+</style>
+</head>
+<body>
+
+<div class="gate" id="gate">
+  <div class="card">
+    <b>WellCome<span style="color:#E76F51">Dubai</span></b>
+    <p>סטטיסטיקה · הזן סיסמה ומפתח ניהול</p>
+    <input type="password" id="pw" placeholder="סיסמה" autocomplete="off">
+    <input type="text" id="tok" placeholder="ADMIN_TOKEN" autocomplete="off">
+    <div class="err" id="err"></div>
+    <button class="btn" onclick="enter()">כניסה</button>
+  </div>
+</div>
+
+<div class="wrap" id="app" style="display:none">
+  <header>
+    <div>
+      <h1>סטטיסטיקה · WellCome<span>Dubai</span></h1>
+      <div class="sub" id="stamp">טוען…</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn ghost" onclick="load()">רענון</button>
+      <button class="btn ghost" onclick="logout()">יציאה</button>
+    </div>
+  </header>
+
+  <div class="tiles" id="tiles"></div>
+
+  <section>
+    <h2>צפיות לפי יום</h2>
+    <div class="hint">כל פתיחת עמוד באפליקציה · 30 הימים האחרונים</div>
+    <div class="days" id="days"></div>
+    <div class="axis"><span id="axFrom"></span><span id="axTo"></span></div>
+  </section>
+
+  <section>
+    <h2>העמודים הנצפים ביותר</h2>
+    <div class="hint">סך הכל מאז ההתקנה</div>
+    <div id="top"></div>
+  </section>
+
+  <section>
+    <h2>קופונים</h2>
+    <div class="hint">"פעיל" = התשלום אושר ב-PayPal והקופון מוצג באפליקציה</div>
+    <div id="coupons"></div>
+  </section>
+</div>
+
+<script>
+const API = 'https://wellcomedubaicom-production.up.railway.app';
+const PW  = '022627269';
+let TOKEN = localStorage.getItem('dubai_admin_token') || '';
+
+function enter(){
+  const pw = document.getElementById('pw').value.trim();
+  const tk = document.getElementById('tok').value.trim();
+  if (pw !== PW) { document.getElementById('err').textContent = 'סיסמה שגויה'; return; }
+  if (!tk) { document.getElementById('err').textContent = 'חסר מפתח ניהול'; return; }
+  TOKEN = tk; localStorage.setItem('dubai_admin_token', tk);
+  document.getElementById('gate').style.display = 'none';
+  document.getElementById('app').style.display = '';
+  load();
+}
+function logout(){ localStorage.removeItem('dubai_admin_token'); location.reload(); }
+
+const fmt = n => (n||0).toLocaleString('he-IL');
+function dayLabel(d){ const [y,m,dd]=d.split('-'); return dd+'/'+m; }
+
+async function load(){
+  document.getElementById('stamp').textContent = 'טוען…';
+  let views=null, coupons=null;
+  try { views = await (await fetch(`${API}/api/admin/views?token=${encodeURIComponent(TOKEN)}&_t=${Date.now()}`)).json(); } catch(e){}
+  try { coupons = await (await fetch(`${API}/api/admin/coupons?token=${encodeURIComponent(TOKEN)}&_t=${Date.now()}`)).json(); } catch(e){}
+
+  if (!views || !views.success) {
+    document.getElementById('stamp').textContent = 'מפתח ניהול שגוי או שהשרת אינו זמין';
+    return;
+  }
+  document.getElementById('stamp').textContent = 'עודכן ' + new Date().toLocaleString('he-IL');
+
+  // last 30 days, oldest → newest
+  const daily = views.daily || {};
+  const days = [];
+  for (let i=29;i>=0;i--){
+    const d = new Date(Date.now()-i*86400000).toISOString().slice(0,10);
+    const obj = daily[d] || {};
+    days.push({ date:d, n:Object.values(obj).reduce((a,b)=>a+b,0) });
+  }
+  const sum = n => days.slice(-n).reduce((a,x)=>a+x.n,0);
+  const grand = (views.total||[]).reduce((a,x)=>a+x.n,0);
+
+  document.getElementById('tiles').innerHTML = [
+    ['היום', days[days.length-1].n, ''],
+    ['7 ימים אחרונים', sum(7), ''],
+    ['30 ימים אחרונים', sum(30), ''],
+    ['סך הכל', grand, 'מאז ההתקנה'],
+  ].map(([k,v,d]) => `<div class="tile"><div class="k">${k}</div><div class="v">${fmt(v)}</div><div class="d">${d}</div></div>`).join('');
+
+  const max = Math.max(1, ...days.map(d=>d.n));
+  document.getElementById('days').innerHTML = days.map(d =>
+    `<div class="day"><em>${dayLabel(d.date)} · ${fmt(d.n)}</em><i style="height:${Math.round(d.n/max*100)}%"></i></div>`
+  ).join('');
+  document.getElementById('axFrom').textContent = dayLabel(days[0].date);
+  document.getElementById('axTo').textContent = dayLabel(days[days.length-1].date);
+
+  const top = (views.total||[]).slice(0,15);
+  const tmax = Math.max(1, ...top.map(t=>t.n));
+  document.getElementById('top').innerHTML = top.length
+    ? top.map(t => `<div class="row"><div class="n">${t.key}</div><div class="bar"><i style="width:${Math.round(t.n/tmax*100)}%"></i></div><div class="v">${fmt(t.n)}</div></div>`).join('')
+    : '<div class="empty">עדיין אין צפיות. הנתונים יופיעו אחרי שהאפליקציה המעודכנת תעלה לאוויר.</div>';
+
+  const list = (coupons && coupons.success && coupons.data) ? coupons.data : [];
+  document.getElementById('coupons').innerHTML = list.length
+    ? `<table><thead><tr><th>עסק</th><th>הנחה</th><th>סטטוס</th><th>בתוקף עד</th></tr></thead><tbody>` +
+      list.map(c => {
+        const live = c.paidAt && c.activeUntil && new Date(c.activeUntil) > new Date();
+        const until = c.activeUntil ? new Date(c.activeUntil).toLocaleDateString('he-IL') : '—';
+        return `<tr><td>${c.bizName||''}</td><td>${c.type==='fixed'?(c.pct+'%'):'משתנה'}</td>` +
+               `<td><span class="pill ${live?'live':'pend'}">${live?'פעיל':'ממתין לתשלום'}</span></td><td>${until}</td></tr>`;
+      }).join('') + '</tbody></table>'
+    : '<div class="empty">עדיין לא נרכשו קופונים.</div>';
+}
+
+if (TOKEN) { document.getElementById('tok').value = TOKEN; }
+document.getElementById('pw').addEventListener('keydown', e => { if(e.key==='Enter') document.getElementById('tok').focus(); });
+document.getElementById('tok').addEventListener('keydown', e => { if(e.key==='Enter') enter(); });
+</script>
+</body>
+</html>
