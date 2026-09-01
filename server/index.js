@@ -368,10 +368,50 @@ app.post('/api/ai/ask', async (req, res) => {
 
 // ---- App version gate (drives the in-app "update available" popup) ----
 // Bump LATEST_VERSION in Railway Variables to make older installs show the update prompt.
-app.get('/api/version', (_req, res) => {
+// The published store version, asked of the stores themselves so nobody has to
+// bump a number here on every release. Cached for 6h; LATEST_VERSION (env) still
+// wins if it is set, and the last known good value is kept if a store is down.
+const APPSTORE_ID = process.env.APPSTORE_ID || '6769145087';
+const PLAY_PACKAGE = process.env.PLAY_PACKAGE || 'com.wellcomedubai.app';
+const STORE_TTL = 6 * 3600 * 1000;
+const storeCache = { ios: { v: null, at: 0 }, android: { v: null, at: 0 } };
+
+async function iosVersion() {
+  const r = await fetch(`https://itunes.apple.com/lookup?id=${APPSTORE_ID}&t=${Date.now()}`);
+  const j = await r.json();
+  const v = j && j.results && j.results[0] && j.results[0].version;
+  return /^\d+(\.\d+)*$/.test(String(v || '')) ? String(v) : null;
+}
+
+async function androidVersion() {
+  const r = await fetch(`https://play.google.com/store/apps/details?id=${PLAY_PACKAGE}&hl=en&gl=US`, {
+    headers: { 'User-Agent': 'Mozilla/5.0 (compatible; WellComeDubai/1.0)' },
+  });
+  const html = await r.text();
+  // Play embeds the version inside a JS array blob; both shapes have appeared.
+  const m = html.match(/\[\[\["(\d+(?:\.\d+)+)"\]\]/) || html.match(/Current Version.{0,80}?(\d+(?:\.\d+)+)/s);
+  return m ? m[1] : null;
+}
+
+async function storeVersion(platform) {
+  const c = storeCache[platform];
+  if (c && c.v && (Date.now() - c.at) < STORE_TTL) return c.v;
+  try {
+    const v = platform === 'android' ? await androidVersion() : await iosVersion();
+    if (v) { storeCache[platform] = { v, at: Date.now() }; return v; }
+  } catch (e) { console.warn('store lookup failed', platform, e && e.message); }
+  return c && c.v ? c.v : null; // keep the last good value rather than prompting wrongly
+}
+
+// GET /api/version?platform=ios|android
+app.get('/api/version', async (req, res) => {
+  const platform = req.query.platform === 'android' ? 'android' : 'ios';
+  let latest = process.env.LATEST_VERSION || null;
+  if (!latest) latest = await storeVersion(platform);
   res.json({
-    latestVersion: process.env.LATEST_VERSION || '1.0.0',
+    latestVersion: latest || '0.0.0', // 0.0.0 = "unknown", which prompts nobody
     minVersion: process.env.MIN_VERSION || '0.0.0',
+    platform,
   });
 });
 
