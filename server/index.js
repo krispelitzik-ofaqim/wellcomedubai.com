@@ -427,4 +427,196 @@ app.get('/api/news', async (req, res) => {
   }
 });
 
+
+// ─── Coupons: paid packages for business owners ─────────────────
+// A coupon is created as PENDING when the owner starts checkout, and goes live
+// ONLY after PayPal confirms the money arrived (capture on return, or webhook if
+// the buyer closed the browser). An owner can never publish a coupon for free.
+const PAYPAL_ENV = (process.env.PAYPAL_ENV || 'live').toLowerCase();
+const PAYPAL_BASE = PAYPAL_ENV === 'sandbox' ? 'https://api-m.sandbox.paypal.com' : 'https://api-m.paypal.com';
+const COUPON_PRICE = '365.00';
+const COUPON_DAYS = 365;
+
+function getCoupons(db) { return Array.isArray(db.coupons) ? db.coupons : []; }
+
+async function paypalToken() {
+  const id = process.env.PAYPAL_CLIENT_ID, secret = process.env.PAYPAL_SECRET;
+  if (!id || !secret) return null;
+  try {
+    const r = await fetch(`${PAYPAL_BASE}/v1/oauth2/token`, {
+      method: 'POST',
+      headers: { Authorization: 'Basic ' + Buffer.from(`${id}:${secret}`).toString('base64'), 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: 'grant_type=client_credentials',
+    });
+    const j = await r.json();
+    return j.access_token || null;
+  } catch { return null; }
+}
+
+function serverBase(req) {
+  const proto = req.headers['x-forwarded-proto'] || req.protocol || 'https';
+  const host = req.headers['x-forwarded-host'] || req.headers.host;
+  return `${proto}://${host}`;
+}
+
+// Flip a pending coupon to live. Idempotent: capture and webhook may both fire.
+function activateCoupon(couponId, orderId) {
+  const db = readDB();
+  const list = getCoupons(db);
+  const c = list.find(x => x.id === couponId);
+  if (!c) return false;
+  if (!c.paidAt) {
+    c.paidAt = new Date().toISOString();
+    c.activeUntil = new Date(Date.now() + COUPON_DAYS * 86400000).toISOString();
+    if (orderId) c.orderId = orderId;
+    db.coupons = list;
+    writeDB(db);
+  }
+  return true;
+}
+
+function isLive(c) { return !!(c.paidAt && c.activeUntil && new Date(c.activeUntil).getTime() > Date.now()); }
+
+// GET /api/coupons — public list: paid and unexpired only.
+app.get('/api/coupons', (_req, res) => {
+  try {
+    const list = getCoupons(readDB()).filter(isLive).map(c => ({
+      id: c.id, bizId: c.bizId, bizName: c.bizName, bizCat: c.bizCat, image: c.image,
+      type: c.type, pct: c.pct, from: c.from, to: c.to,
+    }));
+    res.json({ success: true, data: list });
+  } catch { res.status(500).json({ success: false, error: 'read error' }); }
+});
+
+// POST /api/coupons/pay — start a paid coupon package.
+// Saves the coupon as pending (invisible) and returns the PayPal approval URL.
+app.post('/api/coupons/pay', async (req, res) => {
+  try {
+    const b = req.body || {};
+    const bizName = String(b.bizName || '').trim();
+    const type = b.type === 'variable' ? 'variable' : 'fixed';
+    if (!bizName) return res.status(400).json({ success: false, error: 'bizName required' });
+    if (type === 'fixed' && !b.pct) return res.status(400).json({ success: false, error: 'pct required' });
+
+    const token = await paypalToken();
+    // No credentials → refuse rather than fall back to a manual link, which would
+    // let the coupon go live without a confirmed payment.
+    if (!token) return res.status(503).json({ success: false, error: 'payments unavailable' });
+
+    const db = readDB();
+    const list = getCoupons(db);
+    const id = crypto.randomBytes(8).toString('hex');
+    const now = new Date();
+    const end = new Date(now); end.setFullYear(now.getFullYear() + 1);
+    list.push({
+      id, bizId: b.bizId ?? null, bizName, bizCat: b.bizCat || 'restaurants',
+      image: b.image || '', type, pct: type === 'fixed' ? Number(b.pct) : null,
+      from: now.toISOString(), to: end.toISOString(),
+      createdAt: now.toISOString(), paidAt: null, activeUntil: null, orderId: null,
+    });
+    db.coupons = list;
+    writeDB(db);
+
+    const base = serverBase(req);
+    const lang = String(b.lang || 'en');
+    const orderRes = await fetch(`${PAYPAL_BASE}/v2/checkout/orders`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        intent: 'CAPTURE',
+        purchase_units: [{ custom_id: id, description: `Coupon Package · ${bizName}`, amount: { currency_code: 'USD', value: COUPON_PRICE } }],
+        application_context: {
+          brand_name: 'WellCome Dubai',
+          user_action: 'PAY_NOW',
+          return_url: `${base}/api/coupons/return?c=${encodeURIComponent(id)}&lang=${encodeURIComponent(lang)}`,
+          cancel_url: `${base}/api/coupons/cancel?lang=${encodeURIComponent(lang)}`,
+        },
+      }),
+    });
+    const order = await orderRes.json();
+    const approve = (order.links || []).find(l => l.rel === 'approve');
+    if (!approve) return res.status(502).json({ success: false, error: 'paypal order failed' });
+    res.json({ success: true, url: approve.href, couponId: id, orderId: order.id });
+  } catch (e) { res.status(500).json({ success: false, error: String((e && e.message) || e) }); }
+});
+
+const CPN_PAGE = {
+  he: { dir: 'rtl', ok: 'התשלום התקבל', okSub: 'הקופון שלך עלה לאוויר לשנה. אפשר לחזור לאפליקציה.', wait: 'מעבד את התשלום', waitSub: 'אם שילמת, הקופון יופיע בעוד רגע. אפשר לחזור לאפליקציה.', no: 'התשלום בוטל', noSub: 'אפשר לחזור לאפליקציה ולנסות שוב.' },
+  en: { dir: 'ltr', ok: 'Payment received', okSub: 'Your coupon is live for one year. You can return to the app.', wait: 'Processing payment', waitSub: 'If you paid, the coupon will appear shortly. You can return to the app.', no: 'Payment cancelled', noSub: 'You can return to the app and try again.' },
+  ru: { dir: 'ltr', ok: 'Платёж получен', okSub: 'Ваш купон активен на год. Можно вернуться в приложение.', wait: 'Обработка платежа', waitSub: 'Если вы оплатили, купон появится через минуту.', no: 'Платёж отменён', noSub: 'Вернитесь в приложение и попробуйте снова.' },
+  hi: { dir: 'ltr', ok: 'भुगतान प्राप्त हुआ', okSub: 'आपका कूपन एक वर्ष के लिए सक्रिय है। आप ऐप में लौट सकते हैं।', wait: 'भुगतान संसाधित हो रहा है', waitSub: 'यदि आपने भुगतान किया है, कूपन शीघ्र दिखेगा।', no: 'भुगतान रद्द', noSub: 'ऐप में लौटें और पुनः प्रयास करें।' },
+  ar: { dir: 'rtl', ok: 'تم استلام الدفع', okSub: 'قسيمتك فعّالة لمدة سنة. يمكنك العودة إلى التطبيق.', wait: 'جارٍ معالجة الدفع', waitSub: 'إذا دفعت، ستظهر القسيمة بعد لحظات.', no: 'تم إلغاء الدفع', noSub: 'يمكنك العودة إلى التطبيق والمحاولة مرة أخرى.' },
+};
+function cpnPage(lang, mark, head, sub, dir) {
+  return `<!doctype html><html dir="${dir}" lang="${lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${head}</title><style>body{font-family:-apple-system,Segoe UI,Arial;background:#F5F1EA;color:#16222C;display:flex;min-height:100vh;align-items:center;justify-content:center;margin:0;text-align:center;padding:24px}.c{max-width:340px}.m{font-size:64px;color:#2E9E6B;line-height:1}h1{font-size:22px;margin:14px 0 6px}p{color:#7a7261;font-size:15px}</style></head><body><div class="c"><div class="m">${mark}</div><h1>${head}</h1><p>${sub}</p></div></body></html>`;
+}
+
+// GET /api/coupons/return — PayPal sends the buyer back here: capture, then publish.
+app.get('/api/coupons/return', async (req, res) => {
+  const couponId = String(req.query.c || '');
+  const orderId = String(req.query.token || '');
+  const L = CPN_PAGE[String(req.query.lang || 'en')] || CPN_PAGE.en;
+  let ok = false;
+  try {
+    const tok = await paypalToken();
+    if (tok && orderId) {
+      const capRes = await fetch(`${PAYPAL_BASE}/v2/checkout/orders/${orderId}/capture`, {
+        method: 'POST', headers: { Authorization: `Bearer ${tok}`, 'Content-Type': 'application/json' },
+      });
+      const cap = await capRes.json();
+      if (cap.status === 'COMPLETED') ok = activateCoupon(couponId, orderId);
+    }
+  } catch (e) { console.warn('coupon capture error', e); }
+  res.set('Content-Type', 'text/html; charset=utf-8');
+  res.send(ok ? cpnPage(req.query.lang || 'en', '✓', L.ok, L.okSub, L.dir)
+              : cpnPage(req.query.lang || 'en', '…', L.wait, L.waitSub, L.dir));
+});
+
+app.get('/api/coupons/cancel', (req, res) => {
+  const L = CPN_PAGE[String(req.query.lang || 'en')] || CPN_PAGE.en;
+  res.set('Content-Type', 'text/html; charset=utf-8');
+  res.send(cpnPage(req.query.lang || 'en', '×', L.no, L.noSub, L.dir));
+});
+
+// POST /api/coupons/webhook — backup path when the buyer closes the browser.
+app.post('/api/coupons/webhook', async (req, res) => {
+  try {
+    const event = req.body || {};
+    const webhookId = process.env.PAYPAL_WEBHOOK_ID;
+    if (webhookId) {
+      const tok = await paypalToken();
+      const v = tok ? await fetch(`${PAYPAL_BASE}/v1/notifications/verify-webhook-signature`, {
+        method: 'POST', headers: { Authorization: `Bearer ${tok}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          auth_algo: req.headers['paypal-auth-algo'],
+          cert_url: req.headers['paypal-cert-url'],
+          transmission_id: req.headers['paypal-transmission-id'],
+          transmission_sig: req.headers['paypal-transmission-sig'],
+          transmission_time: req.headers['paypal-transmission-time'],
+          webhook_id: webhookId,
+          webhook_event: event,
+        }),
+      }).then(r => r.json()).catch(() => null) : null;
+      if (!v || v.verification_status !== 'SUCCESS') return res.status(400).json({ success: false });
+    }
+    if (event.event_type === 'PAYMENT.CAPTURE.COMPLETED') {
+      const couponId = event.resource && event.resource.custom_id;
+      if (couponId) activateCoupon(couponId, event.resource.id || null);
+    }
+    res.json({ success: true });
+  } catch { res.status(200).json({ success: true }); }
+});
+
+// Admin: full list (pending included) and manual removal.
+app.get('/api/admin/coupons', requireAdmin, (_req, res) => {
+  res.json({ success: true, data: getCoupons(readDB()) });
+});
+app.delete('/api/admin/coupons/:id', requireAdmin, (req, res) => {
+  const db = readDB();
+  db.coupons = getCoupons(db).filter(c => c.id !== req.params.id);
+  writeDB(db);
+  res.json({ success: true });
+});
+
+
 app.listen(PORT, () => console.log(`Wellcome Dubai server running on port ${PORT}`));
