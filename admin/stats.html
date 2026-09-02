@@ -143,12 +143,12 @@ function enter(){
   const tk = document.getElementById('tok').value.trim();
   if (pw !== PW) { document.getElementById('err').textContent = 'סיסמה שגויה'; return; }
   if (!tk) { document.getElementById('err').textContent = 'חסר מפתח ניהול'; return; }
-  TOKEN = tk; localStorage.setItem('dubai_admin_token', tk);
+  TOKEN = tk; localStorage.setItem('dubai_admin_token', tk); localStorage.setItem('dubai_admin_ok', '1');
   document.getElementById('gate').style.display = 'none';
   document.getElementById('app').style.display = '';
   load();
 }
-function logout(){ localStorage.removeItem('dubai_admin_token'); location.reload(); }
+function logout(){ localStorage.removeItem('dubai_admin_token'); localStorage.removeItem('dubai_admin_ok'); location.reload(); }
 
 const fmt = n => (n||0).toLocaleString('he-IL');
 function dayLabel(d){ const [y,m,dd]=d.split('-'); return dd+'/'+m; }
@@ -262,7 +262,14 @@ async function load(){
     : '<div class="empty">עדיין לא נרכשו קופונים.</div>';
 }
 
-if (TOKEN) { document.getElementById('tok').value = TOKEN; }
+// Once you have signed in on this browser it stops asking; "יציאה" clears it.
+if (TOKEN && localStorage.getItem('dubai_admin_ok') === '1') {
+  document.getElementById('gate').style.display = 'none';
+  document.getElementById('app').style.display = '';
+  load();
+} else if (TOKEN) {
+  document.getElementById('tok').value = TOKEN;
+}
 document.getElementById('pw').addEventListener('keydown', e => { if(e.key==='Enter') document.getElementById('tok').focus(); });
 document.getElementById('tok').addEventListener('keydown', e => { if(e.key==='Enter') enter(); });
 </script>
