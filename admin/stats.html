@@ -64,6 +64,19 @@
   .pill.live{background:#E3F3EB;color:var(--green)}
   .pill.pend{background:#FBEEE9;color:var(--orange)}
   .empty{color:var(--muted);font-size:13px;padding:14px 0}
+  .badge{display:inline-block;background:var(--orange);color:#fff;font-size:11px;font-weight:800;border-radius:10px;padding:2px 8px;margin-inline-start:6px;vertical-align:middle}
+  .inv{border:1px solid var(--line);border-radius:8px;padding:14px;margin-bottom:10px}
+  .inv.pend{border-color:#F0C9B9;background:#FFFBF9}
+  .invTop{display:flex;align-items:flex-start;gap:10px;flex-wrap:wrap}
+  .invName{font-size:15px;font-weight:700;flex:1;min-width:160px}
+  .invMeta{color:var(--ink2);font-size:12.5px;margin-top:6px;line-height:1.7}
+  .invActs{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+  .sm{border:0;border-radius:6px;padding:8px 14px;font-family:inherit;font-weight:700;font-size:13px;cursor:pointer}
+  .ok{background:var(--green);color:#fff}
+  .no{background:#fff;color:var(--orange);border:1px solid #F0C9B9}
+  .del{background:#fff;color:var(--ink2);border:1px solid var(--line)}
+  .shots{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+  .shots img{width:64px;height:64px;object-fit:cover;border-radius:4px;border:1px solid var(--line)}
   @media(max-width:560px){ .row{grid-template-columns:minmax(90px,1.2fr) 2fr auto} }
 </style>
 </head>
@@ -93,6 +106,12 @@
   </header>
 
   <div class="tiles" id="tiles"></div>
+
+  <section>
+    <h2>מודעות השקעה <span id="pendBadge" class="badge" hidden></span></h2>
+    <div class="hint">מודעה מופיעה בלוח רק אחרי אישור · "מלאה" = שולם $20 ל-90 יום</div>
+    <div id="invest"></div>
+  </section>
 
   <section>
     <h2>צפיות לפי יום</h2>
@@ -133,6 +152,58 @@ function logout(){ localStorage.removeItem('dubai_admin_token'); location.reload
 
 const fmt = n => (n||0).toLocaleString('he-IL');
 function dayLabel(d){ const [y,m,dd]=d.split('-'); return dd+'/'+m; }
+
+async function getJSON(path){
+  try { return await (await fetch(`${API}${path}?token=${encodeURIComponent(TOKEN)}&_t=${Date.now()}`)).json(); }
+  catch(e){ return null; }
+}
+
+async function invAction(id, action){
+  const url = action === 'delete'
+    ? `${API}/api/admin/investments/${id}?token=${encodeURIComponent(TOKEN)}`
+    : `${API}/api/admin/investments/${id}/${action}?token=${encodeURIComponent(TOKEN)}`;
+  await fetch(url, { method: action === 'delete' ? 'DELETE' : 'POST' });
+  load();
+}
+
+function renderInvest(res){
+  const el = document.getElementById('invest');
+  const badge = document.getElementById('pendBadge');
+  const data = (res && res.success && res.data) ? res.data : [];
+  const pending = data.filter(x => x.status === 'pending');
+  badge.hidden = pending.length === 0;
+  badge.textContent = pending.length + ' ממתינות';
+  if (!data.length) { el.innerHTML = '<div class="empty">עדיין לא הוגשו מודעות.</div>'; return; }
+  // Pending first — those are the ones waiting on you.
+  const order = { pending: 0, approved: 1, rejected: 2 };
+  data.sort((a,b) => (order[a.status] ?? 3) - (order[b.status] ?? 3) || (b.createdAt||'').localeCompare(a.createdAt||''));
+  el.innerHTML = data.map(x => {
+    const paid = x.featuredUntil && new Date(x.featuredUntil) > new Date();
+    const st = x.status === 'approved' ? '<span class="pill live">מפורסם</span>'
+             : x.status === 'rejected' ? '<span class="pill pend">נדחה</span>'
+             : '<span class="pill pend">ממתין לאישור</span>';
+    const plan = paid
+      ? `<span class="pill live">מלאה · עד ${new Date(x.featuredUntil).toLocaleDateString('he-IL')}</span>`
+      : '<span class="pill" style="background:#F1EDE5;color:#6B7F8D">שורה · חינם</span>';
+    const shots = (x.photos||[]).map(p => `<img src="${API}${p}" alt="">`).join('');
+    return `<div class="inv ${x.status==='pending'?'pend':''}">
+      <div class="invTop"><div class="invName">${x.title||''}</div>${st}${plan}</div>
+      <div class="invMeta">
+        ${x.promoter||''}${x.area ? ' · ' + x.area : ''}<br>
+        ${x.currency||''} ${x.minAmount||''}${x.yieldPct ? ' · תשואה ' + x.yieldPct + '%' : ''}${x.horizon ? ' · ' + x.horizon + ' שנים' : ''}<br>
+        📱 ${x.contactPhone||'-'}${x.contactEmail ? ' · ' + x.contactEmail : ''}
+        ${x.desc ? '<br>' + x.desc.slice(0,240) : ''}
+        ${x.video ? `<br><a href="${API}${x.video}" target="_blank">▶ וידאו</a>` : ''}
+      </div>
+      ${shots ? `<div class="shots">${shots}</div>` : ''}
+      <div class="invActs">
+        ${x.status !== 'approved' ? `<button class="sm ok" onclick="invAction('${x.id}','approve')">אישור</button>` : ''}
+        ${x.status !== 'rejected' ? `<button class="sm no" onclick="invAction('${x.id}','reject')">דחייה</button>` : ''}
+        <button class="sm del" onclick="if(confirm('למחוק לצמיתות?'))invAction('${x.id}','delete')">מחיקה</button>
+      </div>
+    </div>`;
+  }).join('');
+}
 
 async function load(){
   document.getElementById('stamp').textContent = 'טוען…';
@@ -176,6 +247,8 @@ async function load(){
   document.getElementById('top').innerHTML = top.length
     ? top.map(t => `<div class="row"><div class="n">${t.key}</div><div class="bar"><i style="width:${Math.round(t.n/tmax*100)}%"></i></div><div class="v">${fmt(t.n)}</div></div>`).join('')
     : '<div class="empty">עדיין אין צפיות. הנתונים יופיעו אחרי שהאפליקציה המעודכנת תעלה לאוויר.</div>';
+
+  renderInvest(await getJSON('/api/admin/investments'));
 
   const list = (coupons && coupons.success && coupons.data) ? coupons.data : [];
   document.getElementById('coupons').innerHTML = list.length
