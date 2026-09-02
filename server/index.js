@@ -184,11 +184,13 @@ app.post('/api/listings', upload.fields([{ name: 'photos', maxCount: 8 }, { name
 });
 
 // --- Visitors' photo album (shared across all users), keyed per tour/itinerary ---
+// Visitor photos are moderated like Batumi's tour albums: nothing a visitor
+// uploads is public until it is approved here.
 app.get('/api/album', (req, res) => {
   const key = String(req.query.key || '').slice(0, 80);
   const db = readDB();
   const arr = (db.album && db.album[key]) || [];
-  res.json({ photos: arr.map(p => p.url) });
+  res.json({ photos: arr.filter(p => p.status === 'approved').map(p => p.url) });
 });
 
 app.post('/api/album', upload.fields([{ name: 'photos', maxCount: 12 }]), (req, res) => {
@@ -200,11 +202,21 @@ app.post('/api/album', upload.fields([{ name: 'photos', maxCount: 12 }]), (req, 
     const db = readDB();
     db.album = db.album || {};
     db.album[key] = db.album[key] || [];
-    const added = files.map(f => ({ url: `/uploads/${f.filename}`, at: new Date().toISOString() }));
+    const added = files.map(f => ({
+      id: crypto.randomBytes(6).toString('hex'),
+      url: `/uploads/${f.filename}`,
+      at: new Date().toISOString(),
+      status: 'pending',
+    }));
     db.album[key].push(...added);
     if (db.album[key].length > 200) db.album[key] = db.album[key].slice(-200); // cap runaway
     writeDB(db);
-    res.json({ ok: true, photos: db.album[key].map(p => p.url) });
+    notifyAdmin(
+      `📷 ${added.length} תמונות חדשות ממתינות לאישור\n\nאלבום: ${key}\n\n` +
+      `לאישור: https://wellcomedubai.com/admin/stats.html\n\n— WellCome Dubai`
+    );
+    // The uploader still sees only what is public, plus nothing of their own yet.
+    res.json({ ok: true, pending: added.length, photos: db.album[key].filter(p => p.status === 'approved').map(p => p.url) });
   } catch (e) { console.error(e); res.status(500).json({ error: 'server error' }); }
 });
 
@@ -739,6 +751,44 @@ app.get('/api/admin/views', requireAdmin, (_req, res) => {
 });
 
 
+
+// Admin: every visitor photo, pending first.
+app.get('/api/admin/album', requireAdmin, (_req, res) => {
+  const db = readDB();
+  const out = [];
+  Object.entries(db.album || {}).forEach(([key, arr]) => {
+    (arr || []).forEach(p => out.push({ ...p, key, status: p.status || 'approved' }));
+  });
+  out.sort((a, b) => ((a.status === 'pending' ? 0 : 1) - (b.status === 'pending' ? 0 : 1)) || (b.at || '').localeCompare(a.at || ''));
+  res.json({ success: true, data: out });
+});
+
+app.post('/api/admin/album/:key/:id/:action', requireAdmin, (req, res) => {
+  const { key, id, action } = req.params;
+  if (!['approve', 'reject'].includes(action)) return res.status(400).json({ success: false, error: 'bad action' });
+  const db = readDB();
+  const arr = (db.album && db.album[key]) || [];
+  const p = arr.find(x => x.id === id);
+  if (!p) return res.status(404).json({ success: false, error: 'not found' });
+  p.status = action === 'approve' ? 'approved' : 'rejected';
+  writeDB(db);
+  res.json({ success: true });
+});
+
+app.delete('/api/admin/album/:key/:id', requireAdmin, (req, res) => {
+  const { key, id } = req.params;
+  const db = readDB();
+  const arr = (db.album && db.album[key]) || [];
+  const p = arr.find(x => x.id === id);
+  if (!p) return res.status(404).json({ success: false, error: 'not found' });
+  db.album[key] = arr.filter(x => x.id !== id);
+  writeDB(db);
+  try {
+    const fp = path.join(UPLOADS_DIR, path.basename(String(p.url)));
+    if (fp.startsWith(UPLOADS_DIR) && fs.existsSync(fp)) fs.unlinkSync(fp);
+  } catch {}
+  res.json({ success: true });
+});
 
 // ─── Admin WhatsApp notification (Green API, same setup as batumionline.biz) ──
 // Silent no-op unless all four env vars are set, so a missing config can never

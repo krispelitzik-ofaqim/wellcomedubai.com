@@ -77,6 +77,14 @@
   .del{background:#fff;color:var(--ink2);border:1px solid var(--line)}
   .shots{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
   .shots img{width:64px;height:64px;object-fit:cover;border-radius:4px;border:1px solid var(--line)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}
+  .ph{border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fff}
+  .ph.pend{border-color:#F0C9B9}
+  .ph img{width:100%;height:120px;object-fit:cover;display:block;background:#F1EDE5}
+  .phBody{padding:9px}
+  .phMeta{color:var(--muted);font-size:11px;margin-bottom:8px;word-break:break-all}
+  .phActs{display:flex;gap:6px}
+  .phActs .sm{flex:1;padding:7px 0;font-size:12px}
   @media(max-width:560px){ .row{grid-template-columns:minmax(90px,1.2fr) 2fr auto} }
 </style>
 </head>
@@ -111,6 +119,12 @@
     <h2>מודעות השקעה <span id="pendBadge" class="badge" hidden></span></h2>
     <div class="hint">מודעה מופיעה בלוח רק אחרי אישור · "מלאה" = שולם $20 ל-90 יום</div>
     <div id="invest"></div>
+  </section>
+
+  <section>
+    <h2>תמונות מגולשים <span id="albBadge" class="badge" hidden></span></h2>
+    <div class="hint">תמונה שגולש מעלה בסיורים מופיעה באפליקציה רק אחרי אישור</div>
+    <div id="album"></div>
   </section>
 
   <section>
@@ -205,6 +219,39 @@ function renderInvest(res){
   }).join('');
 }
 
+async function albAction(key, id, action){
+  const url = action === 'delete'
+    ? `${API}/api/admin/album/${encodeURIComponent(key)}/${id}?token=${encodeURIComponent(TOKEN)}`
+    : `${API}/api/admin/album/${encodeURIComponent(key)}/${id}/${action}?token=${encodeURIComponent(TOKEN)}`;
+  await fetch(url, { method: action === 'delete' ? 'DELETE' : 'POST' });
+  load();
+}
+
+function renderAlbum(res){
+  const el = document.getElementById('album');
+  const badge = document.getElementById('albBadge');
+  const data = (res && res.success && res.data) ? res.data : [];
+  const pending = data.filter(p => p.status === 'pending');
+  badge.hidden = pending.length === 0;
+  badge.textContent = pending.length + ' ממתינות';
+  if (!data.length) { el.innerHTML = '<div class="empty">עדיין לא הועלו תמונות.</div>'; return; }
+  el.innerHTML = '<div class="grid">' + data.map(p => {
+    const lbl = p.status === 'approved' ? '<span class="pill live">מאושר</span>'
+              : p.status === 'rejected' ? '<span class="pill pend">נדחה</span>'
+              : '<span class="pill pend">ממתין</span>';
+    return `<div class="ph ${p.status==='pending'?'pend':''}">
+      <a href="${API}${p.url}" target="_blank"><img src="${API}${p.url}" alt=""></a>
+      <div class="phBody">
+        <div class="phMeta">${lbl}<br>${p.key}</div>
+        <div class="phActs">
+          ${p.status !== 'approved' ? `<button class="sm ok" onclick="albAction('${p.key}','${p.id}','approve')">אישור</button>` : ''}
+          <button class="sm del" onclick="if(confirm('למחוק את התמונה?'))albAction('${p.key}','${p.id}','delete')">מחיקה</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('') + '</div>';
+}
+
 async function load(){
   document.getElementById('stamp').textContent = 'טוען…';
   let views=null, coupons=null;
@@ -249,6 +296,7 @@ async function load(){
     : '<div class="empty">עדיין אין צפיות. הנתונים יופיעו אחרי שהאפליקציה המעודכנת תעלה לאוויר.</div>';
 
   renderInvest(await getJSON('/api/admin/investments'));
+  renderAlbum(await getJSON('/api/admin/album'));
 
   const list = (coupons && coupons.success && coupons.data) ? coupons.data : [];
   document.getElementById('coupons').innerHTML = list.length
