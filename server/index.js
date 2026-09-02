@@ -640,8 +640,9 @@ app.post('/api/coupons/webhook', async (req, res) => {
       if (!v || v.verification_status !== 'SUCCESS') return res.status(400).json({ success: false });
     }
     if (event.event_type === 'PAYMENT.CAPTURE.COMPLETED') {
-      const couponId = event.resource && event.resource.custom_id;
-      if (couponId) activateCoupon(couponId, event.resource.id || null);
+      const cid = (event.resource && event.resource.custom_id) || '';
+      if (cid.startsWith('inv:')) featureInvestment(cid.slice(4), event.resource.id || null);
+      else if (cid) activateCoupon(cid, event.resource.id || null);
     }
     res.json({ success: true });
   } catch { res.status(200).json({ success: true }); }
@@ -744,11 +745,18 @@ app.get('/api/admin/views', requireAdmin, (_req, res) => {
 // exactly like property listings. Nothing a promoter writes is public on its own.
 function getInvest(db) { return Array.isArray(db.investments) ? db.investments : []; }
 
+function isFeatured(x) { return !!(x.featuredUntil && new Date(x.featuredUntil).getTime() > Date.now()); }
+
 app.get('/api/investments', (_req, res) => {
   const list = getInvest(readDB())
     .filter(x => x.status === 'approved')
-    .sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''))
-    .map(({ contactPhone, contactEmail, delToken, ...pub }) => pub); // contact details and the owner token stay internal
+    // Paid listings first, then newest.
+    .sort((a, b) => (isFeatured(b) - isFeatured(a)) || (b.createdAt || '').localeCompare(a.createdAt || ''))
+    .map(({ contactPhone, contactEmail, delToken, ...pub }) => {
+      const featured = isFeatured(pub);
+      // A free listing is a one-line strip, so it carries no media at all.
+      return featured ? { ...pub, featured } : { ...pub, featured, photos: [], video: null, brochure: null };
+    });
   res.json({ success: true, data: list });
 });
 
@@ -839,6 +847,79 @@ app.delete('/api/investments/:id', (req, res) => {
     });
   } catch {}
   res.json({ success: true });
+});
+
+const INVEST_PRICE = '20.00';
+const INVEST_DAYS = 90;
+
+// Turn a listing into a paid full ad. Idempotent: capture and webhook may both fire.
+function featureInvestment(id, orderId) {
+  const db = readDB();
+  const list = getInvest(db);
+  const it = list.find(x => x.id === id);
+  if (!it) return false;
+  const base = it.featuredUntil && new Date(it.featuredUntil).getTime() > Date.now()
+    ? new Date(it.featuredUntil).getTime()   // extend rather than truncate an active ad
+    : Date.now();
+  if (it.paidOrderId === orderId) return true;
+  it.featuredUntil = new Date(base + INVEST_DAYS * 86400000).toISOString();
+  it.paidAt = new Date().toISOString();
+  if (orderId) it.paidOrderId = orderId;
+  db.investments = list;
+  writeDB(db);
+  return true;
+}
+
+// POST /api/investments/pay {id, token} — $20 for 90 days as a full ad.
+app.post('/api/investments/pay', async (req, res) => {
+  try {
+    const b = req.body || {};
+    const it = getInvest(readDB()).find(x => x.id === String(b.id || ''));
+    if (!it) return res.status(404).json({ success: false, error: 'not found' });
+    if (!b.token || b.token !== it.delToken) return res.status(403).json({ success: false, error: 'forbidden' });
+    const token = await paypalToken();
+    if (!token) return res.status(503).json({ success: false, error: 'payments unavailable' });
+    const base = serverBase(req);
+    const lang = String(b.lang || 'en');
+    const orderRes = await fetch(`${PAYPAL_BASE}/v2/checkout/orders`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        intent: 'CAPTURE',
+        purchase_units: [{ custom_id: 'inv:' + it.id, description: `Featured listing 90 days · ${it.title}`, amount: { currency_code: 'USD', value: INVEST_PRICE } }],
+        application_context: {
+          brand_name: 'WellCome Dubai',
+          user_action: 'PAY_NOW',
+          return_url: `${base}/api/investments/return?i=${encodeURIComponent(it.id)}&lang=${encodeURIComponent(lang)}`,
+          cancel_url: `${base}/api/coupons/cancel?lang=${encodeURIComponent(lang)}`,
+        },
+      }),
+    });
+    const order = await orderRes.json();
+    const approve = (order.links || []).find(l => l.rel === 'approve');
+    if (!approve) return res.status(502).json({ success: false, error: 'paypal order failed' });
+    res.json({ success: true, url: approve.href, orderId: order.id });
+  } catch (e) { res.status(500).json({ success: false, error: String((e && e.message) || e) }); }
+});
+
+app.get('/api/investments/return', async (req, res) => {
+  const id = String(req.query.i || '');
+  const orderId = String(req.query.token || '');
+  const L = CPN_PAGE[String(req.query.lang || 'en')] || CPN_PAGE.en;
+  let ok = false;
+  try {
+    const tok = await paypalToken();
+    if (tok && orderId) {
+      const capRes = await fetch(`${PAYPAL_BASE}/v2/checkout/orders/${orderId}/capture`, {
+        method: 'POST', headers: { Authorization: `Bearer ${tok}`, 'Content-Type': 'application/json' },
+      });
+      const cap = await capRes.json();
+      if (cap.status === 'COMPLETED') ok = featureInvestment(id, orderId);
+    }
+  } catch (e) { console.warn('investment capture error', e); }
+  res.set('Content-Type', 'text/html; charset=utf-8');
+  res.send(ok ? cpnPage(req.query.lang || 'en', '✓', L.ok, L.okSub, L.dir)
+              : cpnPage(req.query.lang || 'en', '…', L.wait, L.waitSub, L.dir));
 });
 
 app.get('/api/admin/investments', requireAdmin, (_req, res) => {
