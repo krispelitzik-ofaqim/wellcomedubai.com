@@ -740,6 +740,27 @@ app.get('/api/admin/views', requireAdmin, (_req, res) => {
 
 
 
+// ─── Admin WhatsApp notification (Green API, same setup as batumionline.biz) ──
+// Silent no-op unless all four env vars are set, so a missing config can never
+// break a submission.
+const GREEN_URL = process.env.GREEN_API_URL;
+const GREEN_INSTANCE = process.env.GREEN_API_INSTANCE;
+const GREEN_TOKEN = process.env.GREEN_API_TOKEN;
+const ADMIN_WHATSAPP = process.env.ADMIN_WHATSAPP; // international digits, e.g. 972502844867
+
+async function notifyAdmin(message) {
+  if (!GREEN_URL || !GREEN_INSTANCE || !GREEN_TOKEN || !ADMIN_WHATSAPP) return;
+  let phone = String(ADMIN_WHATSAPP).replace(/\D/g, '');
+  if (phone.startsWith('0')) phone = '972' + phone.slice(1);
+  try {
+    await fetch(`${GREEN_URL}/waInstance${GREEN_INSTANCE}/sendMessage/${GREEN_TOKEN}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ chatId: `${phone}@c.us`, message }),
+    });
+  } catch (e) { console.warn('whatsapp notify failed', e && e.message); }
+}
+
 // ─── Investment opportunities ───────────────────────────────────
 // A promoter submits an offering; it stays pending until an admin approves it,
 // exactly like property listings. Nothing a promoter writes is public on its own.
@@ -796,6 +817,22 @@ app.post('/api/investments', upload.fields([{ name: 'photos', maxCount: 6 }, { n
     });
     db.investments = list;
     writeDB(db);
+    notifyAdmin(
+      `🔔 מודעת השקעה חדשה ממתינה לאישור
+
+` +
+      `📌 ${b.title}
+👤 ${b.promoter}
+📍 ${b.area || '-'}
+` +
+      `💰 ${b.currency === 'USD' ? 'USD' : 'AED'} ${b.minAmount}
+📱 ${b.contactPhone}
+
+` +
+      `לאישור: https://wellcomedubai.com/admin/stats.html
+
+— WellCome Dubai`
+    );
     res.json({ success: true, id, delToken });
   } catch (e) { res.status(500).json({ success: false, error: String((e && e.message) || e) }); }
 });
