@@ -790,6 +790,41 @@ app.delete('/api/admin/album/:key/:id', requireAdmin, (req, res) => {
   res.json({ success: true });
 });
 
+// ─── Tour ratings ───────────────────────────────────────────────
+// One rating per device per tour, so the average is not a tally of taps. The
+// average is public: everyone sees what everyone else thought.
+function getRatings(db) { return (db.ratings = db.ratings || {}); }
+
+app.get('/api/ratings', (req, res) => {
+  const db = readDB();
+  const all = getRatings(db);
+  const key = req.query.key ? String(req.query.key).slice(0, 80) : null;
+  const summarize = (m) => {
+    const vals = Object.values(m || {});
+    if (!vals.length) return { avg: 0, count: 0 };
+    return { avg: Math.round((vals.reduce((a, b) => a + b, 0) / vals.length) * 10) / 10, count: vals.length };
+  };
+  if (key) return res.json({ success: true, key, ...summarize(all[key]) });
+  const out = {};
+  Object.keys(all).forEach(k => { out[k] = summarize(all[k]); });
+  res.json({ success: true, data: out });
+});
+
+app.post('/api/ratings', (req, res) => {
+  const b = req.body || {};
+  const key = String(b.key || '').slice(0, 80);
+  const device = String(b.device || '').slice(0, 64);
+  const value = Math.round(Number(b.value));
+  if (!key || !device || !(value >= 1 && value <= 5)) return res.status(400).json({ success: false, error: 'bad rating' });
+  const db = readDB();
+  const all = getRatings(db);
+  all[key] = all[key] || {};
+  all[key][device] = value; // re-rating replaces, never adds
+  writeDB(db);
+  const vals = Object.values(all[key]);
+  res.json({ success: true, avg: Math.round((vals.reduce((a, x) => a + x, 0) / vals.length) * 10) / 10, count: vals.length });
+});
+
 // ─── Admin WhatsApp notification (Green API, same setup as batumionline.biz) ──
 // Silent no-op unless all four env vars are set, so a missing config can never
 // break a submission.
