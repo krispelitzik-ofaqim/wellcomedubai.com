@@ -1,0 +1,13 @@
+# Railway only runs server/ — the website itself (pages, images, narration audio)
+# is served by GitHub Pages. Shipping 1.4GB of media as build context was making
+# the build time out with "context canceled".
+narration/
+images/
+iphone/
+mobile/
+records/
+screenshots.html
+gallery/
+*.mp3
+*.m4a
+*.wav
