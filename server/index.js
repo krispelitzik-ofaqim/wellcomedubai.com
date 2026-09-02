@@ -738,4 +738,130 @@ app.get('/api/admin/views', requireAdmin, (_req, res) => {
 });
 
 
+
+// ─── Investment opportunities ───────────────────────────────────
+// A promoter submits an offering; it stays pending until an admin approves it,
+// exactly like property listings. Nothing a promoter writes is public on its own.
+function getInvest(db) { return Array.isArray(db.investments) ? db.investments : []; }
+
+app.get('/api/investments', (_req, res) => {
+  const list = getInvest(readDB())
+    .filter(x => x.status === 'approved')
+    .sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''))
+    .map(({ contactPhone, contactEmail, delToken, ...pub }) => pub); // contact details and the owner token stay internal
+  res.json({ success: true, data: list });
+});
+
+app.post('/api/investments', upload.fields([{ name: 'photos', maxCount: 6 }, { name: 'video', maxCount: 1 }, { name: 'brochure', maxCount: 1 }]), (req, res) => {
+  try {
+    const b = req.body || {};
+    const need = ['title', 'promoter', 'minAmount', 'contactPhone'];
+    const missing = need.filter(k => !String(b[k] || '').trim());
+    if (missing.length) return res.status(400).json({ success: false, error: 'missing: ' + missing.join(', ') });
+    const files = req.files || {};
+    const photos = (files.photos || []).map(f => `/uploads/${f.filename}`);
+    const db = readDB();
+    const list = getInvest(db);
+    // The submitting device keeps this token; it is what lets the promoter edit
+    // or delete their own listing later without an account.
+    const delToken = crypto.randomBytes(16).toString('hex');
+    const id = crypto.randomBytes(8).toString('hex');
+    list.push({
+      id,
+      delToken,
+      title: String(b.title).slice(0, 120),
+      promoter: String(b.promoter).slice(0, 120),
+      kind: String(b.kind || 'realestate').slice(0, 40), // realestate | fund | business | other
+      area: String(b.area || '').slice(0, 80),
+      minAmount: String(b.minAmount).slice(0, 20),
+      currency: b.currency === 'USD' ? 'USD' : 'AED',
+      yieldPct: String(b.yieldPct || '').slice(0, 10),
+      horizon: String(b.horizon || '').slice(0, 40),          // e.g. "3-5 years"
+      desc: String(b.desc || '').slice(0, 4000),
+      photos,
+      video: (files.video || []).map(f => `/uploads/${f.filename}`)[0] || null,
+      brochure: (files.brochure || []).map(f => `/uploads/${f.filename}`)[0] || null,
+      contactPhone: String(b.contactPhone).slice(0, 40),
+      contactEmail: String(b.contactEmail || '').slice(0, 120),
+      status: 'pending',
+      createdAt: new Date().toISOString(),
+    });
+    db.investments = list;
+    writeDB(db);
+    res.json({ success: true, id, delToken });
+  } catch (e) { res.status(500).json({ success: false, error: String((e && e.message) || e) }); }
+});
+
+// The promoter's own view of one listing (needs the token the device kept).
+app.get('/api/investments/:id', (req, res) => {
+  const token = req.query.token;
+  const it = getInvest(readDB()).find(x => x.id === req.params.id);
+  if (!it) return res.status(404).json({ success: false, error: 'not found' });
+  if (!token || token !== it.delToken) return res.status(403).json({ success: false, error: 'forbidden' });
+  res.json({ success: true, data: it });
+});
+
+// Edit. Any change sends the listing back for review, so an approved ad cannot be
+// quietly swapped for different content.
+app.put('/api/investments/:id', upload.fields([{ name: 'photos', maxCount: 6 }, { name: 'video', maxCount: 1 }]), (req, res) => {
+  const b = req.body || {};
+  const token = b.token || req.query.token;
+  const db = readDB();
+  const it = getInvest(db).find(x => x.id === req.params.id);
+  if (!it) return res.status(404).json({ success: false, error: 'not found' });
+  if (!token || token !== it.delToken) return res.status(403).json({ success: false, error: 'forbidden' });
+  ['title', 'promoter', 'kind', 'area', 'minAmount', 'currency', 'yieldPct', 'horizon', 'desc', 'contactPhone', 'contactEmail']
+    .forEach(k => { if (b[k] !== undefined) it[k] = String(b[k]).slice(0, 4000); });
+  const files = req.files || {};
+  const newPhotos = (files.photos || []).map(f => `/uploads/${f.filename}`);
+  if (newPhotos.length) it.photos = newPhotos;
+  const newVideo = (files.video || []).map(f => `/uploads/${f.filename}`)[0];
+  if (newVideo) it.video = newVideo;
+  it.status = 'pending';
+  it.updatedAt = new Date().toISOString();
+  db.investments = getInvest(db);
+  writeDB(db);
+  res.json({ success: true });
+});
+
+app.delete('/api/investments/:id', (req, res) => {
+  const token = (req.query && req.query.token) || (req.body && req.body.token);
+  const db = readDB();
+  const it = getInvest(db).find(x => x.id === req.params.id);
+  if (!it) return res.status(404).json({ success: false, error: 'not found' });
+  if (!token || token !== it.delToken) return res.status(403).json({ success: false, error: 'forbidden' });
+  db.investments = getInvest(db).filter(x => x.id !== req.params.id);
+  writeDB(db);
+  try {
+    (it.photos || []).concat(it.video ? [it.video] : []).forEach(p => {
+      const fp = path.join(UPLOADS_DIR, path.basename(String(p)));
+      if (fp.startsWith(UPLOADS_DIR) && fs.existsSync(fp)) fs.unlinkSync(fp);
+    });
+  } catch {}
+  res.json({ success: true });
+});
+
+app.get('/api/admin/investments', requireAdmin, (_req, res) => {
+  res.json({ success: true, data: getInvest(readDB()) });
+});
+app.post('/api/admin/investments/:id/:action', requireAdmin, (req, res) => {
+  const { id, action } = req.params;
+  if (!['approve', 'reject'].includes(action)) return res.status(400).json({ success: false, error: 'bad action' });
+  const db = readDB();
+  const list = getInvest(db);
+  const it = list.find(x => x.id === id);
+  if (!it) return res.status(404).json({ success: false, error: 'not found' });
+  it.status = action === 'approve' ? 'approved' : 'rejected';
+  db.investments = list;
+  writeDB(db);
+  res.json({ success: true });
+});
+app.delete('/api/admin/investments/:id', requireAdmin, (req, res) => {
+  const db = readDB();
+  db.investments = getInvest(db).filter(x => x.id !== req.params.id);
+  writeDB(db);
+  res.json({ success: true });
+});
+
+
 app.listen(PORT, () => console.log(`Wellcome Dubai server running on port ${PORT}`));
