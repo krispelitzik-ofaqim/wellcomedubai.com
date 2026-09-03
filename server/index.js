@@ -861,7 +861,9 @@ app.get('/api/investments', (_req, res) => {
     .map(({ contactPhone, contactEmail, delToken, ...pub }) => {
       const featured = isFeatured(pub);
       // A free listing is a one-line strip, so it carries no media at all.
-      return featured ? { ...pub, featured } : { ...pub, featured, photos: [], video: null, brochure: null };
+      return featured
+        ? { ...pub, featured }
+        : { ...pub, featured, photos: [], video: null, brochure: null, website: '', facebook: '', instagram: '', whatsapp: '' };
     });
   res.json({ success: true, data: list });
 });
@@ -897,6 +899,11 @@ app.post('/api/investments', upload.fields([{ name: 'photos', maxCount: 6 }, { n
       brochure: (files.brochure || []).map(f => `/uploads/${f.filename}`)[0] || null,
       contactPhone: String(b.contactPhone).slice(0, 40),
       contactEmail: String(b.contactEmail || '').slice(0, 120),
+      // Public channels the promoter chooses to show; shown on paid listings only.
+      website: String(b.website || '').slice(0, 200),
+      facebook: String(b.facebook || '').slice(0, 200),
+      instagram: String(b.instagram || '').slice(0, 200),
+      whatsapp: String(b.whatsapp || '').slice(0, 40),
       status: 'pending',
       createdAt: new Date().toISOString(),
     });
@@ -922,6 +929,36 @@ app.post('/api/investments', upload.fields([{ name: 'photos', maxCount: 6 }, { n
   } catch (e) { res.status(500).json({ success: false, error: String((e && e.message) || e) }); }
 });
 
+// Public detail view: approved listings only, contact details withheld — an
+// enquiry goes through /contact below so the promoter's number is never exposed.
+app.get('/api/investments/view/:id', (req, res) => {
+  const it = getInvest(readDB()).find(x => x.id === req.params.id && x.status === 'approved');
+  if (!it) return res.status(404).json({ success: false, error: 'not found' });
+  const { contactPhone, contactEmail, delToken, ...pub } = it;
+  const featured = isFeatured(pub);
+  res.json({ success: true, data: featured
+    ? { ...pub, featured }
+    : { ...pub, featured, photos: [], video: null, brochure: null, website: '', facebook: '', instagram: '', whatsapp: '' } });
+});
+
+// An investor asks about a listing. We relay it rather than hand out the number.
+app.post('/api/investments/:id/contact', (req, res) => {
+  const b = req.body || {};
+  const name = String(b.name || '').trim().slice(0, 80);
+  const phone = String(b.phone || '').trim().slice(0, 40);
+  const note = String(b.note || '').trim().slice(0, 600);
+  if (!name || !phone) return res.status(400).json({ success: false, error: 'name and phone required' });
+  const it = getInvest(readDB()).find(x => x.id === req.params.id && x.status === 'approved');
+  if (!it) return res.status(404).json({ success: false, error: 'not found' });
+  notifyAdmin(
+    `💼 פנייה חדשה על מודעת השקעה\n\n` +
+    `📌 ${it.title}\n👤 ${it.promoter}\n\n` +
+    `מתעניין: ${name}\n📱 ${phone}\n${note ? '\n' + note + '\n' : ''}\n` +
+    `היזם: ${it.contactPhone}${it.contactEmail ? ' · ' + it.contactEmail : ''}\n\n— WellCome Dubai`
+  );
+  res.json({ success: true });
+});
+
 // The promoter's own view of one listing (needs the token the device kept).
 app.get('/api/investments/:id', (req, res) => {
   const token = req.query.token;
@@ -940,7 +977,8 @@ app.put('/api/investments/:id', upload.fields([{ name: 'photos', maxCount: 6 }, 
   const it = getInvest(db).find(x => x.id === req.params.id);
   if (!it) return res.status(404).json({ success: false, error: 'not found' });
   if (!token || token !== it.delToken) return res.status(403).json({ success: false, error: 'forbidden' });
-  ['title', 'promoter', 'kind', 'area', 'minAmount', 'currency', 'yieldPct', 'horizon', 'desc', 'contactPhone', 'contactEmail']
+  ['title', 'promoter', 'kind', 'area', 'minAmount', 'currency', 'yieldPct', 'horizon', 'desc', 'contactPhone', 'contactEmail',
+   'website', 'facebook', 'instagram', 'whatsapp']
     .forEach(k => { if (b[k] !== undefined) it[k] = String(b[k]).slice(0, 4000); });
   const files = req.files || {};
   const newPhotos = (files.photos || []).map(f => `/uploads/${f.filename}`);
