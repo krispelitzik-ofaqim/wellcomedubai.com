@@ -790,6 +790,35 @@ app.delete('/api/admin/album/:key/:id', requireAdmin, (req, res) => {
   res.json({ success: true });
 });
 
+// ─── Google Places photo proxy ──────────────────────────────────
+// The app used to point Image tags straight at places.googleapis.com, so Google
+// billed us for every photo every viewer loaded, and the API key travelled
+// inside the image URLs. Each photo is now fetched once, kept on the volume and
+// served from here — which also ends the "photos vanished" problem, since a
+// cached file cannot expire the way a Places photo name does.
+const PLACES_PHOTO_DIR = path.join(UPLOADS_DIR, 'places');
+if (!fs.existsSync(PLACES_PHOTO_DIR)) fs.mkdirSync(PLACES_PHOTO_DIR, { recursive: true });
+
+app.get('/api/places/photo', async (req, res) => {
+  const ref = String(req.query.ref || '');
+  const w = Math.min(1600, Math.max(200, parseInt(req.query.w, 10) || 800));
+  // Only ever a Places photo name — never an arbitrary URL.
+  if (!/^places\/[A-Za-z0-9_\-]+\/photos\/[A-Za-z0-9_\-]+$/.test(ref)) return res.status(400).end();
+  const file = path.join(PLACES_PHOTO_DIR, crypto.createHash('sha1').update(`${ref}|${w}`).digest('hex') + '.jpg');
+  res.set('Cache-Control', 'public, max-age=31536000, immutable');
+  if (fs.existsSync(file)) return res.sendFile(file);
+  const key = process.env.GOOGLE_PLACES_KEY;
+  if (!key) return res.status(503).end();
+  try {
+    const r = await fetch(`https://places.googleapis.com/v1/${ref}/media?maxWidthPx=${w}&key=${key}`, { redirect: 'follow' });
+    if (!r.ok) return res.status(r.status).end();
+    const buf = Buffer.from(await r.arrayBuffer());
+    fs.writeFile(file, buf, () => {});
+    res.set('Content-Type', r.headers.get('content-type') || 'image/jpeg');
+    return res.end(buf);
+  } catch { return res.status(502).end(); }
+});
+
 // ─── Tour ratings ───────────────────────────────────────────────
 // One rating per device per tour, so the average is not a tally of taps. The
 // average is public: everyone sees what everyone else thought.
