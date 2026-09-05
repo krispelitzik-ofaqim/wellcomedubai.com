@@ -385,7 +385,7 @@ app.post('/api/ai/ask', async (req, res) => {
 // wins if it is set, and the last known good value is kept if a store is down.
 const APPSTORE_ID = process.env.APPSTORE_ID || '6769145087';
 const PLAY_PACKAGE = process.env.PLAY_PACKAGE || 'com.wellcomedubai.app';
-const STORE_TTL = 60 * 60 * 1000; // 1h — long enough to be polite to the stores, short enough that a release is noticed the same day
+const STORE_TTL = 5 * 60 * 1000; // 5m — the shortest that still shields the stores from one lookup per app launch
 const storeCache = { ios: { v: null, at: 0 }, android: { v: null, at: 0 } };
 
 async function iosVersion() {
