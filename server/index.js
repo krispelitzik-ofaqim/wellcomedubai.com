@@ -385,7 +385,7 @@ app.post('/api/ai/ask', async (req, res) => {
 // wins if it is set, and the last known good value is kept if a store is down.
 const APPSTORE_ID = process.env.APPSTORE_ID || '6769145087';
 const PLAY_PACKAGE = process.env.PLAY_PACKAGE || 'com.wellcomedubai.app';
-const STORE_TTL = 6 * 3600 * 1000;
+const STORE_TTL = 60 * 60 * 1000; // 1h — long enough to be polite to the stores, short enough that a release is noticed the same day
 const storeCache = { ios: { v: null, at: 0 }, android: { v: null, at: 0 } };
 
 async function iosVersion() {
@@ -416,8 +416,11 @@ async function storeVersion(platform) {
 }
 
 // GET /api/version?platform=ios|android
+// `fresh=1` skips the cache — used after a release, so a new store version does
+// not have to wait out the 6h window before the app starts prompting.
 app.get('/api/version', async (req, res) => {
   const platform = req.query.platform === 'android' ? 'android' : 'ios';
+  if (req.query.fresh === '1') storeCache[platform] = { v: null, at: 0 };
   let latest = process.env.LATEST_VERSION || null;
   if (!latest) latest = await storeVersion(platform);
   res.json({
