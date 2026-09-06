@@ -1137,4 +1137,7 @@ app.delete('/api/admin/investments/:id', requireAdmin, (req, res) => {
 });
 
 
+// The household finance portal — private, key-gated, unrelated to the app.
+require('./ksafim')(app, { DATA_DIR, path, fs, multer });
+
 app.listen(PORT, () => console.log(`Wellcome Dubai server running on port ${PORT}`));
