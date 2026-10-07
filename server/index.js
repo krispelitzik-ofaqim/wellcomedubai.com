@@ -385,7 +385,7 @@ app.post('/api/ai/ask', async (req, res) => {
     if (!r.ok) { const t = await r.text().catch(() => ''); return res.status(502).json({ error: 'ai upstream', detail: t.slice(0, 200), answer: '' }); }
     const j = await r.json();
     const answer = (j && j.content && j.content[0] && j.content[0].text) ? j.content[0].text : '';
-    res.json({ answer, places: [] });
+    res.json({ answer, places: [], kb: AI_KB.length });
   } catch (e) {
     res.status(500).json({ error: 'ai failed', answer: '' });
   }
