@@ -1,0 +1,442 @@
+## hotels
+1 | Burj Al Arab Jumeirah | בורג' אל ערב | 7star | Jumeirah Beach Road | $$$$$ | AED 4,000-25,000 ללילה | ★4.9 | Dubai's most iconic hotel, shaped like a sail, with unique 24/7 butler service and two-story suites.
+2 | Atlantis The Royal | אטלנטיס דה רויאל | 7star | Palm Jumeirah | $$$$$ | AED 2,000-40,000 ללילה | ★4.8 | A stunning new hotel on the Palm with 17 restaurants, spectacular pools and kosher service by advance request.
+3 | Armani Hotel Dubai | מלון ארמני | 7star | Burj Khalifa, Downtown | $$$$$ | AED 2,500-15,000 ללילה | ★4.8 | Inside Burj Khalifa, personally designed by Giorgio Armani. The kosher Armani/Kaf restaurant on-site and kosher meals by advance request.
+4 | Bvlgari Resort Dubai | ריזורט בולגרי | 7star | Jumeirah Bay Island | $$$$$ | AED 2,200-90,000 ללילה | ★4.9 | An exclusive hotel on a private seahorse-shaped island, designed by Bulgari.
+5 | The Lana Dorchester Collection | דה לאנה | 7star | Business Bay | $$$$$ | AED 3,400-92,000 ללילה | ★4.8 | Part of the Dorchester Collection, with stunning views over the Dubai Water Canal.
+6 | One&Only The Palm | וואן אנד אונלי הפאלם | 7star | Palm Jumeirah | $$$$$ | AED 2,600-18,000 ללילה | ★4.7 | An intimate boutique hotel on the Palm with Mediterranean gardens and exceptional service.
+7 | One&Only Royal Mirage | וואן אנד אונלי רויאל מיראז' | 7star | King Salman St, Jumeirah | $$$$$ | AED 1,600-12,000 ללילה | ★4.7 | A legendary Arabian palace on the beach with palm gardens and a romantic atmosphere.
+8 | Four Seasons Resort Dubai Jumeirah Beach | פור סיזונס ג'ומיירה | 7star | Jumeirah Beach | $$$$$ | AED 2,000-14,000 ללילה | ★4.8 | A resort on 270m of natural beach with pastel-toned rooms.
+9 | Four Seasons Hotel DIFC | פור סיזונס DIFC | 7star | DIFC | $$$$$ | AED 1,800-10,000 ללילה | ★4.7 | An urban hotel in the financial district with contemporary art and superb restaurants.
+10 | Palazzo Versace Dubai | פאלאצו ורסאצ'ה | 7star | Al Jaddaf | $$$$$ | AED 1,500-10,000 ללילה | ★4.6 | An Italian palace on the banks of Dubai Creek, entirely furnished by Versace.
+11 | Jumeirah Al Qasr | ג'ומיירה אל קסר | 7star | Madinat Jumeirah | $$$$$ | AED 1,800-15,000 ללילה | ★4.7 | The 'sea palace' of the Madinat Jumeirah complex, with waterways.
+12 | Jumeirah Marsa Al Arab | ג'ומיירה מרסה אל ערב | 7star | Umm Suqeim 3 | $$$$$ | AED 2,500-20,000 ללילה | ★4.8 | Among the world's 50 best hotels 2025, with striking marine design.
+13 | Waldorf Astoria Dubai Palm Jumeirah | וולדורף אסטוריה פאלם | 7star | Palm Jumeirah | $$$$$ | AED 1,500-9,000 ללילה | ★4.7 | Waldorf Astoria on the Palm beach with a Michelin-starred chef restaurant.
+14 | FIVE Palm Jumeirah | פייב פאלם | 7star | Palm Jumeirah West | $$$$ | AED 1,200-7,000 ללילה | ★4.5 | A party-boutique hotel with Dubai's most famous rooftop parties.
+15 | Atlantis The Palm | אטלנטיס דה פאלם | 7star | Palm Jumeirah | $$$$ | AED 1,000-12,000 ללילה | ★4.7 | The original Palm hotel with the Aquaventure water park and an aquarium.
+16 | Address Downtown Dubai | אדרס דאון טאון | 7star | Downtown Dubai | $$$$ | AED 1,200-8,000 ללילה | ★4.6 | A golden tower above the Dubai Fountain, with famous Burj Khalifa views.
+17 | The St. Regis Dubai The Palm | סנט רג'יס פאלם | 7star | Palm Jumeirah | $$$$ | AED 1,400-9,000 ללילה | ★4.6 | Personal bespoke service and a Heston Blumenthal restaurant.
+18 | FIVE Jumeirah Village | פייב ג'ומיירה וילג' | 7star | JVC | $$$ | AED 900-5,000 ללילה | ★4.4 | A tower with 5 pools and one of the most popular rooftop clubs.
+19 | Raffles The Palm Dubai | ראפלס פאלם | 7star | Palm Jumeirah West | $$$$ | AED 1,300-8,500 ללילה | ★4.7 | Raffles on the Palm with a world-class spa and one of Dubai's largest pools.
+20 | Jumeirah Al Naseem | ג'ומיירה אל נסים | 7star | Madinat Jumeirah | $$$$ | AED 1,400-8,000 ללילה | ★4.6 | Part of the Madinat Jumeirah complex with a private beach and a marine zoo.
+21 | Sofitel Dubai The Palm | סופיטל פאלם | 5star | Palm Jumeirah East | $$$ | AED 900-4,000 ללילה | ★4.5 | A lavish French-Arabian resort on the Palm with tropical gardens.
+22 | Sofitel Dubai Jumeirah Beach | סופיטל JBR | 5star | JBR | $$$ | AED 800-3,500 ללילה | ★4.4 | A Sofitel hotel on JBR beach with an excellent French restaurant.
+23 | Fairmont The Palm | פיירמונט פאלם | 5star | Palm Jumeirah | $$$ | AED 850-4,500 ללילה | ★4.5 | A lavish Fairmont hotel with a private beach and a world-class spa.
+24 | Fairmont Dubai | פיירמונט דובאי | 5star | Sheikh Zayed Road | $$$ | AED 700-3,500 ללילה | ★4.4 | A flagship hotel in the heart of Dubai, opposite the World Trade Centre.
+25 | Raffles Dubai | ראפלס דובאי | 5star | Wafi City, Oud Metha | $$$ | AED 900-4,500 ללילה | ★4.6 | The Raffles pyramid near Wafi City with a stunning rooftop garden.
+26 | Sheraton Grand Hotel Dubai | שרתון גרנד | 5star | Sheikh Zayed Road | $$$ | AED 650-2,800 ללילה | ★4.3 | A premium Sheraton on Sheikh Zayed Road with panoramic views and a rooftop pool.
+27 | Westin Dubai Mina Seyahi | ווסטין מינה סיהי | 5star | Dubai Marina | $$$ | AED 700-3,000 ללילה | ★4.4 | A Westin beachfront hotel with a private beach and access to the Marina.
+28 | Hilton Dubai Al Habtoor City | הילטון אל חבטור | 5star | Al Habtoor City | $$$ | AED 700-3,200 ללילה | ★4.3 | Part of Al Habtoor City, with a kosher menu at the hotel and La Perle shows in the complex.
+29 | InterContinental Dubai Festival City | אינטר קונטיננטל פסטיבל | 5star | Festival City | $$$ | AED 750-3,500 ללילה | ★4.5 | A hotel on the Dubai Creek waterfront with Burj Khalifa views.
+30 | Jumeirah Beach Hotel | ג'ומיירה ביץ' הוטל | 5star | Jumeirah Beach Road | $$$ | AED 800-4,000 ללילה | ★4.5 | The iconic wave-shaped hotel with Burj Al Arab views and 19 restaurants.
+31 | The Address Beach Resort | אדרס ביץ' ריזורט | 5star | JBR | $$$$ | AED 1,000-5,500 ללילה | ★4.6 | A tower on JBR beach with one of the world's highest infinity pools.
+32 | W Dubai The Palm | W פאלם | 5star | Palm Jumeirah | $$$ | AED 900-4,500 ללילה | ★4.4 | A vibrant W hotel on the Palm with famous pool parties.
+33 | The Ritz-Carlton Dubai | ריץ קרלטון JBR | 5star | JBR | $$$$ | AED 1,100-6,000 ללילה | ★4.6 | Ritz-Carlton on JBR beach, ideal for luxury family holidays.
+34 | Conrad Dubai | קונרד | 5star | Sheikh Zayed Road | $$$ | AED 700-3,200 ללילה | ★4.4 | Modern design and contemporary art on Sheikh Zayed Road.
+35 | Grand Hyatt Dubai | גרנד היאט | 5star | Oud Metha | $$$ | AED 750-3,500 ללילה | ★4.4 | A vast resort with tropical gardens across 37 dunams in the heart of Dubai.
+36 | Kempinski Hotel Mall of the Emirates | קמפינסקי קניון האמירויות | 5star | Mall of Emirates | $$$ | AED 900-4,000 ללילה | ★4.5 | Connected directly to the Mall of the Emirates, with views of Ski Dubai's snow.
+37 | JW Marriott Marquis Dubai | JW מריוט מרקיז | 5star | Business Bay | $$$ | AED 700-3,000 ללילה | ★4.6 | The world's tallest hotel, with 72 floors and 14 restaurants.
+38 | Habtoor Grand Resort Autograph | חבטור גרנד | 5star | JBR | $$$ | AED 800-3,800 ללילה | ★4.3 | A huge resort on JBR beach with a private beach, many restaurants and kosher options by advance request.
+39 | Le Meridien Dubai Hotel | לה מרידיאן שדה תעופה | 5star | Airport Road | $$ | AED 600-2,500 ללילה | ★4.2 | Close to the airport with a huge pool and a conference center.
+40 | Hyatt Regency Dubai | היאט רג'נסי דיירה | 5star | Deira | $$ | AED 600-2,500 ללילה | ★4.2 | Hyatt Regency in Deira with access to the Gold Souk and Creek views.
+41 | Rove Downtown Dubai | רוב דאון טאון | 4-5star | Downtown Dubai | $$ | AED 280-550 ללילה | ★4.3 | A boutique hotel next to Downtown facing Burj Khalifa — excellent value for the location.
+42 | Rove City Walk | רוב סיטי ווק | 4-5star | City Walk | $$ | AED 260-500 ללילה | ★4.2 | A fresh, design-led hotel in the trendy City Walk area.
+43 | Rove Trade Centre | רוב טרייד סנטר | 3-4star | Trade Centre | $$ | AED 230-450 ללילה | ★4.1 | Between old and new Dubai, ideal for business and tourism.
+44 | Citymax Hotel Al Barsha | סיטימקס אל ברשה | 3-4star | Al Barsha | $$ | AED 200-380 ללילה | ★4 | A comfortable budget hotel near the Mall of the Emirates with a rooftop pool.
+45 | Citymax Hotel Bur Dubai | סיטימקס בור דובאי | 3-4star | Bur Dubai | $ | AED 180-350 ללילה | ★3.9 | Citymax in historic Dubai with a rooftop pool, next to the metro.
+46 | Premier Inn Dubai Airport | פרמייר אין שדה תעופה | 3-4star | Al Garhoud | $$ | AED 200-380 ללילה | ★4 | A reliable, comfortable hotel near the airport for early flights.
+47 | ibis Dubai Al Barsha | איביס אל ברשה | 3-4star | Al Barsha | $ | AED 150-280 ללילה | ★3.8 | A clean, reliable ibis in the heart of Al Barsha, comfortable rooms at a fair price.
+48 | ibis Dubai Deira City Centre | איביס דיירה | 3-4star | Deira | $ | AED 140-260 ללילה | ★3.7 | An ibis close to Deira City Centre and the metro station.
+49 | Ramada by Wyndham Downtown Dubai | ראמדה דאון טאון | 4-5star | Downtown Dubai | $$ | AED 350-650 ללילה | ★4.1 | A 4-star Ramada in Downtown with Dubai skyline views.
+50 | Hilton Garden Inn Dubai Al Mina | הילטון גארדן אין | 4-5star | Al Mina, Bur Dubai | $$ | AED 280-520 ללילה | ★4.2 | Hilton Garden Inn with a spa and an indoor pool near Port Dubai.
+51 | Golden Tulip Deira Hotel | גולדן טוליפ דיירה | 3-4star | Deira | $ | AED 180-340 ללילה | ★3.8 | Golden Tulip in Deira with a rooftop pool, walking distance from the Gold Souk.
+52 | Flora Grand Hotel | פלורה גרנד | 4-5star | Deira | $ | AED 170-320 ללילה | ★4 | A popular 4-star budget hotel in Deira, known for its cleanliness.
+81 | Premier Inn Dubai Airport | פרמייר אין שדה תעופה | 4-5star | Airport Terminal 1 | $$ | AED 320-580 ללילה | ★4.3 | Excellent value next to Terminal 1 — free shuttle, good breakfast.
+82 | Aloft Palm Jumeirah | אלופט פאלם | 4-5star | Palm Jumeirah | $$ | AED 450-850 ללילה | ★4.4 | A modern, youthfully designed hotel on the Palm — infinity pool, sea-view deck.
+83 | Hyatt Place Dubai Al Rigga | היאט פלייס אל ריגה | 4-5star | Al Rigga, Deira | $$ | AED 380-680 ללילה | ★4.3 | A modern 4-star in the tourist core of Deira, convenient transport.
+84 | ibis One Central Dubai | איביס וואן סנטרל | 4-5star | World Trade Centre | $$ | AED 340-620 ללילה | ★4.2 | A 4-star city-center hotel near the World Trade Centre and Burj Khalifa.
+85 | Citymax Hotel Bur Dubai | סיטימקס בור דובאי | 4-5star | Bur Dubai | $$ | AED 280-510 ללילה | ★4.1 | A popular 4-star budget hotel next to the metro, with a pool and pub.
+86 | Holiday Inn Express Dubai Internet City | הולידיי אין אינטרנט סיטי | 4-5star | Internet City | $$ | AED 320-580 ללילה | ★4.3 | A comfortable hotel in Internet City, near the metro and the Marina.
+87 | Aloft Me'aisem Dubai | אלופט מעאיסם | 4-5star | Me'aisem | $$ | AED 300-540 ללילה | ★4.2 | A 4-star hotel near the Mall of the Emirates, easy access to Dubai.
+88 | Park Inn by Radisson Dubai Motor City | פארק אין מוטור סיטי | 4-5star | Motor City | $$ | AED 310-560 ללילה | ★4.3 | A modern hotel in a quiet area, near theme parks and golf.
+89 | Centro Barsha by Rotana | סנטרו ברשה | 4-5star | Al Barsha | $$ | AED 290-540 ללילה | ★4.3 | A modern hotel in the heart of Al Barsha, near the Mall of the Emirates and Ski Dubai.
+90 | Ramada Plaza by Wyndham JBR | ראמדה פלאזה ג'ומיירה | 4-5star | JBR | $$$ | AED 480-880 ללילה | ★4.2 | A 4-star on JBR, sea views, pool and restaurants in the lively area.
+91 | Crowne Plaza Dubai Sheikh Zayed Road | קראון פלאזה שייח' זאיד | 4-5star | Sheikh Zayed Road | $$$ | AED 430-780 ללילה | ★4.4 | An upscale-yet-moderate business hotel on Sheikh Zayed Road, a high tower with views.
+92 | Holiday Inn Dubai Al Barsha | הולידיי אין אל ברשה | 4-5star | Al Barsha | $$ | AED 320-590 ללילה | ★4.2 | A reliable 4-star in Al Barsha with a pool and a kosher restaurant (seasonal).
+93 | Pullman Dubai Jumeirah Lakes Towers | פולמן JLT | 4-5star | JLT | $$$ | AED 480-880 ללילה | ★4.5 | A light 5-star hotel in JLT — spa, infinity pool and rooftop bar.
+94 | Wyndham Dubai Marina | וינדהאם מרינה | 4-5star | Dubai Marina | $$$ | AED 450-820 ללילה | ★4.3 | A modern 4-star hotel in the heart of Dubai Marina, near Marina Walk.
+95 | Mövenpick Hotel Bur Dubai | מובנפיק בור דובאי | 4-5star | Bur Dubai | $$ | AED 380-690 ללילה | ★4.4 | A European-classic hotel in central Bur Dubai, fine breakfast.
+53 | Savoy Park Hotel Apartments | סבוי פארק | 3-4star | Bur Dubai | $$ | AED 200-380 ללילה | ★3.9 | Hotel apartments with a kitchenette, ideal for long stays and families.
+54 | Arabian Park Hotel | ערביאן פארק | 3-4star | Al Garhoud | $ | AED 200-370 ללילה | ★3.8 | A gently Arabian-style hotel, quiet and comfortable near the airport.
+55 | Capitol Hotel Dubai | קפיטול דובאי | 3-4star | Trade Centre | $ | AED 220-400 ללילה | ★3.7 | A veteran budget hotel in central Dubai near a metro station.
+56 | Royal Ascot Hotel | רויאל אסקוט | 3-4star | Bur Dubai | $ | AED 190-350 ללילה | ★3.8 | Reasonable and well-regarded in Bur Dubai, excellent value for money.
+57 | ibis One Central Dubai | איביס וואן סנטרל | 3-4star | One Central | $ | AED 160-300 ללילה | ★3.9 | A modern ibis neighboring the World Trade Centre and DIFC.
+58 | Rove Healthcare City | רוב הלת'קר סיטי | 3-4star | Healthcare City | $ | AED 200-400 ללילה | ★4 | A minimalist, comfortable Rove for city-center lovers.
+59 | Smana Hotel Al Raffa | סמאנה אל ראפה | 3-4star | Al Raffa, Bur Dubai | $ | AED 160-300 ללילה | ★3.8 | Stylish and modern in the historic Al Raffa neighborhood.
+60 | Premier Inn Dubai Silicon Oasis | פרמייר אין סיליקון | 3-4star | Silicon Oasis | $$ | AED 230-420 ללילה | ★4.1 | A Premier Inn with a pool and free shuttle.
+61 | XVA Art Hotel | XVA ארט הוטל | budget | Al Fahidi, Bur Dubai | $$ | AED 250-450 ללילה | ★4.3 | An artistic boutique hotel in the historic Al Fahidi quarter, one of a kind.
+62 | Orient Guest House | אוריינט גסט האוס | budget | Al Fahidi, Bur Dubai | $ | AED 180-320 ללילה | ★4.1 | A traditional guesthouse with open courtyards facing the Dubai Museum.
+63 | Sheroes Hostel Business Bay | שירוז הוסטל | budget | Business Bay | $ | AED 80-180 ללילה | ★4 | A modern hostel with sleeping pods and fast WiFi, ideal for tight budgets.
+64 | Somewhere Hotel Barsha Heights | סאמוואר ברשה | 3-4star | Barsha Heights | $ | AED 150-280 ללילה | ★4 | Budget-friendly with a bar, rooftop bars and a pool — excellent value.
+65 | ibis Styles Dubai Jumeirah | איביס סטיילס ג'ומיירה | 3-4star | Jumeirah | $ | AED 160-300 ללילה | ★3.9 | A colorful ibis Styles close to Jumeirah beach.
+66 | Al Seef Heritage Hotel | אל סיף הריטג' | 3-4star | Al Seef, Dubai Creek | $$ | AED 300-500 ללילה | ★4.2 | A heritage hotel in classic Arabian design on the banks of the Creek.
+67 | Tulip Inn Dubai | טוליפ אין דיירה | budget | Deira | $ | AED 130-240 ללילה | ★3.5 | Simple and clean in Deira, close to the Gold Souk and the metro.
+68 | Byblos Hotel Dubai | ביבלוס | 3-4star | Al Barsha, TECOM | $ | AED 200-380 ללילה | ★3.8 | A Lebanese hotel with an excellent Middle Eastern restaurant.
+69 | Sun & Sands Hotel | סאן אנד סנדס | budget | Deira, Baniyas | $ | AED 110-220 ללילה | ★3.4 | Sun and sand in Deira, simple rooms near the port.
+70 | Dubai Youth Hostel | אכסניית דובאי | budget | Al Qusais | $ | AED 60-150 ללילה | ★3.6 | Dubai's official youth hostel, with air-conditioned dorms.
+71 | Four Points by Sheraton Bur Dubai | פור פוינטס בור דובאי | 3-4star | Bur Dubai | $$ | AED 250-450 ללילה | ★4 | A comfortable, reliable Four Points in Bur Dubai with a pool.
+72 | President Hotel Dubai | פרזידנט | budget | Bur Dubai | $ | AED 150-270 ללילה | ★3.6 | Veteran and reliable in Bur Dubai, popular with returning travelers.
+73 | Hyatt Place Dubai Al Rigga | היאט פלייס אל ריגה | 3-4star | Al Rigga, Deira | $$ | AED 220-400 ללילה | ★4.1 | A budget-premium Hyatt Place in Deira with breakfast included.
+74 | Al Ain Palace Hotel Dubai | אל עין פאלאס | budget | Bur Dubai | $ | AED 130-250 ללילה | ★3.5 | A veteran in Bur Dubai with an Arabian atmosphere, near BurJuman.
+75 | Concorde Deira Hotel | קונקורד דיירה | 3-4star | Deira | $ | AED 130-250 ללילה | ★3.7 | Recently renovated with a rooftop pool, near the souks.
+76 | Millennium Place Barsha Heights | מילניום ברשה | 3-4star | Barsha Heights | $$ | AED 220-400 ללילה | ★4 | Modern in Barsha Heights, known for its service-to-price ratio.
+77 | Citymax Hotel Business Bay | סיטימקס ביזנס ביי | 3-4star | Business Bay | $$ | AED 200-380 ללילה | ★3.9 | A trendy Citymax in Business Bay with a pool and contemporary design.
+78 | Aloft Dubai South | אלופט דובאי סאות' | 3-4star | Dubai South | $$ | AED 200-380 ללילה | ★3.8 | Young and musical in Dubai South, near Expo City.
+79 | Signature Hotel Al Barsha | סיגנייצ'ר אל ברשה | 3-4star | Al Barsha | $ | AED 190-340 ללילה | ★3.8 | A small contemporary-style boutique, good value for money.
+80 | Comfort Inn Dubai | קומפורט אין דיירה | budget | Deira | $ | AED 120-230 ללילה | ★3.4 | Basic, correct service, an economical option for trips.
+96 | V Hotel Dubai Curio Collection by Hilton | וי הוטל | 5star | Al Habtoor City | $$$ | AED 750-3,300 ללילה | ★4.4 | Part of Al Habtoor City — kosher menu at the hotel by advance request, gourmet restaurants, pool and entertainment in the complex.
+97 | Al Khoory Inn Bur Dubai | אל חורי בור דובאי | 3-4star | Bur Dubai | $ | AED 180-340 ללילה | ★4 | A clean, cheap 3-star in central Bur Dubai — close to the souks, metro and the Al Fahidi quarter.
+98 | Al Jawhara Metro Hotel | אל ג'ווהרה מטרו | budget | Al Rigga, Deira | $ | AED 140-260 ללילה | ★3.8 | A budget hotel in Deira next to the metro — efficient for tourists needing fast public transport.
+99 | Holiday Inn Express Dubai Safa Park | הולידיי אין ספא פארק | 3-4star | Al Wasl, Safa Park | $$ | AED 240-440 ללילה | ★4.1 | A modern 3-star in Al Wasl — close to City Walk, Safa Park and the city center at a fair price.
+100 | Hampton by Hilton Dubai Al Seef | המפטון אל סיף | 3-4star | Al Seef, Bur Dubai | $$ | AED 260-460 ללילה | ★4.3 | A new 3-star on Dubai Creek — Old Dubai views, breakfast included, near the abra boats and the souks.
+200 | Habtoor Palace Dubai LXR Hotels & Resorts | חבטור פאלאס | 5star | Al Habtoor City | $$$$ | AED 900-3,800 ללילה | ★4.5 | A luxury hotel in the Al Habtoor City complex — kosher-friendly with advance meal coordination, pool and gourmet restaurants.
+201 | Jumeirah Creekside Hotel | ג'ומיירה קריקסייד | 5star | Al Garhoud | $$$ | AED 750-2,400 ללילה | ★4.6 | A 5-star hotel in Garhoud — home to The Kosher Place restaurant (OU-supervised) for weekends, with a kosher half-board option.
+102 | Legoland Hotel Dubai | מלון לגולנד דובאי | 4-5star | Dubai Parks & Resorts, Jebel Ali | $$$ | AED 1,200-3,500 ללילה | ★4.6 | A LEGO-themed family hotel at Dubai Parks & Resorts — 250 rooms themed in different styles (pirates, knights, kingdom). Free park entry.
+## restaurants
+101 | Nobu Dubai | נובו | ultra-luxury | Atlantis The Palm | $$$$ | AED 1,400-2,200 לזוג | ★4.7 | A branch of chef Nobu's world-famous restaurant — Japanese-Peruvian fusion.
+102 | Ossiano | אושיאנו | ultra-luxury | Atlantis The Palm | $$$$$ | AED 2,000-2,800 לזוג | ★4.9 | An award-winning seafood restaurant with a stunning aquarium.
+103 | Zuma Dubai | זומה | ultra-luxury | DIFC, Gate Village | $$$$ | AED 1,400-2,000 לזוג | ★4.7 | An iconic Japanese izakaya-bar with a global reputation and a buzzing atmosphere.
+104 | Tresind Studio | טרסינד סטודיו | ultra-luxury | Palm Jumeirah | $$$$$ | AED 1,600-2,400 לזוג | ★4.9 | An avant-garde, Michelin-starred Indian restaurant, 20 courses.
+105 | 11 Woodfire | 11 וודפייר | ultra-luxury | Alserkal Avenue, Al Quoz | $$$$ | AED 1,200-1,800 לזוג | ★4.8 | A Michelin-starred Danish chef, wood-fire cooking with seasonal ingredients.
+106 | Stay by Yannick Alleno | סטיי | ultra-luxury | One&Only The Palm | $$$$$ | AED 2,000-3,000 לזוג | ★4.8 | A French chef with 3 Michelin stars, contemporary French cuisine.
+107 | COYA Dubai | קויה | ultra-luxury | DIFC | $$$$ | AED 1,200-1,800 לזוג | ★4.6 | An upscale Peruvian restaurant with ceviche and cocktails.
+108 | Nusr-Et Steakhouse | סולט באה | ultra-luxury | Jumeirah 1 | $$$$$ | AED 2,000-4,000 לזוג | ★4.3 | Salt Bae's famous steakhouse.
+109 | Hakkasan Dubai | האקאסן | ultra-luxury | Emirates Towers | $$$$ | AED 1,400-2,000 לזוג | ★4.6 | Upscale contemporary Cantonese Chinese, known worldwide.
+110 | Akira Back Dubai | אקירה באק | ultra-luxury | W Dubai The Palm | $$$$ | AED 1,200-1,800 לזוג | ★4.6 | Korean-Japanese by a Michelin-starred chef, bold fusion.
+111 | Dinner by Heston Blumenthal | דינר ביי הסטון | ultra-luxury | Atlantis The Royal | $$$$ | AED 1,800-2,500 לזוג | ★4.8 | An acclaimed British chef with a creative menu inspired by culinary history.
+112 | Pierchic | פירשיק | luxury | Madinat Jumeirah | $$$$ | AED 1,000-1,600 לזוג | ★4.7 | Romantic seafood on a pier over the sea, with Burj Al Arab views.
+113 | La Petite Maison | לה פטיט מזון | luxury | DIFC | $$$$ | AED 900-1,400 לזוג | ★4.6 | An elegant Niçoise bistro with light dishes and fresh fish.
+114 | Scalini Dubai | סקליני | luxury | Four Seasons, Jumeirah | $$$ | AED 900-1,400 לזוג | ★4.6 | Classic, elegant Italian with fine pasta and truffles.
+115 | Amazonico Dubai | אמזוניקו | luxury | DIFC | $$$ | AED 1,000-1,600 לזוג | ★4.5 | A South American rainforest-jungle style with cocktails and ceviche.
+116 | Thiptara | טיפטרה | luxury | Palace Downtown | $$$ | AED 800-1,200 לזוג | ★4.7 | Traditional Thai with direct views of Burj Khalifa and the fountain lake.
+117 | Torno Subito | טורנו סוביטו | luxury | W Dubai The Palm | $$$ | AED 900-1,400 לזוג | ★4.6 | Italian by chef Massimo Bottura in a 1970s seaside style.
+119 | Rang Mahal | ראנג מהאל | luxury | JW Marriott Marquis | $$$ | AED 700-1,100 לזוג | ★4.5 | Royal Indian with Mughlai cuisine and refined chef's dishes.
+120 | Cipriani Dubai | צ'יפריאני | luxury | Dubai Mall | $$$ | AED 1,000-1,600 לזוג | ★4.5 | Legendary Italian from Venice, known for pasta and the Rossini spritz.
+121 | Netsu | נטסו | luxury | Mandarin Oriental | $$$ | AED 1,000-1,600 לזוג | ★4.6 | Contemporary Japanese with omakase dishes and an excellent sake bar.
+122 | Weslodge Saloon | ווסלודג' | luxury | JW Marriott Marquis | $$$ | AED 800-1,200 לזוג | ★4.4 | A fashionable Canadian-American steakhouse with a whisky bar.
+123 | HaSalon Dubai | הסלון | israeli | DIFC | $$$$ | AED 1,000-1,800 לזוג | ★4.6 | The Dubai branch of Eyal Shani's legendary restaurant — a special night out.
+124 | Armani Kaf | ארמני קאף | israeli | Armani Hotel, Burj Khalifa | $$$ | AED 800-1,400 לזוג | ★4.4 | An upscale kosher restaurant inside the Armani hotel, international menu.
+125 | Mosaica Dubai | מוזאיקה | israeli | Sofitel Downtown, Sheikh Zayed Rd | $$$ | AED 700-1,200 לזוג | ★4.5 | A fashionable kosher restaurant on the 31st floor of Sofitel Downtown.
+126 | Miznon Dubai | מזנון | israeli | City Walk | $ | AED 200-350 לזוג | ★4.5 | Aviv Moshe's pita chain — pita, roasted vegetables, burgers.
+127 | TLV Restaurant | TLV | israeli | Address Boulevard, Downtown | $$ | AED 400-800 לזוג | ★4.4 | Kosher Mediterranean-Middle Eastern: hummus, shakshuka, falafel and more.
+128 | Mul Hayam | מול הים | israeli | Madinat Jumeirah | $$$ | AED 700-1,200 לזוג | ★4.5 | The first Israeli restaurant in Dubai — kosher, with Burj Al Arab views.
+129 | Ellis Kosher Kitchen | אלי הכשר | israeli | Golden Mile, Palm Jumeirah | $$ | AED 200-450 לזוג | ★4.4 | Kosher catering and restaurant (Chalav Yisrael) at Golden Mile Palm — breakfast/lunch.
+130 | Cafe Bibi | קפה ביבי | israeli | Dubai Marina | $ | AED 150-300 לזוג | ★4.3 | A kosher café with focaccias, shakshuka and hummus — an Israeli vibe.
+131 | Bamidbar Kosher Restaurant | במדבר | israeli | MAG 214 Tower, JLT | $$ | AED 500-900 לזוג | ★4.3 | A kosher restaurant in JLT — meat, with contemporary Israeli dishes.
+132 | The Kosher Place | דה כשר פלייס | israeli | Downtown Dubai | $$ | AED 400-700 לזוג | ★4.2 | A kosher restaurant with a varied menu — Middle Eastern and Mediterranean dishes.
+135 | Em Sherif | אם שריף | lebanese | Business Bay | $$$ | AED 700-1,100 לזוג | ★4.7 | Upscale Lebanese with homestyle dishes and palace-like decor.
+136 | Al Nafoorah | אל נפורה | lebanese | Emirates Towers | $$ | AED 600-1,000 לזוג | ★4.6 | One of Dubai's best, elegant traditional dishes.
+137 | Zaroob | זרוב | lebanese | Sheikh Zayed Road | $ | AED 150-280 לזוג | ★4.5 | A popular Levantine chain with falafel, shawarma and fatayer.
+138 | Leila | ליילה | lebanese | City Walk | $$ | AED 400-700 לזוג | ★4.6 | Modern with rustic-intimate decor and an authentic homestyle menu.
+139 | Wafi Gourmet | ופי גורמה | lebanese | Wafi Mall | $$ | AED 300-550 לזוג | ★4.5 | A shop-restaurant with gourmet products, cheeses and cooked dishes.
+142 | Operation Falafel | אופרטשן פלאפל | lebanese | סניפים בכל דובאי | $ | AED 40-100 לזוג | ★4.2 | A high-quality falafel, hummus and shawarma chain.
+143 | Al Hallab | אל חלאב | lebanese | Dubai Mall | $$ | AED 300-550 לזוג | ★4.4 | A famous chain with traditional dishes and amazing knafeh.
+145 | Mezza House | מזה האוס | lebanese | JBR Walk | $$ | AED 350-600 לזוג | ★4.4 | A rich mezze selection, grill and shisha.
+147 | Gunaydin | גונאיידין | turkish | Dubai Mall | $$$ | AED 600-1,000 לזוג | ★4.6 | The famous Turkish steak chain — premium meat.
+148 | Sirali | סיראלי | turkish | Al Habtoor City | $$$ | AED 700-1,100 לזוג | ★4.5 | Modern Turkish in Al Habtoor City with creative cooking and fresh simit.
+149 | Bosporus | בוספורוס | turkish | Jumeirah | $$ | AED 400-700 לזוג | ★4.5 | A veteran favorite with homestyle dishes like moussaka and İşkembe.
+150 | Divan | דיוואן | turkish | DIFC | $$$ | AED 700-1,100 לזוג | ★4.4 | In a modern Istanbul style with Mediterranean dishes.
+151 | Lalezar | לאלזאר | turkish | Jumeirah Zabeel Saray, Palm West | $$$ | AED 700-1,100 לזוג | ★4.5 | A lavish Turkish restaurant at Jumeirah Zabeel Saray with Ottoman decor.
+152 | Asil Dubai | אסיל | turkish | Rixos Premium, JBR | $$ | AED 500-900 לזוג | ★4.4 | A Turkish restaurant at Rixos Premium — mezze, grill, seafood and desserts.
+153 | Besh | בש | turkish | Sheraton Mall of the Emirates | $$ | AED 400-700 לזוג | ★4.4 | A Turkish restaurant at Sheraton Mall of the Emirates — traditional recipes with fresh ingredients.
+154 | Cesme Bazlama Kahvalti | צ'שמה | turkish | City Walk | $ | AED 200-400 לזוג | ★4.6 | Traditional Turkish breakfast — menemen, sujuk, cheeses and pastries.
+156 | Hunkar | האנקאר | turkish | JLT | $$ | AED 350-600 לזוג | ★4.3 | A classic with Hünkar Beğendi and İşkembe-taş-kebab.
+157 | Saltbae Burger | סולט באה בורגר | turkish | DIFC, Gate Village 3 | $ | AED 300-550 לזוג | ★4.3 | Salt Bae's cheaper version — Turkish burgers.
+159 | Al Fanar | אל פאנאר | local | Festival City Mall | $$ | AED 300-550 לזוג | ★4.5 | Authentic Emirati with classic decor and dishes like harees and machboos.
+160 | Arabian Tea House | ערבי טי האוס | local | Al Fahidi, Bur Dubai | $ | AED 150-280 לזוג | ★4.6 | An iconic Emirati café in the heart of Al Fahidi with luqaimat and lahm.
+161 | Ravi Restaurant | ראווי | local | Satwa | $ | AED 80-160 לזוג | ★4.6 | A legendary Pakistani-Indian eatery since 1978, amazing food at rock-bottom prices.
+162 | Bu Qtair | בו קתאיר | local | Fishing Harbour, Jumeirah | $ | AED 120-220 לזוג | ★4.7 | On the seafront with fresh fried fish and local curry.
+163 | Karachi Darbar | קראצ'י דרבר | local | Bur Dubai & Deira | $ | AED 80-160 לזוג | ★4.5 | Casual Pakistani, biryani and nihari — popular with Israelis too.
+164 | Gazebo | גזיבו | local | Sheikh Zayed Road | $ | AED 200-380 לזוג | ★4.4 | A popular Indian chain with curry, tandoori and naan.
+165 | Ashas | אשה | local | Wafi Mall | $$ | AED 300-550 לזוג | ★4.4 | Bollywood-style Indian inspired by the singer Asha Bhosle.
+166 | Calicut Paragon | קליקוט פאראגון | local | Karama | $ | AED 120-220 לזוג | ★4.5 | Authentic Kerala-Indian with dosa, biryani and seafood.
+167 | Bait Al Wakeel | בית אל וקיל | local | Dubai Creek, Bur Dubai | $ | AED 200-380 לזוג | ★4.3 | Old Emirati in a historic building on the Creek.
+169 | Lal Qila | לאל קילה | local | Bur Dubai | $ | AED 200-380 לזוג | ★4.3 | Classic Mughlai Indian with korma and butter-chicken dishes.
+170 | Al Shindagha | אל שינדגה | local | Bur Dubai | $ | AED 150-280 לזוג | ★4.3 | Traditional Emirati — samosa, luqaimat and machboos.
+171 | Al Ustad Special Kebab | אל אוסתאד קבב | street | Bur Dubai | $ | AED 80-150 לזוג | ★4.6 | Classic Iranian kebab, open since 1978, one of Dubai's oldest.
+172 | Al Mallah | אל מלאח | street | Satwa | $ | AED 60-120 לזוג | ★4.7 | A veteran Arabic shawarma and street-food spot in Satwa.
+173 | Filli Cafe | פילי קפה | street | סניפים בכל דובאי | $ | AED 30-80 לזוג | ★4.7 | An iconic Emirati café, famous for its karak chai (smoky tea).
+174 | Shawarma Al Sham | שווארמה אל שאם | street | Al Rigga, Deira | $ | AED 20-50 לזוג | ★4.6 | Giant Arabic shawarma with tahini, very popular.
+175 | Samad Al Iraqi | סמד אל עיראקי | street | Deira | $ | AED 100-200 לזוג | ★4.5 | Iraqi with fatteh, kebab and hot tandoor bread.
+176 | Karak House | קראק האוס | street | סניפים בכל דובאי | $ | AED 10-40 לזוג | ★4 | Karak chai and Indian street food, the most authentic.
+177 | Hatam | האתאם | street | Oud Metha | $ | AED 100-180 לזוג | ★4.5 | Iranian street food with kebab, khubz and saffron rice.
+178 | Lulus Shawarma | לולו שווארמה | street | JBR | $ | AED 25-60 לזוג | ★4.5 | Juicy chicken and lamb shawarma, an endless queue.
+179 | Times of Arabia | טיימס אוף ארביה | street | Al Seef, Dubai Creek | $ | AED 50-100 לזוג | ★4.5 | Emirati breakfast with luqaimat, halwa and chai.
+180 | Pannahar | פנהאר | street | Al Quoz | $ | AED 60-110 לזוג | ★4.3 | Bangladeshi-Indian with cheap biryani, dal and curry.
+181 | Food Village Karama | פוד וילג' | street | Karama | $ | AED 50-100 לזוג | ★4.4 | A casual food market with stalls from across Asia — Indian, Filipino, Egyptian.
+182 | Eat and Drink | אכול ושתה | street | Karama | $ | AED 60-120 לזוג | ★4.4 | Egyptian-Lebanese hummus and ful, a popular breakfast.
+183 | Bella Bella Kosher | בלה בלה | israeli | Dubai Marina | $$$ | AED 400-700 לזוג | ★4.5 | A kosher Italian restaurant — pasta, pizza and antipasti with kosher wines. Family atmosphere.
+184 | Kikos Kosher Restaurant | קיקוס | israeli | JBR | $$ | AED 250-500 לזוג | ★4.4 | A kosher Israeli restaurant — salads, grill and pitas, homestyle. Local rabbinical supervision.
+185 | La Fournil Marina | לה פורניל | street | Dubai Marina | $$ | AED 80-200 לאדם | ★4.6 | A kosher French bakery in the Marina — croissants, baguettes, cookies and a patisserie boutique. All fresh each morning.
+193 | DUBA Kitchen | דובה | israeli | Dubai | $$$ | AED 150-350 | ★4.5 | A kosher Israeli restaurant in Dubai — Israeli chef, a menu blending the Middle East with Mediterranean influences. Fashionable atmosphere.
+194 | Fantastico Cafe & Ristorante | פנטסטיקו | israeli | Dubai Marina / JLT | $$ | AED 70-180 | ★4.5 | An Israeli-owned Italian café-restaurant — pastas, pizza and cakes. Family atmosphere and a central location.
+195 | Butchers Burger Dubai | בוצ'רס בורגר | israeli | Dubai | $$ | AED 80-180 | ★4.5 | A kosher Israeli burger joint in Dubai — fresh meat, house buns, crispy fries and cocktails. A branch of the Israeli chain.
+196 | King David Kosher Kitchen | המטבח של המלך דוד | israeli | Dubai | $$$ | AED 120-280 | ★4.6 | A glatt-kosher kitchen in Dubai — homestyle Israeli food, a Shabbat menu, holiday meals. Under rabbinical supervision.
+187 | Saya Brasserie | סאיה בראסרי | cafe | City Walk + סניפים נוספים | $$ | AED 60-150 | ★4.5 | A brasserie-café with a Mediterranean menu, vegetarian options and quality coffee. Fashionable atmosphere with multiple branches.
+188 | L'eto | לה-אטו | cafe | Dubai Mall, Emirates Mall, City Walk | $$ | AED 70-180 | ★4.5 | A fashionable café chain with pink, floral decor — gorgeous pastries, breakfast and wines. Instagrammable. Branches in leading malls.
+189 | The Hamptons Café | האמפטונס קפה | cafe | Jumeirah + Miracle Garden | $$ | AED 70-180 | ★4.5 | An American-coastal style café. A breakfast menu, pastas and healthy salads. 3 branches in Jumeirah and near Miracle Garden.
+190 | Common Grounds | קאמון גראנדס | cafe | Emirates Mall + JBR + נוספים | $$ | AED 60-150 | ★4.5 | An Australian brunch café — barista-quality coffee, omelets, pancakes, healthy salads. 4 branches.
+191 | Brunch & Cake | ברנץ' אנד קייק | cafe | 3 סניפים בדובאי | $$ | AED 60-180 | ★4.5 | A colorful, floral 'garden of Eden'-themed café — a lovely brunch menu, creative dishes and decorated plates. 3 branches in Dubai + Abu Dhabi.
+192 | Roseleaf Cafe | רוז ליף | cafe | Al Quoz + Fit Lab | $$ | AED 50-120 | ★4.4 | A healthy café at Al Quoz Garden Center and the Fit Lab gym. Salads, smoothies and healthy pastries in a green setting.
+197 | FZN by Bjorn Frantzen | FZN | ultra-luxury | Atlantis The Royal, Palm Jumeirah | $$$$$ | AED 1,400-2,400 | ★4.9 | The Swedish chef's restaurant inside Atlantis The Royal — a 12-course Nordic-Japanese degustation menu. Book two months ahead.
+198 | Il Ristorante Niko Romito | איל ריסטורנטה | italian | Bulgari Resort, Jumeira Bay Island | $$$$$ | AED 800-1,500 | ★4.8 | An Italian restaurant by chef Niko Romito at Bulgari Resort — polished Italian cuisine.
+199 | Al Muntaha Burj Al Arab | אל מונטהא | ultra-luxury | Burj Al Arab | $$$$$ | AED 700-1,500 | ★4.8 | The chef's restaurant on the 27th floor of Burj Al Arab — endless sea views, contemporary European cuisine.
+200 | Armani Ristorante Burj Khalifa | ארמני ריסטורנטה | italian | Armani Hotel, Burj Khalifa | $$$$ | AED 500-1,000 | ★4.7 | An Italian restaurant at the Armani hotel at the base of Burj Khalifa — an elegant atmosphere, an eclectic Italian menu.
+250 | Avatara Dubai | אווטארה | indian | Voco Hotel, Al Sufouh | $$$$ | AED 555 לאדם | ★4.8 | An innovative Indian-vegan restaurant with a 16-course, yoga-based degustation. The Middle East's first Michelin star for vegan.
+251 | Hoseki Dubai | הוסקי | asian | Bulgari Resort, Jumeira Bay Island | $$$$$ | AED 1,200-1,800 | ★4.9 | An intimate Japanese omakase restaurant at Bulgari Resort — only 9 bar seats, a daily-changing menu.
+252 | Moonrise Dubai | מונרייז | ultra-luxury | J1 Beach, Jumeira | $$$$$ | AED 1,000-1,500 | ★4.8 | A rooftop restaurant at J1 Beach with only 12 seats — a pan-Asian degustation menu inspired by chef Solemann Haddad.
+253 | Orfali Bros Bistro | אורפלי ברוס | local | Wasl 51, Jumeirah | $$$ | AED 250-450 | ★4.7 | A bistro by 3 Syrian brothers — creative modern Levantine cuisine. One of Dubai's hottest restaurants.
+254 | Row on 45 DIFC | רו 45 | ultra-luxury | Gate Building 5, DIFC | $$$$$ | AED 950-1,400 | ★4.9 | A degustation restaurant with a hyper-local menu — a bar table with only 10 seats on the 45th floor of the Gate tower in DIFC.
+255 | Smoked Room by Dani Garcia | סמוקד רום | steakhouse | Atlantis The Royal, Palm Jumeirah | $$$$$ | AED 900-1,400 | ★4.8 | A fire restaurant by Spanish chef Dani García at Atlantis The Royal — meats over coals, a degustation menu.
+256 | Tasca by Jose Avillez | טאסקה | ultra-luxury | Mandarin Oriental Jumeira | $$$$ | AED 400-800 | ★4.7 | Innovative Portuguese cuisine by chef Avillez at Mandarin Oriental — fish, seafood and Portuguese wines.
+257 | Khufus Kempinski Marsa Al Arab | ח׳ופו | local | Kempinski Marsa Al Arab | $$$$ | AED 450-900 | ★4.7 | A modern-Egyptian restaurant by chef Christophe Pelé at Kempinski Marsa Al Arab — a unique modern-Egypt experience.
+258 | 3 Fils | 3 פילז | asian | Jumeirah Fishing Harbor | $$$ | AED 300-600 | ★4.7 | A sushi and pan-Asian gem at Jumeirah Fishing Harbor — Mediterranean, Japanese and Chinese, casual style.
+186 | Time Out Market Dubai | שוק טיים אאוט דובאי | street | Souk Al Bahar, Downtown | $$ | AED 60-150 | ★4.5 | A food hall gathering Dubai's best restaurants under one roof — 17+ stalls, a bar and a restaurant. A New York food-hall vibe.
+807 | Romeo Lane Dubai | רומיאו ליין | indian | Pullman Hotel Dubai - Floor 2 - Marasi Dr - Business Bay - Dubai - United Arab Emirates | $$$ | AED 400-900 לזוג | ★4.9 | Vibrant modern Indian restaurant with craft cocktails, a chic urban vibe and dishes with a contemporary twist.
+808 | Rang - Dubai Mall | ראנג | indian | Dubai Mall - 2nd Floor - Burj Khalifa - Downtown Dubai - Dubai - United Arab Emirates | $$ | AED 180-400 לזוג | ★4.8 | Modern Indian in the heart of Dubai Mall — colourful dishes from across India at fair prices.
+809 | Bombay Borough | בומביי בורו | indian | Bombay Borough, Gate Village, Building 3 - towards DIFC Parking - opposite Gate District 2 Valet Parking Desk at Gate - Zaa'beel Second - District 2 - Dubai - United Arab Emirates | $$$ | AED 300-700 לזוג | ★4.8 | Contemporary, refined Bombay cuisine in DIFC with striking design and a festive atmosphere.
+810 | India Palace Restaurant - IBN Battuta, Dubai | Best Indian Restaurant Since 1997 | אינדיה פאלאס (אבן בטוטה) | indian | Ground Floor, China Court, Ibn Battuta Mall Sh - شارع الشيخ زايد - جبل علي الأولى - دبي - United Arab Emirates | $$ | AED 180-400 לזוג | ★4.8 | A beloved Indian institution since 1997 — classic North Indian and Mughlai cuisine at great value.
+811 | Mausam | מאוסם | indian | Dubai Mall - Ground Level - Burj Khalifa - Downtown Dubai - Dubai - United Arab Emirates | $$$ | AED 400-900 לזוג | ★4.8 | Regional Indian restaurant in DIFC celebrating India's seasons with rich, varied flavours.
+812 | Atrangi by Ritu Dalmia | אטראנגי | indian | King Salman Bin Abdulaziz Al Saud St - Al Safouh First - Al Sufouh 1 - Dubai - United Arab Emirates | $$$ | AED 300-700 לזוג | ★4.8 | By acclaimed chef Ritu Dalmia — creative regional Indian cooking in a colourful, welcoming setting.
+813 | India Palace Restaurant - JBR, Dubai | Best Indian Restaurant Since 1997 | אינדיה פאלאס (JBR) | indian | Jumeirah Beach Rd - Marsa Dubai - Jumeirah Beach Residence - Dubai - United Arab Emirates | $$ | AED 180-400 לזוג | ★4.7 | The JBR promenade branch — classic North Indian and Mughlai by the sea.
+814 | Khadak | חד'אק | indian | Villa 426 - 12 Al Wasl Rd - Jumeirah - Jumeirah Second - Dubai - United Arab Emirates | $$ | AED 180-400 לזוג | ★4.7 | A modern Indian street-food experience with bold flavours and a fun vibe.
+815 | The Tasty Shack | דה טייסטי שאק | russian | Indigo Tower - Ground Floor - Unit #5 Cluster D - Al Thanyah Fifth - Jumeirah Lakes Towers - Dubai - United Arab Emirates | $$ | AED 180-400 לזוג | ★4.9 | Comforting, tasty Russian home cooking in a laid-back, family-friendly spot.
+816 | Babushka | Family Comfort Food | באבושקה | russian | Pavilion at the Beach - Marsa Dubai - Jumeirah Beach Residence - Dubai - United Arab Emirates | $$ | AED 180-400 לזוג | ★4.8 | Family comfort food with a Russian soul — classic dishes just like grandma's.
+817 | Zira Restaurant | זירה | russian | Dubai Abdullah Omran Taryam Street 171 Office Park Block B - Al Safouh Second - مدينة دبي للإنترنت - دبي - United Arab Emirates | $$ | AED 180-400 לזוג | ★4.8 | Central Asian and Russian cuisine — grilled meats and richly spiced dishes.
+818 | Flourly Restaurant | פלורלי | russian | 9 Al Marsa St - Marsa Dubai - Dubai Marina - Dubai - United Arab Emirates | $$ | AED 180-400 לזוג | ★4.8 | European-Russian style restaurant and bakery with fresh pastries and indulgent desserts.
+819 | Sakhalin Dubai | סחלין | russian | Beach, J1 - 71A St - Jumeirah - Jumeirah 1 - Dubai - United Arab Emirates | $$$$ | AED 900-1,800 לזוג | ★4.8 | Upscale Russian restaurant focused on fresh seafood with spectacular views.
+820 | Adamushka Restaurant & Cafe | אדאמושקה | russian | Jannah Hotel - Shop 1 Al Seba St - Marsa Dubai - Dubai Marina - Dubai - United Arab Emirates | $$ | AED 180-400 לזוג | ★4.8 | A warm Russian café and restaurant — home cooking and pastries alongside coffee.
+821 | OSH Del Mar | אוש דל מאר | russian | The Address Beach Resort M Floor - مرسى دبي - دبي مارينا - دبي - United Arab Emirates | $$$ | AED 300-700 לזוג | ★4.7 | Contemporary Central Asian cuisine on the Bluewaters waterfront in an elegant setting.
+822 | Chaihona №1 - Best Restaurant in Dubai Marina | צ'איחונה מס' 1 | russian | G Floor - Marina Promenade - Marsa Dubai - Dubai Marina - Dubai - United Arab Emirates | $$ | AED 180-400 לזוג | ★4.7 | A beloved chain of Uzbek and Central Asian cuisine — plov, kebabs and a colourful vibe.
+823 | Kaspia | קספיה | russian | DIFC, Gate Village Building 2 - زعبيل الثانية - DIFC - دبي - United Arab Emirates | $$$$ | AED 900-1,800 לזוג | ★4.7 | The legendary luxury caviar house and refined Russian cuisine — a premium culinary experience.
+824 | Uzgen | אוזגן | russian | Al Adnan Building - 3 Street 3 - Al Barsha First - Al Barsha - Dubai - United Arab Emirates | $ | AED 90-180 לזוג | ★4.6 | Authentic Uzbek cuisine at friendly prices — homemade plov, manti and kebabs.
+825 | Bosporus Turkish Cuisine - The Beach (JBR) | בוספורוס (JBR) | halal | The Walk - Marsa Dubai - Jumeirah Beach Residence - Dubai - United Arab Emirates | $$ | AED 180-400 לזוג | ★4.9 | Authentic halal Turkish cuisine by the sea at JBR — meze, grilled meats and desserts.
+826 | Al Khayma Heritage Restaurant | مطعم الخيمة التراثي | אל ח'יימה | halal | Historical Neighbourhood - 79 Al Mussallah Rd - Al Souq Al Kabeer - Al Fahidi - Dubai - United Arab Emirates | $$ | AED 180-400 לזוג | ★4.9 | Traditional Emirati cuisine in a charming heritage house in Al Fahidi — an authentic cultural experience.
+827 | Social House | סושיאל האוס | halal | level LG - Unit LG - 100 - B - Financial Ctr St - Burj Khalifa - Dubai Mall - Dubai - United Arab Emirates | $$ | AED 180-400 לזוג | ★4.9 | A diverse international menu overlooking the Dubai Fountain — relaxed, alcohol-free dining.
+828 | Arabian Tea House - Jumeirah Archaeological Site, Dubai | בית התה הערבי | halal | JUMEIRAH ARCHAEOLOGICAL - Jumeira Second - Dubai - United Arab Emirates | $$ | AED 180-400 לזוג | ★4.9 | A traditional Emirati tea house in a white, shaded courtyard — breakfasts, seafood and local dishes.
+829 | Shabestan Middle East Restaurant | שבסטן | halal | Lemon Tree Hotel - Al Wasl Rd - Jumeirah - Umm Al Sheif - Dubai - United Arab Emirates | $$ | AED 180-400 לזוג | ★4.9 | Refined Persian cuisine — kebabs, joojeh and fragrant rice, with a traditional setting and live music.
+830 | Kaak Al Manara Restaurant & Bakery | כעכ אל מנארה | halal | Al Wasl Rd - opposite Emarat Al Safa Petrol Station - Al Wasl Area - Jumeirah 2 - Dubai - United Arab Emirates | $$ | AED 180-400 לזוג | ★4.9 | Lebanese restaurant and bakery — kaak, manakish and fresh meze all day.
+831 | Bebek Restaurant & Shisha Lounge| Kids & Family Friendly| Turkish & International | בבק | halal | Villa 531 Jumeirah Beach Road - Jumeira Third - Jumeirah 3 - Dubai - United Arab Emirates | $$ | AED 180-400 לזוג | ★4.9 | Family-friendly Turkish-international restaurant with a shisha lounge — kid-friendly and alcohol-free.
+832 | Grand ZOR - Fairmont The Palm - Uzbek Fusion Restaurant | גראנד זור | halal | Fairmont - Nakhlat Jumeira - Dubai - United Arab Emirates | $$$ | AED 400-900 לזוג | ★4.8 | Contemporary Uzbek fusion at Fairmont The Palm — plov, grill and modern Central Asian dishes.
+833 | ZouZou Turkish & Lebanese Restaurant | JBR DUBAI | זוזו | halal | Marsa Dubai - Jumeirah Beach Residence - Dubai - United Arab Emirates | $$ | AED 180-400 לזוג | ★4.8 | A blend of Turkish and Lebanese cuisine on the JBR promenade — generous meze, grills and sweets.
+834 | Dinner In The Sky | דינר אין דה סקיי | halal | Al Sufoh - 34RM+FW - Al Seyahi St - next to zero gravity - Skydive - Dubai Marina - Dubai - United Arab Emirates | $$$$ | AED 900-1,800 לזוג | ★4.9 | A one-of-a-kind dining experience 50m in the air — set menu and breathtaking Dubai views.
+## attractions
+201 | Burj Khalifa | ברג' חליפה | landmark | Downtown Dubai | $$ | AED 149-369 | ★4.9 | The world's tallest tower (828m), a breathtaking panoramic observation deck on the 148th floor.
+202 | Dubai Mall | דובאי מול | landmark | Downtown Dubai | חינם | כניסה חינם | ★4.7 | One of the world's largest shopping centers, with endless shops, restaurants and attractions.
+203 | Palm Jumeirah | פאלם ג'ומיירה | landmark | Palm Jumeirah | $ | AED 25 מונורייל | ★4.6 | A palm-shaped artificial island, one of Dubai's modern engineering marvels.
+204 | Dubai Frame | דובאי פריים | landmark | Zabeel Park | $ | AED 50 | ★4.5 | A giant rectangular frame offering a unique view of old and new Dubai.
+205 | Dubai Marina | דובאי מרינה | landmark | Dubai Marina | חינם | חינם | ★4.6 | A modern harbor district with skyscrapers, restaurants and a promenade along a sea canal.
+206 | Ain Dubai | עין דובאי | landmark | Bluewaters Island | $$ | AED 130-250 | ★4.6 | The world's tallest observation wheel (250m) with a breathtaking panoramic view.
+207 | Madinat Jumeirah | מדינת ג'ומיירה | landmark | Jumeirah | חינם | כניסה חינם | ★4.7 | A lavish hotel and shopping complex in traditional Arabian style, with canals and a magical atmosphere.
+208 | Dubai Creek | דובאי קריק | landmark | Deira / Bur Dubai | $ | AED 1-10 אברה | ★4.4 | A historic waterway, the beating heart of old Dubai, with traditional abra boat rides.
+209 | Dubai Miracle Garden | גן הפרחים | landmark | Al Barsha South | $ | AED 55 | ★4.5 | The world's largest flower garden, with floral creations of millions of flowers.
+210 | Museum of the Future | מוזיאון העתיד | museum | Sheikh Zayed Road | $$ | AED 149 | ★4.8 | A stunning futuristic museum presenting visions and technologies that will shape tomorrow's world.
+211 | Dubai Aquarium & Underwater Zoo | אקוריום דובאי | museum | Downtown Dubai | $$ | AED 130-200 | ★4.6 | A giant aquarium inside Dubai Mall with a glass tunnel and diving tours.
+212 | Dubai Garden Glow | גן הזוהר | museum | Zabeel Park | $ | AED 65 | ★4.3 | A magical nighttime art park with light displays and glowing sculptures.
+213 | JBR Beach | חוף JBR | beach | JBR | חינם | חינם | ★4.5 | An open, popular beach along the JBR boardwalk with restaurants and activities.
+214 | Kite Beach | חוף קייט | beach | Umm Suqeim | חינם | חינם | ★4.4 | A modern beach popular with kite surfers, with sports facilities.
+215 | La Mer | לה מר | beach | Jumeirah 1 | חינם | חינם (פעילויות בתשלום) | ★4.3 | A modern, bohemian-style beachfront leisure area with shops, restaurants and a water park.
+216 | Aquaventure Waterpark | אקוונצ׳ר | waterpark | Palm Jumeirah | $$$ | AED 299-395 | ★4.7 | An exciting water park on the Palm with adrenaline slides and attractions for all ages.
+217 | Wild Wadi Waterpark | ויילד ואדי | waterpark | Jumeirah | $$ | AED 225-295 | ★4.5 | A popular water park with slides and wave pools in a fantastic setting.
+218 | IMG Worlds of Adventure | IMG וורלדס | theme-park | City of Arabia | $$$ | AED 345-399 | ★4.4 | One of the world's largest indoor theme parks, with Marvel and dinosaur zones.
+219 | Ski Dubai | סקי דובאי | theme-park | Mall of the Emirates | $$ | AED 200-350 | ★4.5 | An indoor ski resort with real snow slopes in the heart of the desert!
+220 | Global Village | גלובל וילג' | theme-park | Sheikh Mohammed Bin Zayed Rd | $ | AED 25 | ★4.5 | A huge international culture and entertainment festival presenting cultures from dozens of countries.
+221 | Desert Safari | ספארי מדבר | tour | Dubai Desert | $$ | AED 150-300 | ★4.7 | A thrilling tour of the desert sands including dune bashing and a Bedouin dinner.
+222 | Helicopter Tour | סיור הליקופטר | tour | Dubai | $$$$ | AED 625-1,500 | ★4.8 | A stunning helicopter tour above Dubai with views of Burj Khalifa and the Palm.
+223 | Speedboat Tour | סיור סירת מנוע | tour | Dubai Marina | $$ | AED 200-400 | ★4.5 | A fast, thrilling speedboat tour with skyline views.
+224 | Gold Souk Tour | סיור שוק הזהב | tour | Deira | חינם | חינם | ★4.3 | A traditional, famous gold souk in Deira with hundreds of jewelry shops.
+225 | Dubai Safari Park | ספארי פארק | zoo | Al Warqa | $ | AED 50 | ★4.4 | A large, modern safari park home to thousands of animals in natural habitats.
+243 | Skydive Dubai | סקיידייב | extreme | Dubai Marina (Skydive Center) | $$$$$ | AED 2,500-3,500 | ★4.9 | A skydive above the Palm — insane views, a full ~15-minute experience. Professional safety.
+244 | iFly Dubai Wind Tunnel | אייפליי | extreme | City Centre Mirdif | $$$ | AED 350-700 | ★4.7 | An indoor wind tunnel — a skydiving experience without jumping from a plane. Suitable from age 3.
+245 | Hot Air Balloon Dubai | טיסות כדור פורח | extreme | Margham Desert | $$$$ | AED 1,200-1,800 | ★4.9 | A hot-air balloon over the desert at sunrise — a romantic experience with a unique view. Includes breakfast at a Bedouin camp.
+246 | Helicopter Tour Dubai | סיור מסוק | extreme | Atlantis The Palm Helipad | $$$$$ | AED 2,000-5,000 | ★4.8 | A 12-45 minute helicopter tour — aerial views of the Palm, Burj Khalifa and Atlantis.
+247 | Alserkal Avenue | אל סרקל | art | Al Quoz | חינם | כניסה חינם | ★4.7 | A contemporary art complex in the heart of Al Quoz — galleries, studios, cafés and boutiques. Free entry, a sophisticated urban vibe.
+248 | Wind Towers Al Bastakiya | מגדלי הרוח באל בסתקיה | art | Al Fahidi Historical District | חינם | חינם | ★4.6 | Dubai's historic quarter — traditional wind towers, stone alleys, galleries and cafés. A glimpse of pre-oil times.
+249 | Etihad Museum | מוזיאון אתיחאד | museum | Jumeirah Beach Road | $ | AED 25-50 | ★4.5 | A modern museum documenting the founding of the UAE (1971). A striking architectural building with historic documents.
+250 | Coffee Museum | מוזיאון הקפה | museum | Al Fahidi | $ | AED 15-30 | ★4.5 | A small, fascinating museum in Al Bastakiya — the history of Arabic coffee, traditional equipment and tastings.
+251 | Camel Museum | מוזיאון הגמלים | museum | Al Shindagha | חינם | חינם | ★4.3 | A museum about the camel in Bedouin culture — its role, history and connection to the UAE.
+252 | Money Museum | מוזיאון הכסף | museum | Emirates NBD HQ, Baniyas Square | חינם | חינם | ★4.2 | The history of coins — from Silk Road trade to the modern dirham.
+253 | Crossroads of Civilizations Museum | מפגש התרבויות | museum | Al Shindagha | $$ | AED 70-120 | ★4.6 | A private museum on Dubai Creek — ancient civilizations, papyri, swords and weapons.
+254 | Dhow Cruise Dubai Creek | שיט דהאו | tour | Dubai Creek, Deira | $$ | AED 250-450 | ★4.6 | A cruise on a traditional wooden dhow on Dubai Creek — a romantic atmosphere, dinner and a show.
+255 | Marina Yacht Cruise | שיט יאכטה | tour | Dubai Marina | $$$$ | AED 400-1,500 | ★4.7 | A private yacht cruise in the Marina — Bluewaters beach, the Palm and Burj Al Arab from the water. Includes a barbecue.
+256 | Jewish Community Center UAE | בית הכנסת JCC | judaism | Villa Centro, Umm Suqeim | חינם | חינם | ★4.9 | A Jewish community center and active Orthodox synagogue in Dubai led by Rabbi Levi Duchman. Prayers, bar/bat mitzvah, events. Kosher restaurant on-site.
+274 | Chabad of UAE | חב"ד דובאי | judaism | Umm Suqeim, Dubai | חינם | חינם — תרומה מומלצת | ★4.9 | An active Chabad house in Dubai led by Rabbi Levi Duchman — daily prayers, Shabbat meals, Passover Seders, holidays, help for Israeli tourists, a mikveh and a k
+275 | Mikveh Dubai | מקווה דובאי | judaism | Umm Suqeim, Dubai | חינם | חינם — תרומה מומלצת | ★4.8 | A kosher women's mikveh in Dubai run by the Jewish community — hours by advance arrangement. Free for community members and Israeli tourists.
+276 | Jewish Community of UAE | קהילה יהודית | judaism | Dubai (כל העיר) | חינם | חינם | ★4.9 | An official Jewish community of ~3,000 members that grew after the Abraham Accords (2020). Includes synagogues, a mikveh, kosher restaurants, a Jewish kindergar
+277 | Rimon Kosher Supermarket Dubai | סופרמרקט רימון | judaism | Umm Suqeim, Dubai | $$ | לפי קנייה | ★4.7 | A kosher supermarket in Dubai — meat, dairy, pastries, salads and products from Israel. Open all week, serving Israeli tourists.
+278 | King David Kosher Kitchen | המטבח של המלך דוד | judaism | InterContinental, Festival City | $$$ | AED 500-1,000 לזוג | ★4.6 | A kosher restaurant at the InterContinental Festival City hotel — meat, a formal atmosphere, Shabbat meals by advance request. Under rabbinical supervision.
+279 | Sababa Abu Dhabi | סבבה אבו דאבי | judaism | Abu Dhabi | $$ | AED 200-450 לזוג | ★4.5 | A kosher dairy restaurant in Abu Dhabi — starters, salads, pastas, pizzas and fish. A kosher Israeli vibe in the Middle East.
+258 | The View at the Palm Jumeirah | התצפית על הפאלם | landmark | Palm Tower, Palm Jumeirah | $$ | AED 100-180 | ★4.4 | An observation deck on the 52nd floor (240m) of the Palm Tower. A 360° view of Palm Jumeirah, Atlantis and the skyline. Includes an interactive display of the P
+259 | Sky Views Observatory | סקיי וויוז | landmark | Address Sky View Hotel, Downtown | $$ | AED 100-300 | ★4.5 | An observation deck at 219m at the Address Sky View hotel. Includes a glass walkway between the two towers and an external slide from the 53rd floor. Views of B
+260 | Jumeirah Mosque | מסגד ג'ומיירה | landmark | Jumeirah Beach Road | $ | AED 35 | ★4.6 | The only mosque in Dubai open to guided tours for visitors of all faiths. 'Open Doors, Open Minds' tours present Islam and local culture.
+262 | Dubai Opera | אופרת דובאי | landmark | Downtown Dubai | $$$ | AED 200-1500 | ★4.7 | A modern opera house with a unique dhow-shaped design in Downtown. Hosts ballet, opera, classical music and jazz. You can tour the architecture even without a s
+263 | AYA Universe | AYA יוניברס | art | WAFI Mall | $$$ | AED 150-220 | ★4.8 | An immersive experience of 12 digital-art worlds — mind-bending lights, sounds and projections. Suitable for adults and children.
+264 | Madame Tussauds Dubai | מאדאם טוסו | museum | Bluewaters Island | $$$ | AED 165-220 | ★4.5 | The first branch of the iconic wax museum in the Middle East, on Bluewaters Island. Includes 60+ wax figures of Israeli and international celebrities.
+265 | The Lost Chambers Aquarium | אקווריום החדרים האבודים | aquarium | Atlantis The Palm | $$ | AED 130-180 | ★4.5 | An aquarium beneath Atlantis simulating the lost city of Atlantis. 65,000+ fish, sharks and divers. Pairs perfectly with Aquaventure.
+266 | The Green Planet Dubai | הגרין פלאנט | zoo | City Walk | $$ | AED 99-130 | ★4.4 | An indoor tropical rainforest at Dubai City Walk. 3,000+ exotic plants and animals — sloths, birds, snakes, a butterfly farm.
+267 | Hatta Mountains & Dam | סיור מורשת חאטה | adventure | Hatta | $ | AED 0-200 | ★4.7 | Dubai's mountain enclave on the Oman border. A turquoise-green dam for kayaking, a heritage village, and a trek. ~90 min drive from Dubai. A popular weekend.
+268 | Motiongate Dubai | מושנגייט | theme-park | Dubai Parks | $$$ | AED 295-345 | ★4.4 | A Hollywood theme park with rides from Sony, Lionsgate and DreamWorks. 27 rides — Smurfs, Hunger Games, Madagascar.
+269 | LEGOLAND Dubai | לגולנד | theme-park | Dubai Parks | $$$ | AED 295-345 | ★4.5 | The Middle East's first LEGO park — 40 rides, LEGO miniatures of Dubai, Abu Dhabi and Jerusalem. Geared for kids 2-12.
+270 | Bollywood Parks Dubai | פארק בוליווד | theme-park | Dubai Parks | $$$ | AED 295-345 | ★4.3 | The world's first Bollywood-themed park — shows, rides and Indian restaurants. Indian culture inside Dubai.
+241 | Sweet Museum Dubai | מוזיאון הממתקים | museum | The Avenue, City Walk | $$ | AED 80-150 | ★4.6 | Dubai's new candy museum 🍬 — 14 Instagram-friendly rooms themed around candy, chocolate and desserts. A giant lollipop, a chocolate bath, a sweets room. Fun for
+231 | Platinum Heritage | ספארי מדבר פלטינום | desert-safari | Dubai Desert Conservation Reserve | $$$$ | AED 650-1,500 לאדם | ★4.9 | A premium safari in the nature reserve — dunes in a luxury Hummer, camels, a Bedouin meal.
+232 | Arabian Adventures | ערבי אדוונצ׳ר ספארי | desert-safari | Lehbab Desert | $$$ | AED 400-900 לאדם | ★4.7 | A veteran, leading company — dune safari (4x4), dinner at a Bedouin camp.
+233 | OceanAir Desert Safari | אושן אייר ספארי | desert-safari | Lehbab Desert | $$ | AED 200-500 לאדם | ★4.6 | A popular evening package — dune bashing, camels, henna, a meal and a dance show.
+234 | Big Red Desert Adventure | הרפתקת ביג רד | desert-safari | Big Red Dunes | $$$ | AED 450-900 לאדם | ★4.6 | High dunes with a 4x4 and quad bikes for extreme lovers.
+235 | Desert Safari Sunrise | ספארי זריחה | desert-safari | Margham Desert | $$$$ | AED 900-1,800 לאדם | ★4.8 | A desert sunrise experience — a hot-air balloon, breakfast and a camel ride.
+280 | Dinner in the Sky Dubai | ארוחת ערב בשמיים | extreme | Skydive Dubai, Marina | $$$$$ | AED 600-900 לאדם | ★4.6 | A unique meal suspended 50 meters above the ground — a table for 22 diners, a 360-degree view, a live chef.
+281 | La Perle by Dragone | לה פרל | show | Al Habtoor City | $$$$ | AED 280-1,000 | ★4.8 | A resident acrobatic show — 65 minutes of water, fire and technology. A custom theater of just 1,300 seats.
+282 | Museum of Illusions Dubai | מוזיאון האשליות | museum | Al Seef | $$ | AED 95 | ★4.5 | An interactive museum with 80+ optical illusions, an anti-gravity room and a vertigo tunnel. Fun for the whole family.
+283 | Real Madrid World Dubai | ריאל מדריד וורלד | theme-park | Dubai Parks and Resorts | $$$ | AED 295 | ★4.4 | A fan experience — Real Madrid-themed rides, virtual reality, match simulations and a walk through the players' tunnel.
+284 | Topgolf Dubai | טופגולף | adventure | Emirates Golf Club | $$ | AED 100-300 לאדם | ★4.5 | A golf-entertainment attraction — electronic targets, a restaurant, a bar and music. Suitable for beginners too.
+285 | Expo City Dubai | אקספו סיטי | landmark | Expo Road, Jebel Ali | חינם | כניסה חינם | ★4.6 | The Expo 2020 site turned into a smart city — country pavilions, sculptures, restaurants and a garden. Free entry.
+286 | Dubai Butterfly Garden | גן הפרפרים | zoo | Al Barsha South | $$ | AED 60 | ★4.5 | The world's largest butterfly garden — 9 domes with 15,000+ butterflies of 50 species. Next to Miracle Garden.
+287 | Dubai Dolphinarium | דולפינריום | aquarium | Creek Park, Riyadh St | $$ | AED 100-150 | ★4.4 | Dolphin, sea lion and bird shows — a daily 45-minute show inside Creek Park.
+288 | 3D World Selfie Museum Dubai | מוזיאון סלפי 3D | museum | Hessa Street, Al Barsha | $$ | AED 75 | ★4.4 | An interactive museum with 100+ 3D wall paintings. Stand inside the painting and take photos — a funny experience for the whole family.
+289 | LEGOLAND Water Park Dubai | פארק מים לגולנד | waterpark | Dubai Parks and Resorts | $$$ | AED 195-295 | ★4.6 | A LEGO-themed water park — 20+ slides and pools for kids 2-12. A wet building area and a DUPLO slide.
+290 | Dubai Ice Rink | החלקה על הקרח | adventure | Dubai Mall, Ground Level | $$ | AED 50-130 | ★4.5 | An Olympic ice-skating rink at Dubai Mall — for free skating, lessons and even shows.
+291 | Dubai Fountain Lake Ride | שייט מזרקות | tour | Burj Khalifa Lake | $$ | AED 75-95 | ★4.7 | A short ride in a colorful boat on the Burj Khalifa lake — a VIP spot to watch the fountain show up close.
+295 | Dubai Tennis Championships | אליפות הטניס | sport | Dubai Duty Free Tennis Stadium | $$$ | AED 75-1,000 | ★4.7 | An annual international tennis tournament in February — top players, the Aviation Club stadium. Tickets from AED 75.
+296 | Standard Chartered Dubai Marathon | מרתון דובאי | sport | Umm Suqeim Road | $$ | AED 175-450 | ★4.6 | An international marathon in January — a 42 km course, a half marathon and 10K. One of the world's fastest thanks to flat terrain.
+297 | Hero Dubai Desert Classic | טורניר הגולף | sport | Emirates Golf Club | $$$ | AED 150-1,500 | ★4.7 | A prestigious DP World Tour golf tournament — January. Top players, Emirates Golf Club. Open to spectators.
+298 | Al Fahidi Historical District | אל פאהידי - הרובע ההיסטורי | landmark | Al Fahidi, Bur Dubai | $ | חינם | ★4.7 | Dubai's historic quarter — narrow alleys, clay houses and traditional wind towers. Home to museums, galleries, cafés and handicrafts.
+299 | Al Seef | אל סייף | landmark | Bur Dubai, על הקריק | $$ | חינם · מסעדות וחנויות | ★4.6 | A promenade on Dubai Creek blending traditional architecture with modern shops. Restaurants, boutiques, and abra rides in the evening.
+226 | Dubai Museum at Al Fahidi Fort | מוזיאון דובאי | museum | Al Fahidi Fort, Bur Dubai | $ | AED 3 | ★4.4 | Dubai's oldest museum — housed in Al Fahidi Fort from 1787. Displays on tribal life, pearl divers and the city up to the oil era.
+227 | Al Shindagha Museum | מוזיאון שינדאגה | museum | Al Shindagha, Bur Dubai | $$ | AED 50 | ★4.6 | A modern museum complex dedicated to Dubai's maritime heritage — pearl divers, dhow boats, the ruling family's life.
+228 | Saruq Al-Hadid Archaeological Museum | מוזיאון סארוק אל-חדיד | museum | Al Fahidi, Bur Dubai | $ | AED 20 | ★4.5 | An archaeological museum with 900+ Iron Age finds (3,000 years old) discovered in the desert near Dubai. Jewelry, weapons and household items.
+229 | Crossroads of Civilizations Museum | מוזיאון מפגש התרבויות | museum | Al Fahidi, Bur Dubai | $$ | AED 50 | ★4.8 | A private museum in Al Fahidi — displays on the Holocaust, a Holy Land gallery, and a Jewish-Islamic-Christian cultural encounter.
+230 | Sheikh Mohammed Centre for Cultural Understanding | מרכז שייח׳ מוחמד להבנה תרבותית | tour | Al Fahidi, Bur Dubai | $$ | AED 90-130 | ★4.7 | Guided tours of the old city and traditional Emirati breakfasts/lunches — the best opportunity to understand the culture.
+236 | XVA Art Gallery | גלריית XVA | art | Al Fahidi, Bur Dubai | $ | חינם | ★4.5 | A contemporary Middle Eastern art gallery in a traditional Al Fahidi house — rotating exhibitions, a café and a boutique hotel.
+237 | Diwan Mosque | מסגד דיוואן | landmark | Bur Dubai, ליד Dubai Creek | $ | חינם | ★4.4 | A historic mosque in the heart of the old quarter near Dubai Creek — traditional Islamic architecture with an inner courtyard.
+238 | Traditional Abra Across Dubai Creek | סירת אברה | tour | Bur Dubai Abra Station | $ | AED 1 | ★4.7 | A traditional wooden boat crossing Dubai Creek between Bur Dubai and Deira — an authentic 5-minute experience for just AED 1.
+521 | Big Bus Dubai - Hop On Hop Off | ביג באס דובאי | tour | תחנה ראשית: Wafi Mall | $$ | AED 200-310 ליום | ★4.4 | A red double-decker tourist bus, hop-on hop-off with 3 routes: City, Beach, Premium. Hebrew audio guide. Hours: 9:00-18:00 every 30 min.
+522 | City Sightseeing Dubai - Hop On Hop Off | סיטי סייטסיינג דובאי | tour | תחנה ראשית: Deira City Centre | $$ | AED 178-260 ליום | ★4.2 | A red open-top double-decker tourist bus, hop-on hop-off — 2 routes parallel to Big Bus. Audio guide in 12 languages (including Hebrew). Frequency: every 30 min
+800 | Theatre of Digital Art | תיאטרון האמנות הדיגיטלית | show | Madinat Jumeirah, Souk | $$ | AED 100-160 | ★4.7 | An immersive experience complex with 360° projections of Gauguin, Van Gogh and others. A stunning multimedia scene at Madinat Souk.
+801 | The Palm Fountain at The Pointe | מזרקת הדקלים | landmark | The Pointe, Palm Jumeirah | $ | חינם | ★4.6 | A Guinness-record fountain — the world's largest (14,000 m²). A choreographed show with music and light at the edge of Palm Jumeirah.
+802 | Sky Views Dubai | סקיי וויוז דובאי | extreme | Address Sky View, Downtown | $$$ | AED 80-300 | ★4.6 | A 220-meter-high observation over Burj Khalifa from the glass bridge — an Edge Walk/Glass Slide. For those comfortable with heights.
+804 | Hatta Wadi Hub | מרכז וואדי האטה | adventure | Hatta, ~2h from Dubai | $$ | AED 50-200 | ★4.6 | An adventure center in the mountain desert of Hatta — mountain biking, tobogganing, zipline, archery, axe throwing. Two hours from Dubai.
+805 | Madame Tussauds Dubai | מאדאם טוסו דובאי | museum | Bluewaters Island | $$$ | AED 110-200 | ★4.4 | A wax-figure museum — 60+ celebrity figures from Hollywood, Bollywood, sport and royalty. At Bluewaters near Ain Dubai.
+806 | Zombie Apocalypse Park | פארק הזומבים | adventure | Dubai | $$ | AED 150-250 | ★4.3 | An apocalypse-themed adventure park — escape rooms, immersive zombie experiences, laser tag. For adrenaline seekers.
+## shopping
+301 | Dubai Mall | קניון דובאי | mall | Downtown Dubai | $-$$$$$ | כל טווח מחירים | ★4.8 | The world's largest mall! Over 1,200 shops, an aquarium, ice skating.
+302 | Mall of the Emirates | קניון האמירויות | mall | Sheikh Zayed Road | $$-$$$$ | כל טווח מחירים | ★4.6 | 600+ shops with Ski Dubai — an indoor ski resort in the heart of the desert!
+303 | Cityland Mall | קניון סיטי לאנד | mall | Dubai Land | $$-$$$ | כל טווח מחירים | ★4.4 | The world's largest single-story mall! 1.2 million m² with a botanical garden.
+304 | Dubai Hills Mall | קניון היליס דובאי | mall | Dubai Hills | $$-$$$ | כל טווח מחירים | ★4.5 | A new mall (2022) with the world's fastest indoor roller coaster!
+305 | Dubai Festival City Mall | קניון פסטיבל סיטי | mall | Festival City | $$-$$$ | כל טווח מחירים | ★4.5 | A waterfront mall with a promenade, fountains and a stunning light show.
+306 | Ibn Battuta Mall | קניון אבן בטוטה | mall | Jebel Ali | $$ | מחירים בינוניים | ★4.4 | Designed as Ibn Battuta's journey with 6 zones: China, India, Persia, Egypt, Tunisia, Andalusia.
+307 | City Walk | סיטי ווק | mall | Jumeirah | $$$ | יוקרתי | ★4.5 | An open-air, European-style shopping area with boutiques, restaurants and galleries.
+308 | Nakheel Mall | קניון נאחיל | mall | Palm Jumeirah | $$-$$$ | בינוני-יוקרתי | ★4.3 | A mall on the Palm with stunning views, chef restaurants and pools.
+309 | Mercato Mall | קניון מארקטו | mall | Jumeirah | $$ | מחירים בינוניים | ★4.2 | An Italian Renaissance-style mall with fashion shops and restaurants.
+310 | Wafi Mall | קניון ופי | mall | Oud Metha | $$-$$$ | בינוני-יוקרתי | ★4.3 | An ancient-Egyptian-themed mall with pyramids, luxury shops and restaurants.
+311 | Gold Souk | שוק הזהב | souk | Deira | $$-$$$$ | תלוי בקנייה | ★4.5 | The famous Gold Souk. Hundreds of jewelry shops at competitive prices.
+312 | Spice Souk | שוק התבלינים | souk | Deira | $ | זול מאוד | ★4.3 | The historic Spice Souk. Amazing aromas and spices from around the world.
+313 | Textile Souk | שוק הטקסטיל | souk | Bur Dubai | $-$$ | זול-בינוני | ★4.2 | Bur Dubai's textile souk. Fabrics, pashmina and made-to-order suits.
+314 | Perfume Souk | שוק הבשמים | souk | Deira | $-$$$ | זול-יקר | ★4.1 | Deira's perfume souk. Oud, Arabic perfumes and essential oils.
+315 | Souk Madinat Jumeirah | שוק מדינת ג'ומיירה | souk | Madinat Jumeirah | $$$ | יוקרתי | ★4.6 | An upscale souk in traditional Arabian style with canals, galleries and restaurants.
+316 | African+Eastern | אפריקן + איסטרן | alcohol | סניפים ברחבי דובאי ואבו דאבי | $$-$$$$ | מותגים בינלאומיים | ★4.3 | A licensed alcohol-store chain. Tourists 21+ buy with a passport only (no license). Branches in Dubai and Abu Dhabi.
+317 | Maritime & Mercantile International | MMI | alcohol | סניפים ברחבי דובאי ואבו דאבי | $$-$$$$ | מותגים פרימיום | ★4.4 | A leading alcohol-store chain. Tourists 21+ with a passport. Convenient branches in Dubai and Abu Dhabi, a wide selection including whisky, wine and beer.
+318 | Dubai Marina Mall | קניון מרינה דובאי | mall | Dubai Marina | $$-$$$ | מחירים בינוניים-גבוהים | ★4.5 | A boutique mall on the Marina — waterside dining, fashion brands, a Mediterranean vibe.
+319 | Dubai Outlet Mall | קניון אאוטלט דובאי | mall | Al Ain Road, Dubai Outlet City | $-$$$ | הנחות גדולות | ★4.3 | An outlet center with 30-90% discounts on international brands. ~30 min drive from central Dubai.
+320 | Dragon Mart | קניון דרגון מארט | mall | International City | $-$$ | מחירים זולים | ★4.3 | The largest Chinese trading complex outside China — electronics, clothing, furniture. Cheap prices.
+321 | BurJuman Mall | קניון בורג'ומאן | mall | Bur Dubai | $$-$$$$ | יוקרה ובינוני | ★4.4 | A veteran mall in Bur Dubai with luxury brands and a Sephora. Next to the BurJuman metro station.
+324 | Davidoff of Geneva Dubai | דבידוף סיגרים | alcohol | Dubai Mall + Mall of the Emirates | $$$$ | AED 50-500 לסיגר | ★4.6 | A luxury cigar chain — a selection of premium, hand-rolled cigars and vitolas. Branches in leading malls (Dubai Mall, Mall of the Emirates).
+325 | La Casa del Habano Dubai | לה קאסה דל הבאנו | alcohol | DIFC + One Central | $$$$ | AED 60-700 לסיגר | ★4.7 | An official Cuban-cigar branch — all the leading brands (Cohiba, Montecristo, Romeo y Julieta). A VIP smoking room on-site.
+323 | Souk Al Bahar | שוק אל באהר | souk | Downtown Dubai, ליד Dubai Mall | $$-$$$ | מסעדות וחנויות | ★4.5 | A traditional Arabian-style souk on the Burj Lake bridge — views of Burj Khalifa and the fountain show, restaurants, galleries and gift shops.
+322 | The Pointe | מרכז הקניות דה פוינט | mall | Palm Jumeirah | $$-$$$ | מסעדות וקניות | ★4.5 | A dining and shopping complex at the tip of Palm Jumeirah with views of Atlantis and a giant fountain show.
+## nightlife
+401 | White Dubai | ווייט דובאי | club | Meydan Racecourse | $$$ | AED 200-500 | ★4.5 | An open rooftop club at Meydan — international DJs.
+405 | Soho Garden Dubai | סוהו גארדן | club | Meydan | $$$ | AED 250-600 | ★4.4 | A huge entertainment complex at Meydan with a club, rooftop bar, restaurants and a garden.
+406 | Cavalli Club Dubai | מועדון קוואלי | club | Fairmont, Sheikh Zayed | $$$$ | AED 400-1000 | ★4.3 | An upscale club under the Cavalli brand — Italian glam.
+407 | Drais Dubai | דרייז דובאי | club | MGM Cosmo, Dubai Marina | $$$$ | AED 300-800 | ★4.4 | A high-floor club with a view — master DJs.
+408 | Iris Mira Meydan | איריס מירה | club | Meydan Racecourse | $$$ | AED 250-600 | ★4.3 | A club-lounge at Meydan with an exotic-Borneo atmosphere.
+402 | Atmosphere Burj Khalifa | אטמוספיר | rooftop | Burj Khalifa, Floor 122 | $$$$ | AED 300-700 | ★4.7 | A bar and restaurant on the 122nd floor of Burj Khalifa — the world's highest.
+409 | CE LA VI Dubai | סה לה וי | rooftop | Address Sky View, Downtown | $$$$ | AED 400-900 | ★4.5 | A stunning rooftop bar at Address Sky View — a pool and Asian cuisine.
+410 | Treehouse Taj Dubai | טריהאוס | rooftop | Taj Dubai, Burj Khalifa St | $$$ | AED 300-600 | ★4.5 | A rooftop bar with Burj Khalifa views — a tropical atmosphere and cocktails.
+411 | 40 Kong | 40 קונג | rooftop | H Hotel, Sheikh Zayed | $$$ | AED 300-650 | ★4.4 | A rooftop bar on the 40th floor near Burj Khalifa.
+412 | Nikki Beach Dubai | ניקי ביץ׳ | beach-club | Pearl Jumeirah | $$$$ | AED 400-1200 | ★4.4 | An upscale beach club with a pool, private beach and day parties.
+413 | Drift Beach | דריפט ביץ׳ | beach-club | One&Only Royal Mirage | $$$$ | AED 500-1200 | ★4.5 | A beach club at One&Only with Burj Al Arab views.
+414 | Cove Beach | קוב ביץ׳ | beach-club | Caesars Palace, Bluewaters | $$$ | AED 350-900 | ★4.3 | A trendy beach club at Bluewaters — a pool, beach and restaurant.
+415 | Zero Gravity | זירו גרביטי | beach-club | Skydive Dubai, Marina | $$$ | AED 300-800 | ★4.4 | An active beach club with a pool and DJ parties.
+423 | 1OAK Dubai | 1OAK | club | Habtoor Palace, Al Habtoor City | $$$$ | AED 200-1,500 | ★4.4 | An upscale New York-style nightclub — international DJs, dining and VIP tables. Minimum age 21.
+417 | Dubai Fountain | מזרקת דובאי | entertainment | Burj Khalifa Lake | חינם | חינם | ★4.8 | Back after an upgrade — innovative effects, stunning music, synced with the Burj Khalifa lighting. Free, every half hour from 18:00 to 23:00.
+420 | Dubai Drone Show | מופע הרחפנים | entertainment | Burj Khalifa / Bluewaters / Beach | חינם | חינם | ★4.9 | A stunning show of hundreds of drones in Dubai's skies — 3D images, an Expo logo and fireworks. Free, mainly on Friday-Saturday nights and holidays above Burj K
+421 | Palm Fountain The Pointe | מזרקת פאלם | entertainment | The Pointe, Palm Jumeirah | חינם | חינם | ★4.7 | The world's largest interactive fountain (a Guinness record) — 105,000 square feet of water, 3,000 LEDs. Free, shows every 30 minutes from 19:00.
+422 | IMAGINE Festival City | מופע אימג׳ין | entertainment | Dubai Festival City, Festival Bay | חינם | חינם | ★4.7 | A water-laser-fireworks show on the Dubai Creek waterfront. A mesmerizing blend of water, fire and laser. Free, evenings starting at 19:30.
+404 | La Perle by Dragone | לה פרל | show | Al Habtoor City | $$$ | AED 300-700 | ★4.8 | A stunning acrobatic show with water and fire effects.
+418 | Dubai Opera | אופרת דובאי | show | Downtown Dubai | $$$ | AED 200-1500 | ★4.7 | Dubai's opera house — concerts, ballet and Broadway shows.
+419 | Madinat Theatre | תיאטרון מדינת | show | Madinat Jumeirah | $$ | AED 150-500 | ★4.4 | An intimate theater at Madinat Jumeirah — music and comedy.
+424 | Brass Monkey Dubai | ברס מאנקי | bar | Souk Madinat Jumeirah | $$$ | AED 100-300 | ★4.5 | A virtual games bar combined with alcohol — mini bowling, retro arcade, cards, and a trendy pub. A social atmosphere.
+## kids
+701 | IMG Worlds of Adventure | IMG וורלדס | theme-park | City of Arabia | $$ | AED 200-400 | ★4.5 | A huge indoor theme park — Marvel, Cartoon Network, Jurassic.
+702 | Legoland Dubai | לגולנד דובאי | theme-park | Dubai Parks and Resorts | $$ | AED 220-380 | ★4.5 | A LEGO park for ages 2-12 — rides, shows and LEGO building.
+703 | Motiongate Dubai | מושנגייט | theme-park | Dubai Parks and Resorts | $$ | AED 250-450 | ★4.5 | A Hollywood theme park — movies, extreme rides and shows.
+704 | Bollywood Parks Dubai | פארק בוליווד | theme-park | Dubai Parks and Resorts | $$ | AED 200-400 | ★4.2 | A park inspired by the Indian film industry — shows and rides.
+705 | Global Village | גלובל וילג' | theme-park | Sheikh Mohammed Bin Zayed Road | $ | AED 25-50 | ★4.4 | A huge international festival (Oct-Apr) with 90 countries, attractions and food.
+706 | Aquaventure Waterpark | אקוונצ׳ר | waterpark | Atlantis The Palm | $$$ | AED 300-600 | ★4.7 | The world's largest water park — water rides, marine animals and a private beach.
+707 | Wild Wadi Waterpark | ויילד ואדי | waterpark | Jumeirah Beach | $$ | AED 250-450 | ★4.4 | 30 water rides — slides, a lazy river and artificial waves.
+708 | Laguna Waterpark | פארק המים לגונה | waterpark | La Mer | $$ | AED 150-300 | ★4.3 | A beachfront water park — slides, waves and restaurants.
+709 | Dubai Aquarium Underwater Zoo | אקווריום דובאי | aquarium | Dubai Mall | $$ | AED 150-400 | ★4.5 | 33,000 marine animals, a 48m glass tunnel and a shark pantry.
+710 | Lost Chambers Aquarium | אקווריום החדרים האבודים | aquarium | Atlantis The Palm | $$ | AED 150-300 | ★4.5 | Underwater Atlantis ruins with exotic marine life.
+711 | KidZania Dubai | קידזניה | kids-city | Dubai Mall | $$ | AED 150-280 | ★4.5 | A mini city — role-play professions (firefighter, doctor, pilot) in the mall.
+712 | VR Park Dubai Mall | פארק VR | vr-park | Dubai Mall | $$ | AED 100-300 | ★4.4 | Virtual reality — advanced VR attractions for all ages.
+713 | Bounce Dubai | באונס | trampoline | Marina/Al Quoz | $ | AED 90-180 | ★4.5 | A trampoline park — jumps, extreme sports and a climbing wall.
+714 | Ski Dubai and Snow Park | סקי דובאי + פארק שלג | snow | Mall of the Emirates | $$ | AED 150-400 | ★4.6 | A huge indoor snow complex at Mall of the Emirates — ski and snowboard runs for adults, a Snow Park for kids with slides, an igloo and activities, and a meeting
+716 | Magic Planet | מג׳יק פלאנט | arcade | Mall of the Emirates / City Centre / Mirdif | $ | AED 40-150 | ★4.7 | A family entertainment chain — arcade, bumper cars, rides. In several Dubai malls.
+717 | Fun City | פאן סיטי | toddlers | Reef Mall / BurJuman / Wafi / Times Square | $ | AED 30-120 | ★4.6 | A family entertainment center — arcade games, a small train, toddler rides. Branches at Reef Mall (Deira), BurJuman, Times Square, Bin Sougat, Wafi Mall.
+## transport
+501 | Dubai Metro | מטרו דובאי | metro | תחנות בכל דובאי | $ | AED 3-8.5 / $1-2.3 לנסיעה | ★4.4 | An automated metro network. The Red and Green lines cover most points of interest. Buy a Nol Card!
+502 | Dubai Taxi RTA | מוניות דובאי | taxi | בכל מקום | $$ | AED 12 בסיס + AED 2/ק"מ | ★4.2 | Official cream-colored taxis. Reliable and convenient.
+503 | Water Taxi Abra | סירת אברה | boat | Dubai Creek | $ | AED 1 / $0.27 לנסיעה | ★4.6 | Traditional wooden boats crossing Dubai Creek for 1 dirham!
+504 | Careem | קארים | app | בכל מקום | $$ | AED 15-100 / $4-27 לנסיעה | ★4.3 | A local ride-hailing app service, popular across the UAE.
+516 | Popular RTA City Bus Routes | קווי אוטובוס פופולריים | bus | בכל רחבי דובאי | $ | AED 3-7 לנסיעה | ★4 | Recommended RTA routes for tourists: Route 8 (Sheikh Zayed Road — Burj Khalifa, Dubai Mall, Mall of the Emirates), X28 (Mall of the Emirates ↔ Gold Souk), 27 (A
+515 | Uber | אובר | app | בכל מקום | $$ | AED 15-100 / $4-27 לנסיעה | ★4.3 | A global ride-hailing app service.
+520 | Bus to Abu Dhabi E100/E101 | אוטובוס לאבו דאבי | bus | Al Ghubaiba / Ibn Battuta Metro | $ | 25-30 דירהם (AED 25-30) לכיוון | ★4.3 | Route E100 from Al Ghubaiba (Bur Dubai) or E101 from Ibn Battuta Metro to Abu Dhabi's central bus station. Departs every 30 minutes, 05:30-23:30. Travel time ~1
+505 | Paddock Rent A Car | פדוק | car-rental | Sheikh Zayed Road | $$$$ | AED 3,000-12,000 ליום | ★4.6 | Supercars — Lamborghini, Ferrari, Bentley, Rolls-Royce.
+506 | Be VIP Limousine | בי VIP לימוזין | car-rental | Business Bay | $$$$ | AED 2,500-10,000 ליום | ★4.5 | VIP services — luxury and sports cars with a driver.
+507 | Octane Rent A Car | אוקטן | car-rental | Downtown Dubai | $$$$$ | AED 3,500-15,000 ליום | ★4.6 | Supercars — Lamborghini Urus, Huracán, Ferrari Roma, McLaren.
+508 | Diamondlease | דיימונדליז | car-rental | Dubai Marina | $$$$ | AED 2,000-8,000 ליום | ★4.4 | A selection of luxury and sports cars at competitive prices.
+509 | Royal Premier Cars | רויאל פרמייר | car-rental | JBR | $$$ | AED 1,500-6,000 ליום | ★4.5 | Luxury cars — Range Rover, Mercedes-AMG, Porsche.
+510 | Hertz Dubai | הרץ | car-rental | שדה התעופה + סניפים | $$ | AED 150-400 ליום | ★4.2 | An international chain — a selection of family cars, SUVs and minivans.
+511 | Avis Dubai | אוויס | car-rental | שדה התעופה + סניפים | $$ | AED 140-380 ליום | ★4.1 | Reliable rental with family and touring cars at competitive prices.
+512 | Sixt Dubai | סיקסט | car-rental | שדה התעופה + Marina | $$ | AED 150-450 ליום | ★4.3 | German rental — new cars and a wide selection.
+513 | Europcar Dubai | יורופקאר | car-rental | שדה התעופה + Downtown | $$ | AED 130-360 ליום | ★4 | A range of family and business cars, deals for tourists.
+514 | Budget Dubai | באדג'ט | car-rental | שדה התעופה | $ | AED 110-280 ליום | ★4 | Economy rental — compact and family cars at low prices.
+521 | Big Bus Dubai - Hop On Hop Off | ביג באס | bus | תחנה ראשית: Wafi Mall | $$ | AED 200-310 ליום (24/48 שעות) | ★4.4 | A red double-decker hop-on hop-off tourist bus with 3 routes: City (red) — Burj Khalifa, Dubai Creek, Heritage Village, Al Fahidi, Museum of the Future, Deira s
+522 | City Sightseeing Dubai - Hop On Hop Off | סיטי סייטסיינג | bus | תחנה ראשית: Deira City Centre | $$ | AED 178-260 ליום (24/48 שעות) | ★4.2 | A red open-top double-decker hop-on hop-off tourist bus — 2 routes parallel to Big Bus. Includes an audio guide in 12 languages (including Hebrew). Frequency: e
+## casino
+601 | Wynn Resort Dubai | ויין ריזורט | casino | Ras Al Khaimah | $$$$ | טרם פורסם | The first casino resort in the UAE! Expected to open in 2027.
+602 | Meydan Racecourse | מרוצי סוסים מיידן | racing | Meydan | $$$ | AED 100-500 | ★4.4 | Dubai's prestigious horse-racing complex. The Dubai World Cup — the world's richest prize.
+603 | Al Marmoom Camel Racing | מרוצי גמלים | racing | Al Marmoom | חינם | חינם | ★4.6 | Traditional camel races with robot jockeys. A unique, free Emirati experience!
+605 | Dubai World Cup | מרוצי סוסים - דובאי וורלד קאפ | racing | Meydan Racecourse | $$$ | AED 200-2,000 | ★4.7 | The World Cup of horse racing — the world's richest prize ($12 million). Every March.
+606 | Dubai Polo Club | מועדון פולו | sport | Arabian Ranches | $$ | AED 100-500 | ★4.3 | Dubai's polo club. Matches, VIP events and a Friday brunch.
+607 | Emirates Golf Club | מועדון גולף אמירייטס | sport | Emirates Hills | $$$ | AED 500-1,500 | ★4.5 | Dubai's famous golf club with an 18-hole course and a VIP clubhouse.
+608 | Dubai Autodrome | אוטודרום דובאי | sport | Motor City | $$ | AED 150-400 | ★4.4 | A racetrack and professional karting complex. An adrenaline experience for all ages.
+610 | Coca-Cola Arena Dubai | ארנת קוקה קולה | music-show | City Walk, Al Wasl | $$$ | AED 150-2,000 | ★4.7 | The largest indoor arena in the Middle East — 17,000 seats. World artist concerts, stand-up, sports. Check the schedule on the website.
+611 | Etihad Arena Yas Island | ארנת אתיחאד | music-show | Yas Island, Abu Dhabi | $$$ | AED 200-3,000 | ★4.7 | An innovative arena on Yas Island, Abu Dhabi — 18,000 seats. International concerts, tennis and more. ~1.5-hour drive from Dubai.
+612 | Ekart Zabeel Electric Karting | קרטינג זאביל | sport | Zabeel Park | $$ | AED 50-150 | ★4.5 | An indoor electric karting track at Zabeel Park — 480 meters, fast cars, professional. For adults and kids from age 8.
+613 | Pixoul Gaming Dubai Hills | פיקסול גיימינג | music-show | Dubai Hills Mall | $$ | AED 60-200 לשעה | ★4.6 | A professional gaming and eSports complex at Dubai Hills — high-end PCs, consoles, racing simulators, and VR. For families and pro gamers.
+614 | The Theater Dubai | דה תיאטר דובאי | music-show | Address Beach Resort, JBR | $$$$ | AED 350-700 | ★4.6 | A Broadway-style theater-restaurant at Address Beach. Singing, music and acrobatics shows while you dine. A full evening experience.
+615 | Yalla Bowling Lounge Dubai | באולינג יאללה | sport | Dubai Festival City + נוספים | $$ | AED 50-100 למסלול | ★4.5 | A modern bowling hall with professional lanes, an arcade, a bar and a restaurant. Family and friends outing. Multiple branches.
+## abudhabi
+240 | Zayed National Museum | מוזיאון זאיד | museum | Saadiyat Cultural District, Abu Dhabi | $$ | AED 80-150 | ★4.7 | New in 2025 — a flagship museum in Abu Dhabi commemorating Sheikh Zayed, founder of the UAE. Part of the Saadiyat Cultural District (alongside the Louvre and th
+257 | Abrahamic Family House | בית האברהם | judaism | Saadiyat Island, Abu Dhabi | חינם | חינם | ★4.8 | An interfaith complex in Abu Dhabi comprising a synagogue (Moses Ben Maimon), a church and a mosque. Opened in 2023 as a symbol of tolerance. The first synagogu
+261 | Sheikh Zayed Grand Mosque | מסגד שייח' זאיד | landmark | Abu Dhabi | חינם | חינם | ★4.9 | One of the world's most beautiful mosques, in Abu Dhabi. Includes 82 domes, 1,000+ columns and the world's largest hand-woven carpet. Free entry for tourists (m
+271 | Ferrari World Abu Dhabi | פרארי וורלד | theme-park | Yas Island, Abu Dhabi | $$$$ | AED 295-395 | ★4.7 | A Ferrari theme park — Formula Rossa, the world's fastest roller coaster (240 km/h). Suited to speed lovers and kids.
+272 | Yas Waterworld Abu Dhabi | יאס ווטרוורלד | waterpark | Yas Island, Abu Dhabi | $$$ | AED 250-330 | ★4.6 | A luxury water park in Abu Dhabi, 40+ slides with an Emirati theme. An attraction worth a full day.
+273 | Louvre Abu Dhabi | לובר אבו דאבי | museum | Saadiyat Island, Abu Dhabi | $$ | AED 63-105 | ★4.7 | The Louvre Abu Dhabi — Jean Nouvel's stunning architecture, a collection of 600+ works from different cultures. A 'rain of light' starry-roof canopy.
+604 | Abu Dhabi Grand Prix | גרנד פרי פורמולה 1 | sport | Yas Marina Circuit, Abu Dhabi | $$$$ | AED 1,000-10,000 | ★4.8 | A Formula 1 Grand Prix at the Yas Marina Circuit. The biggest sporting event in the Middle East.
+700 | Qasr Al Watan Presidential Palace | קאסר אל וטן | landmark | Al Ras Al Akhdar, Abu Dhabi | $$ | AED 65-95 | ★4.7 | The presidential palace of the UAE, open to the public. Stunning architecture, ornate halls, gardens and a museum. Highly recommended entry for any Abu Dhabi vi
+701 | Emirates Palace Hotel | אמירייטס פאלאס | landmark | West Corniche Road, Abu Dhabi | $$$$$ | AED 1,500-30,000 | ★4.8 | One of the world's most luxurious hotels with golden accents, traditional Arabian architecture, a private beach and a famous gold coffee. Worth a visit even if 
+702 | Yas Mall | קניון יאס | mall | Yas Island, Abu Dhabi | $$ | חינם כניסה | ★4.5 | The largest mall in Abu Dhabi, on Yas Island. 400+ shops, restaurants, kids' attractions, and next to Ferrari World and Yas Waterworld.
+703 | Marina Mall Abu Dhabi | קניון מרינה אבו דאבי | mall | Breakwater, Corniche Road, Abu Dhabi | $$ | חינם כניסה | ★4.4 | A central mall on the Corniche breakwater, near Emirates Palace. 400+ shops, an entertainment complex, bowling and a cinema.
+704 | Mina Zayed Fish Market | שוק הדגים מינא זאיד | souk | Mina Zayed, Abu Dhabi | $$ | AED 50-200 | ★4.5 | The largest, most authentic fish market in Abu Dhabi. Local fishermen bring in the daily catch, with 'pick-and-cook' restaurants that will cook the fish for you
