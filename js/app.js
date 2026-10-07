@@ -1863,10 +1863,7 @@ function renderContactForm() {
           <label style="display:block;color:#2C5F6E;font-weight:600;font-size:0.85rem;margin-bottom:5px;">הודעה *</label>
           <textarea name="message" required rows="5" style="width:100%;padding:10px;border:1px solid #E5E7EB;border-radius:6px;font-family:Heebo;font-size:0.9rem;color:#2C5F6E;resize:vertical;min-height:100px;box-sizing:border-box;"></textarea>
         </div>
-        <div style="display:flex;gap:10px;">
-          <button type="submit" style="flex:1;background:#B8923A;color:#2C5F6E;border:none;padding:12px;border-radius:6px;font-family:Heebo;font-weight:700;font-size:0.95rem;cursor:pointer;"><i class="fas fa-envelope"></i> שלח באימייל</button>
-          <button type="button" onclick="submitContactForm(null, true)" style="flex:1;background:#25D366;color:#fff;border:none;padding:12px;border-radius:6px;font-family:Heebo;font-weight:700;font-size:0.95rem;cursor:pointer;"><i class="fab fa-whatsapp"></i> שלח בוואטסאפ</button>
-        </div>
+        <button type="submit" style="width:100%;background:#B8923A;color:#2C5F6E;border:none;padding:12px;border-radius:6px;font-family:Heebo;font-weight:700;font-size:0.95rem;cursor:pointer;"><i class="fas fa-envelope"></i> שלח</button>
       </form>
     </div>
     <div style="background:#F5E6CB;border-radius:10px;padding:14px;font-size:0.82rem;color:#2C5F6E;text-align:center;">
@@ -1876,7 +1873,7 @@ function renderContactForm() {
   `;
 }
 
-function submitContactForm(e, viaWhatsApp) {
+function submitContactForm(e) {
   if (e) e.preventDefault();
   const form = document.querySelector('#page-contact form');
   if (!form) return;
@@ -1886,11 +1883,7 @@ function submitContactForm(e, viaWhatsApp) {
   const topicLabels = { error:'דיווח על שגיאה', suggestion:'הצעה לשיפור', photo:'שיתוף תמונה', partnership:'שיתוף פעולה', other:'אחר' };
   const subject = `[WellCome Dubai] ${topicLabels[topic] || topic} — ${name}`;
   const body = `שם: ${name}\nאימייל: ${email}\nנושא: ${topicLabels[topic] || topic}\n\n${message}`;
-  if (viaWhatsApp) {
-    window.open(`https://wa.me/972501234567?text=${encodeURIComponent(subject + '\n\n' + body)}`, '_blank');
-  } else {
-    window.location.href = `mailto:krispelitzik@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  }
+  window.location.href = `mailto:krispelitzik@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }
 
 const CURRENCY_FLAGS = { ILS:'🇮🇱', AED:'🇦🇪', USD:'🇺🇸', EUR:'🇪🇺' };
@@ -3987,9 +3980,9 @@ function showBrokerCriteria() {
 }
 
 function showBrokerSubmit() {
-  const wa = '+972-50-284-4867';
-  const text = encodeURIComponent('שלום, אני רוצה להמליץ על מתווך נדל"ן בדובאי. שם המתווך: ');
-  window.open(`https://wa.me/972502844867?text=${text}`, '_blank');
+  const subject = encodeURIComponent('[WellCome Dubai] המלצה על מתווך נדל"ן');
+  const body = encodeURIComponent('שם המתווך: \nחברה: \nטלפון: \n\nלמה אתם ממליצים: ');
+  window.location.href = `mailto:krispelitzik@gmail.com?subject=${subject}&body=${body}`;
 }
 
 function renderREArticles() {
