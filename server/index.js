@@ -347,7 +347,7 @@ app.get('/api/og-image', async (req, res) => {
    it may only recommend what WellCome Dubai actually holds, which is this file.
    Read once at boot; a content change ships with a deploy. */
 const AI_KB = (() => {
-  try { return fs.readFileSync(path.join(__dirname, '..', 'data', 'ai-kb.txt'), 'utf8'); }
+  try { return fs.readFileSync(path.join(__dirname, 'ai-kb.txt'), 'utf8'); }
   catch (e) { console.warn('ai-kb missing', e && e.message); return ''; }
 })();
 
